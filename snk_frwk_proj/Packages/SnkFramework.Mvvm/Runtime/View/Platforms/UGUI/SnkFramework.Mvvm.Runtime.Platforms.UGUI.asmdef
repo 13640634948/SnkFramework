@@ -1,7 +1,9 @@
 {
-    "name": "SnkFramework.Mvvm.Runtime",
+    "name": "SnkFramework.Mvvm.Runtime.Platforms.UGUI",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:cb224053faeab41da9efa2ebf507313a"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -10,5 +12,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }
