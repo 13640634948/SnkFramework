@@ -1,6 +1,8 @@
-namespace View
+namespace SnkFramework.Mvvm.Base
+
 {
-    public interface UIContainer
+    public interface UIContainer<T>
     {
+        
     }
 }

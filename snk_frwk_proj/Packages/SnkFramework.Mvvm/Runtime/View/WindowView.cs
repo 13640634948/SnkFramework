@@ -1,8 +1,10 @@
-namespace View
+using SnkFramework.Mvvm.Base;
+
+namespace SnkFramework.Mvvm.View
 {
-    public abstract class WindowView<T> : View<T>, IWindowView
+    public abstract class WindowView : View, IWindowView
     {
-        public abstract UIAnimation ActivationAnimation { get; }
-        public abstract UIAnimation PassivationAnimation { get; }
+        public virtual UIAnimation ActivationAnimation { get; }
+        public virtual UIAnimation PassivationAnimation { get; }
     }
 }

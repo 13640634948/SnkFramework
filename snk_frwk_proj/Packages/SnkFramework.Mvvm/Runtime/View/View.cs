@@ -1,19 +1,29 @@
-namespace View
+using Loxodon.Framework.Binding.Contexts;
+using SnkFramework.Mvvm.Base;
+using UnityEngine;
+
+namespace SnkFramework.Mvvm.View
 {
-    public abstract class View<T> : IView
+    public abstract class View : IView, IBindingContextOwner
     {
-        public abstract string mName { get; }
-        public abstract UIVector2 mPosition { get; }
-        public abstract UIVector2 mSize { get; }
-        public abstract bool mActivated { get; }
-        public abstract bool mInteractable { get; }
-        public abstract UIAnimation mEnterAnimation { get; }
-        public abstract UIAnimation mExitAnimation { get; }
-        public abstract UIAttribute[] mUIAttributes { get; }
+        public virtual GameObject mOwner { get; private set; }
 
-        public T mOwner { get; }
-        public T mParent { get; }
+        public virtual string mName { get; }
+        public virtual bool mActivated { get; }
+        public virtual bool mInteractable { get; set; }
+        public virtual UIAnimation mEnterAnimation { get; set; }
+        public virtual UIAnimation mExitAnimation { get; set; }
+        public virtual UIAttribute[] mUIAttributes { get; set; }
+        
+        public virtual void SetOwner(GameObject owner)
+        {
+            this.mOwner = owner;
+        }
 
-        protected virtual void OnVisibilityChanged() { }
+        public virtual void InitComponents()
+        {
+        }
+
+        public IBindingContext DataContext { get; set; }
     }
 }

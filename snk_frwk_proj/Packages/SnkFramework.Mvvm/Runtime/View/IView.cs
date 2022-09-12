@@ -1,17 +1,20 @@
-namespace View
+using SnkFramework.Mvvm.Base;
+using UnityEngine;
+
+namespace SnkFramework.Mvvm.View
 {
     public interface IView
     {
+        public GameObject mOwner { get; }
         public string mName { get; }
-        public UIVector2 mPosition { get; }
-        public UIVector2 mSize { get; }
         public bool mActivated { get; }
 
-        public bool mInteractable { get; }
-        public UIAnimation mEnterAnimation { get; }
-        public UIAnimation mExitAnimation { get; }
-
-        public UIAttribute[] mUIAttributes { get; }
-
+        public bool mInteractable { get; set; }
+        public UIAnimation mEnterAnimation { get; set; }
+        public UIAnimation mExitAnimation { get; set; }
+        public UIAttribute[] mUIAttributes { get; set; }
+            
+        public void SetOwner(GameObject owner);
+        public void InitComponents();
     }
 }

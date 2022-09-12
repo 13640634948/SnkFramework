@@ -1,7 +1,6 @@
 namespace SnkFramework.Mvvm.Base
-
 {
-    public interface UIAnimation
+    public interface IUILayer
     {
     }
 }
