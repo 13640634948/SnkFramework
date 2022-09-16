@@ -1,0 +1,18 @@
+{
+  "name": "com.snkframework.mvvm",
+  "displayName": "Snk Mvvm",
+  "version": "2.4.7",
+  "unity": "2019.4",
+  "license": "MIT",
+  "keywords": [
+    "snake",
+    "framework",
+    "core"
+  ],
+  "author": {
+    "name": "ClaineLe",
+    "email": "7941324@qq.com",
+    "url": "https://github.com/ClaineLe/SnkFramework.FluentBinding.git"
+  },
+  "description": "SnkFramework Mvvm"
+}
