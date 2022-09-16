@@ -106,7 +106,8 @@ namespace SnkFramework.Mvvm.View
                 if (this.ownerValidityCheck() == false)
                     return false;
 
-                if (SnkMvvmSetting.useBlocksRaycastsInsteadOfInteractable)
+                
+                if (SnkMvvmSetup.mSettings.mUseBlocksRaycastsInsteadOfInteractable)
                     return this.mCanvasGroup.blocksRaycasts;
                 return this.mCanvasGroup.interactable;
             }
@@ -115,7 +116,7 @@ namespace SnkFramework.Mvvm.View
                 if (this.ownerValidityCheck() == false)
                     return;
 
-                if (SnkMvvmSetting.useBlocksRaycastsInsteadOfInteractable)
+                if (SnkMvvmSetup.mSettings.mUseBlocksRaycastsInsteadOfInteractable)
                     this.mCanvasGroup.blocksRaycasts = value;
                 else
                     this.mCanvasGroup.interactable = value;
@@ -140,7 +141,7 @@ namespace SnkFramework.Mvvm.View
             {
                 if (this.ownerValidityCheck() == false)
                     return null;
-                return this._canvasGroup ??= this.mOwner.GetComponent<CanvasGroup>();
+                return this._canvasGroup ??= this.mOwner.AddComponent<CanvasGroup>();
             }
         }
 
@@ -160,7 +161,7 @@ namespace SnkFramework.Mvvm.View
         protected bool ownerValidityCheck() => this.viewValidityCheck(this);
 
         protected bool viewValidityCheck(IView view)
-            => this.mOwner != null && view.mOwner.gameObject != null;
+            => view.mOwner != null && view.mOwner.gameObject != null;
 
         public void SetOwner(GameObject owner)
         {

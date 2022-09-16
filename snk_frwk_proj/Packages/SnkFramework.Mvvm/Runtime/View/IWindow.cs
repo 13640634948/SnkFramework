@@ -1,4 +1,3 @@
-
 using System;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.ViewModel;
@@ -59,6 +58,7 @@ namespace SnkFramework.Mvvm.View
         private readonly WindowState oldState;
         private readonly WindowState state;
         private readonly IWindow window;
+
         public WindowStateEventArgs(IWindow window, WindowState oldState, WindowState newState)
         {
             this.window = window;
@@ -66,13 +66,23 @@ namespace SnkFramework.Mvvm.View
             this.state = newState;
         }
 
-        public WindowState OldState { get { return this.oldState; } }
-        public WindowState State { get { return this.state; } }
+        public WindowState OldState
+        {
+            get { return this.oldState; }
+        }
 
-        public IWindow Window { get { return this.window; } }
+        public WindowState State
+        {
+            get { return this.state; }
+        }
+
+        public IWindow Window
+        {
+            get { return this.window; }
+        }
     }
-    
-    public interface IWindow : IWindowView
+
+    public interface IWindow : IWindowView, ISnkWindowControllable
     {
         /// <summary>
         /// Triggered when the Activated's value to be changed.
@@ -141,6 +151,7 @@ namespace SnkFramework.Mvvm.View
         /// 
         /// </summary>
         /// <exception cref="InvalidOperationException"></exception>
+//        void Show(bool ignoreAnimation = false);
         ITransition Show(bool ignoreAnimation = false);
 
         /// <summary>
@@ -158,6 +169,5 @@ namespace SnkFramework.Mvvm.View
     public interface IWindow<TViewModel> : IWindow, IWindowView<TViewModel>
         where TViewModel : class, IViewModel
     {
-        
     }
 }

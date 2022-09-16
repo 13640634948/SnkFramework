@@ -1,5 +1,6 @@
 using Windows.LoginWindow;
 using SnkFramework.FluentBinding.Base;
+using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
 public class WindowDemo : MonoBehaviour
@@ -7,18 +8,32 @@ public class WindowDemo : MonoBehaviour
     private void Awake()
     {
         SnkBindingSetup.Initialize();
+        SnkMvvmSetup.Initialize();
     }
 
     private LoginWindow loginWindow;
+    private IResourceUILocator locator;
+
     void Start()
     {
-        IResourceUILocator locator = new ResourceUILocator();
-        loginWindow = locator.LoadWindow<LoginWindow>(null);
+        locator = new ResourceUILocator();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        loginWindow.mViewModel.Tip = Time.frameCount.ToString();
+        if (loginWindow != null)
+            loginWindow.mViewModel.Tip = Time.frameCount.ToString();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (loginWindow != null)
+                loginWindow.Dismiss(true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            loginWindow = locator.LoadWindow<LoginWindow>(null);
+            loginWindow.Show();
+        }
     }
 }

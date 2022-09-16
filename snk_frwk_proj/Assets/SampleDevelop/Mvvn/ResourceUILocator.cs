@@ -26,7 +26,13 @@ public class ResourceUILocator : UILocator, IResourceUILocator
     }
 
     public override TWindow LoadWindow<TWindow>(IUILayer uiLayer)
-        => LoadView<TWindow>();
+    {
+        TWindow window = LoadView<TWindow>();
+        window.UILayer = uiLayer ?? SnkMvvmSetup.mMainLayer;
+        window.Create();
+        return window;
+    }
+    
 
     public override UILoadResult<TWindow> LoadWindowAsync<TWindow>(IUILayer uiLayer)
         => LoadViewAsync<TWindow>();

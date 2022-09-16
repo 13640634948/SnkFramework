@@ -20,8 +20,7 @@ namespace Windows.LoginWindow
         }
 
         protected override void onCreate(IBundle bundle)
-        {
-            throw new System.NotImplementedException();
+        { 
         }
     }
 }

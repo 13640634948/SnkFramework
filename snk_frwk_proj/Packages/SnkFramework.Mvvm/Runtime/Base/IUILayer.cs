@@ -10,6 +10,14 @@ namespace SnkFramework.Mvvm.Base
     {
         public bool Remove(IWindow window);
         public void Add(IWindow window);
+
+        //public void Show(IWindow window);
         ITransition Show(IWindow window);
+
+        //public void Hide(IWindow window);
+        ITransition Hide(IWindow window);
+
+        //public void Dismiss(IWindow window);
+        ITransition Dismiss(IWindow window);
     }
 }
