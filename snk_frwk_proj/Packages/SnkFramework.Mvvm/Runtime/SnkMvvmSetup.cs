@@ -1,4 +1,5 @@
 using System;
+using SnkFramework.FluentBinding.Base;
 using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
@@ -59,6 +60,8 @@ namespace SnkFramework.Mvvm.Base
             ISnkMvvmSettings settings = null,
             IMvvmLog mvvmLog = null)
         {
+            SnkBindingSetup.Initialize();
+
             mSettings = settings ??= new SnkMvvmSettings();
             mCameraRoot = cameraRoot ??= new SnkCameraRoot();
             mMvvmLog = mvvmLog ??= new SnkMvvmLog();

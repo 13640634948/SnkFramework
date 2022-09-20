@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Windows.LoginWindow;
-using SnkFramework.FluentBinding.Base;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ public class WindowDemo : MonoBehaviour
     
     private void Awake()
     {
-        SnkBindingSetup.Initialize();
         SnkMvvmSetup.Initialize();
     }
 
