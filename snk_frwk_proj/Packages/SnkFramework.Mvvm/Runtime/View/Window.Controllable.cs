@@ -1,48 +1,100 @@
 using System;
 using UnityEngine;
+using System.Collections;
 
 namespace SnkFramework.Mvvm.View
 {
     public abstract partial class Window<TViewModel>
     {
-        
-        public IAsyncResult Activate(bool ignoreAnimation)
+        public IEnumerator Activate(bool ignoreAnimation)
         {
             if (this.mVisibility == false)
-                this.mVisibility = true;
-            if (this.Activated == false)
-            {
-                this.Activated = true;
-                this.State = WindowState.ACTIVATED;
-            }
+                throw new InvalidOperationException("the window is not visible.");
 
-            return default;
+            if (this.mActivated == false)
+                yield break;
+
+
+            this.mActivated = true;
+            this.State = WindowState.ACTIVATED;
+            if (ignoreAnimation == false && this.PassivationAnimation != null)
+            {
+                bool animCompleted = false;
+                this.ActivationAnimation.OnStart(() => { this.State = WindowState.ACTIVATION_ANIMATION_BEGIN; }).OnEnd(
+                    () =>
+                    {
+                        this.State = WindowState.ACTIVATION_ANIMATION_END;
+                        animCompleted = true;
+                    }).Play();
+                yield return new WaitUntil(() => animCompleted);
+            }
         }
 
-        public IAsyncResult Passivate(bool ignoreAnimation)
+        public IEnumerator Passivate(bool ignoreAnimation)
         {
-            this.Activated = false;
+            if (this.mVisibility == false)
+                throw new InvalidOperationException("the window is not visible.");
+
+            if (this.mActivated == false)
+                yield break;
+
+            this.mActivated = false;
             this.State = WindowState.PASSIVATED;
 
-            return default;
+            if (ignoreAnimation == false && this.PassivationAnimation != null)
+            {
+                bool animCompleted = false;
+                this.PassivationAnimation
+                    .OnStart(() => this.State = WindowState.PASSIVATION_ANIMATION_BEGIN)
+                    .OnEnd(() =>
+                    {
+                        this.State = WindowState.PASSIVATION_ANIMATION_END;
+                        animCompleted = true;
+                    }).Play();
+                yield return new WaitUntil(() => animCompleted);
+            }
         }
 
-        public IAsyncResult DoShow(bool ignoreAnimation = false)
-        {
-            if (this._created == false)
+        public IEnumerator DoShow(bool ignoreAnimation = false)
+        { 
+            if(this._created == false)
                 this.Create();
             this.onShow();
+            
             this.mVisibility = true;
             this.State = WindowState.VISIBLE;
-            return default;
+
+            if (ignoreAnimation == false && this.mEnterAnimation != null)
+            {
+                bool animCompleted = false;
+                this.mEnterAnimation
+                    .OnStart(() => this.State = WindowState.ENTER_ANIMATION_BEGIN)
+                    .OnEnd(() =>
+                    {
+                        this.State = WindowState.ENTER_ANIMATION_END;
+                        animCompleted = true;
+                    })
+                    .Play();
+                yield return new WaitUntil(() => animCompleted);
+            }
         }
 
-        public IAsyncResult DoHide(bool ignoreAnimation = false)
+        public IEnumerator DoHide(bool ignoreAnimation = false)
         {
-            this.mVisibility = false;
-            this.State = WindowState.INVISIBLE;
-            this.onHide();
-            return default;
+            bool animCompleted = false;
+            if (ignoreAnimation == false && this.mExitAnimation != null)
+            {
+                this.mExitAnimation.OnStart(() => this.State = WindowState.EXIT_ANIMATION_BEGIN)
+                    .OnEnd(() =>
+                    {
+                        this.State = WindowState.EXIT_ANIMATION_END;
+                        this.mVisibility = false;
+                        this.State = WindowState.INVISIBLE;
+                        this.onHide();
+                        animCompleted = true;
+                    }).Play();
+                yield return new WaitUntil(() => animCompleted);
+            }
         }
 
         public virtual void DoDismiss()
@@ -56,7 +108,6 @@ namespace SnkFramework.Mvvm.View
                     this.onDismiss();
                     this.raiseOnDismissed();
                     this.UILayer.Remove(this);
-                    //this.WindowManager.Remove(this);
 
                     if (this.ownerValidityCheck())
                         GameObject.Destroy(this.mOwner.gameObject);

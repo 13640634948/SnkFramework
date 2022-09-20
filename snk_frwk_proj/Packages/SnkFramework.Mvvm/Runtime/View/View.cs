@@ -2,6 +2,7 @@ using System;
 using Loxodon.Framework.Binding.Builder;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
 
@@ -10,10 +11,12 @@ namespace SnkFramework.Mvvm.View
     public abstract class View<TViewModel> : IView<TViewModel>, IBindingContextOwner
         where TViewModel : class, IViewModel, new()
     {
+        private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+
         private TViewModel _viewModel;
 
-        private UIAnimation _enterAnimation;
-        private UIAnimation _exitAnimation;
+        private IAnimation _enterAnimation;
+        private IAnimation _exitAnimation;
         private CanvasGroup _canvasGroup;
         [NonSerialized] private UIAttribute[] _attributes;
         private EventHandler _visibilityChanged;
@@ -93,9 +96,8 @@ namespace SnkFramework.Mvvm.View
             }
             catch (Exception e)
             {
-                throw;
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("{0}", e);
+                if (log.IsWarnEnabled)
+                    log.WarnFormat("{0}", e);
             }
         }
 
@@ -123,13 +125,13 @@ namespace SnkFramework.Mvvm.View
             }
         }
 
-        public UIAnimation mEnterAnimation
+        public IAnimation mEnterAnimation
         {
             get => this._enterAnimation;
             set => this._enterAnimation = value;
         }
 
-        public UIAnimation mExitAnimation
+        public IAnimation mExitAnimation
         {
             get => this._exitAnimation;
             set => this._exitAnimation = value;

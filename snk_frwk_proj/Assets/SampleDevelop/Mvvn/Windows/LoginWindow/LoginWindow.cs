@@ -1,6 +1,7 @@
 using Loxodon.Framework.Binding.Builder;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.View;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Windows.LoginWindow
@@ -21,6 +22,12 @@ namespace Windows.LoginWindow
 
         protected override void onCreate(IBundle bundle)
         { 
+        }
+
+        protected override void onShow()
+        {
+            base.onShow();
+            this.mName = "[LoginWindow]" + Time.frameCount.ToString();
         }
     }
 }

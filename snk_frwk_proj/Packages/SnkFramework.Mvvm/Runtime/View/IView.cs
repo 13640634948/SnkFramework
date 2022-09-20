@@ -16,8 +16,8 @@ namespace SnkFramework.Mvvm.View
         public float Alpha { get; set; }
 
         public bool mInteractable { get; set; }
-        public UIAnimation mEnterAnimation { get; set; }
-        public UIAnimation mExitAnimation { get; set; }
+        public IAnimation mEnterAnimation { get; set; }
+        public IAnimation mExitAnimation { get; set; }
         public UIAttribute[] mUIAttributes { get; }
 
         public CanvasGroup mCanvasGroup { get; }

@@ -32,7 +32,13 @@ public class ResourceUILocator : UILocator, IResourceUILocator
         window.Create();
         return window;
     }
-    
+
+    public override TWindow LoadWindow<TWindow>(string layerName)
+    {
+        IUILayer layer = SnkMvvmSetup.mWindowManager.GetLayer(layerName);
+        return LoadWindow<TWindow>(layer);
+    }
+
 
     public override UILoadResult<TWindow> LoadWindowAsync<TWindow>(IUILayer uiLayer)
         => LoadViewAsync<TWindow>();

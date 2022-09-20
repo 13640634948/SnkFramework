@@ -8,8 +8,8 @@ namespace SnkFramework.Mvvm.View
     public abstract class WindowView<TViewModel> : View<TViewModel>, IWindowView<TViewModel>
         where TViewModel : class, IViewModel, new()
     {
-        public UIAnimation ActivationAnimation { get; }
-        public UIAnimation PassivationAnimation { get; }
+        public IAnimation ActivationAnimation { get; }
+        public IAnimation PassivationAnimation { get; }
 
         private List<IView> _viewList;
         public List<IView> Views => _viewList;

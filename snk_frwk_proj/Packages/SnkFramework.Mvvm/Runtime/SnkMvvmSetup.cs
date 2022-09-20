@@ -49,6 +49,7 @@ namespace SnkFramework.Mvvm.Base
     {
         static public ISnkMvvmSettings mSettings;
         static public ISnkUIMainLayer mMainLayer;
+        static public IWindowManager mWindowManager;
         static public ICameraRoot mCameraRoot;
         static public IMvvmLog mMvvmLog;
 

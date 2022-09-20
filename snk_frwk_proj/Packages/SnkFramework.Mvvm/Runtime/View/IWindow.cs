@@ -82,7 +82,7 @@ namespace SnkFramework.Mvvm.View
         }
     }
 
-    public interface IWindow : IWindowView, ISnkWindowControllable
+    public interface IWindow : IWindowView//, ISnkWindowControllable
     {
         /// <summary>
         /// Triggered when the Activated's value to be changed.
@@ -122,7 +122,7 @@ namespace SnkFramework.Mvvm.View
         /// <summary>
         /// Returns  "true" if this window activated.
         /// </summary>
-        bool Activated { get; }
+        bool mActivated { get; }
 
         /// <summary>
         /// The WindowManager of the window.

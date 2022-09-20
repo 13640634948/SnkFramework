@@ -9,7 +9,7 @@ public interface IMvvmPromise
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract partial class Window<TViewModel> : WindowView<TViewModel>, IWindow<TViewModel>
+    public abstract partial class Window<TViewModel> : WindowView<TViewModel>, ISnkWindowControllable<TViewModel>
         where TViewModel : class, IViewModel, new()
     {
         static private IMvvmLog log = SnkMvvmSetup.mMvvmLog;
@@ -107,7 +107,7 @@ namespace SnkFramework.Mvvm.View
             }
         }
 
-        public bool Activated
+        public bool mActivated
         {
             get => this._activated;
             protected set
@@ -159,9 +159,8 @@ namespace SnkFramework.Mvvm.View
 
             this.State = WindowState.CREATE_BEGIN;
             this.mVisibility = false;
-            this.mInteractable = this.Activated;
+            this.mInteractable = this.mActivated;
             this.onCreate(bundle);
-            //this.WindowManager.Add(this);
             this.UILayer.Add(this);
             this._created = true;
             this.State = WindowState.CREATE_END;
@@ -175,10 +174,7 @@ namespace SnkFramework.Mvvm.View
             if (this.mVisibility)
                 throw new InvalidOperationException("The window is already visible.");
 
-            this.UILayer.Show(this);
-            return default;
-            //return this.UILayer.Show(this).DisableAnimation(ignoreAnimation);
-            //return this.WindowManager.Show(this).DisableAnimation(ignoreAnimation);
+            return this.UILayer.Show(this).DisableAnimation(ignoreAnimation);
         }
 
         public ITransition Hide(bool ignoreAnimation = false)
@@ -192,10 +188,9 @@ namespace SnkFramework.Mvvm.View
             if (!this.mVisibility)
                 throw new InvalidOperationException("The window is not visible.");
 
-            this._uiLayer.Hide(this);
-            return default;
-            //return this.WindowManager.Hide(this).DisableAnimation(ignoreAnimation);
+            return this.UILayer.Hide(this).DisableAnimation(ignoreAnimation);
         }
+
 
         public ITransition Dismiss(bool ignoreAnimation = false)
         {
@@ -205,16 +200,14 @@ namespace SnkFramework.Mvvm.View
             if (this._dismissed)
                 throw new InvalidOperationException(string.Format("The window[{0}] has been destroyed.", this.mName));
 
-            this.UILayer.Dismiss(this);
-            return default;
-            //this.dismissTransition = this.UILayer.Dismiss(this).DisableAnimation(ignoreAnimation);
-            //return this.dismissTransition;
+            this._dismissTransition = this.UILayer.Dismiss(this).DisableAnimation(ignoreAnimation);
+            return this._dismissTransition;
         }
 
 
         protected virtual void onActivatedChanged()
         {
-            this.mInteractable = this.Activated;
+            this.mInteractable = this.mActivated;
         }
 
         protected abstract void onCreate(IBundle bundle);

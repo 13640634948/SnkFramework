@@ -1,36 +1,43 @@
 using System;
+using SnkFramework.Mvvm.ViewModel;
+using System.Collections;
 
 namespace SnkFramework.Mvvm.View
 {
-    public interface ISnkWindowControllable
+    public interface ISnkWindowControllable<TViewModel> : ISnkWindowControllable, IWindow<TViewModel>
+        where TViewModel : class, IViewModel, new()
+    {
+    }
+
+    public interface ISnkWindowControllable : IWindow
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult Activate(bool ignoreAnimation);
+        IEnumerator Activate(bool ignoreAnimation);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult Passivate(bool ignoreAnimation);
+        IEnumerator Passivate(bool ignoreAnimation);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult DoShow(bool ignoreAnimation = false);
+        IEnumerator DoShow(bool ignoreAnimation = false);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult DoHide(bool ignoreAnimation = false);
+        IEnumerator DoHide(bool ignoreAnimation = false);
 
         /// <summary>
         /// 
