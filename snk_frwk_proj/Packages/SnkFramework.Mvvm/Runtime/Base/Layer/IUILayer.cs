@@ -1,20 +1,9 @@
-using System.Collections;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.Base
 {
     public delegate void UILayoutOverride(RectTransform rectTransform);
-
-    public interface ISnkUIMainLayer : IUILayer
-    {
-    }
-
-    [RequireComponent(typeof(RectTransform), typeof(Canvas))]
-    public class SnkUIMainLayer : SnkUILayerBase, ISnkUIMainLayer
-    {
-       
-    }
 
     public interface IUILayer
     {

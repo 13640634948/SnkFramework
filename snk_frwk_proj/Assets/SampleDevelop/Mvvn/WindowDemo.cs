@@ -1,22 +1,23 @@
+using System.Collections;
 using System.Collections.Generic;
 using Windows.LoginWindow;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
-public class UGUIWindowManager : IWindowManager
+public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
 {
-    public IUILayer GetLayer(string layerName)
-        => default;
-}
-
-public class WindowDemo : MonoBehaviour
-{
+    public void RunOnCoroutineNoReturn(IEnumerator routine)
+    {
+        StartCoroutine(routine);
+    }
+    
     private List<LoginWindow> loginWindowList = new List<LoginWindow>();
     private IResourceUILocator locator;
     
     private void Awake()
     {
-        SnkMvvmSetup.Initialize();
+        UGUIWindowManager uguiWindowMgr = new UGUIWindowManager( );
+        SnkMvvmSetup.Initialize(uguiWindowMgr,this);
     }
 
     void Start()
@@ -29,7 +30,7 @@ public class WindowDemo : MonoBehaviour
         foreach (var window in loginWindowList)
         {
             if (window != null)
-                window.mViewModel.Tip = Time.frameCount.ToString();   
+                window.mViewModel.Tip = Time.frameCount.ToString();
         }
 
         if (Input.GetKeyDown(KeyCode.Space))

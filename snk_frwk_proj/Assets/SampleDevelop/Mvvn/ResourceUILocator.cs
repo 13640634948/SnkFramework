@@ -1,3 +1,4 @@
+using System;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
@@ -28,17 +29,10 @@ public class ResourceUILocator : UILocator, IResourceUILocator
     public override TWindow LoadWindow<TWindow>(IUILayer uiLayer)
     {
         TWindow window = LoadView<TWindow>();
-        window.UILayer = uiLayer ?? SnkMvvmSetup.mMainLayer;
+        window.UILayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER),LAYER.normal));
         window.Create();
         return window;
     }
-
-    public override TWindow LoadWindow<TWindow>(string layerName)
-    {
-        IUILayer layer = SnkMvvmSetup.mWindowManager.GetLayer(layerName);
-        return LoadWindow<TWindow>(layer);
-    }
-
 
     public override UILoadResult<TWindow> LoadWindowAsync<TWindow>(IUILayer uiLayer)
         => LoadViewAsync<TWindow>();

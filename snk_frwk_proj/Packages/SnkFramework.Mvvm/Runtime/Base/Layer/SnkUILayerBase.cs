@@ -1,12 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.View;
-using UnityEngine;
 
 namespace SnkFramework.Mvvm.Base
 {
-    public abstract class SnkUILayerBase : MonoBehaviour, IUILayer
+    public abstract class SnkUILayerBase : IUILayer
     {
+        private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+
         private LinkedList<IWindow> _linkedList = new LinkedList<IWindow>();
 
         protected TransitionQueue _transitionQueue = new TransitionQueue();
@@ -23,11 +26,12 @@ namespace SnkFramework.Mvvm.Base
             while (enumerator.MoveNext())
             {
                 ++index;
-                if(enumerator.Current == null || enumerator.Current.Dismissed)
+                if (enumerator.Current == null || enumerator.Current.Dismissed)
                     continue;
                 if (enumerator.Current.mName == window.mName)
                     return index;
             }
+
             return index;
         }
 
@@ -48,34 +52,21 @@ namespace SnkFramework.Mvvm.Base
             if (this._linkedList.Contains(window))
                 return;
 
-            LinkedListNode<IWindow> windowNode = this._linkedList.AddLast(window);
-            RectTransform child = windowNode.Value.mOwner.transform as RectTransform;
-
-            if (child == null || this.transform.Equals(child.parent))
-                return;
-
-            child.gameObject.layer = this.gameObject.layer;
-            child.SetParent(this.transform);
-            
-            child.anchorMin = Vector2.zero;
-            child.anchorMax = Vector2.one;
-            child.sizeDelta = Vector2.zero;
-            child.anchoredPosition3D = Vector3.zero;
-            child.localScale = Vector3.one;
-            
-            
-            child.SetAsFirstSibling();
+            this._linkedList.AddLast(window);
         }
+
+        public virtual void CoroutineExecuter(IEnumerator routine)
+            => SnkMvvmSetup.mCoroutineExecutor.RunOnCoroutineNoReturn(routine);
 
         public virtual ITransition Show(ISnkWindowControllable window)
         {
             ShowTransition transition = new ShowTransition(this, window);
-            StartCoroutine(this._transitionQueue.Play(transition));
+            CoroutineExecuter(this._transitionQueue.Play(transition));
             return transition.OnStateChanged((w, state) =>
             {
                 /* Control the layer of the window */
                 if (state == WindowState.VISIBLE)
-                    Debug.LogFormat("Show-MoveToIndex({0}, {1});", window, transition.Layer);
+                    log.InfoFormat("Show-MoveToIndex({0}, {1});", window, transition.Layer);
                 //this.MoveToIndex(w, transition.Layer);
 
                 //if (state == WindowState.INVISIBLE)
@@ -84,27 +75,27 @@ namespace SnkFramework.Mvvm.Base
         }
 
         public virtual ITransition Hide(ISnkWindowControllable window)
-        {    
+        {
             HideTransition transition = new HideTransition(this, window, false);
-            StartCoroutine(this._transitionQueue.Play(transition));
+            CoroutineExecuter(this._transitionQueue.Play(transition));
             return transition.OnStateChanged((w, state) =>
             {
                 /* Control the layer of the window */
                 if (state == WindowState.INVISIBLE)
-                    Debug.LogFormat("Hide-MoveToIndex({0}, {1});", window, transition.Layer);
-                   // this.MoveToLast(w);
+                    log.InfoFormat("Hide-MoveToIndex({0}, {1});", window, transition.Layer);
+                // this.MoveToLast(w);
             });
         }
 
         public virtual ITransition Dismiss(ISnkWindowControllable window)
         {
             HideTransition transition = new HideTransition(this, window, true);
-            StartCoroutine(this._transitionQueue.Play(transition));
+            CoroutineExecuter(this._transitionQueue.Play(transition));
             return transition.OnStateChanged((w, state) =>
             {
                 /* Control the layer of the window */
                 if (state == WindowState.INVISIBLE)
-                    Debug.LogFormat("Dismiss-MoveToIndex({0}, {1});", window, transition.Layer);
+                    log.InfoFormat("Dismiss-MoveToIndex({0}, {1});", window, transition.Layer);
 //                    this.MoveToLast(w);
             });
         }
