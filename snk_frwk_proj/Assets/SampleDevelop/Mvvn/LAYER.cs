@@ -1,11 +1,9 @@
 public enum LAYER
 {
-    back_ground = 0,
-    normal,
+    normal = 0,
     guide,
     top,
     loading,
     system,
-    
     COUNT
 }
