@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
@@ -11,29 +12,37 @@ public class ResourceUILocator : UILocator, IResourceUILocator
         string resPath = string.Format(UI_PREFAB_PATH_FORMAT, typeof(TView).Name);
         GameObject asset = Resources.Load<GameObject>(resPath);
         GameObject inst = GameObject.Instantiate(asset);
-        //UIBehaviour uiBeh = inst.GetComponent<UIBehaviour>();
-        //Debug.Log("inst:" + inst);
-        //Debug.Log("uiBeh:" + uiBeh);
         TView view = new TView();
         view.SetOwner(inst);
         return view;
     }
 
-    public override UILoadResult<TView> LoadViewAsync<TView>()
+    public override IEnumerator LoadViewAsync<TView>(Action<TView> callback)
     {
-        UILoadResult<TView> result = new UILoadResult<TView>();
-        result.mResult = LoadView<TView>();;
-        return result;
+        string resPath = string.Format(UI_PREFAB_PATH_FORMAT, typeof(TView).Name);
+        ResourceRequest request = Resources.LoadAsync<GameObject>(resPath);
+        yield return request;
+        GameObject inst = GameObject.Instantiate(request.asset as GameObject);
+        TView view = new TView();
+        view.SetOwner(inst);
+        callback?.Invoke(view);
     }
 
     public override TWindow LoadWindow<TWindow>(IUILayer uiLayer)
     {
         TWindow window = LoadView<TWindow>();
-        window.UILayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER),LAYER.normal));
+        window.UILayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
         window.Create();
         return window;
     }
 
-    public override UILoadResult<TWindow> LoadWindowAsync<TWindow>(IUILayer uiLayer)
-        => LoadViewAsync<TWindow>();
+    public override IEnumerator LoadWindowAsync<TWindow>(IUILayer uiLayer, Action<TWindow> callback)
+    {
+        yield return LoadViewAsync<TWindow>(window =>
+        {
+            window.UILayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
+            window.Create();
+            callback?.Invoke(window);
+        });
+    } 
 }

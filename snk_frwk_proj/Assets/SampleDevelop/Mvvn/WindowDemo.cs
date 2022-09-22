@@ -10,14 +10,14 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
     {
         StartCoroutine(routine);
     }
-    
+
     private List<LoginWindow> loginWindowList = new List<LoginWindow>();
     private IResourceUILocator locator;
-    
+
     private void Awake()
     {
-        UGUIWindowManager uguiWindowMgr = new UGUIWindowManager( );
-        SnkMvvmSetup.Initialize(uguiWindowMgr,this);
+        UGUIWindowManager uguiWindowMgr = new UGUIWindowManager();
+        SnkMvvmSetup.Initialize(uguiWindowMgr, this);
     }
 
     void Start()
@@ -42,12 +42,28 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            var loginWindow = locator.LoadWindow<LoginWindow>(null);
-            loginWindow.Show();
-            this.loginWindowList.Add(loginWindow);
+            RunOnCoroutineNoReturn(LoadWindowAsync());
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            var window = locator.LoadWindow<LoginWindow>(null);
+            window.Show();
+            window.mName += "[S]";
+            this.loginWindowList.Add(window);
+        }
+    }
+
+    private IEnumerator LoadWindowAsync()
+    {
+        yield return new WaitForSeconds(1.0f);
+        yield return locator.LoadWindowAsync<LoginWindow>(null, window =>
+        {
+            window.Show();
+            window.mName += "[A]";
+            this.loginWindowList.Add(window);
+        });
     }
 
     private void OnApplicationQuit()
@@ -57,6 +73,7 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
         {
             window.Dismiss(true);
         }
+
         this.loginWindowList.Clear();
         this.loginWindowList = null;
     }
