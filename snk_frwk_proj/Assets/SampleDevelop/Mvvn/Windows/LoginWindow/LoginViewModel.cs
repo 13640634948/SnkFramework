@@ -1,3 +1,4 @@
+using Loxodon.Framework.Commands;
 using SnkFramework.Mvvm.ViewModel;
 
 namespace Windows.LoginWindow
@@ -9,6 +10,13 @@ namespace Windows.LoginWindow
         {
             get => this.tip;
             set => this.Set(ref this.tip, value, nameof(Tip));
+        }
+
+        public SimpleCommand mButtonCommand;
+
+        public LoginViewModel()
+        {
+            this.mButtonCommand = new SimpleCommand(() => log.Info("LoginViewModel - mButtonCommand"));
         }
     }
 }
