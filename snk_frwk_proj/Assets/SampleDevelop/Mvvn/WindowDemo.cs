@@ -57,7 +57,6 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
 
     private IEnumerator LoadWindowAsync()
     {
-        yield return new WaitForSeconds(1.0f);
         yield return locator.LoadWindowAsync<LoginWindow>(null, window =>
         {
             window.Show();

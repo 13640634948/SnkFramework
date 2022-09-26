@@ -9,6 +9,12 @@ namespace SnkFramework.Mvvm.Base
     {
         public bool mActivated { get; }
         public IWindow mCurrent { get; }
+
+        public int Count { get; }
+
+        public short AddSortingOrder();
+        public int GetSortingLayerID();
+        
         public int IndexOf(IWindow window);
 
         public bool Remove(IWindow window);

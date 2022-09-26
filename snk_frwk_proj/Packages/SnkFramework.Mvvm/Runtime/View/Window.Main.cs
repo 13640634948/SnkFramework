@@ -2,13 +2,15 @@ using System;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.ViewModel;
-
-public interface IMvvmPromise
-{
-}
+using UnityEngine;
 
 namespace SnkFramework.Mvvm.View
 {
+    public interface IUGUILayer : IUILayer
+    {
+        public Canvas mCanvas { get; }
+    }
+
     public abstract partial class Window<TViewModel> : WindowView<TViewModel>, ISnkWindowControllable<TViewModel>
         where TViewModel : class, IViewModel, new()
     {
@@ -35,23 +37,49 @@ namespace SnkFramework.Mvvm.View
         public bool Created => this._created;
         public bool Dismissed => this._dismissed;
         public bool StateBroadcast => this._stateBroadcast;
-        
+
         public event EventHandler ActivatedChanged
         {
-            add { lock (_lock) this._activatedChanged += value; }
-            remove { lock (_lock) this._activatedChanged -= value; }
+            add
+            {
+                lock (_lock) this._activatedChanged += value;
+            }
+            remove
+            {
+                lock (_lock) this._activatedChanged -= value;
+            }
         }
 
         public event EventHandler OnDismissed
         {
-            add { lock (_lock) this._onDismissed += value; }
-            remove { lock (_lock) this._onDismissed -= value; }
+            add
+            {
+                lock (_lock) this._onDismissed += value;
+            }
+            remove
+            {
+                lock (_lock) this._onDismissed -= value;
+            }
         }
 
         public event EventHandler<WindowStateEventArgs> StateChanged
         {
-            add { lock (_lock) this._stateChanged += value; }
-            remove { lock (_lock) this._stateChanged -= value; }
+            add
+            {
+                lock (_lock) this._stateChanged += value;
+            }
+            remove
+            {
+                lock (_lock) this._stateChanged -= value;
+            }
+        }
+
+        private int _sortingOrder;
+
+        public int mSortingOrder
+        {
+            get => this._sortingOrder;
+            set => this._sortingOrder = value;
         }
 
         public IUILayer UILayer
@@ -149,22 +177,38 @@ namespace SnkFramework.Mvvm.View
         }
 
 
-        public void Create(IBundle bundle = null)
+        public IWindow Create(IBundle bundle = null)
         {
             if (this._dismissTransition != null || this._dismissed)
                 throw new ObjectDisposedException(this.mName);
 
             if (this._created)
-                return;
+                return this;
+
+            if (this.mOwner.TryGetComponent<Canvas>(out var canvas) == false)
+                canvas = mOwner.AddComponent<Canvas>();
+
 
             this.State = WindowState.CREATE_BEGIN;
+
+            this.UILayer.Add(this);
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = this.mSortingOrder;
+            canvas.sortingLayerID = this.UILayer.GetSortingLayerID();
+            this.mName = "[" + this.mSortingOrder + "]" + this.mName;
+
             this.mVisibility = false;
             this.mInteractable = this.mActivated;
+
             this.onCreate(bundle);
-            this.UILayer.Add(this);
+
             this._created = true;
             this.State = WindowState.CREATE_END;
+
+
+            return this;
         }
+
 
         public ITransition Show(bool ignoreAnimation = false)
         {

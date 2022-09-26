@@ -23,11 +23,5 @@ namespace Windows.LoginWindow
         protected override void onCreate(IBundle bundle)
         { 
         }
-
-        protected override void onShow()
-        {
-            base.onShow();
-            this.mName = "[LoginWindow]" + Time.frameCount.ToString();
-        }
     }
 }

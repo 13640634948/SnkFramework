@@ -124,6 +124,8 @@ namespace SnkFramework.Mvvm.View
         /// </summary>
         bool mActivated { get; }
 
+        public int mSortingOrder { get; set; }
+
         /// <summary>
         /// The WindowManager of the window.
         /// </summary>
@@ -145,7 +147,7 @@ namespace SnkFramework.Mvvm.View
         /// Create window
         /// </summary>
         /// <param name="bundle"></param>
-        void Create(IBundle bundle = null);
+        IWindow Create(IBundle bundle = null);
 
         /// <summary>
         /// 

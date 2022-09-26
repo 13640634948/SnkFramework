@@ -1,15 +1,19 @@
 using System;
 using System.Collections;
 using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.View;
 using UnityEngine;
 
 public class ResourceUILocator : UILocator, IResourceUILocator
 {
     protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
 
+    private string getViewPath<TView>()
+        => string.Format(UI_PREFAB_PATH_FORMAT, typeof(TView).Name);
+
     public override TView LoadView<TView>()
     {
-        string resPath = string.Format(UI_PREFAB_PATH_FORMAT, typeof(TView).Name);
+        string resPath = getViewPath<TView>();
         GameObject asset = Resources.Load<GameObject>(resPath);
         GameObject inst = GameObject.Instantiate(asset);
         TView view = new TView();
@@ -19,7 +23,7 @@ public class ResourceUILocator : UILocator, IResourceUILocator
 
     public override IEnumerator LoadViewAsync<TView>(Action<TView> callback)
     {
-        string resPath = string.Format(UI_PREFAB_PATH_FORMAT, typeof(TView).Name);
+        string resPath = getViewPath<TView>();
         ResourceRequest request = Resources.LoadAsync<GameObject>(resPath);
         yield return request;
         GameObject inst = GameObject.Instantiate(request.asset as GameObject);
@@ -30,19 +34,35 @@ public class ResourceUILocator : UILocator, IResourceUILocator
 
     public override TWindow LoadWindow<TWindow>(IUILayer uiLayer)
     {
-        TWindow window = LoadView<TWindow>();
-        window.UILayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
+        uiLayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
+        int sortingOrder = uiLayer.AddSortingOrder();
+        string resPath = getViewPath<TWindow>();
+        GameObject asset = Resources.Load<GameObject>(resPath);
+        GameObject inst = GameObject.Instantiate(asset);
+        TWindow window = new TWindow();
+        window.SetOwner(inst);
+        window.UILayer = uiLayer;
+        window.mSortingOrder = sortingOrder;
         window.Create();
         return window;
     }
 
     public override IEnumerator LoadWindowAsync<TWindow>(IUILayer uiLayer, Action<TWindow> callback)
     {
-        yield return LoadViewAsync<TWindow>(window =>
-        {
-            window.UILayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
-            window.Create();
-            callback?.Invoke(window);
-        });
-    } 
+        uiLayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
+        int sortingOrder = uiLayer.AddSortingOrder();
+        Debug.Log("LoadWindowAsync:" + sortingOrder);
+        string resPath = getViewPath<TWindow>();
+        ResourceRequest request = Resources.LoadAsync<GameObject>(resPath);
+        yield return request;
+        yield return new WaitForSeconds(1.0f);
+        GameObject inst = GameObject.Instantiate(request.asset as GameObject);
+        TWindow window = new TWindow();
+        window.SetOwner(inst);
+        window.UILayer = uiLayer;
+        window.mSortingOrder = sortingOrder;
+        window.Create();
+        callback?.Invoke(window);
+    }
+
 }

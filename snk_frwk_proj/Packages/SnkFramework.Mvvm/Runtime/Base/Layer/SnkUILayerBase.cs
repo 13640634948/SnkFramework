@@ -8,6 +8,8 @@ namespace SnkFramework.Mvvm.Base
 {
     public abstract class SnkUILayerBase : IUILayer
     {
+        public static readonly short SORTING_ORDER_STEP = 10;
+
         private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
 
         private LinkedList<IWindow> _linkedList = new LinkedList<IWindow>();
@@ -17,6 +19,20 @@ namespace SnkFramework.Mvvm.Base
         public bool mActivated { get; protected set; }
         public IWindow mCurrent { get; protected set; }
 
+        public int Count => this._linkedList.Count;
+
+        
+        public short _currSortingOrder = 0;
+
+        
+        public virtual short AddSortingOrder()
+        {
+            _currSortingOrder -= SORTING_ORDER_STEP;
+            return _currSortingOrder;
+        }
+
+        public abstract int GetSortingLayerID();
+        
         public int IndexOf(IWindow window)
         {
             int index = -1;

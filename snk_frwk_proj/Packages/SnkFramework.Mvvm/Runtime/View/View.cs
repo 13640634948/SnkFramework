@@ -165,7 +165,7 @@ namespace SnkFramework.Mvvm.View
         protected bool viewValidityCheck(IView view)
             => view.mOwner != null && view.mOwner.gameObject != null;
 
-        public void SetOwner(GameObject owner)
+        public virtual void SetOwner(GameObject owner)
         {
             this.mOwner = owner;
             this.onInitComponents();
