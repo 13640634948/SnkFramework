@@ -11,7 +11,7 @@ namespace SnkFramework.Mvvm.View
             if (this.mVisibility == false)
                 throw new InvalidOperationException("the window is not visible.");
 
-            if (this.mActivated == false)
+            if (this.mActivated == true)
                 yield break;
 
 

@@ -16,8 +16,8 @@ namespace SnkFramework.Mvvm.Base
 
         protected TransitionQueue _transitionQueue = new TransitionQueue();
 
-        public bool mActivated { get; protected set; }
-        public IWindow mCurrent { get; protected set; }
+        public bool mActivated { get; protected set; } = true;
+        public IWindow mCurrent => _linkedList.Count == 0 ? null : _linkedList.Last.Value;
 
         public int Count => this._linkedList.Count;
 
