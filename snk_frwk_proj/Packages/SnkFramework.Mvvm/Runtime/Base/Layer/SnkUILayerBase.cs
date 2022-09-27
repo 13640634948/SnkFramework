@@ -20,14 +20,12 @@ namespace SnkFramework.Mvvm.Base
         public IWindow mCurrent => _linkedList.Count == 0 ? null : _linkedList.Last.Value;
 
         public int Count => this._linkedList.Count;
-
         
         public short _currSortingOrder = 0;
-
         
         public virtual short AddSortingOrder()
         {
-            _currSortingOrder -= SORTING_ORDER_STEP;
+            _currSortingOrder += SORTING_ORDER_STEP;
             return _currSortingOrder;
         }
 
