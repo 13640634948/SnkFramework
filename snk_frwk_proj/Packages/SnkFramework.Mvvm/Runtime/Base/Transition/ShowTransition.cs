@@ -1,6 +1,5 @@
 using System.Collections;
 using SnkFramework.Mvvm.View;
-using UnityEngine;
 
 namespace SnkFramework.Mvvm.Base
 {
@@ -16,12 +15,10 @@ namespace SnkFramework.Mvvm.Base
         {
             ISnkWindowControllable current = this.Window;
             
-            Debug.Log("DoTransition-" + current.mVisibility);
             if (!current.mVisibility)
             {
                 yield return current.DoShow(this.AnimationDisabled);
             }
-            Debug.Log("DoTransition-" + current.mVisibility);
 
             if (this._layer.mActivated && current.Equals(this._layer.mCurrent))
             {

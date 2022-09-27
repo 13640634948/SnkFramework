@@ -292,6 +292,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2143315769243812429}
   - component: {fileID: -3889391260492216724}
+  - component: {fileID: 7733409007521212937}
+  - component: {fileID: 831437326292527672}
   m_Layer: 5
   m_Name: LoginWindow
   m_TagString: Untagged
@@ -343,3 +345,35 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &7733409007521212937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7665578553431842432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98790e11c06d452a8c61d44a6b3421f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 0
+  from: 0
+  to: 1
+  duration: 2
+--- !u!114 &831437326292527672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7665578553431842432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98790e11c06d452a8c61d44a6b3421f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationType: 1
+  from: 1
+  to: 0
+  duration: 2

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Windows.LoginWindow;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
+ 
 
 public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
 {
@@ -25,6 +27,7 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
         locator = new ResourceUILocator();
     }
 
+    public bool mIgnoreAnimation;
     void Update()
     {
         foreach (var window in loginWindowList)
@@ -37,8 +40,9 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
         {
             if (this.loginWindowList.Count > 0)
             {
-                this.loginWindowList[0].Dismiss(true);
-                this.loginWindowList.RemoveAt(0);
+                int index = this.loginWindowList.Count-1;
+                this.loginWindowList[index].Dismiss(mIgnoreAnimation);
+                this.loginWindowList.RemoveAt(index);
             }
         }
 
@@ -48,9 +52,22 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
+            SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-0", Time.frameCount);
             var window = locator.LoadWindow<LoginWindow>(null);
-            window.Show();
-            window.mName += "[S]";
+            
+            
+            //AlphaAnimation alphaAnimation = window.mOwner.GetComponent<AlphaAnimation>();
+            //alphaAnimation.Init(window);
+
+            var anims = window.mOwner.GetComponents<AlphaAnimation>();
+            foreach (var anim in anims)
+            {
+                anim.Init(window);
+            }
+            
+            
+            window.Show(mIgnoreAnimation);
+            SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-1", Time.frameCount);
             this.loginWindowList.Add(window);
         }
     }
@@ -59,8 +76,7 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
     {
         yield return locator.LoadWindowAsync<LoginWindow>(null, window =>
         {
-            window.Show();
-            window.mName += "[A]";
+            window.Show(mIgnoreAnimation);
             this.loginWindowList.Add(window);
         });
     }

@@ -17,10 +17,10 @@ namespace SnkFramework.Mvvm.View
 
             this.mActivated = true;
             this.State = WindowState.ACTIVATED;
-            if (ignoreAnimation == false && this.PassivationAnimation != null)
+            if (ignoreAnimation == false && this.mPassivationAnimation != null)
             {
                 bool animCompleted = false;
-                this.ActivationAnimation.OnStart(() => { this.State = WindowState.ACTIVATION_ANIMATION_BEGIN; }).OnEnd(
+                this.mActivationAnimation.OnStart(() => { this.State = WindowState.ACTIVATION_ANIMATION_BEGIN; }).OnEnd(
                     () =>
                     {
                         this.State = WindowState.ACTIVATION_ANIMATION_END;
@@ -41,10 +41,10 @@ namespace SnkFramework.Mvvm.View
             this.mActivated = false;
             this.State = WindowState.PASSIVATED;
 
-            if (ignoreAnimation == false && this.PassivationAnimation != null)
+            if (ignoreAnimation == false && this.mPassivationAnimation != null)
             {
                 bool animCompleted = false;
-                this.PassivationAnimation
+                this.mPassivationAnimation
                     .OnStart(() => this.State = WindowState.PASSIVATION_ANIMATION_BEGIN)
                     .OnEnd(() =>
                     {
@@ -66,6 +66,7 @@ namespace SnkFramework.Mvvm.View
 
             if (ignoreAnimation == false && this.mEnterAnimation != null)
             {
+                log.InfoFormat("[{0}]EnterAnimation-0", Time.frameCount);
                 bool animCompleted = false;
                 this.mEnterAnimation
                     .OnStart(() => this.State = WindowState.ENTER_ANIMATION_BEGIN)
@@ -73,9 +74,12 @@ namespace SnkFramework.Mvvm.View
                     {
                         this.State = WindowState.ENTER_ANIMATION_END;
                         animCompleted = true;
+                        log.InfoFormat("[{0}]EnterAnimation-1", Time.frameCount);
                     })
                     .Play();
+                log.InfoFormat("[{0}]EnterAnimation-2", Time.frameCount);
                 yield return new WaitUntil(() => animCompleted);
+                log.InfoFormat("[{0}]EnterAnimation-3", Time.frameCount);
             }
         }
 

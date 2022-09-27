@@ -5,8 +5,8 @@ namespace SnkFramework.Mvvm.View
 {
     public interface IWindowView : IUIContainer, IView
     {
-        public IAnimation ActivationAnimation { get; }
-        public IAnimation PassivationAnimation { get; }
+        public IAnimation mActivationAnimation { get; set; }
+        public IAnimation mPassivationAnimation { get; set; }
     }
 
     public interface IWindowView<TViewModel> : IWindowView, IView<TViewModel>
