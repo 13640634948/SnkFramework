@@ -55,35 +55,34 @@ namespace SnkFramework.Mvvm.Base
 
         public virtual ISnkWindowControllable Window
         {
-            get { return this.window; }
-            set { this.window = value; }
+            get => this.window;
+            set => this.window = value;
         }
 
         public virtual bool IsDone
         {
-            get { return this.done; }
-            protected set { this.done = value; }
+            get => this.done;
+            protected set => this.done = value;
         }
 
         public virtual object WaitForDone() => this.IsDone;
-        // => Executors.WaitWhile(() => !IsDone);
 
         public virtual bool AnimationDisabled
         {
-            get { return this.animationDisabled; }
-            protected set { this.animationDisabled = value; }
+            get => this.animationDisabled;
+            protected set => this.animationDisabled = value;
         }
 
         public virtual int Layer
         {
-            get { return this.layer; }
-            protected set { this.layer = value; }
+            get => this.layer;
+            protected set => this.layer = value;
         }
 
         public virtual Func<IWindow, IWindow, ActionType> OverlayPolicy
         {
-            get { return this.overlayPolicy; }
-            protected set { this.overlayPolicy = value; }
+            get => this.overlayPolicy;
+            protected set => this.overlayPolicy = value;
         }
 
         protected void StateChanged(object sender, WindowStateEventArgs e)
