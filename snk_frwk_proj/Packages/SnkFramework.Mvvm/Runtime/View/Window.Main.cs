@@ -3,12 +3,14 @@ using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SnkFramework.Mvvm.View
 {
     public interface IUGUILayer : IUILayer
     {
         public Canvas mCanvas { get; }
+        public CanvasScaler mCanvasScaler { get; }
     }
 
     public abstract partial class Window<TViewModel> : WindowView<TViewModel>, ISnkWindowControllable<TViewModel>
@@ -188,6 +190,8 @@ namespace SnkFramework.Mvvm.View
             if (this.mOwner.TryGetComponent<Canvas>(out var canvas) == false)
                 canvas = mOwner.AddComponent<Canvas>();
 
+            if (this.mOwner.TryGetComponent<GraphicRaycaster>(out var graphicRaycaster) == false)
+                mOwner.AddComponent<GraphicRaycaster>();
 
             this.State = WindowState.CREATE_BEGIN;
 
