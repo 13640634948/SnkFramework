@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Windows.LoginWindow;
+using Loxodon.Framework.Interactivity;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
- 
 
 public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
 {
@@ -46,15 +45,24 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            if (this.loginWindowList.Count > 0)
+            {
+                int index = this.loginWindowList.Count-1;
+                (this.loginWindowList[index].mViewModel.mInteractionFinished as InteractionRequest).Raise();
+            } 
+        }
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             RunOnCoroutineNoReturn(LoadWindowAsync());
         }
+        
         if (Input.GetKeyDown(KeyCode.S))
         {
             SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-0", Time.frameCount);
             var window = locator.LoadWindow<LoginWindow>(null);
-            
             
             //AlphaAnimation alphaAnimation = window.mOwner.GetComponent<AlphaAnimation>();
             //alphaAnimation.Init(window);

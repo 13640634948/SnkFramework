@@ -1,4 +1,5 @@
 using Loxodon.Framework.Commands;
+using Loxodon.Framework.Interactivity;
 using SnkFramework.Mvvm.ViewModel;
 
 namespace Windows.LoginWindow
@@ -6,6 +7,7 @@ namespace Windows.LoginWindow
     public class LoginViewModel : ViewModel
     {
         private string tip = "default";
+
         public string Tip
         {
             get => this.tip;
@@ -14,9 +16,13 @@ namespace Windows.LoginWindow
 
         public SimpleCommand mButtonCommand;
 
+        private InteractionRequest _interactionFinished;
+        public IInteractionRequest mInteractionFinished => this._interactionFinished;
+
         public LoginViewModel()
         {
             this.mButtonCommand = new SimpleCommand(() => log.Info("LoginViewModel - mButtonCommand"));
+            this._interactionFinished = new InteractionRequest(this);
         }
     }
 }

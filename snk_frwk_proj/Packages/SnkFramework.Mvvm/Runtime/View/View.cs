@@ -1,5 +1,4 @@
 using System;
-using Loxodon.Framework.Binding.Builder;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.Log;
@@ -23,7 +22,6 @@ namespace SnkFramework.Mvvm.View
 
         IViewModel IView.mViewModel => _viewModel;
         public TViewModel mViewModel => _viewModel;
-
 
         public GameObject mOwner { get; private set; }
 
@@ -170,14 +168,12 @@ namespace SnkFramework.Mvvm.View
             this.mOwner = owner;
             this.onInitComponents();
             this._viewModel = new TViewModel();
-            var setter = this.CreateBindingSet(this._viewModel);
-            this.onBindingComponents(setter);
-            setter.Build();
+            this.onBindingComponents();
         }
 
         protected abstract void onInitComponents();
 
-        protected abstract void onBindingComponents(BindingSet<View<TViewModel>, TViewModel> setter);
+        protected abstract void onBindingComponents();
 
         protected virtual void onVisibilityChanged(bool visibility)
         {
