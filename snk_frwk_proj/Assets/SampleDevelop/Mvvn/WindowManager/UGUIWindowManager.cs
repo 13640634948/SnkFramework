@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
-public class UGUIWindowManager : WindowManagerBase, IViewCameraProvider
+public class UGUIWindowManager : WindowManagerBase
 {
     public Camera mViewCamera { get; }
 
