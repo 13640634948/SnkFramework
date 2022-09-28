@@ -7,12 +7,6 @@ using UnityEngine.UI;
 
 namespace SnkFramework.Mvvm.View
 {
-    public interface IUGUILayer : IUILayer
-    {
-        public Canvas mCanvas { get; }
-        public CanvasScaler mCanvasScaler { get; }
-    }
-
     public abstract partial class Window<TViewModel> : WindowView<TViewModel>, ISnkWindowControllable<TViewModel>
         where TViewModel : class, IViewModel, new()
     {
