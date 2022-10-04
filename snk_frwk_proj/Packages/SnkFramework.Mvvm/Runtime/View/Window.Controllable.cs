@@ -16,14 +16,14 @@ namespace SnkFramework.Mvvm.View
 
 
             this.mActivated = true;
-            this.State = WindowState.ACTIVATED;
+            this.State = WIN_STATE.activation;
             if (ignoreAnimation == false && this.mPassivationAnimation != null)
             {
                 bool animCompleted = false;
-                this.mActivationAnimation.OnStart(() => { this.State = WindowState.ACTIVATION_ANIMATION_BEGIN; }).OnEnd(
+                this.mActivationAnimation.OnStart(() => { this.State = WIN_STATE.activation_anim_begin; }).OnEnd(
                     () =>
                     {
-                        this.State = WindowState.ACTIVATION_ANIMATION_END;
+                        this.State = WIN_STATE.activation_anim_end;
                         animCompleted = true;
                     }).Play();
                 yield return new WaitUntil(() => animCompleted);
@@ -39,16 +39,16 @@ namespace SnkFramework.Mvvm.View
                 yield break;
 
             this.mActivated = false;
-            this.State = WindowState.PASSIVATED;
+            this.State = WIN_STATE.passivation;
 
             if (ignoreAnimation == false && this.mPassivationAnimation != null)
             {
                 bool animCompleted = false;
                 this.mPassivationAnimation
-                    .OnStart(() => this.State = WindowState.PASSIVATION_ANIMATION_BEGIN)
+                    .OnStart(() => this.State = WIN_STATE.passivation_anim_begin)
                     .OnEnd(() =>
                     {
-                        this.State = WindowState.PASSIVATION_ANIMATION_END;
+                        this.State = WIN_STATE.passivation_anim_end;
                         animCompleted = true;
                     }).Play();
                 yield return new WaitUntil(() => animCompleted);
@@ -62,17 +62,17 @@ namespace SnkFramework.Mvvm.View
             this.onShow();
             
             this.mVisibility = true;
-            this.State = WindowState.VISIBLE;
+            this.State = WIN_STATE.visible;
 
             if (ignoreAnimation == false && this.mEnterAnimation != null)
             {
                 log.InfoFormat("[{0}]EnterAnimation-0", Time.frameCount);
                 bool animCompleted = false;
                 this.mEnterAnimation
-                    .OnStart(() => this.State = WindowState.ENTER_ANIMATION_BEGIN)
+                    .OnStart(() => this.State = WIN_STATE.enter_anim_begin)
                     .OnEnd(() =>
                     {
-                        this.State = WindowState.ENTER_ANIMATION_END;
+                        this.State = WIN_STATE.enter_anim_end;
                         animCompleted = true;
                         log.InfoFormat("[{0}]EnterAnimation-1", Time.frameCount);
                     })
@@ -88,12 +88,12 @@ namespace SnkFramework.Mvvm.View
             bool animCompleted = false;
             if (ignoreAnimation == false && this.mExitAnimation != null)
             {
-                this.mExitAnimation.OnStart(() => this.State = WindowState.EXIT_ANIMATION_BEGIN)
+                this.mExitAnimation.OnStart(() => this.State = WIN_STATE.exit_anim_begin)
                     .OnEnd(() =>
                     {
-                        this.State = WindowState.EXIT_ANIMATION_END;
+                        this.State = WIN_STATE.exit_anim_end;
                         this.mVisibility = false;
-                        this.State = WindowState.INVISIBLE;
+                        this.State = WIN_STATE.invisible;
                         this.onHide();
                         animCompleted = true;
                     }).Play();
@@ -107,7 +107,7 @@ namespace SnkFramework.Mvvm.View
             {
                 if (!this._dismissed)
                 {
-                    this.State = WindowState.DISMISS_BEGIN;
+                    this.State = WIN_STATE.dismiss_begin;
                     this._dismissed = true;
                     this.onDismiss();
                     this.raiseOnDismissed();
@@ -115,7 +115,7 @@ namespace SnkFramework.Mvvm.View
 
                     if (this.ownerValidityCheck())
                         GameObject.Destroy(this.mOwner.gameObject);
-                    this.State = WindowState.DISMISS_END;
+                    this.State = WIN_STATE.dismiss_end;
                     this._dismissTransition = null;
                 }
             }

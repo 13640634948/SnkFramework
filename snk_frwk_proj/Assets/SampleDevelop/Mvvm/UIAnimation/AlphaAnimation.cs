@@ -14,30 +14,28 @@ namespace SnkFramework.Mvvm.Base
         private IView _view;
 
         public void Init(IView view)
-        //void OnEnable()
         {
             this._view = view;
-            //this.view = this.GetComponent<IView>();
-            switch (this.AnimationType)
+            switch (this.AnimType)
             {
-                case AnimationType.EnterAnimation:
+                case ANIM_TYPE.enter_anim:
                     this._view.mEnterAnimation = this;
                     break;
-                case AnimationType.ExitAnimation:
+                case ANIM_TYPE.exit_anim:
                     this._view.mExitAnimation = this;
                     break;
-                case AnimationType.ActivationAnimation:
+                case ANIM_TYPE.activation_anim:
                     if (this._view is IWindowView)
                         (this._view as IWindowView).mActivationAnimation = this;
                     break;
-                case AnimationType.PassivationAnimation:
+                case ANIM_TYPE.passivation_anim:
                     if (this._view is IWindowView)
                         (this._view as IWindowView).mPassivationAnimation = this;
                     break;
             }
 
-            if (this.AnimationType == AnimationType.ActivationAnimation ||
-                this.AnimationType == AnimationType.EnterAnimation)
+            if (this.AnimType == ANIM_TYPE.activation_anim ||
+                this.AnimType == ANIM_TYPE.enter_anim)
             {
                 this._view.mCanvasGroup.alpha = from;
             }

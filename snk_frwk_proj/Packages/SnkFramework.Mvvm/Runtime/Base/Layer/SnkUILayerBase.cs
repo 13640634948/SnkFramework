@@ -79,7 +79,7 @@ namespace SnkFramework.Mvvm.Base
             return transition.OnStateChanged((w, state) =>
             {
                 /* Control the layer of the window */
-                if (state == WindowState.VISIBLE)
+                if (state == WIN_STATE.visible)
                     log.InfoFormat("Show-MoveToIndex({0}, {1});", window, transition.Layer);
                 //this.MoveToIndex(w, transition.Layer);
 
@@ -95,7 +95,7 @@ namespace SnkFramework.Mvvm.Base
             return transition.OnStateChanged((w, state) =>
             {
                 /* Control the layer of the window */
-                if (state == WindowState.INVISIBLE)
+                if (state == WIN_STATE.invisible)
                     log.InfoFormat("Hide-MoveToIndex({0}, {1});", window, transition.Layer);
                 // this.MoveToLast(w);
             });
@@ -108,7 +108,7 @@ namespace SnkFramework.Mvvm.Base
             return transition.OnStateChanged((w, state) =>
             {
                 /* Control the layer of the window */
-                if (state == WindowState.INVISIBLE)
+                if (state == WIN_STATE.invisible)
                     log.InfoFormat("Dismiss-MoveToIndex({0}, {1});", window, transition.Layer);
 //                    this.MoveToLast(w);
             });

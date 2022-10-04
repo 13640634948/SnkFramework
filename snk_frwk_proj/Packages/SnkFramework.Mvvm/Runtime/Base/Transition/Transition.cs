@@ -19,7 +19,7 @@ namespace SnkFramework.Mvvm.Base
 
         private bool bound = false;
         private Action onStart;
-        private Action<IWindow, WindowState> onStateChanged;
+        private Action<IWindow, WIN_STATE> onStateChanged;
         private Action onFinish;
 
         public Transition(ISnkWindowControllable window)
@@ -104,7 +104,7 @@ namespace SnkFramework.Mvvm.Base
             }
         }
 
-        protected virtual void RaiseStateChanged(IWindow window, WindowState state)
+        protected virtual void RaiseStateChanged(IWindow window, WIN_STATE state)
         {
             try
             {
@@ -208,7 +208,7 @@ namespace SnkFramework.Mvvm.Base
             return this;
         }
 
-        public ITransition OnStateChanged(Action<IWindow, WindowState> callback)
+        public ITransition OnStateChanged(Action<IWindow, WIN_STATE> callback)
         {
             if (this.running)
             {

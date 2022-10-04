@@ -37,11 +37,11 @@ namespace SnkFramework.Mvvm.Base
             if (current == null)
                 return true;
 
-            if (current.WindowType == WindowType.DIALOG || current.WindowType == WindowType.PROGRESS)
+            if (current.WinType == WIN_TYPE.dialog || current.WinType == WIN_TYPE.progress)
                 return false;
 
-            if (current.WindowType == WindowType.QUEUED_POPUP &&
-                !(window.WindowType == WindowType.DIALOG || window.WindowType == WindowType.PROGRESS))
+            if (current.WinType == WIN_TYPE.queue_popup &&
+                !(window.WinType == WIN_TYPE.dialog || window.WinType == WIN_TYPE.progress))
                 return false;
             return true;
         }

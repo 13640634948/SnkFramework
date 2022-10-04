@@ -83,7 +83,7 @@ namespace SnkFramework.Mvvm.Base
         /// </summary>
         /// <param name="callback"></param>
         /// <returns></returns>
-        ITransition OnStateChanged(Action<IWindow, WindowState> callback);
+        ITransition OnStateChanged(Action<IWindow, WIN_STATE> callback);
 
         /// <summary>
         /// 

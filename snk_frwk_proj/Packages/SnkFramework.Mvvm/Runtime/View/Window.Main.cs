@@ -24,8 +24,8 @@ namespace SnkFramework.Mvvm.View
 
         private int _windowPriority;
 
-        private WindowState _state = WindowState.NONE;
-        private WindowType _windowType;
+        private WIN_STATE _state = WIN_STATE.none;
+        private WIN_TYPE _winType;
 
         private IUILayer _uiLayer;
         private ITransition _dismissTransition;
@@ -84,10 +84,10 @@ namespace SnkFramework.Mvvm.View
             set => this._uiLayer = value;
         }
 
-        public WindowType WindowType
+        public WIN_TYPE WinType
         {
-            get => this._windowType;
-            set => this._windowType = value;
+            get => this._winType;
+            set => this._winType = value;
         }
 
         public int WindowPriority
@@ -96,7 +96,7 @@ namespace SnkFramework.Mvvm.View
             set => this._windowPriority = value;
         }
 
-        protected WindowState State
+        protected WIN_STATE State
         {
             get { return this._state; }
             set
@@ -104,14 +104,14 @@ namespace SnkFramework.Mvvm.View
                 if (this._state.Equals(value))
                     return;
 
-                WindowState old = this._state;
+                WIN_STATE old = this._state;
                 this._state = value;
                 this.raiseStateChanged(old, this._state);
             }
         }
 
 
-        protected void raiseStateChanged(WindowState oldState, WindowState newState)
+        protected void raiseStateChanged(WIN_STATE oldState, WIN_STATE newState)
         {
             try
             {
@@ -187,7 +187,7 @@ namespace SnkFramework.Mvvm.View
             if (this.mOwner.TryGetComponent<GraphicRaycaster>(out var graphicRaycaster) == false)
                 mOwner.AddComponent<GraphicRaycaster>();
 
-            this.State = WindowState.CREATE_BEGIN;
+            this.State = WIN_STATE.create_begin;
 
             this.UILayer.Add(this);
             canvas.overrideSorting = true;
@@ -201,7 +201,7 @@ namespace SnkFramework.Mvvm.View
             this.onCreate(bundle);
 
             this._created = true;
-            this.State = WindowState.CREATE_END;
+            this.State = WIN_STATE.create_end;
 
 
             return this;

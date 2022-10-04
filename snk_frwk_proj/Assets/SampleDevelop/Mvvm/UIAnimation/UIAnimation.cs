@@ -3,26 +3,18 @@ using UnityEngine;
 
 namespace SnkFramework.Mvvm.Base
 {
-    public enum AnimationType
-    {
-        EnterAnimation,
-        ExitAnimation,
-        ActivationAnimation,
-        PassivationAnimation
-    }
-    
     public abstract class UIAnimation : MonoBehaviour, IAnimation
     {
         private Action _onStart;
         private Action _onEnd;
 
         [SerializeField]
-        private AnimationType animationType;
+        private ANIM_TYPE animType;
 
-        public AnimationType AnimationType
+        public ANIM_TYPE AnimType
         {
-            get { return this.animationType; }
-            set { this.animationType = value; }
+            get { return this.animType; }
+            set { this.animType = value; }
         }
 
         protected void OnStart()
