@@ -11,52 +11,24 @@ namespace SnkFramework.Mvvm.Base
 
         public float duration = 2f;
 
-        private IView _view;
-
-        public void Init(IView view)
+        public override void Initialize(IView view)
         {
-            this._view = view;
-            switch (this.AnimType)
-            {
-                case ANIM_TYPE.enter_anim:
-                    this._view.mEnterAnimation = this;
-                    break;
-                case ANIM_TYPE.exit_anim:
-                    this._view.mExitAnimation = this;
-                    break;
-                case ANIM_TYPE.activation_anim:
-                    if (this._view is IWindowView)
-                        (this._view as IWindowView).mActivationAnimation = this;
-                    break;
-                case ANIM_TYPE.passivation_anim:
-                    if (this._view is IWindowView)
-                        (this._view as IWindowView).mPassivationAnimation = this;
-                    break;
-            }
+            base.Initialize(view);
 
             if (this.AnimType == ANIM_TYPE.activation_anim ||
                 this.AnimType == ANIM_TYPE.enter_anim)
             {
-                this._view.mCanvasGroup.alpha = from;
+                base.mView.mCanvasGroup.alpha = from;
             }
         }
 
-        public override IAnimation Play()
-        {
-            ////use the DoTween
-            //this.view.CanvasGroup.DOFade (this.to, this.duration).OnStart (this.OnStart).OnComplete (this.OnEnd).Play ();		
-
-            this.StartCoroutine(DoPlay());
-            return this;
-        }
-
-        IEnumerator DoPlay()
+        protected override IEnumerator DoPlay()
         {
             this.OnStart();
 
             var delta = (to - from) / duration;
             var alpha = from;
-            this._view.Alpha = alpha;
+            this.mView.Alpha = alpha;
             if (delta > 0f)
             {
                 while (alpha < to)
@@ -67,7 +39,7 @@ namespace SnkFramework.Mvvm.Base
                         alpha = to;
                     }
 
-                    this._view.Alpha = alpha;
+                    base.mView.Alpha = alpha;
                     yield return null;
                 }
             }
@@ -81,7 +53,7 @@ namespace SnkFramework.Mvvm.Base
                         alpha = to;
                     }
 
-                    this._view.Alpha = alpha;
+                    base.mView.Alpha = alpha;
                     yield return null;
                 }
             }

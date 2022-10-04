@@ -1,19 +1,44 @@
 using System;
-using UnityEngine;
+using SnkFramework.Mvvm.View;
+using System.Collections;
 
 namespace SnkFramework.Mvvm.Base
 {
-    public abstract class UIAnimation : MonoBehaviour, IAnimation
+    public abstract class UIAnimation : IAnimation
     {
         private Action _onStart;
         private Action _onEnd;
 
-        [SerializeField]
         private ANIM_TYPE animType;
         public ANIM_TYPE AnimType
         {
             get => this.animType;
             set => this.animType = value;
+        }
+        
+        private IView _view;
+        protected IView mView => _view;
+
+        public virtual void Initialize(IView view)
+        {
+            this._view = view;
+            switch (this.AnimType)
+            {
+                case ANIM_TYPE.enter_anim:
+                    this._view.mEnterAnimation = this;
+                    break;
+                case ANIM_TYPE.exit_anim:
+                    this._view.mExitAnimation = this;
+                    break;
+                case ANIM_TYPE.activation_anim:
+                    if (this._view is IWindowView)
+                        (this._view as IWindowView).mActivationAnimation = this;
+                    break;
+                case ANIM_TYPE.passivation_anim:
+                    if (this._view is IWindowView)
+                        (this._view as IWindowView).mPassivationAnimation = this;
+                    break;
+            }
         }
 
         protected void OnStart()
@@ -48,6 +73,12 @@ namespace SnkFramework.Mvvm.Base
             return this;
         }
 
-        public abstract IAnimation Play();
+        public virtual void Play()
+        {
+            SnkMvvmSetup.mCoroutineExecutor.RunOnCoroutineNoReturn(DoPlay());
+        }
+
+        protected abstract IEnumerator DoPlay();
+
     }
 }

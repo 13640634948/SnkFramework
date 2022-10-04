@@ -67,12 +67,24 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
             //AlphaAnimation alphaAnimation = window.mOwner.GetComponent<AlphaAnimation>();
             //alphaAnimation.Init(window);
 
-            var anims = window.mOwner.GetComponents<AlphaAnimation>();
-            foreach (var anim in anims)
+            IAnimation[] anims = 
             {
-                anim.Init(window);
-            }
+                new AlphaAnimation{
+                    AnimType = ANIM_TYPE.enter_anim,
+                    from = 0.0f,
+                    to = 1.0f,
+                    duration = 1.0f
+                },
+                new AlphaAnimation{
+                    AnimType = ANIM_TYPE.exit_anim,
+                    from = 1.0f,
+                    to = 0.0f,
+                    duration = 1.0f
+                }
+            };
             
+            foreach (var anim in anims)
+                anim.Initialize(window);
             
             window.Show(mIgnoreAnimation);
             SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-1", Time.frameCount);

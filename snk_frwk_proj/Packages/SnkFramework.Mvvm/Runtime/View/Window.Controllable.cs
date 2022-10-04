@@ -20,12 +20,14 @@ namespace SnkFramework.Mvvm.View
             if (ignoreAnimation == false && this.mPassivationAnimation != null)
             {
                 bool animCompleted = false;
-                this.mActivationAnimation.OnStart(() => { this.State = WIN_STATE.activation_anim_begin; }).OnEnd(
-                    () =>
+                this.mActivationAnimation
+                    .OnStart(() => { this.State = WIN_STATE.activation_anim_begin; })
+                    .OnEnd(() =>
                     {
                         this.State = WIN_STATE.activation_anim_end;
                         animCompleted = true;
-                    }).Play();
+                    })
+                    .Play();
                 yield return new WaitUntil(() => animCompleted);
             }
         }
