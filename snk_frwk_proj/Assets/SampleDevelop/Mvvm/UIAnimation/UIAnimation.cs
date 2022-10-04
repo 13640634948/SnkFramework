@@ -10,22 +10,18 @@ namespace SnkFramework.Mvvm.Base
 
         [SerializeField]
         private ANIM_TYPE animType;
-
         public ANIM_TYPE AnimType
         {
-            get { return this.animType; }
-            set { this.animType = value; }
+            get => this.animType;
+            set => this.animType = value;
         }
 
         protected void OnStart()
         {
             try
             {
-                if (this._onStart != null)
-                {
-                    this._onStart();
-                    this._onStart = null;
-                }
+                this._onStart.Invoke();
+                this._onStart = null;
             }
             catch (Exception) { }
         }
@@ -34,11 +30,8 @@ namespace SnkFramework.Mvvm.Base
         {
             try
             {
-                if (this._onEnd != null)
-                {
-                    this._onEnd();
-                    this._onEnd = null;
-                }
+                this._onEnd?.Invoke();
+                this._onEnd = null;
             }
             catch (Exception) { }
         }
