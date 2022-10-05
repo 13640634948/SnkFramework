@@ -7,13 +7,6 @@ namespace Loxodon.Log
         public bool IsErrorEnabled { get; set; } = true;
         public bool IsErrorEnabledx { get; set; } = true;
 
-        public string mName { get; private set; }
-
-        public BindingLogBase(string name)
-        {
-            this.mName = name;
-        }
-
         protected abstract void InternalOutputString(string flag, string format, params object[] args);
 
         public void Info(object message)
