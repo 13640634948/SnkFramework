@@ -1,6 +1,5 @@
 using System;
 using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.ViewModel;
 
 namespace SnkFramework.Mvvm.View
 {
@@ -88,10 +87,5 @@ namespace SnkFramework.Mvvm.View
         /// 
         /// </summary>
         ITransition Dismiss(bool ignoreAnimation = false);
-    }
-
-    public interface IWindow<TViewModel> : IWindow, IWindowView<TViewModel>
-        where TViewModel : class, IViewModel
-    {
     }
 }

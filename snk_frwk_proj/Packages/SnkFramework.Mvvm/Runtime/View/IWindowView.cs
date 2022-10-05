@@ -8,10 +8,4 @@ namespace SnkFramework.Mvvm.View
         public IAnimation mActivationAnimation { get; set; }
         public IAnimation mPassivationAnimation { get; set; }
     }
-
-    public interface IWindowView<TViewModel> : IWindowView, IView<TViewModel>
-        where TViewModel : class, IViewModel
-    {
-        
-    }
 }

@@ -1,15 +1,13 @@
 using System;
 using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace SnkFramework.Mvvm.View
 {
     public interface IView
     {
         public GameObject mOwner { get; }
-        public IViewModel mViewModel { get; }
+        //public IViewModel mViewModel { get; }
         public string mName { get; set; }
         public bool mVisibility { get; set; }
 
@@ -28,10 +26,11 @@ namespace SnkFramework.Mvvm.View
         event EventHandler VisibilityChanged;
         public void SetOwner(GameObject owner);
     }
-
+/*
     public interface IView<TViewModel> : IView
         where TViewModel : class, IViewModel
     {
         public new TViewModel mViewModel { get; }
     }
+*/
 }

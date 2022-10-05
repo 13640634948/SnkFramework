@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract partial class Window<TViewModel>
+    public abstract partial class Window
     {
         public IEnumerator Activate(bool ignoreAnimation)
         {

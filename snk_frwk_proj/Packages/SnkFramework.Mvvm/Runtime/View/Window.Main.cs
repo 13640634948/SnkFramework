@@ -1,14 +1,12 @@
 using System;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.Log;
-using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract partial class Window<TViewModel> : WindowView<TViewModel>, ISnkWindowControllable<TViewModel>
-        where TViewModel : class, IViewModel, new()
+    public abstract partial class Window : WindowView, ISnkWindowControllable
     {
         static private IMvvmLog log = SnkMvvmSetup.mMvvmLog;
 

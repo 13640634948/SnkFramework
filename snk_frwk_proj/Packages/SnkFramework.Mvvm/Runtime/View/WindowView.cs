@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class WindowView<TViewModel> : View<TViewModel>, IWindowView<TViewModel>
-        where TViewModel : class, IViewModel, new()
+    public abstract class WindowView : View, IWindowView
     {
         public IAnimation mActivationAnimation { get; set; }
         public IAnimation mPassivationAnimation { get; set; }

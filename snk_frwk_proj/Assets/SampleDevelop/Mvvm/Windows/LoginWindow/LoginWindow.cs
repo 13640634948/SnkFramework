@@ -1,13 +1,13 @@
 using Loxodon.Framework.Binding.Contexts;
 using Loxodon.Framework.Interactivity;
+using SampleDevelop.Mvvm.Implments.UGUI;
 using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.View;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Windows.LoginWindow
 {
-    public class LoginWindow : Window<LoginViewModel>
+    public class LoginWindow : UGUIWindow<LoginViewModel>
     {
         private Text mTxt;
         public Button mButton;

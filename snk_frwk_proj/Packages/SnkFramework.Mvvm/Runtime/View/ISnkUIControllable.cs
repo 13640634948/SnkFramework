@@ -1,14 +1,7 @@
-using System;
-using SnkFramework.Mvvm.ViewModel;
 using System.Collections;
 
 namespace SnkFramework.Mvvm.View
 {
-    public interface ISnkWindowControllable<TViewModel> : ISnkWindowControllable, IWindow<TViewModel>
-        where TViewModel : class, IViewModel, new()
-    {
-    }
-
     public interface ISnkWindowControllable : IWindow
     {
         /// <summary>

@@ -2,17 +2,13 @@ using System;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.Log;
-using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class View<TViewModel> : IView<TViewModel>, IBindingContextOwner
-        where TViewModel : class, IViewModel, new()
+    public abstract class View : IView, IBindingContextOwner
     {
         private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
-
-        private TViewModel _viewModel;
 
         private IAnimation _enterAnimation;
         private IAnimation _exitAnimation;
@@ -20,10 +16,8 @@ namespace SnkFramework.Mvvm.View
         [NonSerialized] private UIAttribute[] _attributes;
         private EventHandler _visibilityChanged;
 
-        IViewModel IView.mViewModel => _viewModel;
-        public TViewModel mViewModel => _viewModel;
-
         public GameObject mOwner { get; private set; }
+        //public IViewModel mViewModel { get; }
 
         public IBindingContext DataContext { get; set; }
 
@@ -167,7 +161,7 @@ namespace SnkFramework.Mvvm.View
         {
             this.mOwner = owner;
             this.onInitComponents();
-            this._viewModel = new TViewModel();
+            //this._viewModel = new TViewModel();
             this.onBindingComponents();
         }
 
