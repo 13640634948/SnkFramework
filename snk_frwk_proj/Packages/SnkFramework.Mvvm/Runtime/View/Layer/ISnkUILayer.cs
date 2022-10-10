@@ -32,7 +32,5 @@ namespace SampleDevelop.Test
         List<T> FindAll<T>() where T : class, ISnkWindow;
 
         void Clear();
-
-        public int GetPrioritySerialNum();
     }
 }

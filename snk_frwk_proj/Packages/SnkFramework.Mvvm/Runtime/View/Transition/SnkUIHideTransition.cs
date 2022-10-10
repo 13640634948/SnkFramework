@@ -17,39 +17,24 @@ namespace SampleDevelop.Test
         protected override IEnumerator DoTransition()
         {
             ISnkControllable current = this.Window;
-            if (this._uiLayer.IndexOf(current) == 0)
+            if (this._uiLayer.IndexOf(current) == 0 && current.mActivated)
             {
-                if (current.mActivated)
-                {
-                    IAsyncResult result = current.Passivate(this.AnimationDisabled);
-                    while (result.IsCompleted == false)
-                        yield return null;
-                    //yield return result.WaitForDone();
-                }
-
-                if (current.mVisibility)
-                {
-                    IAsyncResult result = current.DoHide(this.AnimationDisabled);
-                    while (result.IsCompleted == false)
-                        yield return null;
-                    //yield return result.WaitForDone();
-                }
+                IAsyncResult result = current.Passivate(this.AnimationDisabled);
+                while (result.IsCompleted == false)
+                    yield return null;
+                //yield return result.WaitForDone();
             }
-            else
+
+            if (current.mVisibility)
             {
-                if (current.mVisibility)
-                {
-                    IAsyncResult result = current.DoHide(this.AnimationDisabled);
-                    while (result.IsCompleted == false)
-                        yield return null;
-                    //yield return result.WaitForDone();
-                }
+                IAsyncResult result = current.DoHide(this.AnimationDisabled);
+                while (result.IsCompleted == false)
+                    yield return null;
+                //yield return result.WaitForDone();
             }
 
             if (_dismiss)
-            {
                 current.DoDismiss();
-            }
         }
     }
 }

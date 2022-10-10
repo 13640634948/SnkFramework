@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using SnkFramework.Mvvm.Base;
-using UnityEngine;
 
 namespace SampleDevelop.Test
 {
@@ -37,44 +36,29 @@ namespace SampleDevelop.Test
         }
 
         public virtual int Count => this.windowList.Count;
-        
-        public ISnkTransitionExecutor mTransitionExecutor;
+        protected int _priorityNum = 0;
 
+        public ISnkTransitionExecutor mTransitionExecutor;
+        
         public virtual ISnkTransition Show(ISnkWindow window)
         {
             SnkUIShowTransition transition = new SnkUIShowTransition(this, (ISnkControllable)window);
             this.mTransitionExecutor.Execute(transition);
-            return transition.OnStateChanged((w, state) =>
-            {
-                /* Control the layer of the window */
-                if (state == WindowState.VISIBLE)
-//                    this.MoveToIndex(w, transition.Layer);
-                  this.MoveToIndex(w, window.mPriority);
-            });
+            return transition;
         }
 
         public virtual ISnkTransition Hide(ISnkWindow window)
         {
             SnkUIHideTransition transition = new SnkUIHideTransition(this, (ISnkControllable)window, false);
             this.mTransitionExecutor.Execute(transition);
-            return transition.OnStateChanged((w, state) =>
-            {
-                /* Control the layer of the window */
-                if (state == WindowState.INVISIBLE)
-                    this.MoveToLast(w);
-            });
+            return transition;
         }
 
         public virtual ISnkTransition Dismiss(ISnkWindow window)
         {
             SnkUIHideTransition transition = new SnkUIHideTransition(this, (ISnkControllable)window, true);
             this.mTransitionExecutor.Execute(transition);
-            return transition.OnStateChanged((w, state) =>
-            {
-                /* Control the layer of the window */
-                if (state == WindowState.INVISIBLE)
-                    this.MoveToLast(w);
-            });
+            return transition;
         }
 
         public virtual IEnumerator<ISnkWindow> Visibles()
@@ -88,10 +72,6 @@ namespace SampleDevelop.Test
             return this.windowList[index];
         }
 
-        //protected virtual void onAdd(ISnkWindow window){ }
-        //protected virtual void onRemove(ISnkWindow window){ }
-        //protected virtual void onRemoveAt(ISnkWindow window, int index){ }
-
         public virtual void Add(ISnkWindow window)
         {
             if (window == null)
@@ -101,9 +81,8 @@ namespace SampleDevelop.Test
                 return;
 
             window.mUILayer = this;
-            window.mPriority = this.GetPrioritySerialNum();
+            window.mPriority = this._priorityNum++;
             this.windowList.Add(window);
-            //this.onAdd(window);
         }
 
         public virtual bool Remove(ISnkWindow window)
@@ -111,7 +90,6 @@ namespace SampleDevelop.Test
             if (window == null)
                 throw new ArgumentNullException("window");
 
-            //this.onRemove(window);
             return this.windowList.Remove(window);
         }
 
@@ -121,7 +99,6 @@ namespace SampleDevelop.Test
                 throw new IndexOutOfRangeException();
 
             var window = this.windowList[index];
-            //this.onRemoveAt(window, index);
             this.windowList.RemoveAt(index);
             return window;
         }
@@ -164,39 +141,5 @@ namespace SampleDevelop.Test
             }
             this.windowList.Clear();
         }
-
-        protected int _serialNum = 0;
-        public virtual int GetPrioritySerialNum() => _serialNum++;
-
-        protected virtual void MoveToIndex(ISnkWindow window, int index)
-        {
-            if (window == null)
-                throw new ArgumentNullException("window");
-
-            int oldIndex = this.IndexOf(window);
-            
-            if (oldIndex < 0 || oldIndex == index)
-                return;
-
-            Debug.Log("MoveToIndex:" + window.mName + ", index:" + index);
-            this.windowList.RemoveAt(oldIndex);
-            this.windowList.Insert(index, window);
-            PrintWindowPriority();
-        }
-        
-        protected virtual void MoveToLast(ISnkWindow window)
-        {
-            if (window == null)
-                throw new ArgumentNullException("window");
-            int index = this.IndexOf(window);
-            if (index < 0 || index == this.Count - 1)
-                return;
-
-            this.windowList.RemoveAt(index);
-            this.windowList.Add(window);
-            PrintWindowPriority();
-        }
-
-        protected abstract void PrintWindowPriority();
     }
 }

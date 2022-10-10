@@ -1,4 +1,4 @@
-using SampleDevelop.Mvvm.Implments.UGUI;
+using Windows.LoginWindow;
 using SampleDevelop.Test;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.View;
@@ -13,12 +13,10 @@ public class UGUILayer : SnkUIlayerBase, IUGUILayer
     }
     
     private Canvas _canvas;
-
     public Canvas mCanvas => this._canvas;
 
     private CanvasScaler _canvasScaler;
     public CanvasScaler mCanvasScaler => _canvasScaler;
-
 
     private Transform _transform;
     public Transform transform => _transform ??= this._canvas ? this._canvas.transform : null;
@@ -32,37 +30,6 @@ public class UGUILayer : SnkUIlayerBase, IUGUILayer
         this._canvasScaler = this._canvas.GetComponent<CanvasScaler>() ?? this._canvas.gameObject.AddComponent<CanvasScaler>();
     }
 
-    /*
-    public override int GetSortingLayerID()
-        => this.mCanvas.sortingLayerID;
-        */
-
-    /*
-    protected override void onAdd(ISnkWindow window)
-    {
-        base.onAdd(window);
-        this.AddChild(((IUGUIWindow)window).mUGUIOwner.transform);
-    }
-
-    protected override void onRemove(ISnkWindow window)
-    {
-        base.onRemove(window);
-        this.RemoveChild(GetTransform(window));
-    }
-
-    protected override void onRemoveAt(ISnkWindow window, int index)
-    {
-        base.onRemoveAt(window, index);
-        this.RemoveChild(GetTransform(window));
-    }
-    */
-    
-    protected Transform GetTransform(ISnkWindow window)
-    {
-        IUGUIWindow uWindow = (IUGUIWindow) window;
-        return uWindow.mUGUIOwner.transform;
-    }
-
     public void AddChild(Transform child, bool worldPositionStays = false)
     {
         if (child == null || this.transform.Equals(child.parent))
@@ -72,6 +39,7 @@ public class UGUILayer : SnkUIlayerBase, IUGUILayer
         child.SetParent(this.transform, worldPositionStays);
         child.SetAsFirstSibling();
     }
+    
     public virtual void RemoveChild(Transform child, bool worldPositionStays = false)
     {
         if (child == null || !this.transform.Equals(child.parent))
@@ -80,23 +48,51 @@ public class UGUILayer : SnkUIlayerBase, IUGUILayer
         child.SetParent(null, worldPositionStays);
     }
 
-    protected override void PrintWindowPriority()
+    public override ISnkTransition Show(ISnkWindow window)
     {
-        //throw new NotImplementedException();
-        SortSibling();
+        ISnkTransition transition = base.Show(window);
+        return transition.OnStateChanged((w, state) =>
+        {
+            /* Control the layer of the window */
+            if (state == WindowState.VISIBLE)
+                onTransitionCompleted(window, transition);
+            //this.MoveToIndex(w, window.mPriority);
+        });
+    }
+    
+    public virtual ISnkTransition Hide(ISnkWindow window)
+    {
+        ISnkTransition transition = base.Hide(window);
+        return transition.OnStateChanged((w, state) =>
+        {
+            /* Control the layer of the window */
+            if (state == WindowState.INVISIBLE)
+                onTransitionCompleted(window, transition);
+                //this.MoveToLast(w);
+        });
+    }
+    public virtual ISnkTransition Dismiss(ISnkWindow window)
+    {
+        ISnkTransition transition = base.Dismiss(window);
+        return transition.OnStateChanged((w, state) =>
+        {
+            /* Control the layer of the window */
+            if (state == WindowState.INVISIBLE)
+                onTransitionCompleted(window, transition);
+                //this.MoveToLast(w);
+        });
     }
 
-    protected void SortSibling()
+    protected virtual void onTransitionCompleted(ISnkWindow window, ISnkTransition transition)
     {
-        windowList.Sort((left, right)=> left.mPriority.CompareTo(right));
-        Debug.Log("SortSibling:" + windowList.Count);
-        for (int i = 0; i < windowList.Count; i++)
-        {
-            Debug.Log(GetTransform(windowList[i]).name + ":" + windowList[i].mPriority + ", " + i);
-            if(windowList[i].mPriority == i)
-                continue;
-            transform.SetSiblingIndex(i);
-        }
+        IUGUIViewOwner viewOwner = window.mOwner as IUGUIViewOwner;
+        IUGUILayer layer = window.mUILayer as IUGUILayer;
+        
+        viewOwner.mCanvas.overrideSorting = true;
+        viewOwner.mCanvas.sortingLayerID = layer.mCanvas.sortingLayerID;
+        viewOwner.mCanvas.sortingOrder = window.mPriority;
     }
+
+
 
 }

@@ -29,6 +29,7 @@ namespace SampleDevelop.Test
     public abstract partial class SnkWindowBase : SnkWindowViewBase, ISnkControllable
     {
         private SnkUIPageBase _mainPage;
+
         public virtual ISnkUIPage mMainPage
         {
             get
@@ -38,6 +39,7 @@ namespace SampleDevelop.Test
                     if (this.mPageList != null && this.mPageList.Count > 0)
                         _mainPage = this.mPageList[0];
                 }
+
                 return _mainPage;
             }
         }
@@ -52,10 +54,9 @@ namespace SampleDevelop.Test
         public ISnkUILayer mUILayer
         {
             get => this._uiLayer;
-            //internal set => this._uiLayer = value;
-             set => this._uiLayer = value;
+            set => this._uiLayer = value;
         }
-        
+
         public bool mCreated => this._created;
         public bool mDismissed => this._dismissed;
 
@@ -70,19 +71,19 @@ namespace SampleDevelop.Test
             get => this._activated;
             protected set
             {
-                if(this._activated == value)
+                if (this._activated == value)
                     return;
                 this._activated = value;
                 this.OnActivatedChanged();
                 this.raiseActivatedChanged();
             }
         }
-        
+
         protected virtual void OnActivatedChanged()
         {
             this.mInteractable = this.mActivated;
         }
-        
+
         //public bool mStateBroadcast = true;
 
         private WindowState _windowState = WindowState.NONE;
@@ -92,7 +93,7 @@ namespace SampleDevelop.Test
             get => this._windowState;
             protected set
             {
-                if(this._windowState.Equals(value))
+                if (this._windowState.Equals(value))
                     return;
                 WindowState oldState = this._windowState;
                 this._windowState = value;
@@ -101,8 +102,8 @@ namespace SampleDevelop.Test
         }
 
         private ISnkTransition _dismissTransition;
-        
-        private readonly object _lock = new ();
+
+        private readonly object _lock = new();
         private EventHandler _visibilityChanged;
         private EventHandler _activatedChanged;
         private EventHandler _onDismissed;
@@ -110,23 +111,50 @@ namespace SampleDevelop.Test
 
         public event EventHandler mVisibilityChanged
         {
-            add { lock (_lock) this._visibilityChanged += value; }
-            remove { lock (_lock) this._visibilityChanged -= value;  }
+            add
+            {
+                lock (_lock) this._visibilityChanged += value;
+            }
+            remove
+            {
+                lock (_lock) this._visibilityChanged -= value;
+            }
         }
+
         public event EventHandler mActivatedChanged
         {
-            add { lock (_lock) this._activatedChanged += value; }
-            remove { lock (_lock) this._activatedChanged -= value;  }
+            add
+            {
+                lock (_lock) this._activatedChanged += value;
+            }
+            remove
+            {
+                lock (_lock) this._activatedChanged -= value;
+            }
         }
+
         public event EventHandler mOnDismissed
         {
-            add { lock (_lock) this._onDismissed += value; }
-            remove { lock (_lock) this._onDismissed -= value;  }
+            add
+            {
+                lock (_lock) this._onDismissed += value;
+            }
+            remove
+            {
+                lock (_lock) this._onDismissed -= value;
+            }
         }
+
         public event EventHandler<WindowStateEventArgs> StateChanged
         {
-            add { lock (_lock) this._stateChanged += value; }
-            remove { lock (_lock) this._stateChanged -= value;  }
+            add
+            {
+                lock (_lock) this._stateChanged += value;
+            }
+            remove
+            {
+                lock (_lock) this._stateChanged -= value;
+            }
         }
 
         protected void raiseActivatedChanged()
@@ -142,6 +170,7 @@ namespace SampleDevelop.Test
                 //    log.WarnFormat("{0}", e);
             }
         }
+
         protected void raiseVisibilityChanged()
         {
             try
@@ -154,7 +183,8 @@ namespace SampleDevelop.Test
                 //if (log.IsWarnEnabled)
                 //    log.WarnFormat("{0}", e);
             }
-        } 
+        }
+
         protected void raiseOnDismissed()
         {
             try
@@ -168,6 +198,7 @@ namespace SampleDevelop.Test
                 //    log.WarnFormat("{0}", e);
             }
         }
+
         protected void raiseStateChanged(WindowState oldState, WindowState newState)
         {
             try
@@ -195,7 +226,7 @@ namespace SampleDevelop.Test
         public override void Create()
         {
             base.Create();
-            
+
             if (this._dismissTransition != null || this._dismissed)
                 throw new ObjectDisposedException(this.mName);
 
@@ -209,8 +240,7 @@ namespace SampleDevelop.Test
             this._created = true;
             this.mWindowState = WindowState.CREATE_END;
         }
-        
+
         protected abstract void OnCreate();
-        
     }
 }

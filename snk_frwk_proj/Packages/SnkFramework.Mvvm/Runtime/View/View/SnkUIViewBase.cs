@@ -1,7 +1,6 @@
 using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
-using UnityEngine;
 
 namespace SampleDevelop.Test
 {
@@ -37,29 +36,53 @@ namespace SampleDevelop.Test
         {
         }
 
-        protected virtual void OnOwnerLoaded()
+        protected virtual void OnOwnerLoadBegin()
+        {
+        }
+        protected virtual void OnOwnerLoadEnd()
+        {
+        }
+        protected virtual void OnOwnerUnloadBegin()
+        {
+        }
+        protected virtual void OnOwnerUnloadEnd()
         {
         }
 
         public IBindingContext DataContext { get; set; }
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
 
-
         public LoadState mLoadState { get; private set; } = LoadState.none;
         public string assetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
         public void Load()
         {
-            this.mLoadState = LoadState.loading;
+            this.OnOwnerLoadBegin();
+            this.mLoadState = LoadState.load_begin;
             this.mOwner = SnkMvvmSetup.mLoader.LoadViewOwner(assetPath);
-            this.mLoadState = LoadState.loaded;
-            this.OnOwnerLoaded();
+            this.mLoadState = LoadState.load_end;
+            this.OnOwnerLoadEnd();
         }
 
         public IEnumerator LoadAsync()
         {
-            this.mLoadState = LoadState.loading;
+            this.OnOwnerLoadBegin();
+            this.mLoadState = LoadState.load_begin;
             yield return SnkMvvmSetup.mLoader.LoadViewOwnerAsync(assetPath, owner=>this.mOwner = owner);
-            this.mLoadState = LoadState.loaded;
+            this.mLoadState = LoadState.load_end;
+            this.OnOwnerLoadEnd();
+        }
+
+        public virtual void Unload()
+        {
+            this.OnOwnerUnloadBegin();
+            this.mLoadState = LoadState.load_begin;
+            if (this.mOwner != null)
+            {
+                this.mOwner.Dispose();
+                this.mOwner = null;
+            }
+            this.mLoadState = LoadState.load_end;
+            this.OnOwnerUnloadEnd();
         }
     }
 

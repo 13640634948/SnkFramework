@@ -7,14 +7,14 @@ namespace SampleDevelop.Test
     {
         private bool _isCompleted = false;
         private Exception _exception = null;
-        
+
         public object AsyncState { get; }
         public WaitHandle AsyncWaitHandle { get; }
         public bool CompletedSynchronously { get; }
-        
+
         public bool IsCompleted => _isCompleted;
         private Exception mException => _exception;
-        
+
         public void SetException(Exception exception)
         {
             this._exception = exception;
@@ -26,21 +26,23 @@ namespace SampleDevelop.Test
             _isCompleted = true;
         }
     }
-    
-    
-    
-    
-    
+
 
     public abstract partial class SnkWindowBase : ISnkWindowControllable
     {
-        protected virtual void OnShow() { }
+        protected virtual void OnShow()
+        {
+        }
 
-        protected virtual void OnHide() { }
+        protected virtual void OnHide()
+        {
+        }
 
-        protected virtual void OnDismiss() { }
+        protected virtual void OnDismiss()
+        {
+        }
 
-        
+
         public ISnkTransition Show(bool ignoreAnimation = false)
         {
             if (this._dismissTransition != null || this._dismissed)
@@ -78,7 +80,7 @@ namespace SampleDevelop.Test
             return this._dismissTransition;
         }
 
-        
+
         public IAsyncResult Activate(bool ignoreAnimation)
         {
             UIAsyncResult result = new UIAsyncResult();
@@ -89,12 +91,13 @@ namespace SampleDevelop.Test
                     result.SetException(new InvalidOperationException("The window is not visible."));
                     return result;
                 }
-                
+
                 if (this.mActivated)
                 {
                     result.SetResult();
                     return result;
                 }
+
                 if (!ignoreAnimation && this.mActivationAnimation != null)
                 {
                     this.mActivationAnimation.OnStart(() =>
@@ -119,6 +122,7 @@ namespace SampleDevelop.Test
             {
                 result.SetException(e);
             }
+
             return result;
         }
 
@@ -162,15 +166,13 @@ namespace SampleDevelop.Test
             {
                 result.SetException(e);
             }
+
             return result;
         }
 
-        
-        
+
         public IAsyncResult DoShow(bool ignoreAnimation = false)
         {
-            
-            
             UIAsyncResult result = new UIAsyncResult();
             try
             {
@@ -184,14 +186,12 @@ namespace SampleDevelop.Test
                 this.mWindowState = WindowState.VISIBLE;
                 if (!ignoreAnimation && this.mEnterAnimation != null)
                 {
-                    this.mEnterAnimation.OnStart(() =>
-                    {
-                        this.mWindowState = WindowState.ENTER_ANIMATION_BEGIN;
-                    }).OnEnd(() =>
-                    {
-                        this.mWindowState = WindowState.ENTER_ANIMATION_END;
-                        result.SetResult();
-                    }).Play();
+                    this.mEnterAnimation.OnStart(() => { this.mWindowState = WindowState.ENTER_ANIMATION_BEGIN; })
+                        .OnEnd(() =>
+                        {
+                            this.mWindowState = WindowState.ENTER_ANIMATION_END;
+                            result.SetResult();
+                        }).Play();
                 }
                 else
                 {
@@ -205,6 +205,7 @@ namespace SampleDevelop.Test
                 //if (log.IsWarnEnabled)
                 //    log.WarnFormat("The window named \"{0}\" failed to open!Error:{1}", this.Name, e);
             }
+
             return result;
         }
 
@@ -215,17 +216,15 @@ namespace SampleDevelop.Test
             {
                 if (!ignoreAnimation && this.mExitAnimation != null)
                 {
-                    this.mExitAnimation.OnStart(() =>
-                    {
-                        this.mWindowState = WindowState.EXIT_ANIMATION_BEGIN;
-                    }).OnEnd(() =>
-                    {
-                        this.mWindowState = WindowState.EXIT_ANIMATION_END;
-                        this.mVisibility = false;
-                        this.mWindowState = WindowState.INVISIBLE;
-                        this.OnHide();
-                        result.SetResult();
-                    }).Play();
+                    this.mExitAnimation.OnStart(() => { this.mWindowState = WindowState.EXIT_ANIMATION_BEGIN; }).OnEnd(
+                        () =>
+                        {
+                            this.mWindowState = WindowState.EXIT_ANIMATION_END;
+                            this.mVisibility = false;
+                            this.mWindowState = WindowState.INVISIBLE;
+                            this.OnHide();
+                            result.SetResult();
+                        }).Play();
                 }
                 else
                 {
@@ -241,11 +240,13 @@ namespace SampleDevelop.Test
                 //if (log.IsWarnEnabled)
                 //    log.WarnFormat("The window named \"{0}\" failed to hide!Error:{1}", this.Name, e);
             }
+
             return result;
         }
 
-        public void DoDismiss()
-        {  try
+        public virtual void DoDismiss()
+        {
+            try
             {
                 if (this._dismissed == false)
                 {
@@ -253,12 +254,13 @@ namespace SampleDevelop.Test
                     this._dismissed = true;
                     this.OnDismiss();
                     this.raiseOnDismissed();
-                    
+
                     this.mUILayer.Remove(this);
 
+                    this.Unload();
                     //if (!this.IsDestroyed() && this.gameObject != null)
                     //    GameObject.Destroy(this.gameObject);
-                    
+
                     this.mWindowState = WindowState.DISMISS_END;
                     this._dismissTransition = null;
                 }
@@ -269,5 +271,6 @@ namespace SampleDevelop.Test
                 //    log.WarnFormat("The window named \"{0}\" failed to dismiss!Error:{1}", this.Name, e);
             }
         }
+        
     }
 }

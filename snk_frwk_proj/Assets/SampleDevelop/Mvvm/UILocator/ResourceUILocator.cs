@@ -1,3 +1,5 @@
+
+/*
 using System;
 using System.Collections;
 using Windows.LoginWindow;
@@ -66,4 +68,4 @@ public class ResourceUILocator : UILocator, IResourceUILocator
         callback?.Invoke(window);
     }
 
-}
+}*/

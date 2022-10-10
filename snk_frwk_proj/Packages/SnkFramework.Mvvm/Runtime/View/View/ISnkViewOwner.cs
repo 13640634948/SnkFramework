@@ -1,6 +1,6 @@
 namespace SampleDevelop.Test
 {
-    public interface ISnkViewOwner
+    public interface ISnkViewOwner : System.IDisposable
     {
     }
 }

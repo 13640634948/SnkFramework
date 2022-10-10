@@ -6,8 +6,10 @@ namespace SampleDevelop.Test
     public enum LoadState
     {
         none,
-        loading,
-        loaded,
+        load_begin,
+        load_end,
+        unload_begin,
+        unload_end
     }
 
     public interface ISnkLoader
@@ -16,6 +18,8 @@ namespace SampleDevelop.Test
         public string assetPath { get; }
         public void Load();
         public IEnumerator LoadAsync();
+
+        public void Unload();
     }
 
     public interface ISnkView : ISnkViewControllable, ISnkLoader, IBindingContextOwner

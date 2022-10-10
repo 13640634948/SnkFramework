@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Windows.LoginWindow;
 using SampleDevelop.Test;
 using SnkFramework.Mvvm.ViewModel;
@@ -7,9 +5,24 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-    public interface IUGUIWindow : ISnkWindow
+
+    public interface IUGUIView : ISnkUIView
     {
         public UGUIViewOwner mUGUIOwner { get; }
+    }
+
+    public interface IUGUIPageBase : ISnkUIPage, IUGUIView
+    {
+        
+    }
+
+    public interface IUGUIWindowView : ISnkWindowView, IUGUIPageBase
+    {
+    }
+
+    public interface IUGUIWindow : ISnkWindow, IUGUIWindowView
+    {
+        
     }
 
     public abstract class UGUIWindow<TViewModel> : SnkWindowBase, IUGUIWindow
@@ -31,19 +44,24 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
         private Transform _transform;
         protected Transform transform => _transform ??= this.mUGUIOwner.transform;
 
+        private RectTransform _rectTransform;
+        protected RectTransform rectTransform => _rectTransform ??= transform as RectTransform;
+
         public override bool mInteractable
         {
             get
             {
                 if (this.gameObject == null)
                     return false;
-                return this.mUGUIOwner.mCanvasGroup.interactable;
+                //return this.mUGUIOwner.mCanvasGroup.interactable;
+                return this.mUGUIOwner.mCanvasGroup.blocksRaycasts;
             }
             set
             {
                 if (this.gameObject == null)
                     return;
-                this.mUGUIOwner.mCanvasGroup.interactable = value;
+                //this.mUGUIOwner.mCanvasGroup.interactable = value;
+                this.mUGUIOwner.mCanvasGroup.blocksRaycasts = value;
             }
         }
 
@@ -55,10 +73,16 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
             this.onBindingComponents();
         }
 
-        protected override void OnOwnerLoaded()
+        protected override void OnOwnerLoadEnd()
         {
-            base.OnOwnerLoaded();
-            this.mUGUILayer.AddChild(this.transform);
+            base.OnOwnerLoadEnd();
+            this.mUGUILayer.AddChild(rectTransform);
+        }
+
+        protected override void OnOwnerUnloadEnd()
+        {
+            base.OnOwnerUnloadEnd();
+            this.mUGUILayer.RemoveChild(rectTransform);
         }
 
         protected virtual void onInitComponents()
@@ -68,21 +92,5 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
         protected virtual void onBindingComponents()
         {
         }
-        
     }
-
-
-    /*
-     public abstract class UGUIWindow<TViewModel> : Window
-        where TViewModel : class, IViewModel, new()
-    {
-        public TViewModel mViewModel { get; set; }
-
-        public override void SetOwner(GameObject owner)
-        {
-            this.mViewModel = new TViewModel();
-            base.SetOwner(owner);
-        }
-    }
-    */
 }
