@@ -1,10 +1,18 @@
+using System;
 using SnkFramework.FluentBinding.Base;
 using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.View;
 using System.Collections;
+using SampleDevelop.Test;
 
 namespace SnkFramework.Mvvm.Base
 {
+    public interface IMvvmLoader
+    {
+        public ISnkViewOwner LoadViewOwner(string ownerPath);
+        public IEnumerator LoadViewOwnerAsync(string ownerPath, Action<ISnkViewOwner> callback);
+    }
+
     public interface IMvvmCoroutineExecutor
     {
         public void RunOnCoroutineNoReturn(IEnumerator routine);
@@ -16,10 +24,12 @@ namespace SnkFramework.Mvvm.Base
         static public IWindowManager mWindowManager;
         static public IMvvmLog mMvvmLog;
         static public IMvvmCoroutineExecutor mCoroutineExecutor;
+        static public IMvvmLoader mLoader;
 
         static public void Initialize(
             IWindowManager windowManager,
             IMvvmCoroutineExecutor coroutineExecutor,
+            IMvvmLoader loader,
             ISnkMvvmSettings settings = null,
             IMvvmLog mvvmLog = null
             )
@@ -28,6 +38,7 @@ namespace SnkFramework.Mvvm.Base
             
             mSettings = settings ??= new SnkMvvmSettings();
             mMvvmLog = mvvmLog ??= new SnkMvvmLog();
+            mLoader = loader;
             mWindowManager = windowManager;
             mCoroutineExecutor = coroutineExecutor;
         }

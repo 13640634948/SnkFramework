@@ -1,9 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Windows.LoginWindow;
 using Loxodon.Framework.Interactivity;
+using SampleDevelop.Test;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
+
+public class MvvmLoader : IMvvmLoader
+{
+    public ISnkViewOwner LoadViewOwner(string ownerPath)
+    {
+        GameObject asset = Resources.Load<GameObject>(ownerPath);
+        GameObject inst = GameObject.Instantiate(asset);
+        return inst.AddComponent<UGUIViewOwner>();
+    }
+
+    public IEnumerator LoadViewOwnerAsync(string ownerPath, Action<ISnkViewOwner> callback)
+    {
+        ResourceRequest request = Resources.LoadAsync<GameObject>(ownerPath);
+        yield return request;
+        GameObject inst = GameObject.Instantiate(request.asset as GameObject);
+        callback.Invoke(inst.AddComponent<UGUIViewOwner>());
+    }
+}
 
 public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
 {
@@ -13,17 +33,16 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
     }
 
     private List<LoginWindow> loginWindowList = new List<LoginWindow>();
-    private IResourceUILocator locator;
 
+    private UGUIWindowManager _uguiWindowMgr;
     private void Awake()
     {
-        UGUIWindowManager uguiWindowMgr = new UGUIWindowManager();
-        SnkMvvmSetup.Initialize(uguiWindowMgr, this);
+        _uguiWindowMgr= new UGUIWindowManager();
+        SnkMvvmSetup.Initialize(_uguiWindowMgr, this, new MvvmLoader());
     }
 
     void Start()
     {
-        locator = new ResourceUILocator();
     }
 
     public bool mIgnoreAnimation;
@@ -61,12 +80,13 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
         
         if (Input.GetKeyDown(KeyCode.S))
         {
-            SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-0", Time.frameCount);
-            var window = locator.LoadWindow<LoginWindow>(null);
-            
+            //SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-0", Time.frameCount);
+            //var window = locator.LoadWindow<LoginWindow>(null);
+            var window = _uguiWindowMgr.OpenWindow<LoginWindow>();
             //AlphaAnimation alphaAnimation = window.mOwner.GetComponent<AlphaAnimation>();
             //alphaAnimation.Init(window);
 
+            /*
             IAnimation[] anims = 
             {
                 new AlphaAnimation{
@@ -85,16 +105,17 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
             
             foreach (var anim in anims)
                 anim.Initialize(window);
+            */
             
             window.Show(mIgnoreAnimation);
-            SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-1", Time.frameCount);
+            //SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-1", Time.frameCount);
             this.loginWindowList.Add(window);
         }
     }
 
     private IEnumerator LoadWindowAsync()
     {
-        yield return locator.LoadWindowAsync<LoginWindow>(null, window =>
+        yield return _uguiWindowMgr.OpenWindowAsync<LoginWindow>( window =>
         {
             window.Show(mIgnoreAnimation);
             this.loginWindowList.Add(window);

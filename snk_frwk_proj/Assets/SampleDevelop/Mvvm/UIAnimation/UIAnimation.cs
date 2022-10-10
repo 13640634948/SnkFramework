@@ -1,10 +1,11 @@
 using System;
 using SnkFramework.Mvvm.View;
 using System.Collections;
+using SampleDevelop.Test;
 
 namespace SnkFramework.Mvvm.Base
 {
-    public abstract class UIAnimation : IAnimation
+    public abstract class UIAnimation : ISnkAnimation
     {
         private Action _onStart;
         private Action _onEnd;
@@ -16,10 +17,10 @@ namespace SnkFramework.Mvvm.Base
             set => this.animType = value;
         }
         
-        private IView _view;
-        protected IView mView => _view;
+        private ISnkView _view;
+        protected ISnkView mView => _view;
 
-        public virtual void Initialize(IView view)
+        public virtual void Initialize(ISnkView view)
         {
             this._view = view;
             switch (this.AnimType)
@@ -31,12 +32,12 @@ namespace SnkFramework.Mvvm.Base
                     this._view.mExitAnimation = this;
                     break;
                 case ANIM_TYPE.activation_anim:
-                    if (this._view is IWindowView)
-                        (this._view as IWindowView).mActivationAnimation = this;
+                    if (this._view is ISnkWindowView)
+                        (this._view as ISnkWindowView).mActivationAnimation = this;
                     break;
                 case ANIM_TYPE.passivation_anim:
-                    if (this._view is IWindowView)
-                        (this._view as IWindowView).mPassivationAnimation = this;
+                    if (this._view is ISnkWindowView)
+                        (this._view as ISnkWindowView).mPassivationAnimation = this;
                     break;
             }
         }
@@ -61,23 +62,24 @@ namespace SnkFramework.Mvvm.Base
             catch (Exception) { }
         }
 
-        public IAnimation OnStart(Action onStart)
+        public ISnkAnimation OnStart(Action onStart)
         {
             this._onStart += onStart;
             return this;
         }
 
-        public IAnimation OnEnd(Action onEnd)
+        public ISnkAnimation OnEnd(Action onEnd)
         {
             this._onEnd += onEnd;
             return this;
         }
 
-        public virtual void Play()
+        //public virtual void Play()
+        public virtual ISnkAnimation Play()
         {
             SnkMvvmSetup.mCoroutineExecutor.RunOnCoroutineNoReturn(DoPlay());
+            return default;
         }
-
         protected abstract IEnumerator DoPlay();
 
     }

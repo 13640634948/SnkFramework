@@ -1,16 +1,39 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using SampleDevelop.Mvvm.Implments.UGUI;
+using SampleDevelop.Test;
 using SnkFramework.Mvvm.Base;
 using UnityEngine;
 
+public class CoroutineExecutor : MonoBehaviour, ICoroutineExecutor
+{
+    public IAsyncResult RunOnCoroutine(IEnumerator routine)
+    {
+        StartCoroutine(routine);
+        return default;
+    }
+}
 public class UGUIWindowManager : WindowManagerBase
 {
     public Camera mViewCamera { get; }
 
-    private Dictionary<LAYER, IUILayer> _layerDict;
+    private Dictionary<LAYER, ISnkUILayer> _layerDict;
     public GameObject mOwner;
+
+    private ICoroutineExecutor _coroutineExecutor;
+    private ISnkTransitionExecutor _transitionExecutor;
+
+    private IResourceUILocator locator;
+
     public UGUIWindowManager()
     {
-        this._layerDict = new Dictionary<LAYER, IUILayer>();
+        //locator = new ResourceUILocator();
+        GameObject goCoroutineExecutor = new GameObject();
+        _coroutineExecutor = goCoroutineExecutor.AddComponent<CoroutineExecutor>();
+        _transitionExecutor = new SnkTransitionPopupExecutor(_coroutineExecutor);
+
+        this._layerDict = new Dictionary<LAYER, ISnkUILayer>();
         GameObject asset = Resources.Load<GameObject>("WindowRoot");
         GameObject inst = GameObject.Instantiate(asset);
         GameObject.DontDestroyOnLoad(inst);
@@ -22,17 +45,17 @@ public class UGUIWindowManager : WindowManagerBase
             this.CreateLayer((LAYER)i);
     }
 
-    public override IUILayer GetLayer(string layerName)
+    public override ISnkUILayer GetLayer(string layerName)
     {
         if (System.Enum.TryParse(layerName, out LAYER layer) == false)
             return null;
 
-        if (this._layerDict.TryGetValue(layer, out IUILayer layerTarget) == false)
+        if (this._layerDict.TryGetValue(layer, out ISnkUILayer layerTarget) == false)
             return null;
         return layerTarget;
     }
 
-    public IUILayer CreateLayer(LAYER layer)
+    public ISnkUILayer CreateLayer(LAYER layer)
     {
         if (this._layerDict.TryGetValue(layer, out var tmpLayer))
             return tmpLayer;
@@ -48,10 +71,31 @@ public class UGUIWindowManager : WindowManagerBase
         canvas.worldCamera = this.mViewCamera;
         canvas.sortingLayerID = SortingLayer.NameToID(layerName);
         
-        UGUILayer uguiLayer = new UGUILayer();
+        UGUILayer uguiLayer = new UGUILayer(this.locator);
+        uguiLayer.mTransitionExecutor = _transitionExecutor;
         uguiLayer.SetOwner(canvas);
         this._layerDict.Add(layer, uguiLayer);
         return uguiLayer;
     }
 
+    public TWindow OpenWindow<TWindow>(bool ignoreAnimation = false) where TWindow : class, IUGUIWindow, new()
+    {
+        var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
+        var window = new TWindow();
+        layer.Add(window);
+        window.Load();
+        window.Create();
+        window.Show(ignoreAnimation);
+        return window;
+    }
+    public IEnumerator OpenWindowAsync<TWindow>(Action<TWindow> callback, bool ignoreAnimation = false) where TWindow : class, IUGUIWindow, new()
+    {
+        var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
+        var window = new TWindow();
+        layer.Add(window);
+        yield return window.LoadAsync();
+        window.Create();
+        window.Show(ignoreAnimation);
+        callback?.Invoke(window);
+    }
 }

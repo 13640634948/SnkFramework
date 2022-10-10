@@ -1,9 +1,11 @@
 using System.Collections;
+using SampleDevelop.Test;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.Base
 {
+    /*
     public class AlphaAnimation : UIAnimation
     {
         [Range(0f, 1f)] public float from = 1f;
@@ -11,7 +13,7 @@ namespace SnkFramework.Mvvm.Base
 
         public float duration = 2f;
 
-        public override void Initialize(IView view)
+        public override void Initialize(ISnkView view)
         {
             base.Initialize(view);
 
@@ -61,4 +63,5 @@ namespace SnkFramework.Mvvm.Base
             this.OnEnd();
         }
     }
+    */
 }

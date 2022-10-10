@@ -1,7 +1,8 @@
 using System;
 using System.Collections;
+using Windows.LoginWindow;
+using SampleDevelop.Test;
 using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.View;
 using UnityEngine;
 
 public class ResourceUILocator : UILocator, IResourceUILocator
@@ -17,7 +18,7 @@ public class ResourceUILocator : UILocator, IResourceUILocator
         GameObject asset = Resources.Load<GameObject>(resPath);
         GameObject inst = GameObject.Instantiate(asset);
         TView view = new TView();
-        view.SetOwner(inst);
+        view.Create();
         return view;
     }
 
@@ -28,39 +29,39 @@ public class ResourceUILocator : UILocator, IResourceUILocator
         yield return request;
         GameObject inst = GameObject.Instantiate(request.asset as GameObject);
         TView view = new TView();
-        view.SetOwner(inst);
+        view.Create();
         callback?.Invoke(view);
     }
 
-    public override TWindow LoadWindow<TWindow>(IUILayer uiLayer)
+    public override TWindow LoadWindow<TWindow>(ISnkUILayer uiLayer)
     {
         uiLayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
-        int sortingOrder = uiLayer.AddSortingOrder();
+        TWindow window = new TWindow();
+        uiLayer.Add(window);
+        
         string resPath = getViewPath<TWindow>();
         GameObject asset = Resources.Load<GameObject>(resPath);
         GameObject inst = GameObject.Instantiate(asset);
-        TWindow window = new TWindow();
-        window.SetOwner(inst);
-        window.UILayer = uiLayer;
-        window.mSortingOrder = sortingOrder;
+        inst.name = "[S]" + window.mPriority + "="+ Time.frameCount;;
         window.Create();
+
         return window;
     }
 
-    public override IEnumerator LoadWindowAsync<TWindow>(IUILayer uiLayer, Action<TWindow> callback)
+    public override IEnumerator LoadWindowAsync<TWindow>(ISnkUILayer uiLayer, Action<TWindow> callback)
     {
         uiLayer = uiLayer ?? SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
-        int sortingOrder = uiLayer.AddSortingOrder();
-        Debug.Log("LoadWindowAsync:" + sortingOrder);
+        TWindow window = new TWindow();
+        uiLayer.Add(window);
+        window.Load();
+        
         string resPath = getViewPath<TWindow>();
         ResourceRequest request = Resources.LoadAsync<GameObject>(resPath);
         yield return request;
         yield return new WaitForSeconds(1.0f);
         GameObject inst = GameObject.Instantiate(request.asset as GameObject);
-        TWindow window = new TWindow();
-        window.SetOwner(inst);
-        window.UILayer = uiLayer;
-        window.mSortingOrder = sortingOrder;
+        inst.name = "[A]" + window.mPriority + "="+ Time.frameCount;
+        
         window.Create();
         callback?.Invoke(window);
     }

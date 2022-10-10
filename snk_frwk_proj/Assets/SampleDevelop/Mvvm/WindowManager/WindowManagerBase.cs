@@ -1,6 +1,7 @@
+using SampleDevelop.Test;
 using SnkFramework.Mvvm.Base;
 
 public abstract class WindowManagerBase : IWindowManager
 {
-    public abstract IUILayer GetLayer(string layerName);
+    public abstract ISnkUILayer GetLayer(string layerName);
 }
