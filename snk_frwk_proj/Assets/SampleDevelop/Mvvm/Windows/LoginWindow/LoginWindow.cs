@@ -22,10 +22,21 @@ namespace Windows.LoginWindow
         
         private CanvasGroup _canvasGroup;
         public CanvasGroup mCanvasGroup => this._canvasGroup ??= this.GetComponent<CanvasGroup>();
-        public void Dispose()
+        public virtual void Dispose()
         {
+            this.onDisposeBegin();
             if (!this.IsDestroyed() && this.gameObject != null)
                 GameObject.Destroy(this.gameObject);
+            this.onDisposeEnd();
+        }
+
+        protected virtual void onDisposeBegin()
+        {
+            
+        }
+        protected virtual void onDisposeEnd()
+        {
+            
         }
     }
 
