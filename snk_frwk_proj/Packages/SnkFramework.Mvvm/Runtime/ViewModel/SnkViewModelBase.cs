@@ -4,7 +4,7 @@ using SnkFramework.Mvvm.Log;
 
 namespace SnkFramework.Mvvm.ViewModel
 {
-    public abstract class ViewModel : ObservableObject,IViewModel
+    public abstract class SnkViewModelBase : ObservableObject,ISnkViewModel
     {
         protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
     }

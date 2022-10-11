@@ -4,7 +4,7 @@ using SnkFramework.Mvvm.ViewModel;
 
 namespace Windows.LoginWindow
 {
-    public class LoginViewModel : ViewModel
+    public class LoginViewModel : SnkViewModelBase
     {
         private string tip = "default";
 

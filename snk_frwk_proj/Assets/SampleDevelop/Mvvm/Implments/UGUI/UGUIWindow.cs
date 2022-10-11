@@ -26,7 +26,7 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
     }
 
     public abstract class UGUIWindow<TViewModel> : SnkWindowBase, IUGUIWindow
-        where TViewModel : class, IViewModel, new()
+        where TViewModel : class, ISnkViewModel, new()
     {
         public override string mName
         {

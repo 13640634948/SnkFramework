@@ -1,6 +1,6 @@
 namespace SnkFramework.Mvvm.ViewModel
 {
-    public interface IViewModel
+    public interface ISnkViewModel
     {
     }
 }
