@@ -75,13 +75,13 @@ namespace SampleDevelop.Test
         public virtual void Unload()
         {
             this.OnOwnerUnloadBegin();
-            this.mLoadState = LoadState.load_begin;
+            this.mLoadState = LoadState.unload_begin;
             if (this.mOwner != null)
             {
                 this.mOwner.Dispose();
                 this.mOwner = null;
             }
-            this.mLoadState = LoadState.load_end;
+            this.mLoadState = LoadState.unload_end;
             this.OnOwnerUnloadEnd();
         }
     }
