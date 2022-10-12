@@ -2,6 +2,12 @@ using System;
 
 namespace SampleDevelop.Test
 {
+    public interface ISnkControllable<TViewOwner> : ISnkControllable, ISnkWindow<TViewOwner>
+        where TViewOwner : class, ISnkViewOwner
+    {
+        
+    }
+
     public interface ISnkControllable : ISnkWindow
     { /// <summary>
         /// 

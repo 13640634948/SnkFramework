@@ -2,8 +2,22 @@ using System.Collections.Generic;
 
 namespace SampleDevelop.Test
 {
-    public partial class SnkWindowViewBase : ISnkUIContainer
+    public abstract class SnkWindowViewBase : SnkUIPageBase, ISnkWindowView, ISnkUIContainer
     {
+        private ISnkAnimation _activationAnimation;
+        private ISnkAnimation _passivationAnimation;
+        
+        public ISnkAnimation mActivationAnimation 
+        { 
+            get=> this._activationAnimation;
+            set => this._activationAnimation = value;
+        }
+        
+        public ISnkAnimation mPassivationAnimation
+        { 
+            get=> this._passivationAnimation;
+            set => this._passivationAnimation = value;
+        }
         private List<SnkUIPageBase> _pageList;
         public virtual List<SnkUIPageBase> mPageList => _pageList ??= new List<SnkUIPageBase>();
 
@@ -25,4 +39,7 @@ namespace SampleDevelop.Test
             this._pageList.Remove(page);
         }
     }
+    
+   
+
 }

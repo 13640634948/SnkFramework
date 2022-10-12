@@ -5,8 +5,6 @@ namespace SampleDevelop.Test
     public enum WindowState
     {
         NONE,
-        LOAD_BEGIN,
-        LOAD_END,
         CREATE_BEGIN,
         CREATE_END,
         ENTER_ANIMATION_BEGIN,
@@ -25,6 +23,12 @@ namespace SampleDevelop.Test
         DISMISS_END
     }
 
+
+    public abstract class SnkWindowBase<TViewOwner> : SnkWindowBase, ISnkControllable<TViewOwner>
+        where TViewOwner : class, ISnkViewOwner
+    {
+        public virtual TViewOwner mOwner => base.mOwner as TViewOwner;
+    }
 
     public abstract partial class SnkWindowBase : SnkWindowViewBase, ISnkControllable
     {
@@ -157,65 +161,14 @@ namespace SampleDevelop.Test
             }
         }
 
-        protected void raiseActivatedChanged()
-        {
-            try
-            {
-                if (this._activatedChanged != null)
-                    this._activatedChanged(this, EventArgs.Empty);
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("{0}", e);
-            }
-        }
+        protected void raiseActivatedChanged() => this._activatedChanged(this, EventArgs.Empty);
 
-        protected void raiseVisibilityChanged()
-        {
-            try
-            {
-                if (this._visibilityChanged != null)
-                    this._visibilityChanged(this, EventArgs.Empty);
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("{0}", e);
-            }
-        }
+        protected void raiseVisibilityChanged() => this._visibilityChanged?.Invoke(this, EventArgs.Empty);
 
-        protected void raiseOnDismissed()
-        {
-            try
-            {
-                if (this._onDismissed != null)
-                    this._onDismissed(this, EventArgs.Empty);
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("{0}", e);
-            }
-        }
+        protected void raiseOnDismissed() => this._onDismissed.Invoke(this, EventArgs.Empty);
 
         protected void raiseStateChanged(WindowState oldState, WindowState newState)
-        {
-            try
-            {
-                WindowStateEventArgs eventArgs = new WindowStateEventArgs(this, oldState, newState);
-                //if (mStateBroadcast)
-                //    Messenger.Publish(eventArgs);
-
-                if (this._stateChanged != null)
-                    this._stateChanged(this, eventArgs);
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("{0}", e);
-            }
-        }
+            => this._stateChanged.Invoke(this, new WindowStateEventArgs(this, oldState, newState));
 
         protected override void OnVisibilityChanged()
         {

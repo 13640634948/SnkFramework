@@ -5,4 +5,10 @@ namespace SampleDevelop.Test
         public ISnkAnimation mActivationAnimation { get; set; }
         public ISnkAnimation mPassivationAnimation { get; set; }
     }
+
+    public interface ISnkWindowView<TViewOwner> : ISnkWindowView, ISnkUIPage<TViewOwner>
+        where TViewOwner : class, ISnkViewOwner
+    {
+        
+    }
 }

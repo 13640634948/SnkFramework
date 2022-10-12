@@ -6,25 +6,7 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-    public interface IUGUIView : ISnkUIView
-    {
-    }
-
-    public interface IUGUIPageBase : ISnkUIPage, IUGUIView
-    {
-        
-    }
-
-    public interface IUGUIWindowView : ISnkWindowView, IUGUIPageBase
-    {
-    }
-
-    public interface IUGUIWindow : ISnkWindow, IUGUIWindowView
-    {
-        
-    }
-
-    public abstract class UGUIWindow<TViewModel> : SnkWindowBase, IUGUIWindow
+    public abstract class UGUIWindow<TViewModel> : SnkWindowBase<UGUIViewOwner>
         where TViewModel : class, ISnkViewModel, new()
     {
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
@@ -37,7 +19,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
         }
         public TViewModel mViewModel { get; set; }
 
-        public new UGUIViewOwner mOwner => base.mOwner as UGUIViewOwner;
         public UGUILayer mUGUILayer => this.mUILayer as UGUILayer;
         
         private GameObject _gameObject;

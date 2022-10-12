@@ -1,8 +1,15 @@
 using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
+using SnkFramework.Mvvm.ViewModel;
 
 namespace SampleDevelop.Test
 {
+    public interface ISnkView<TViewOwner> : ISnkView
+        where TViewOwner : class, ISnkViewOwner
+    {
+        public TViewOwner mOwner { get; }
+    }
+
     public interface ISnkView : ISnkViewControllable, IBindingContextOwner
     {
         public ISnkViewOwner mOwner { get; }

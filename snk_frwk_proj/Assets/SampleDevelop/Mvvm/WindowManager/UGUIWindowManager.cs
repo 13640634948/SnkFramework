@@ -78,7 +78,7 @@ public class UGUIWindowManager : WindowManagerBase
         return uguiLayer;
     }
 
-    public TWindow OpenWindow<TWindow>(bool ignoreAnimation = false) where TWindow : class, IUGUIWindow, new()
+    public TWindow OpenWindow<TWindow>(bool ignoreAnimation = false) where TWindow : class, ISnkWindow, new()
     {
         var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
         var window = new TWindow();
@@ -88,7 +88,7 @@ public class UGUIWindowManager : WindowManagerBase
         window.Show(ignoreAnimation);
         return window;
     }
-    public IEnumerator OpenWindowAsync<TWindow>(Action<TWindow> callback, bool ignoreAnimation = false) where TWindow : class, IUGUIWindow, new()
+    public IEnumerator OpenWindowAsync<TWindow>(Action<TWindow> callback, bool ignoreAnimation = false) where TWindow : class, ISnkWindow, new()
     {
         var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
         var window = new TWindow();

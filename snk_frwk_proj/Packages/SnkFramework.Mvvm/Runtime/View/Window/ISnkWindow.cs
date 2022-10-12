@@ -2,6 +2,12 @@ using System;
 
 namespace SampleDevelop.Test
 {
+    public interface ISnkWindow<TViewOwner> : ISnkWindow, ISnkWindowView<TViewOwner>
+        where TViewOwner : class, ISnkViewOwner
+    {
+        
+    }
+
     public interface ISnkWindow : ISnkWindowView
     {
         public ISnkUIPage mMainPage { get; }
