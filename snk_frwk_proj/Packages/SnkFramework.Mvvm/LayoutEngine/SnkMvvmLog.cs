@@ -1,6 +1,7 @@
+using SnkFramework.Mvvm.Log;
 using UnityEngine;
 
-namespace SnkFramework.Mvvm.Log
+namespace SnkFramework.Mvvm.LayoutEngine
 {
     public class SnkMvvmLog : MvvmLogBase
     { 

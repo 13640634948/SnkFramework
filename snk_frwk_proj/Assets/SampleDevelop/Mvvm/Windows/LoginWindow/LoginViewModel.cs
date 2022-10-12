@@ -2,7 +2,7 @@ using Loxodon.Framework.Commands;
 using Loxodon.Framework.Interactivity;
 using SnkFramework.Mvvm.ViewModel;
 
-namespace Windows.LoginWindow
+namespace SampleDevelop.Mvvm
 {
     public class LoginViewModel : SnkViewModelBase
     {

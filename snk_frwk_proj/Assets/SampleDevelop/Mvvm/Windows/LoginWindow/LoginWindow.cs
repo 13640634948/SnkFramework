@@ -1,10 +1,10 @@
 using Loxodon.Framework.Binding.Contexts;
 using Loxodon.Framework.Interactivity;
-using SampleDevelop.Mvvm.Implments.UGUI;
+using SnkFramework.Mvvm.LayoutEngine.UGUI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Windows.LoginWindow
+namespace SampleDevelop.Mvvm
 {
     public class LoginWindow : UGUIWindow<LoginViewModel>
     {
