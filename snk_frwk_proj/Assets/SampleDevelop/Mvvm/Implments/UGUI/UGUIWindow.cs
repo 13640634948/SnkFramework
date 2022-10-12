@@ -5,18 +5,6 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-    public interface IUGUIView
-    {
-        public GameObject mGameObject { get; }
-        public Transform mTransform { get; }
-        public RectTransform mTectTransform { get; }
-    }
-
-    public interface IUGUIWindow : IUGUIView
-    {
-        public float mAlpha { get; set; }
-    }
-
     public abstract class UGUIWindow<TViewModel> : SnkWindow<UGUIViewOwner, UGUILayer, TViewModel>, IUGUIWindow
         where TViewModel : class, ISnkViewModel, new()
     {

@@ -5,6 +5,7 @@ using Windows.LoginWindow;
 using Loxodon.Framework.Interactivity;
 using SampleDevelop.Mvvm.Implments.UGUI;
 using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
     private void Awake()
     {
         _uguiWindowMgr= new UGUIWindowManager();
-        SnkMvvmSetup.Initialize(_uguiWindowMgr, this, new MvvmLoader());
+        SnkMvvmSetup.Initialize(_uguiWindowMgr, this, new MvvmLoader(), new SnkMvvmLog());
     }
 
     void Start()

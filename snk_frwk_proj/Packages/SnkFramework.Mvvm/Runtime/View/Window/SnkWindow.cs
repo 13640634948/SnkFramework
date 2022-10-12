@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using SnkFramework.Mvvm.ViewModel;
-using UnityEngine;
 
 namespace SnkFramework.Mvvm.View
 {

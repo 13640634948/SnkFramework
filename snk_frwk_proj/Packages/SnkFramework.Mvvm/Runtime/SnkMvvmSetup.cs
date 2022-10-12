@@ -29,14 +29,14 @@ namespace SnkFramework.Mvvm.Base
             IWindowManager windowManager,
             IMvvmCoroutineExecutor coroutineExecutor,
             IMvvmLoader loader,
-            ISnkMvvmSettings settings = null,
-            IMvvmLog mvvmLog = null
+            IMvvmLog mvvmLog = null,
+            ISnkMvvmSettings settings = null
             )
         {
             SnkBindingSetup.Initialize();
             
             mSettings = settings ??= new SnkMvvmSettings();
-            mMvvmLog = mvvmLog ??= new SnkMvvmLog();
+            mMvvmLog = mvvmLog;
             mLoader = loader;
             mWindowManager = windowManager;
             mCoroutineExecutor = coroutineExecutor;
