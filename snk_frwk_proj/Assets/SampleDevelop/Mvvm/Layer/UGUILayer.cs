@@ -60,7 +60,7 @@ public class UGUILayer : SnkUIlayerBase, IUGUILayer
         });
     }
     
-    public virtual ISnkTransition Hide(ISnkWindow window)
+    public override ISnkTransition Hide(ISnkWindow window)
     {
         ISnkTransition transition = base.Hide(window);
         return transition.OnStateChanged((w, state) =>
@@ -71,7 +71,7 @@ public class UGUILayer : SnkUIlayerBase, IUGUILayer
                 //this.MoveToLast(w);
         });
     }
-    public virtual ISnkTransition Dismiss(ISnkWindow window)
+    public override ISnkTransition Dismiss(ISnkWindow window)
     {
         ISnkTransition transition = base.Dismiss(window);
         return transition.OnStateChanged((w, state) =>
