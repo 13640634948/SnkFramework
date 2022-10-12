@@ -11,7 +11,7 @@ namespace Loxodon.Log
         {
             if (_logDict.TryGetValue(logType, out ILog log) == false)
             {
-                log = new BindingLog(logType.FullName);
+                log = new BindingLog();
                 _logDict.Add(logType, log);
             }
             return log;
