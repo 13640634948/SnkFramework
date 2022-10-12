@@ -83,7 +83,7 @@ public class UGUIWindowManager : WindowManagerBase
         var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
         var window = new TWindow();
         layer.Add(window);
-        window.Load();
+        window.LoadViewOwner();
         window.Create();
         window.Show(ignoreAnimation);
         return window;
@@ -93,7 +93,7 @@ public class UGUIWindowManager : WindowManagerBase
         var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
         var window = new TWindow();
         layer.Add(window);
-        yield return window.LoadAsync();
+        yield return window.LoadViewOwnerAsync();
         window.Create();
         window.Show(ignoreAnimation);
         callback?.Invoke(window);

@@ -20,6 +20,8 @@ namespace SampleDevelop.Test
             
         }
 
+        public bool mViewOwnerLoaded { get; protected set; }
+
         private bool _visibility;
 
         public virtual bool mVisibility
@@ -38,53 +40,30 @@ namespace SampleDevelop.Test
         {
         }
 
-        protected virtual void OnOwnerLoadBegin()
-        {
-        }
-        protected virtual void OnOwnerLoadEnd()
-        {
-        }
-        protected virtual void OnOwnerUnloadBegin()
-        {
-        }
-        protected virtual void OnOwnerUnloadEnd()
-        {
-        }
 
         public IBindingContext DataContext { get; set; }
-        protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
 
-        public LoadState mLoadState { get; private set; } = LoadState.none;
-        public string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
-        public void Load()
+        public abstract string mAssetPath { get; }
+        public virtual void LoadViewOwner()
         {
-            this.OnOwnerLoadBegin();
-            this.mLoadState = LoadState.load_begin;
             this.mOwner = SnkMvvmSetup.mLoader.LoadViewOwner(mAssetPath);
-            this.mLoadState = LoadState.load_end;
-            this.OnOwnerLoadEnd();
+            this.mViewOwnerLoaded = true;
         }
 
-        public IEnumerator LoadAsync()
+        public virtual IEnumerator LoadViewOwnerAsync()
         {
-            this.OnOwnerLoadBegin();
-            this.mLoadState = LoadState.load_begin;
             yield return SnkMvvmSetup.mLoader.LoadViewOwnerAsync(mAssetPath, owner=>this.mOwner = owner);
-            this.mLoadState = LoadState.load_end;
-            this.OnOwnerLoadEnd();
+            this.mViewOwnerLoaded = true;
         }
 
-        public virtual void Unload()
+        public virtual void UnloadViewOwner()
         {
-            this.OnOwnerUnloadBegin();
-            this.mLoadState = LoadState.unload_begin;
             if (this.mOwner != null)
             {
                 this.mOwner.Dispose();
                 this.mOwner = null;
             }
-            this.mLoadState = LoadState.unload_end;
-            this.OnOwnerUnloadEnd();
+            this.mViewOwnerLoaded = false;
         }
     }
 

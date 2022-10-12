@@ -1,3 +1,4 @@
+using System.Collections;
 using Windows.LoginWindow;
 using SampleDevelop.Test;
 using SnkFramework.Mvvm.ViewModel;
@@ -26,6 +27,9 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
     public abstract class UGUIWindow<TViewModel> : SnkWindowBase, IUGUIWindow
         where TViewModel : class, ISnkViewModel, new()
     {
+        protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
+        public override string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
+        
         public override string mName
         {
             get => this.mOwner.name;
@@ -71,15 +75,21 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
             this.onBindingComponents();
         }
 
-        protected override void OnOwnerLoadEnd()
+        public override void LoadViewOwner()
         {
-            base.OnOwnerLoadEnd();
+            base.LoadViewOwner();
             this.mUGUILayer.AddChild(rectTransform);
         }
 
-        protected override void OnOwnerUnloadEnd()
+        public override IEnumerator LoadViewOwnerAsync()
         {
-            base.OnOwnerUnloadEnd();
+            yield return base.LoadViewOwnerAsync();
+            this.mUGUILayer.AddChild(rectTransform);
+        }
+
+        public override void UnloadViewOwner()
+        {
+            base.UnloadViewOwner();
             this.mUGUILayer.RemoveChild(rectTransform);
         }
 

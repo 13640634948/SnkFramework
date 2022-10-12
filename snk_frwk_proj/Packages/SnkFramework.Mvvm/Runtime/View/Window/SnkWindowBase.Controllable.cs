@@ -257,7 +257,7 @@ namespace SampleDevelop.Test
 
                     this.mUILayer.Remove(this);
 
-                    this.Unload();
+                    this.UnloadViewOwner();
                     //if (!this.IsDestroyed() && this.gameObject != null)
                     //    GameObject.Destroy(this.gameObject);
 
