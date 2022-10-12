@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-
     public interface IUGUIView : ISnkUIView
     {
-        public UGUIViewOwner mUGUIOwner { get; }
     }
 
     public interface IUGUIPageBase : ISnkUIPage, IUGUIView
@@ -30,19 +28,19 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
     {
         public override string mName
         {
-            get => this.mUGUIOwner.name;
+            get => this.mOwner.name;
             set => base.mName = value;
         }
         public TViewModel mViewModel { get; set; }
 
-        public UGUIViewOwner mUGUIOwner => this.mOwner as UGUIViewOwner;
+        public new UGUIViewOwner mOwner => base.mOwner as UGUIViewOwner;
         public UGUILayer mUGUILayer => this.mUILayer as UGUILayer;
         
         private GameObject _gameObject;
-        protected GameObject gameObject => _gameObject ??= this.mUGUIOwner.gameObject;
+        protected GameObject gameObject => _gameObject ??= this.mOwner.gameObject;
 
         private Transform _transform;
-        protected Transform transform => _transform ??= this.mUGUIOwner.transform;
+        protected Transform transform => _transform ??= this.mOwner.transform;
 
         private RectTransform _rectTransform;
         protected RectTransform rectTransform => _rectTransform ??= transform as RectTransform;
@@ -54,14 +52,14 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
                 if (this.gameObject == null)
                     return false;
                 //return this.mUGUIOwner.mCanvasGroup.interactable;
-                return this.mUGUIOwner.mCanvasGroup.blocksRaycasts;
+                return this.mOwner.mCanvasGroup.blocksRaycasts;
             }
             set
             {
                 if (this.gameObject == null)
                     return;
                 //this.mUGUIOwner.mCanvasGroup.interactable = value;
-                this.mUGUIOwner.mCanvasGroup.blocksRaycasts = value;
+                this.mOwner.mCanvasGroup.blocksRaycasts = value;
             }
         }
 
@@ -92,5 +90,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
         protected virtual void onBindingComponents()
         {
         }
+
     }
 }
