@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-    public abstract class UGUIWindow<TViewModel> : SnkWindowBase<UGUIViewOwner, UGUILayer, TViewModel>
+    public abstract class UGUIWindow<TViewModel> : SnkWindow<UGUIViewOwner, UGUILayer, TViewModel>
         where TViewModel : class, ISnkViewModel, new()
     {
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";

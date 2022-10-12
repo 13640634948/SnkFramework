@@ -2,11 +2,10 @@ using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.ViewModel;
-using UnityEngine;
 
 namespace SampleDevelop.Test
 {
-    public abstract class SnkUIViewBase : ISnkUIView
+    public abstract class SnkUIView : ISnkUIView
     {
         public virtual ISnkAnimation mEnterAnimation { get; set; }
         public virtual ISnkAnimation mExitAnimation { get; set; }

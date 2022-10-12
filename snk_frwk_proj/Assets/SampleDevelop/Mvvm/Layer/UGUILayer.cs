@@ -6,7 +6,7 @@ using UnityEngine;
 
 using UnityEngine.UI;
 
-public class UGUILayer : SnkUIlayerBase, IUGUILayer
+public class UGUILayer : SnkUILayer, IUGUILayer
 {
     public UGUILayer(IUILocator locator) : base(locator)
     {

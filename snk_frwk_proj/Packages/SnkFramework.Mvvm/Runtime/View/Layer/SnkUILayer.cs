@@ -4,11 +4,11 @@ using SnkFramework.Mvvm.Base;
 
 namespace SampleDevelop.Test
 {
-    public abstract class SnkUIlayerBase : ISnkUILayer
+    public abstract class SnkUILayer : ISnkUILayer
     {
         public IUILocator mLocator { get; }
 
-        public SnkUIlayerBase(IUILocator locator)
+        public SnkUILayer(IUILocator locator)
         {
             mLocator = locator;
         }

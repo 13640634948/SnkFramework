@@ -28,7 +28,7 @@ namespace SampleDevelop.Test
     }
 
 
-    public abstract partial class SnkWindowBase : ISnkWindowControllable
+    public abstract partial class SnkWindow : ISnkWindowControllable
     {
         protected virtual void OnShow()
         {

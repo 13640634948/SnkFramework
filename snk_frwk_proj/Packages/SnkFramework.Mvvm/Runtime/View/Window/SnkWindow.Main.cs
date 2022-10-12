@@ -26,7 +26,7 @@ namespace SampleDevelop.Test
         DISMISS_END
     }
 
-    public abstract class SnkWindowBase<TViewOwner, TLayer, TViewModel> : SnkWindowBase,
+    public abstract class SnkWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
         ISnkControllable<TViewOwner, TLayer, TViewModel>
         where TViewOwner : class, ISnkViewOwner
         where TLayer : class, ISnkUILayer
@@ -43,9 +43,9 @@ namespace SampleDevelop.Test
         protected override Func<ISnkViewModel> ViewModelCreater => () => new TViewModel();
     }
 
-    public abstract partial class SnkWindowBase : SnkWindowViewBase, ISnkControllable
+    public abstract partial class SnkWindow : SnkWindowView, ISnkControllable
     {
-        private SnkUIPageBase _mainPage;
+        private SnkUIPage _mainPage;
 
         public virtual ISnkUIPage mMainPage
         {
