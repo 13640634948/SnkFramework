@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkWindowView : SnkUIPage, ISnkWindowView, ISnkUIContainer
+    public abstract partial class SnkWindowView : SnkUIPage, ISnkWindowView, ISnkUIContainer
     {
         private ISnkAnimation _activationAnimation;
         private ISnkAnimation _passivationAnimation;

@@ -1,7 +1,7 @@
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkUIPage : SnkUIView, ISnkUIPage
+    public abstract partial class SnkUIPage : SnkUIView, ISnkUIPage
     {
         public override void Create()
         {

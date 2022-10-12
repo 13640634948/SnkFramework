@@ -3,7 +3,7 @@ using SnkFramework.Mvvm.ViewModel;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
+    public abstract partial class SnkWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
         ISnkWindowControllable<TViewOwner, TLayer, TViewModel>
         where TViewOwner : class, ISnkViewOwner
         where TLayer : class, ISnkUILayer
@@ -21,7 +21,7 @@ namespace SnkFramework.Mvvm.View
         protected override Func<ISnkViewModel> ViewModelCreater => () => new TViewModel();
     }
 
-    public abstract class SnkWindow : SnkWindowView, ISnkWindowControllable
+    public abstract partial class SnkWindow : SnkWindowView, ISnkWindowControllable
     {
         private SnkUIPage _mainPage;
 

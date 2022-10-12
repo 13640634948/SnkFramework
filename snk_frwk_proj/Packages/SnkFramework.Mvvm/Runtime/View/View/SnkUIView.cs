@@ -5,7 +5,7 @@ using SnkFramework.Mvvm.ViewModel;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkUIView : ISnkUIView
+    public abstract partial class SnkUIView : ISnkUIView
     {
         
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
