@@ -2,8 +2,9 @@ using System;
 
 namespace SampleDevelop.Test
 {
-    public interface ISnkControllable<TViewOwner> : ISnkControllable, ISnkWindow<TViewOwner>
+    public interface ISnkControllable<TViewOwner,TLayer> : ISnkControllable, ISnkWindow<TViewOwner, TLayer>
         where TViewOwner : class, ISnkViewOwner
+        where TLayer : class, ISnkUILayer
     {
         
     }

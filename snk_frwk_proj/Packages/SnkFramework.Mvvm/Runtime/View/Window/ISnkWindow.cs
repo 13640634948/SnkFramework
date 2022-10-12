@@ -2,10 +2,17 @@ using System;
 
 namespace SampleDevelop.Test
 {
-    public interface ISnkWindow<TViewOwner> : ISnkWindow, ISnkWindowView<TViewOwner>
+    public interface ISnkWindow<TViewOwner, TLayer> : ISnkWindow<TLayer>, ISnkWindowView<TViewOwner>
         where TViewOwner : class, ISnkViewOwner
+        where TLayer : class, ISnkUILayer
     {
         
+    }   
+    
+    public interface ISnkWindow<TLayer> : ISnkWindow
+        where TLayer : class, ISnkUILayer
+    {
+        public new ISnkUILayer mUILayer { get; set; }
     }
 
     public interface ISnkWindow : ISnkWindowView

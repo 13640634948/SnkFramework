@@ -23,11 +23,12 @@ namespace SampleDevelop.Test
         DISMISS_END
     }
 
-
-    public abstract class SnkWindowBase<TViewOwner> : SnkWindowBase, ISnkControllable<TViewOwner>
+    public abstract class SnkWindowBase<TViewOwner, TLayer> : SnkWindowBase, ISnkControllable<TViewOwner, TLayer>
         where TViewOwner : class, ISnkViewOwner
+        where TLayer : class, ISnkUILayer
     {
-        public virtual TViewOwner mOwner => base.mOwner as TViewOwner;
+        public new TViewOwner mOwner => base.mOwner as TViewOwner;
+        public new TLayer mUILayer => base.mUILayer as TLayer;
     }
 
     public abstract partial class SnkWindowBase : SnkWindowViewBase, ISnkControllable
@@ -161,14 +162,14 @@ namespace SampleDevelop.Test
             }
         }
 
-        protected void raiseActivatedChanged() => this._activatedChanged(this, EventArgs.Empty);
+        protected void raiseActivatedChanged() => this._activatedChanged?.Invoke(this, EventArgs.Empty);
 
         protected void raiseVisibilityChanged() => this._visibilityChanged?.Invoke(this, EventArgs.Empty);
 
-        protected void raiseOnDismissed() => this._onDismissed.Invoke(this, EventArgs.Empty);
+        protected void raiseOnDismissed() => this._onDismissed?.Invoke(this, EventArgs.Empty);
 
         protected void raiseStateChanged(WindowState oldState, WindowState newState)
-            => this._stateChanged.Invoke(this, new WindowStateEventArgs(this, oldState, newState));
+            => this._stateChanged?.Invoke(this, new WindowStateEventArgs(this, oldState, newState));
 
         protected override void OnVisibilityChanged()
         {
