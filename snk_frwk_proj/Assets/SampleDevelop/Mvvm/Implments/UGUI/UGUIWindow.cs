@@ -9,9 +9,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
     public abstract class UGUIWindow<TViewModel> : SnkWindowWindow<UGUIViewOwner, UGUILayer, TViewModel>
         where TViewModel : class, ISnkViewModel, new()
     {
-        protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
-        public override string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
-        
         public override string mName
         {
             get => this.mOwner.name;
@@ -25,26 +22,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
 
         private RectTransform _rectTransform;
         protected RectTransform rectTransform => _rectTransform ??= transform as RectTransform;
-
-        public override bool mInteractable
-        {
-            get
-            {
-                if (this.gameObject == null)
-                    return false;
-                //return this.mUGUIOwner.mCanvasGroup.interactable;
-                return this.mOwner.mCanvasGroup.blocksRaycasts;
-            }
-            set
-            {
-                if (this.gameObject == null)
-                    return;
-                //this.mUGUIOwner.mCanvasGroup.interactable = value;
-                this.mOwner.mCanvasGroup.blocksRaycasts = value;
-            }
-        }
-
-      
 
         public override void LoadViewOwner()
         {

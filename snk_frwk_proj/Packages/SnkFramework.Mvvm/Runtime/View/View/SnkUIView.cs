@@ -7,9 +7,19 @@ namespace SampleDevelop.Test
 {
     public abstract class SnkUIView : ISnkUIView
     {
+        
+        protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
+        public virtual string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
+
+        
         public virtual ISnkAnimation mEnterAnimation { get; set; }
         public virtual ISnkAnimation mExitAnimation { get; set; }
-        public abstract bool mInteractable { get; set; }
+
+        public bool mInteractable
+        {
+            get => this.mOwner.mInteractable;
+            set => this.mOwner.mInteractable = value;
+        }
 
         public ISnkViewOwner mOwner { get; private set; }
 
@@ -59,8 +69,6 @@ namespace SampleDevelop.Test
 
 
         public IBindingContext DataContext { get; set; }
-
-        public abstract string mAssetPath { get; }
 
         public virtual void LoadViewOwner()
         {

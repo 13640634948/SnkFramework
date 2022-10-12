@@ -38,6 +38,7 @@ namespace SampleDevelop.Test
             page.mParentView = null;
             this._pageList.Remove(page);
         }
+        
     }
     
    

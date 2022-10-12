@@ -38,6 +38,21 @@ namespace Windows.LoginWindow
         {
             
         }
+        public   bool mInteractable
+        {
+            get
+            {
+                if (this.gameObject == null)
+                    return false;
+                return this.mCanvasGroup.blocksRaycasts;
+            }
+            set
+            {
+                if (this.gameObject == null)
+                    return;
+                this.mCanvasGroup.blocksRaycasts = value;
+            }
+        }
     }
 
     public class LoginWindow : UGUIWindow<LoginViewModel>
