@@ -17,7 +17,7 @@ namespace SampleDevelop.Mvvm
 
         private void Awake()
         {
-            _uguiWindowMgr = new UGUIWindowManager();
+            _uguiWindowMgr = new UGUIWindowManager(this);
             SnkMvvmSetup.Initialize(_uguiWindowMgr, this, new MvvmLoader(), new SnkMvvmLog());
         }
 

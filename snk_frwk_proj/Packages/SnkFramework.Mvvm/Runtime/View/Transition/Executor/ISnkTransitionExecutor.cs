@@ -1,14 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SnkFramework.Mvvm.Base;
 
 namespace SnkFramework.Mvvm.View
 {
-    public interface ICoroutineExecutor
-    {
-        public IAsyncResult RunOnCoroutine(IEnumerator routine);
-    }
-
     public interface ISnkTransitionExecutor
     {
         public void Execute(SnkTransition transition);
@@ -16,12 +12,11 @@ namespace SnkFramework.Mvvm.View
 
     public class SnkTransitionPopupExecutor : ISnkTransitionExecutor
     {
-        private ICoroutineExecutor _coroutineExecutor;
+        private IMvvmCoroutineExecutor _coroutineExecutor;
         private bool running = false;
 
-        private IAsyncResult _asyncResult;
 
-        public SnkTransitionPopupExecutor(ICoroutineExecutor coroutineExecutor)
+        public SnkTransitionPopupExecutor(IMvvmCoroutineExecutor coroutineExecutor)
         {
             this._coroutineExecutor = coroutineExecutor;
         }
@@ -37,7 +32,7 @@ namespace SnkFramework.Mvvm.View
             finally
             {
                 if (this.running == false)
-                    this._asyncResult = this._coroutineExecutor.RunOnCoroutine(DoTask());
+                    this._coroutineExecutor.RunOnCoroutineNoReturn(DoTask());
             }
         }
 

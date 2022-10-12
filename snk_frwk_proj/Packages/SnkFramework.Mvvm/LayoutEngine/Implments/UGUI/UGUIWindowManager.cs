@@ -9,15 +9,6 @@ namespace SnkFramework.Mvvm.LayoutEngine
 {
     namespace UGUI
     {
-        public class CoroutineExecutor : MonoBehaviour, ICoroutineExecutor
-        {
-            public IAsyncResult RunOnCoroutine(IEnumerator routine)
-            {
-                StartCoroutine(routine);
-                return default;
-            }
-        }
-
         public class UGUIWindowManager : WindowManagerBase
         {
             public Camera mViewCamera { get; }
@@ -25,16 +16,12 @@ namespace SnkFramework.Mvvm.LayoutEngine
             private Dictionary<LAYER, ISnkUILayer> _layerDict;
             public GameObject mOwner;
 
-            private ICoroutineExecutor _coroutineExecutor;
+            private IMvvmCoroutineExecutor _coroutineExecutor;
             private ISnkTransitionExecutor _transitionExecutor;
 
-            //private IResourceUILocator locator;
-
-            public UGUIWindowManager()
+            public UGUIWindowManager(IMvvmCoroutineExecutor coroutineExecutor)
             {
-                //locator = new ResourceUILocator();
-                GameObject goCoroutineExecutor = new GameObject();
-                _coroutineExecutor = goCoroutineExecutor.AddComponent<CoroutineExecutor>();
+                _coroutineExecutor = coroutineExecutor;
                 _transitionExecutor = new SnkTransitionPopupExecutor(_coroutineExecutor);
 
                 this._layerDict = new Dictionary<LAYER, ISnkUILayer>();
