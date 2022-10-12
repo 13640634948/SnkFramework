@@ -1,4 +1,4 @@
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public enum WindowState
     {

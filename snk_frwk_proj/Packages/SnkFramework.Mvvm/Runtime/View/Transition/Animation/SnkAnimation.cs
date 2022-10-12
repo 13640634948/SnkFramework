@@ -1,6 +1,6 @@
 using System;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public abstract class SnkAnimation : ISnkAnimation
     {

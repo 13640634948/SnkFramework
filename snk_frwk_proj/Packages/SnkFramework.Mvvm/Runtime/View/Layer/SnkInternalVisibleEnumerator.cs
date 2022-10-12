@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     internal class SnkInternalVisibleEnumerator : IEnumerator<ISnkWindow>
     {

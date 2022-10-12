@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public class SnkUIShowTransition : SnkUITransition
     {

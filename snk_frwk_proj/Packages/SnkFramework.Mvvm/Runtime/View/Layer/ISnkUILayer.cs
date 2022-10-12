@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public interface ISnkUILayer : ISnkTransitionController
     {

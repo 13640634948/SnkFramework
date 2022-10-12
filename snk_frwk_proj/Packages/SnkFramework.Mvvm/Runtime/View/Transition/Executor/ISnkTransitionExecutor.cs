@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public interface ICoroutineExecutor
     {

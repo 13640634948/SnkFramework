@@ -1,5 +1,4 @@
 using Windows.LoginWindow;
-using SampleDevelop.Test;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
 

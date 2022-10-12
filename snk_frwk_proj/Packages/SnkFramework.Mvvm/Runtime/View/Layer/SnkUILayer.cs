@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public abstract class SnkUILayer : ISnkUILayer
     {

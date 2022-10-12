@@ -1,7 +1,7 @@
 using Loxodon.Framework.Binding.Contexts;
 using Loxodon.Framework.Interactivity;
 using SampleDevelop.Mvvm.Implments.UGUI;
-using SampleDevelop.Test;
+using SnkFramework.Mvvm.View;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     internal class UIAsyncResult : IAsyncResult
     {

@@ -1,4 +1,4 @@
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public interface ISnkViewOwner : System.IDisposable
     {

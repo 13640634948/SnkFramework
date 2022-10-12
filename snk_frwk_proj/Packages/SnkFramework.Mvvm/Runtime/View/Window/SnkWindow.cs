@@ -1,10 +1,9 @@
 using System;
-using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.ViewModel;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkWindowWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
+    public abstract class SnkWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
         ISnkWindowControllable<TViewOwner, TLayer, TViewModel>
         where TViewOwner : class, ISnkViewOwner
         where TLayer : class, ISnkUILayer

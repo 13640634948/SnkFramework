@@ -1,5 +1,5 @@
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public abstract class SnkUIPage : SnkUIView, ISnkUIPage
     {

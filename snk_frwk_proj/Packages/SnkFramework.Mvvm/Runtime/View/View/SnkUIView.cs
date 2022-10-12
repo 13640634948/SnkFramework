@@ -3,7 +3,7 @@ using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.ViewModel;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public abstract class SnkUIView : ISnkUIView
     {

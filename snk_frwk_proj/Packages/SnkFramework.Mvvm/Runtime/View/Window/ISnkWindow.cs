@@ -1,7 +1,7 @@
 using System;
 using SnkFramework.Mvvm.ViewModel;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public interface ISnkWindow<TViewOwner, TLayer, TViewModel> : ISnkWindow<TLayer>, ISnkWindowView<TViewOwner,TViewModel>
         where TViewOwner : class, ISnkViewOwner

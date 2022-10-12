@@ -1,12 +1,12 @@
 using System.Collections;
 using Windows.LoginWindow;
-using SampleDevelop.Test;
+using SnkFramework.Mvvm.View;
 using SnkFramework.Mvvm.ViewModel;
 using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-    public abstract class UGUIWindow<TViewModel> : SnkWindowWindow<UGUIViewOwner, UGUILayer, TViewModel>
+    public abstract class UGUIWindow<TViewModel> : SnkWindow<UGUIViewOwner, UGUILayer, TViewModel>
         where TViewModel : class, ISnkViewModel, new()
     {
         public override string mName

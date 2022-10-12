@@ -1,5 +1,4 @@
 using System.Collections;
-using SampleDevelop.Test;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
 

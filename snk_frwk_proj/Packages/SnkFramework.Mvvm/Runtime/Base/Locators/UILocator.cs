@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using SampleDevelop.Test;
 using SnkFramework.Mvvm.View;
 
 namespace SnkFramework.Mvvm.Base

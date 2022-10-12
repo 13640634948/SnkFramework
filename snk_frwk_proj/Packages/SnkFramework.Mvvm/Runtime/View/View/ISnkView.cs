@@ -2,7 +2,7 @@ using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.ViewModel;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public interface ISnkView<TViewOwner, TViewModel> : ISnkView
         where TViewOwner : class, ISnkViewOwner

@@ -1,6 +1,6 @@
 using SnkFramework.Mvvm.ViewModel;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public interface ISnkWindowView : ISnkUIPage
     {

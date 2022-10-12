@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SampleDevelop.Test
+namespace SnkFramework.Mvvm.View
 {
     public abstract class SnkWindowView : SnkUIPage, ISnkWindowView, ISnkUIContainer
     {

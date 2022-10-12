@@ -1,4 +1,4 @@
-using SampleDevelop.Test;
+using SnkFramework.Mvvm.View;
 
 namespace SnkFramework.Mvvm.Base
 
