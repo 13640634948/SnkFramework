@@ -16,7 +16,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
     {
         public float mAlpha { get; set; }
     }
-    
 
     public abstract class UGUIWindow<TViewModel> : SnkWindow<UGUIViewOwner, UGUILayer, TViewModel>, IUGUIWindow
         where TViewModel : class, ISnkViewModel, new()
