@@ -246,29 +246,21 @@ namespace SampleDevelop.Test
 
         public virtual void DoDismiss()
         {
-            try
+            if (this._dismissed == false)
             {
-                if (this._dismissed == false)
-                {
-                    this.mWindowState = WindowState.DISMISS_BEGIN;
-                    this._dismissed = true;
-                    this.OnDismiss();
-                    this.raiseOnDismissed();
+                this.mWindowState = WindowState.DISMISS_BEGIN;
+                this._dismissed = true;
+                this.OnDismiss();
+                this.raiseOnDismissed();
 
-                    this.mUILayer.Remove(this);
+                this.mUILayer.Remove(this);
 
-                    this.UnloadViewOwner();
-                    //if (!this.IsDestroyed() && this.gameObject != null)
-                    //    GameObject.Destroy(this.gameObject);
+                this.UnloadViewOwner();
+                //if (!this.IsDestroyed() && this.gameObject != null)
+                //    GameObject.Destroy(this.gameObject);
 
-                    this.mWindowState = WindowState.DISMISS_END;
-                    this._dismissTransition = null;
-                }
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("The window named \"{0}\" failed to dismiss!Error:{1}", this.Name, e);
+                this.mWindowState = WindowState.DISMISS_END;
+                this._dismissTransition = null;
             }
         }
         

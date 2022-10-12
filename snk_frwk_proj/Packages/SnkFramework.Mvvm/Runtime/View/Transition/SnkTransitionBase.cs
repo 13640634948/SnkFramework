@@ -93,47 +93,12 @@ namespace SampleDevelop.Test
             this.RaiseStateChanged((ISnkWindow)sender, e.State);
         }
 
-        protected virtual void RaiseStart()
-        {
-            try
-            {
-                if (this.onStart != null)
-                    this.onStart();
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.Warn("", e);
-            }
-        }
+        protected virtual void RaiseStart() => this.onStart?.Invoke();
 
         protected virtual void RaiseStateChanged(ISnkWindow window, WindowState state)
-        {
-            try
-            {
-                if (this.onStateChanged != null)
-                    this.onStateChanged(window, state);
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.Warn("", e);
-            }
-        }
+            => this.onStateChanged?.Invoke(window, state);
 
-        protected virtual void RaiseFinished()
-        {
-            try
-            {
-                if (this.onFinish != null)
-                    this.onFinish();
-            }
-            catch (Exception e)
-            {
-                //if (log.IsWarnEnabled)
-                //    log.Warn("", e);
-            }
-        }
+        protected virtual void RaiseFinished() => this.onFinish?.Invoke();
 
         protected virtual void OnStart()
         {
