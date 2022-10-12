@@ -4,6 +4,8 @@ using SnkFramework.Mvvm.Base;
 
 namespace SampleDevelop.Test
 {
+    
+    
     public abstract class SnkUIViewBase : ISnkUIView
     {
         public virtual ISnkAnimation mEnterAnimation { get; set; }
@@ -53,12 +55,12 @@ namespace SampleDevelop.Test
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
 
         public LoadState mLoadState { get; private set; } = LoadState.none;
-        public string assetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
+        public string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
         public void Load()
         {
             this.OnOwnerLoadBegin();
             this.mLoadState = LoadState.load_begin;
-            this.mOwner = SnkMvvmSetup.mLoader.LoadViewOwner(assetPath);
+            this.mOwner = SnkMvvmSetup.mLoader.LoadViewOwner(mAssetPath);
             this.mLoadState = LoadState.load_end;
             this.OnOwnerLoadEnd();
         }
@@ -67,7 +69,7 @@ namespace SampleDevelop.Test
         {
             this.OnOwnerLoadBegin();
             this.mLoadState = LoadState.load_begin;
-            yield return SnkMvvmSetup.mLoader.LoadViewOwnerAsync(assetPath, owner=>this.mOwner = owner);
+            yield return SnkMvvmSetup.mLoader.LoadViewOwnerAsync(mAssetPath, owner=>this.mOwner = owner);
             this.mLoadState = LoadState.load_end;
             this.OnOwnerLoadEnd();
         }

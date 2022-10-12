@@ -14,7 +14,7 @@ namespace SampleDevelop.Test
     public interface ISnkLoader
     {
         public LoadState mLoadState { get; }
-        public string assetPath { get; }
+        public string mAssetPath { get; }
         public void Load();
         public IEnumerator LoadAsync();
 
