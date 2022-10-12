@@ -11,6 +11,7 @@ public class MvvmLoader : IMvvmLoader
 {
     public ISnkViewOwner LoadViewOwner(string ownerPath)
     {
+        Debug.Log(ownerPath);
         GameObject asset = Resources.Load<GameObject>(ownerPath);
         GameObject inst = GameObject.Instantiate(asset);
         return inst.AddComponent<UGUIViewOwner>();

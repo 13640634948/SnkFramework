@@ -24,7 +24,7 @@ public class UGUIWindowManager : WindowManagerBase
     private ICoroutineExecutor _coroutineExecutor;
     private ISnkTransitionExecutor _transitionExecutor;
 
-    private IResourceUILocator locator;
+    //private IResourceUILocator locator;
 
     public UGUIWindowManager()
     {
@@ -71,7 +71,7 @@ public class UGUIWindowManager : WindowManagerBase
         canvas.worldCamera = this.mViewCamera;
         canvas.sortingLayerID = SortingLayer.NameToID(layerName);
         
-        UGUILayer uguiLayer = new UGUILayer(this.locator);
+        UGUILayer uguiLayer = new UGUILayer();
         uguiLayer.mTransitionExecutor = _transitionExecutor;
         uguiLayer.SetOwner(canvas);
         this._layerDict.Add(layer, uguiLayer);

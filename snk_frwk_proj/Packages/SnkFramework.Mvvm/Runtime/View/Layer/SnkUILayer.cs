@@ -1,18 +1,10 @@
 using System;
 using System.Collections.Generic;
-using SnkFramework.Mvvm.Base;
 
 namespace SampleDevelop.Test
 {
     public abstract class SnkUILayer : ISnkUILayer
     {
-        public IUILocator mLocator { get; }
-
-        public SnkUILayer(IUILocator locator)
-        {
-            mLocator = locator;
-        }
-
         protected List<ISnkWindow> windowList = new();
 
         private bool _activated = true;
@@ -42,21 +34,21 @@ namespace SampleDevelop.Test
         
         public virtual ISnkTransition Show(ISnkWindow window)
         {
-            SnkUIShowTransition transition = new SnkUIShowTransition(this, (ISnkControllable)window);
+            SnkUIShowTransition transition = new SnkUIShowTransition(this, (ISnkWindowControllable)window);
             this.mTransitionExecutor.Execute(transition);
             return transition;
         }
 
         public virtual ISnkTransition Hide(ISnkWindow window)
         {
-            SnkUIHideTransition transition = new SnkUIHideTransition(this, (ISnkControllable)window, false);
+            SnkUIHideTransition transition = new SnkUIHideTransition(this, (ISnkWindowControllable)window, false);
             this.mTransitionExecutor.Execute(transition);
             return transition;
         }
 
         public virtual ISnkTransition Dismiss(ISnkWindow window)
         {
-            SnkUIHideTransition transition = new SnkUIHideTransition(this, (ISnkControllable)window, true);
+            SnkUIHideTransition transition = new SnkUIHideTransition(this, (ISnkWindowControllable)window, true);
             this.mTransitionExecutor.Execute(transition);
             return transition;
         }

@@ -7,7 +7,7 @@ namespace SampleDevelop.Test
     {
         //private static readonly ILog log = LogManager.GetLogger(typeof(Transition));
 
-        private ISnkControllable window;
+        private ISnkWindowControllable window;
         private bool done = false;
         private bool animationDisabled = false;
         private int layer = 0;
@@ -21,7 +21,7 @@ namespace SampleDevelop.Test
         private Action<ISnkWindow, WindowState> onStateChanged;
         private Action onFinish;
 
-        public SnkTransitionBase(ISnkControllable window)
+        public SnkTransitionBase(ISnkWindowControllable window)
         {
             this.window = window;
         }
@@ -52,7 +52,7 @@ namespace SampleDevelop.Test
                 this.window.StateChanged -= StateChanged;
         }
 
-        public virtual ISnkControllable Window
+        public virtual ISnkWindowControllable Window
         {
             get { return this.window; }
             set { this.window = value; }

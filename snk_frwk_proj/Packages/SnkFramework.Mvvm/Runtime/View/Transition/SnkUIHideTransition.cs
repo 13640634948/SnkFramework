@@ -8,7 +8,7 @@ namespace SampleDevelop.Test
         private bool _dismiss;
         private ISnkUILayer _uiLayer;
 
-        public SnkUIHideTransition(ISnkUILayer uiLayer, ISnkControllable window, bool dismiss) : base(window)
+        public SnkUIHideTransition(ISnkUILayer uiLayer, ISnkWindowControllable window, bool dismiss) : base(window)
         {
             this._uiLayer = uiLayer;
             this._dismiss = dismiss;
@@ -16,7 +16,7 @@ namespace SampleDevelop.Test
 
         protected override IEnumerator DoTransition()
         {
-            ISnkControllable current = this.Window;
+            ISnkWindowControllable current = this.Window;
             if (this._uiLayer.IndexOf(current) == 0 && current.mActivated)
             {
                 IAsyncResult result = current.Passivate(this.AnimationDisabled);

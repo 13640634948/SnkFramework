@@ -6,7 +6,7 @@ namespace SampleDevelop.Test
     public class SnkUIShowTransition : SnkUITransition
     {
         private ISnkUILayer _uiLayer;
-        public SnkUIShowTransition(ISnkUILayer uiLayer, ISnkControllable window) : base(window)
+        public SnkUIShowTransition(ISnkUILayer uiLayer, ISnkWindowControllable window) : base(window)
         {
             this._uiLayer = uiLayer;
         }
@@ -27,9 +27,9 @@ namespace SampleDevelop.Test
         
         protected override IEnumerator DoTransition()
             {
-                ISnkControllable current = this.Window;
+                ISnkWindowControllable current = this.Window;
                 //IManageable previous = (IManageable)this.manager.GetVisibleWindow(layer);
-                ISnkControllable previous = (ISnkControllable)this._uiLayer.Current;
+                ISnkWindowControllable previous = (ISnkWindowControllable)this._uiLayer.Current;
                 if (previous != null)
                 {
                     //Passivate the previous window

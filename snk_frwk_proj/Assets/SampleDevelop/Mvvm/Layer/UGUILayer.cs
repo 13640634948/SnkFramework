@@ -1,6 +1,5 @@
 using Windows.LoginWindow;
 using SampleDevelop.Test;
-using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
 
@@ -8,10 +7,6 @@ using UnityEngine.UI;
 
 public class UGUILayer : SnkUILayer, IUGUILayer
 {
-    public UGUILayer(IUILocator locator) : base(locator)
-    {
-    }
-    
     private Canvas _canvas;
     public Canvas mCanvas => this._canvas;
 

@@ -3,31 +3,8 @@ using SnkFramework.Mvvm.ViewModel;
 
 namespace SampleDevelop.Test
 {
-    public enum WindowState
-    {
-        NONE,
-        CREATE_BEGIN,
-        CREATE_END,
-        INIT_BEGIN,
-        INIT_END,
-        ENTER_ANIMATION_BEGIN,
-        VISIBLE,
-        ENTER_ANIMATION_END,
-        ACTIVATION_ANIMATION_BEGIN,
-        ACTIVATED,
-        ACTIVATION_ANIMATION_END,
-        PASSIVATION_ANIMATION_BEGIN,
-        PASSIVATED,
-        PASSIVATION_ANIMATION_END,
-        EXIT_ANIMATION_BEGIN,
-        INVISIBLE,
-        EXIT_ANIMATION_END,
-        DISMISS_BEGIN,
-        DISMISS_END
-    }
-
-    public abstract class SnkWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
-        ISnkControllable<TViewOwner, TLayer, TViewModel>
+    public abstract class SnkWindowWindow<TViewOwner, TLayer, TViewModel> : SnkWindow,
+        ISnkWindowControllable<TViewOwner, TLayer, TViewModel>
         where TViewOwner : class, ISnkViewOwner
         where TLayer : class, ISnkUILayer
         where TViewModel : class, ISnkViewModel, new()
@@ -43,7 +20,7 @@ namespace SampleDevelop.Test
         protected override Func<ISnkViewModel> ViewModelCreater => () => new TViewModel();
     }
 
-    public abstract partial class SnkWindow : SnkWindowView, ISnkControllable
+    public abstract partial class SnkWindow : SnkWindowView, ISnkWindowControllable
     {
         private SnkUIPage _mainPage;
 
