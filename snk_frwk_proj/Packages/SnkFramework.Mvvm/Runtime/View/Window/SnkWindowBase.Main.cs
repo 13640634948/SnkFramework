@@ -1,4 +1,5 @@
 using System;
+using SnkFramework.Mvvm.ViewModel;
 
 namespace SampleDevelop.Test
 {
@@ -23,12 +24,17 @@ namespace SampleDevelop.Test
         DISMISS_END
     }
 
-    public abstract class SnkWindowBase<TViewOwner, TLayer> : SnkWindowBase, ISnkControllable<TViewOwner, TLayer>
+    public abstract class SnkWindowBase<TViewOwner, TLayer, TViewModel> : SnkWindowBase,
+        ISnkControllable<TViewOwner, TLayer, TViewModel>
         where TViewOwner : class, ISnkViewOwner
         where TLayer : class, ISnkUILayer
+        where TViewModel : class, ISnkViewModel, new()
     {
         public new TViewOwner mOwner => base.mOwner as TViewOwner;
         public new TLayer mUILayer => base.mUILayer as TLayer;
+        public new TViewModel mViewModel => base.mViewModel as TViewModel;
+
+        protected override Func<ISnkViewModel> ViewModelCreater => () => new TViewModel();
     }
 
     public abstract partial class SnkWindowBase : SnkWindowViewBase, ISnkControllable
@@ -190,11 +196,13 @@ namespace SampleDevelop.Test
             this.mWindowState = WindowState.CREATE_BEGIN;
             this.mVisibility = false;
             this.mInteractable = this.mActivated;
+            this.mViewModel = ViewModelCreater?.Invoke();
             this.OnCreate();
             this._created = true;
             this.mWindowState = WindowState.CREATE_END;
         }
 
+        protected abstract Func<ISnkViewModel> ViewModelCreater { get; }
         protected abstract void OnCreate();
     }
 }

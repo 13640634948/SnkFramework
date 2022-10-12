@@ -4,14 +4,17 @@ using SnkFramework.Mvvm.ViewModel;
 
 namespace SampleDevelop.Test
 {
-    public interface ISnkView<TViewOwner> : ISnkView
+    public interface ISnkView<TViewOwner, TViewModel> : ISnkView
         where TViewOwner : class, ISnkViewOwner
+        where TViewModel : class, ISnkViewModel
     {
         public TViewOwner mOwner { get; }
+        public TViewModel mViewModel { get; }
     }
 
     public interface ISnkView : ISnkViewControllable, IBindingContextOwner
     {
+        public ISnkViewModel mViewModel { get; }
         public ISnkViewOwner mOwner { get; }
         public string mName { get; set; }
         public bool mVisibility { get; set; }

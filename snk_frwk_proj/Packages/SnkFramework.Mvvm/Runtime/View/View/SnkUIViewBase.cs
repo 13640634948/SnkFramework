@@ -1,11 +1,10 @@
 using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.ViewModel;
 
 namespace SampleDevelop.Test
 {
-    
-    
     public abstract class SnkUIViewBase : ISnkUIView
     {
         public virtual ISnkAnimation mEnterAnimation { get; set; }
@@ -13,6 +12,7 @@ namespace SampleDevelop.Test
         public abstract bool mInteractable { get; set; }
 
         public virtual ISnkViewOwner mOwner { get; private set; }
+        public virtual ISnkViewModel mViewModel { get; protected set; }
         public virtual string mName { get; set; }
         public virtual ISnkView mParentView { get; set; }
         public virtual void Create()

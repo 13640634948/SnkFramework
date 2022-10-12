@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm.Implments.UGUI
 {
-    public abstract class UGUIWindow<TViewModel> : SnkWindowBase<UGUIViewOwner, UGUILayer>
+    public abstract class UGUIWindow<TViewModel> : SnkWindowBase<UGUIViewOwner, UGUILayer, TViewModel>
         where TViewModel : class, ISnkViewModel, new()
     {
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
@@ -17,8 +17,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
             get => this.mOwner.name;
             set => base.mName = value;
         }
-        public TViewModel mViewModel { get; set; }
-        
         private GameObject _gameObject;
         protected GameObject gameObject => _gameObject ??= this.mOwner.gameObject;
 
@@ -49,7 +47,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
         protected override void OnCreate()
         {
             Debug.Log("OnCreate");
-            this.mViewModel = new TViewModel();
             this.onInitComponents();
             this.onBindingComponents();
         }

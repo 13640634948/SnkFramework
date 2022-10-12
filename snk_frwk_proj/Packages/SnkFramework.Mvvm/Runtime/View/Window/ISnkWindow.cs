@@ -1,10 +1,12 @@
 using System;
+using SnkFramework.Mvvm.ViewModel;
 
 namespace SampleDevelop.Test
 {
-    public interface ISnkWindow<TViewOwner, TLayer> : ISnkWindow<TLayer>, ISnkWindowView<TViewOwner>
+    public interface ISnkWindow<TViewOwner, TLayer, TViewModel> : ISnkWindow<TLayer>, ISnkWindowView<TViewOwner,TViewModel>
         where TViewOwner : class, ISnkViewOwner
         where TLayer : class, ISnkUILayer
+        where TViewModel : class, ISnkViewModel
     {
         
     }   
