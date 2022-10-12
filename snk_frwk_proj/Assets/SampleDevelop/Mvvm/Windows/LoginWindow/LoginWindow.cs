@@ -13,8 +13,8 @@ namespace Windows.LoginWindow
 
         protected override void onInitialize()
         {
-            this.mTxt = this.transform.Find("Text").GetComponent<Text>();
-            this.mButton = this.transform.Find("Button").GetComponent<Button>();
+            this.mTxt = this.mTransform.Find("Text").GetComponent<Text>();
+            this.mButton = this.mTransform.Find("Button").GetComponent<Button>();
         }
 
         protected override void onViewModelChanged()

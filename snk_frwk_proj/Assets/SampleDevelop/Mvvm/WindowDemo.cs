@@ -88,8 +88,7 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
             //AlphaAnimation alphaAnimation = window.mOwner.GetComponent<AlphaAnimation>();
             //alphaAnimation.Init(window);
 
-            /*
-            IAnimation[] anims = 
+            ISnkAnimation[] anims = 
             {
                 new AlphaAnimation{
                     AnimType = ANIM_TYPE.enter_anim,
@@ -107,7 +106,6 @@ public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
             
             foreach (var anim in anims)
                 anim.Initialize(window);
-            */
             
             window.Show(mIgnoreAnimation);
             //SnkMvvmSetup.mMvvmLog.InfoFormat("[{0}]KeyCode.S-1", Time.frameCount);
