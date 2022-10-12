@@ -44,12 +44,7 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
             }
         }
 
-        protected override void OnCreate()
-        {
-            Debug.Log("OnCreate");
-            this.onInitComponents();
-            this.onBindingComponents();
-        }
+      
 
         public override void LoadViewOwner()
         {
@@ -69,13 +64,6 @@ namespace SampleDevelop.Mvvm.Implments.UGUI
             this.mUILayer.RemoveChild(rectTransform);
         }
 
-        protected virtual void onInitComponents()
-        {
-        }
-
-        protected virtual void onBindingComponents()
-        {
-        }
 
     }
 }

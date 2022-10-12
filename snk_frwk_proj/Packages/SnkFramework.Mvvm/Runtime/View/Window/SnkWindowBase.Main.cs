@@ -8,6 +8,8 @@ namespace SampleDevelop.Test
         NONE,
         CREATE_BEGIN,
         CREATE_END,
+        INIT_BEGIN,
+        INIT_END,
         ENTER_ANIMATION_BEGIN,
         VISIBLE,
         ENTER_ANIMATION_END,
@@ -32,7 +34,11 @@ namespace SampleDevelop.Test
     {
         public new TViewOwner mOwner => base.mOwner as TViewOwner;
         public new TLayer mUILayer => base.mUILayer as TLayer;
-        public new TViewModel mViewModel => base.mViewModel as TViewModel;
+        public new TViewModel mViewModel
+        {
+            get => base.mViewModel as TViewModel;
+            protected set => base.mViewModel = value;
+        }
 
         protected override Func<ISnkViewModel> ViewModelCreater => () => new TViewModel();
     }
@@ -185,8 +191,6 @@ namespace SampleDevelop.Test
 
         public override void Create()
         {
-            base.Create();
-
             if (this._dismissTransition != null || this._dismissed)
                 throw new ObjectDisposedException(this.mName);
 
@@ -196,13 +200,25 @@ namespace SampleDevelop.Test
             this.mWindowState = WindowState.CREATE_BEGIN;
             this.mVisibility = false;
             this.mInteractable = this.mActivated;
-            this.mViewModel = ViewModelCreater?.Invoke();
-            this.OnCreate();
+            this.onCreate();
             this._created = true;
             this.mWindowState = WindowState.CREATE_END;
+            
+            this.mWindowState = WindowState.INIT_BEGIN;
+            this.onInitialize();
+            this.mWindowState = WindowState.INIT_END;
+            
+            this.mViewModel = ViewModelCreater?.Invoke();
         }
 
         protected abstract Func<ISnkViewModel> ViewModelCreater { get; }
-        protected abstract void OnCreate();
+
+        protected virtual void onCreate()
+        {
+        }
+
+        protected virtual void onInitialize()
+        {
+        }
     }
 }

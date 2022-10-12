@@ -45,13 +45,13 @@ namespace Windows.LoginWindow
         private Text mTxt;
         public Button mButton;
 
-        protected override void onInitComponents()
+        protected override void onInitialize()
         {
             this.mTxt = this.transform.Find("Text").GetComponent<Text>();
             this.mButton = this.transform.Find("Button").GetComponent<Button>();
         }
 
-        protected override void onBindingComponents()
+        protected override void onViewModelChanged()
         {
             var setter = this.CreateBindingSet(this.mViewModel);
             setter.Bind(this.mTxt).For(v => v.text).To(vm => vm.Tip);
@@ -59,7 +59,6 @@ namespace Windows.LoginWindow
             setter.Bind().For(v => v.onInteractionFinished).To(vm => vm.mInteractionFinished);
             setter.Build();
         }
-
 
         public void onInteractionFinished(object sender, InteractionEventArgs args)
         {
