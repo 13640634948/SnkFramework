@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Windows.LoginWindow;
 using Loxodon.Framework.Interactivity;
+using SampleDevelop.Mvvm.Implments.UGUI;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
