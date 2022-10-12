@@ -1,6 +1,6 @@
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkUITransition : SnkTransitionBase, ISnkUITransition
+    public abstract class SnkUITransition : SnkTransition, ISnkUITransition
     {
         protected SnkUITransition(ISnkWindowControllable window) : base(window)
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using SnkFramework.Mvvm.ViewModel;
 
 namespace SnkFramework.Mvvm.View
@@ -17,28 +18,28 @@ namespace SnkFramework.Mvvm.View
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult Activate(bool ignoreAnimation);
+        IEnumerator Activate(bool ignoreAnimation);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult Passivate(bool ignoreAnimation);
+        IEnumerator Passivate(bool ignoreAnimation);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult DoShow(bool ignoreAnimation = false);
+        IEnumerator DoShow(bool ignoreAnimation = false);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="ignoreAnimation"></param>
         /// <returns></returns>
-        IAsyncResult DoHide(bool ignoreAnimation = false);
+        IEnumerator DoHide(bool ignoreAnimation = false);
 
         /// <summary>
         /// 

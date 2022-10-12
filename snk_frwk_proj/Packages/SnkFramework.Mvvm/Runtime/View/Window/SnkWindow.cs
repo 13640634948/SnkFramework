@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using SnkFramework.Mvvm.ViewModel;
+using UnityEngine;
 
 namespace SnkFramework.Mvvm.View
 {
@@ -251,167 +253,127 @@ namespace SnkFramework.Mvvm.View
         }
 
 
-        public IAsyncResult Activate(bool ignoreAnimation)
+        public IEnumerator Activate(bool ignoreAnimation)
         {
-            UIAsyncResult result = new UIAsyncResult();
-            try
+            if (this.mVisibility == false)
             {
-                if (this.mVisibility == false)
-                {
-                    result.SetException(new InvalidOperationException("The window is not visible."));
-                    return result;
-                }
+                log.Error("The window is not visible.");
+                yield break;
+            }
 
-                if (this.mActivated)
-                {
-                    result.SetResult();
-                    return result;
-                }
+            if (this.mActivated)
+                yield break;
 
-                if (!ignoreAnimation && this.mActivationAnimation != null)
+            if (!ignoreAnimation && this.mActivationAnimation != null)
+            {
+                bool completed = false;
+                this.mActivationAnimation.OnStart(() =>
                 {
-                    this.mActivationAnimation.OnStart(() =>
-                    {
-                        this.mWindowState = WindowState.ACTIVATION_ANIMATION_BEGIN;
-                    }).OnEnd(() =>
-                    {
-                        this.mWindowState = WindowState.ACTIVATION_ANIMATION_END;
-                        this.mActivated = true;
-                        this.mWindowState = WindowState.ACTIVATED;
-                        result.SetResult();
-                    }).Play();
-                }
-                else
+                    this.mWindowState = WindowState.ACTIVATION_ANIMATION_BEGIN;
+                }).OnEnd(() =>
                 {
+                    this.mWindowState = WindowState.ACTIVATION_ANIMATION_END;
                     this.mActivated = true;
                     this.mWindowState = WindowState.ACTIVATED;
-                    result.SetResult();
-                }
-            }
-            catch (Exception e)
-            {
-                result.SetException(e);
-            }
+                    completed = true;
+                }).Play();
 
-            return result;
+                while (completed == false)
+                    yield return null;
+            }
+            else
+            {
+                this.mActivated = true;
+                this.mWindowState = WindowState.ACTIVATED;
+            }
         }
 
-        public IAsyncResult Passivate(bool ignoreAnimation)
+        public IEnumerator Passivate(bool ignoreAnimation)
         {
-            UIAsyncResult result = new UIAsyncResult();
-            try
+           
+            if (this.mVisibility == false)
             {
-                if (this.mVisibility == false)
-                {
-                    result.SetException(new InvalidOperationException("The window is not visible."));
-                    return result;
-                }
+                log.Error("The window is not visible.");
+                yield break;
+            }
 
-                if (this.mActivated == false)
-                {
-                    result.SetResult();
-                    return result;
-                }
+            if (this.mActivated == false)
+                yield break;
 
-                this.mActivated = false;
-                this.mWindowState = WindowState.PASSIVATED;
+            this.mActivated = false;
+            this.mWindowState = WindowState.PASSIVATED;
 
-                if (!ignoreAnimation && this.mPassivationAnimation != null)
+            if (!ignoreAnimation && this.mPassivationAnimation != null)
+            {
+                bool completed = false;
+                this.mPassivationAnimation.OnStart(() =>
                 {
-                    this.mPassivationAnimation.OnStart(() =>
+                    this.mWindowState = WindowState.PASSIVATION_ANIMATION_BEGIN;
+                }).OnEnd(() =>
+                {
+                    this.mWindowState = WindowState.PASSIVATION_ANIMATION_END;
+                    completed = true;
+                }).Play();
+
+                while (completed == false)
+                    yield return null;
+            }
+        }
+
+
+        public IEnumerator DoShow(bool ignoreAnimation = false)
+        {
+            if (this._created == false)
+            {
+                log.Error("The window is not create.");
+                yield break;
+            }
+
+            this.OnShow();
+            this.mVisibility = true;
+            this.mWindowState = WindowState.VISIBLE;
+            if (!ignoreAnimation && this.mEnterAnimation != null)
+            {
+                bool completed = false;
+                this.mEnterAnimation.OnStart(() =>
+                {
+                    this.mWindowState = WindowState.ENTER_ANIMATION_BEGIN;
+                }).OnEnd(() =>
+                {
+                    this.mWindowState = WindowState.ENTER_ANIMATION_END;
+                    completed = true;
+                }).Play();
+                    
+                while (completed == false)
+                    yield return null;
+            }
+        }
+
+        public IEnumerator DoHide(bool ignoreAnimation = false)
+        {
+            if (!ignoreAnimation && this.mExitAnimation != null)
+            {
+                bool completed = false;
+
+                this.mExitAnimation.OnStart(() => { this.mWindowState = WindowState.EXIT_ANIMATION_BEGIN; }).OnEnd(
+                    () =>
                     {
-                        this.mWindowState = WindowState.PASSIVATION_ANIMATION_BEGIN;
-                    }).OnEnd(() =>
-                    {
-                        this.mWindowState = WindowState.PASSIVATION_ANIMATION_END;
-                        result.SetResult();
+                        this.mWindowState = WindowState.EXIT_ANIMATION_END;
+                        this.mVisibility = false;
+                        this.mWindowState = WindowState.INVISIBLE;
+                        this.OnHide();
+                        completed = true;
                     }).Play();
-                }
-                else
-                {
-                    result.SetResult();
-                }
+                
+                while (completed == false)
+                    yield return null;
             }
-            catch (Exception e)
+            else
             {
-                result.SetException(e);
+                this.mVisibility = false;
+                this.mWindowState = WindowState.INVISIBLE;
+                this.OnHide();
             }
-
-            return result;
-        }
-
-
-        public IAsyncResult DoShow(bool ignoreAnimation = false)
-        {
-            UIAsyncResult result = new UIAsyncResult();
-            try
-            {
-                if (this._created == false)
-                {
-                    new System.Exception("未成功创建");
-                }
-
-                this.OnShow();
-                this.mVisibility = true;
-                this.mWindowState = WindowState.VISIBLE;
-                if (!ignoreAnimation && this.mEnterAnimation != null)
-                {
-                    this.mEnterAnimation.OnStart(() => { this.mWindowState = WindowState.ENTER_ANIMATION_BEGIN; })
-                        .OnEnd(() =>
-                        {
-                            this.mWindowState = WindowState.ENTER_ANIMATION_END;
-                            result.SetResult();
-                        }).Play();
-                }
-                else
-                {
-                    result.SetResult();
-                }
-            }
-            catch (Exception e)
-            {
-                result.SetException(e);
-                UnityEngine.Debug.LogException(e);
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("The window named \"{0}\" failed to open!Error:{1}", this.Name, e);
-            }
-
-            return result;
-        }
-
-        public IAsyncResult DoHide(bool ignoreAnimation = false)
-        {
-            UIAsyncResult result = new UIAsyncResult();
-            try
-            {
-                if (!ignoreAnimation && this.mExitAnimation != null)
-                {
-                    this.mExitAnimation.OnStart(() => { this.mWindowState = WindowState.EXIT_ANIMATION_BEGIN; }).OnEnd(
-                        () =>
-                        {
-                            this.mWindowState = WindowState.EXIT_ANIMATION_END;
-                            this.mVisibility = false;
-                            this.mWindowState = WindowState.INVISIBLE;
-                            this.OnHide();
-                            result.SetResult();
-                        }).Play();
-                }
-                else
-                {
-                    this.mVisibility = false;
-                    this.mWindowState = WindowState.INVISIBLE;
-                    this.OnHide();
-                    result.SetResult();
-                }
-            }
-            catch (Exception e)
-            {
-                result.SetException(e);
-                //if (log.IsWarnEnabled)
-                //    log.WarnFormat("The window named \"{0}\" failed to hide!Error:{1}", this.Name, e);
-            }
-
-            return result;
         }
 
         public virtual void DoDismiss()

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SnkFramework.Mvvm.View
 {
-    public abstract class SnkTransitionBase : ISnkTransition
+    public abstract class SnkTransition : ISnkTransition
     {
         //private static readonly ILog log = LogManager.GetLogger(typeof(Transition));
 
@@ -21,12 +21,12 @@ namespace SnkFramework.Mvvm.View
         private Action<ISnkWindow, WindowState> onStateChanged;
         private Action onFinish;
 
-        public SnkTransitionBase(ISnkWindowControllable window)
+        public SnkTransition(ISnkWindowControllable window)
         {
             this.window = window;
         }
 
-        ~SnkTransitionBase()
+        ~SnkTransition()
         {
             this.Unbind();
         }

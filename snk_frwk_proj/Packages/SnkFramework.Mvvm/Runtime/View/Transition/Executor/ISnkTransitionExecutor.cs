@@ -12,7 +12,7 @@ namespace SnkFramework.Mvvm.View
 
     public interface ISnkTransitionExecutor
     {
-        public void Execute(SnkTransitionBase transition);
+        public void Execute(SnkTransition transition);
     }
 
     public class SnkTransitionPopupExecutor : ISnkTransitionExecutor
@@ -27,9 +27,9 @@ namespace SnkFramework.Mvvm.View
             this._coroutineExecutor = coroutineExecutor;
         }
 
-        private List<SnkTransitionBase> transitions = new List<SnkTransitionBase>();
+        private List<SnkTransition> transitions = new List<SnkTransition>();
 
-        public void Execute(SnkTransitionBase transition)
+        public void Execute(SnkTransition transition)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace SnkFramework.Mvvm.View
             }
         }
 
-        protected virtual bool Check(SnkTransitionBase transition)=> true;
+        protected virtual bool Check(SnkTransition transition)=> true;
 
         protected virtual IEnumerator DoTask()
         {
@@ -52,7 +52,7 @@ namespace SnkFramework.Mvvm.View
                 yield return null; //wait one frame
                 while (this.transitions.Count > 0)
                 {
-                    SnkTransitionBase transition = this.transitions.Find(e => Check(e));
+                    SnkTransition transition = this.transitions.Find(e => Check(e));
                     if (transition != null)
                     {
                         this.transitions.Remove(transition);

@@ -19,18 +19,12 @@ namespace SnkFramework.Mvvm.View
             ISnkWindowControllable current = this.Window;
             if (this._uiLayer.IndexOf(current) == 0 && current.mActivated)
             {
-                IAsyncResult result = current.Passivate(this.AnimationDisabled);
-                while (result.IsCompleted == false)
-                    yield return null;
-                //yield return result.WaitForDone();
+                yield return current.Passivate(this.AnimationDisabled);
             }
 
             if (current.mVisibility)
             {
-                IAsyncResult result = current.DoHide(this.AnimationDisabled);
-                while (result.IsCompleted == false)
-                    yield return null;
-                //yield return result.WaitForDone();
+                yield return current.DoHide(this.AnimationDisabled);
             }
 
             if (_dismiss)

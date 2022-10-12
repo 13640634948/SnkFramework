@@ -35,11 +35,7 @@ namespace SnkFramework.Mvvm.View
                     //Passivate the previous window
                     if (previous.mActivated)
                     {
-                        IAsyncResult passivate = previous.Passivate(this.AnimationDisabled);
-                        while (passivate.IsCompleted == false)
-                            yield return null;
-
-                        //yield return passivate.WaitForDone();
+                        yield return previous.Passivate(this.AnimationDisabled);;
                     }
 
                     Func<ISnkWindow, ISnkWindow, ActionType> policy = this.OverlayPolicy;
@@ -52,9 +48,7 @@ namespace SnkFramework.Mvvm.View
                             previous.DoHide(this.AnimationDisabled);
                             break;
                         case ActionType.Dismiss:
-                            IAsyncResult result = previous.DoHide(this.AnimationDisabled);
-                            while (result.IsCompleted == false)
-                                yield return null;
+                            yield return previous.DoHide(this.AnimationDisabled);
                             previous.DoDismiss();
                             /*
                             previous.DoHide(this.AnimationDisabled).Callbackable().OnCallback((r) =>
@@ -70,18 +64,12 @@ namespace SnkFramework.Mvvm.View
 
                 if (!current.mVisibility)
                 {
-                    IAsyncResult result = current.DoShow(this.AnimationDisabled);
-                    while (result.IsCompleted == false)
-                        yield return null;
-                    //yield return result.WaitForDone();
+                    yield return current.DoShow(this.AnimationDisabled);
                 }
 
                 if (this._uiLayer.Activated && current.Equals(this._uiLayer.Current))
                 {
-                    IAsyncResult result = current.Activate(this.AnimationDisabled);
-                    while (result.IsCompleted == false)
-                        yield return null;
-                    //yield return activate.WaitForDone();
+                    yield return current.Activate(this.AnimationDisabled);
                 }
             }
     }
