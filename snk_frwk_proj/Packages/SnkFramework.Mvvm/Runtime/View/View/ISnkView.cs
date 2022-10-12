@@ -8,8 +8,8 @@ namespace SampleDevelop.Test
         where TViewOwner : class, ISnkViewOwner
         where TViewModel : class, ISnkViewModel
     {
-        public TViewOwner mOwner { get; }
-        public TViewModel mViewModel { get; }
+        public new TViewOwner mOwner { get; }
+        public new TViewModel mViewModel { get; }
     }
 
     public interface ISnkView : ISnkViewControllable, IBindingContextOwner
