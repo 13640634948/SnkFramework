@@ -1,12 +1,14 @@
 using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.Log;
 using SnkFramework.Mvvm.ViewModel;
 
 namespace SnkFramework.Mvvm.View
 {
     public abstract partial class SnkUIView : ISnkUIView
     {
+        protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
         
         protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
         public virtual string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
