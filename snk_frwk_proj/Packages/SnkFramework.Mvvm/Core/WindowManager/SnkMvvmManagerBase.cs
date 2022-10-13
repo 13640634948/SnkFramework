@@ -42,7 +42,7 @@ namespace SnkFramework.Mvvm.Core
         public virtual TWindow OpenWindow<TWindow>(string layerName, bool ignoreAnimation = false)
             where TWindow : class, ISnkWindow, new()
         {
-            var layer = SnkMvvmSetup.MSnkMvvmManager.GetLayer(layerName);
+            var layer = this.GetLayer(layerName);
             var window = new TWindow();
             layer.Add(window);
             window.LoadViewOwner();
@@ -55,7 +55,7 @@ namespace SnkFramework.Mvvm.Core
             bool ignoreAnimation = false)
             where TWindow : class, ISnkWindow, new()
         {
-            var layer = SnkMvvmSetup.MSnkMvvmManager.GetLayer(layerName);
+            var layer = this.GetLayer(layerName);
             var window = new TWindow();
             layer.Add(window);
             yield return window.LoadViewOwnerAsync();

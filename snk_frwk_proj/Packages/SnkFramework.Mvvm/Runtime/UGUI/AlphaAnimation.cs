@@ -10,7 +10,7 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public class AlphaAnimation : SnkUIAnimation
         {
-            protected static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
+            protected static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             [Range(0f, 1f)] public float from = 1f;
             [Range(0f, 1f)] public float to = 1f;

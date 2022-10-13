@@ -8,7 +8,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public abstract class SnkTransition : ISnkTransition
         {
-            private static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
+            protected static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             private ISnkWindowControllable window;
             private bool done = false;

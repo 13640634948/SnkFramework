@@ -7,7 +7,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public abstract class SnkViewModelBase : ObservableObject, ISnkViewModel
         {
-            protected static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
+            protected static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
         }
     }
 }

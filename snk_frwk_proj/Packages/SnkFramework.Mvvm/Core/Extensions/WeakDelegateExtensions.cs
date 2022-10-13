@@ -9,7 +9,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public static class WeakDelegateExtensions
         {
-            private static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
+            private static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             public static Action AsWeak(this Action action)
             {

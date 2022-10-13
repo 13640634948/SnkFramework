@@ -5,27 +5,34 @@ namespace SnkFramework.Mvvm.Core
 {
     public class SnkMvvmSetup
     {
-        static public ISnkMvvmSettings mSettings;
-        static public ISnkMvvmManager MSnkMvvmManager;
-        static public ISnkMvvmLogger MSnkMvvmLogger;
-        static public ISnkMvvmCoroutineExecutor mCoroutineExecutor;
-        static public ISnkMvvmLoader mLoader;
+        static public System.Func<ISnkMvvmSettings> SettingCreator;
+        static public System.Func<ISnkMvvmManager> ManagerCreator;
+        static public System.Func<ISnkMvvmLogger> LoggerCreator;
+        static public System.Func<ISnkMvvmCoroutineExecutor> CoroutineExecutorCreator;
+        static public System.Func<ISnkMvvmLoader> LoaderCreator;
 
-        static public void Initialize(
-            ISnkMvvmManager snkMvvmManager,
-            ISnkMvvmCoroutineExecutor coroutineExecutor,
-            ISnkMvvmLoader loader,
-            ISnkMvvmLogger snkMvvmLogger = null,
-            ISnkMvvmSettings settings = null
-            )
+        static public void Initialize()
         {
             SnkBindingSetup.Initialize();
             
-            mSettings = settings;
-            MSnkMvvmLogger = snkMvvmLogger;
-            mLoader = loader;
-            MSnkMvvmManager = snkMvvmManager;
-            mCoroutineExecutor = coroutineExecutor;
+            SnkIoCProvider iocProvider = SnkIoCProvider.Instance;
+            iocProvider.Register(SettingCreator?.Invoke());
+            iocProvider.Register(ManagerCreator?.Invoke());
+            iocProvider.Register(LoggerCreator?.Invoke());
+            iocProvider.Register(CoroutineExecutorCreator?.Invoke());
+            iocProvider.Register(LoaderCreator?.Invoke());
+        }
+
+        static public void Uninitialize()
+        {
+            SnkIoCProvider iocProvider = SnkIoCProvider.Instance;
+            iocProvider.Unregister<ISnkMvvmSettings>();
+            iocProvider.Unregister<ISnkMvvmManager>();
+            iocProvider.Unregister<ISnkMvvmLogger>();
+            iocProvider.Unregister<ISnkMvvmCoroutineExecutor>();
+            iocProvider.Unregister<ISnkMvvmLoader>();
+            
+            SnkBindingSetup.Uninitialize();
         }
     }
 

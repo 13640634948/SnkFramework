@@ -10,8 +10,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public class SnkCompositeCommand : SnkCommand
         {
-//      private static readonly ILog log = LogManager.GetLogger(typeof(CompositeCommand));
-            private static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
+            private static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             private readonly List<ICommand> commands = new List<ICommand>();
             private readonly bool monitorCommandActivity;
