@@ -19,14 +19,10 @@ namespace SnkFramework.Mvvm.Core
             {
                 ISnkWindowControllable current = this.Window;
                 if (this._uiLayer.IndexOf(current) == 0 && current.mActivated)
-                {
                     yield return current.Passivate(this.AnimationDisabled);
-                }
 
                 if (current.mVisibility)
-                {
                     yield return current.DoHide(this.AnimationDisabled);
-                }
 
                 if (_dismiss)
                     current.DoDismiss();
