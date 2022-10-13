@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SnkFramework.Mvvm.Runtime
 {
-    public class SnkSnkMvvmLogger : SnkMvvmLoggerBase
+    public class SnkMvvmLogger : SnkMvvmLoggerBase
     { 
         protected override void InternalOutputString(string flag, string format, params object[] args)
         {

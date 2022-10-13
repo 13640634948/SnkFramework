@@ -18,7 +18,7 @@ namespace SampleDevelop.Mvvm
         private void Awake()
         {
             _uguiSnkMvvmMgr = new UGUISnkMvvmManager(this);
-            SnkMvvmSetup.Initialize(_uguiSnkMvvmMgr, this, new SnkMvvmLoader(), new SnkSnkMvvmLogger());
+            SnkMvvmSetup.Initialize(_uguiSnkMvvmMgr, this, new SnkMvvmLoader(), new SnkMvvmLogger());
         }
 
         void Start()
