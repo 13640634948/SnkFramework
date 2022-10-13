@@ -6,13 +6,13 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace UGUI
     {
-        public class UGUIWindowManager : WindowManagerBase<UGUILayer>
+        public class UGUISnkMvvmManager : SnkMvvmManagerBase<UGUILayer>
         {
             public Camera mViewCamera { get; }
 
             public GameObject mOwner;
 
-            public UGUIWindowManager(IMvvmCoroutineExecutor coroutineExecutor) : base(coroutineExecutor)
+            public UGUISnkMvvmManager(ISnkMvvmCoroutineExecutor coroutineExecutor) : base(coroutineExecutor)
             {
                 GameObject asset = Resources.Load<GameObject>("WindowRoot");
                 GameObject inst = GameObject.Instantiate(asset);

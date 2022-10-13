@@ -4,7 +4,7 @@ using SnkFramework.Mvvm.Core.View;
 
 namespace SnkFramework.Mvvm.Core
 {
-    public interface IWindowManager
+    public interface ISnkMvvmManager
     {
         public ISnkUILayer GetLayer(string layerName);
         public ISnkUILayer CreateLayer(string layerName);

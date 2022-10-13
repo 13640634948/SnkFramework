@@ -9,16 +9,16 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm
 {
-    public class WindowDemo : MonoBehaviour, IMvvmCoroutineExecutor
+    public class WindowDemo : MonoBehaviour, ISnkMvvmCoroutineExecutor
     {
         private List<LoginWindow> loginWindowList = new List<LoginWindow>();
-        private UGUIWindowManager _uguiWindowMgr;
+        private UGUISnkMvvmManager _uguiSnkMvvmMgr;
         public bool mIgnoreAnimation;
 
         private void Awake()
         {
-            _uguiWindowMgr = new UGUIWindowManager(this);
-            SnkMvvmSetup.Initialize(_uguiWindowMgr, this, new MvvmLoader(), new SnkMvvmLog());
+            _uguiSnkMvvmMgr = new UGUISnkMvvmManager(this);
+            SnkMvvmSetup.Initialize(_uguiSnkMvvmMgr, this, new SnkMvvmLoader(), new SnkSnkMvvmLogger());
         }
 
         void Start()
@@ -61,7 +61,7 @@ namespace SampleDevelop.Mvvm
 
             if (Input.GetKeyDown(KeyCode.S))
             {
-                var window = _uguiWindowMgr.OpenWindow<LoginWindow>("normal");
+                var window = _uguiSnkMvvmMgr.OpenWindow<LoginWindow>("normal");
                 ISnkAnimation[] anims =
                 {
                     new AlphaAnimation
@@ -90,7 +90,7 @@ namespace SampleDevelop.Mvvm
 
         private IEnumerator LoadWindowAsync()
         {
-            yield return _uguiWindowMgr.OpenWindowAsync<LoginWindow>("normal", window =>
+            yield return _uguiSnkMvvmMgr.OpenWindowAsync<LoginWindow>("normal", window =>
             {
                 window.Show(mIgnoreAnimation);
                 this.loginWindowList.Add(window);

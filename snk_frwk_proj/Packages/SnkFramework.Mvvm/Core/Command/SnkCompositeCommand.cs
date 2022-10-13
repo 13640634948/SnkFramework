@@ -11,7 +11,7 @@ namespace SnkFramework.Mvvm.Core
         public class SnkCompositeCommand : SnkCommand
         {
 //      private static readonly ILog log = LogManager.GetLogger(typeof(CompositeCommand));
-            private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+            private static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
 
             private readonly List<ICommand> commands = new List<ICommand>();
             private readonly bool monitorCommandActivity;
@@ -161,8 +161,8 @@ namespace SnkFramework.Mvvm.Core
                     }
                     catch (Exception e)
                     {
-                        if (log.IsWarnEnabled)
-                            log.Warn(e);
+                        if (Logger.IsWarnEnabled)
+                            Logger.Warn(e);
                     }
                 }
             }

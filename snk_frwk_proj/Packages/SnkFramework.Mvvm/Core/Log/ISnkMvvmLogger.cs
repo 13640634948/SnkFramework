@@ -2,7 +2,7 @@ namespace SnkFramework.Mvvm.Core
 {
     namespace Log
     {
-        public interface IMvvmLog
+        public interface ISnkMvvmLogger
         {
             void Info(object message);
             void Warn(object message);
@@ -15,7 +15,6 @@ namespace SnkFramework.Mvvm.Core
             bool IsInfoEnabled { get; }
             bool IsWarnEnabled { get; }
             bool IsErrorEnabled { get; }
-            bool IsErrorEnabledx { get; }
         }
     }
 }

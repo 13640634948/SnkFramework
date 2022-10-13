@@ -13,11 +13,11 @@ namespace SnkFramework.Mvvm.Core
 
         public class SnkTransitionPopupExecutor : ISnkTransitionExecutor
         {
-            private IMvvmCoroutineExecutor _coroutineExecutor;
+            private ISnkMvvmCoroutineExecutor _coroutineExecutor;
             private bool running = false;
 
 
-            public SnkTransitionPopupExecutor(IMvvmCoroutineExecutor coroutineExecutor)
+            public SnkTransitionPopupExecutor(ISnkMvvmCoroutineExecutor coroutineExecutor)
             {
                 this._coroutineExecutor = coroutineExecutor;
             }

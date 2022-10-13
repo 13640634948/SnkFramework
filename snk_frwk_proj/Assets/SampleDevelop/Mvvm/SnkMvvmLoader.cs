@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SampleDevelop.Mvvm
 {
-    public class MvvmLoader : IMvvmLoader
+    public class SnkMvvmLoader : ISnkMvvmLoader
     {
         public ISnkViewOwner LoadViewOwner(string ownerPath)
         {

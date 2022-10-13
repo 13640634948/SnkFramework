@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace SnkFramework.Mvvm.Core
 {
-    public interface IMvvmCoroutineExecutor
+    public interface ISnkMvvmCoroutineExecutor
     {
         public void RunOnCoroutineNoReturn(IEnumerator routine);
     }

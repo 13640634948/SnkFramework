@@ -9,7 +9,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public abstract partial class SnkUIView : ISnkUIView
         {
-            protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+            protected static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
 
             protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
             public virtual string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);

@@ -5,16 +5,16 @@ using SnkFramework.Mvvm.Core.View;
 
 namespace SnkFramework.Mvvm.Core
 {
-    public abstract class WindowManagerBase<TUILayer> : IWindowManager
+    public abstract class SnkMvvmManagerBase<TUILayer> : ISnkMvvmManager
         where TUILayer : class, ISnkUILayer, new()
     {
         protected Dictionary<string, TUILayer> layerDict;
-        protected IMvvmCoroutineExecutor coroutineExecutor;
+        protected ISnkMvvmCoroutineExecutor coroutineExecutor;
         protected ISnkTransitionExecutor transitionExecutor;
 
         public abstract ISnkUILayer CreateLayer(string layerName);
 
-        public WindowManagerBase(IMvvmCoroutineExecutor coroutineExecutor)
+        public SnkMvvmManagerBase(ISnkMvvmCoroutineExecutor coroutineExecutor)
         {
             layerDict = new Dictionary<string, TUILayer>();
 
@@ -22,7 +22,7 @@ namespace SnkFramework.Mvvm.Core
             this.transitionExecutor = createTransitionExecutor(coroutineExecutor);
         }
 
-        protected virtual ISnkTransitionExecutor createTransitionExecutor(IMvvmCoroutineExecutor coroutineExecutor)
+        protected virtual ISnkTransitionExecutor createTransitionExecutor(ISnkMvvmCoroutineExecutor coroutineExecutor)
             => new SnkTransitionPopupExecutor(coroutineExecutor);
 
         public virtual ISnkUILayer GetLayer(string layerName)
@@ -42,7 +42,7 @@ namespace SnkFramework.Mvvm.Core
         public virtual TWindow OpenWindow<TWindow>(string layerName, bool ignoreAnimation = false)
             where TWindow : class, ISnkWindow, new()
         {
-            var layer = SnkMvvmSetup.mWindowManager.GetLayer(layerName);
+            var layer = SnkMvvmSetup.MSnkMvvmManager.GetLayer(layerName);
             var window = new TWindow();
             layer.Add(window);
             window.LoadViewOwner();
@@ -55,7 +55,7 @@ namespace SnkFramework.Mvvm.Core
             bool ignoreAnimation = false)
             where TWindow : class, ISnkWindow, new()
         {
-            var layer = SnkMvvmSetup.mWindowManager.GetLayer(layerName);
+            var layer = SnkMvvmSetup.MSnkMvvmManager.GetLayer(layerName);
             var window = new TWindow();
             layer.Add(window);
             yield return window.LoadViewOwnerAsync();

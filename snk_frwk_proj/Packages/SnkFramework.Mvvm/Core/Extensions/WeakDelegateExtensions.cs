@@ -9,7 +9,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public static class WeakDelegateExtensions
         {
-            private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+            private static readonly ISnkMvvmLogger Logger = SnkMvvmSetup.MSnkMvvmLogger;
 
             public static Action AsWeak(this Action action)
             {
@@ -29,8 +29,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
                         return;
@@ -57,8 +57,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
                         return;
@@ -85,8 +85,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
                         return;
@@ -113,8 +113,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
                         return;
@@ -141,8 +141,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
                         return;
@@ -169,8 +169,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
 
@@ -200,8 +200,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
 
@@ -231,8 +231,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
 
@@ -263,8 +263,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
 
@@ -295,8 +295,8 @@ namespace SnkFramework.Mvvm.Core
                     object target = targetRef.Target;
                     if (target == null)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat(
+                        if (Logger.IsWarnEnabled)
+                            Logger.WarnFormat(
                                 "You are trying to invoke a weak reference delegate({0}.{1}), and the target object has been destroyed.",
                                 type, method);
 

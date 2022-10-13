@@ -259,7 +259,7 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.mVisibility == false)
                 {
-                    log.Error("The window is not visible.");
+                    Logger.Error("The window is not visible.");
                     yield break;
                 }
 
@@ -294,7 +294,7 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.mVisibility == false)
                 {
-                    log.Error("The window is not visible.");
+                    Logger.Error("The window is not visible.");
                     yield break;
                 }
 
@@ -326,7 +326,7 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this._created == false)
                 {
-                    log.Error("The window is not create.");
+                    Logger.Error("The window is not create.");
                     yield break;
                 }
 
