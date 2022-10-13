@@ -3,7 +3,7 @@ using SnkFramework.Mvvm.Core.View;
 using SnkFramework.Mvvm.Core.ViewModel;
 using UnityEngine;
 
-namespace SnkFramework.Mvvm.LayoutEngine
+namespace SnkFramework.Mvvm.Runtime
 {
     namespace UGUI
     {

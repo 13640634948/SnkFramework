@@ -2,6 +2,7 @@
     "name": "SnkFramework.Mvvm.Runtime",
     "rootNamespace": "",
     "references": [
+        "GUID:2b9a24f089c91433691f7706fa73b16b",
         "GUID:21c295c21c64b49a08c9c2744e50c058"
     ],
     "includePlatforms": [],
@@ -12,5 +13,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

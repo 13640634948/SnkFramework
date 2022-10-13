@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace SnkFramework.Mvvm.LayoutEngine
+namespace SnkFramework.Mvvm.Runtime
 {
     namespace UGUI
     {

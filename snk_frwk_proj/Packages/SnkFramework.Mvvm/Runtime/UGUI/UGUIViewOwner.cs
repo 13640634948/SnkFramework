@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SnkFramework.Mvvm.LayoutEngine
+namespace SnkFramework.Mvvm.Runtime
 {
     namespace UGUI
     {

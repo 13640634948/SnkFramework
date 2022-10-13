@@ -1,6 +1,6 @@
 using Loxodon.Framework.Binding.Contexts;
 using Loxodon.Framework.Interactivity;
-using SnkFramework.Mvvm.LayoutEngine.UGUI;
+using SnkFramework.Mvvm.Runtime.UGUI;
 using UnityEngine;
 using UnityEngine.UI;
 
