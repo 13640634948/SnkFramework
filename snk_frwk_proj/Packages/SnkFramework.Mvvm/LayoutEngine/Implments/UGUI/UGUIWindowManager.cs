@@ -1,5 +1,5 @@
-using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core;
+using SnkFramework.Mvvm.Core.View;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.LayoutEngine

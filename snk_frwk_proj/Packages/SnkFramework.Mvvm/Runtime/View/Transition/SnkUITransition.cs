@@ -1,9 +1,12 @@
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public abstract class SnkUITransition : SnkTransition, ISnkUITransition
+    namespace View
     {
-        protected SnkUITransition(ISnkWindowControllable window) : base(window)
+        public abstract class SnkUITransition : SnkTransition, ISnkUITransition
         {
+            protected SnkUITransition(ISnkWindowControllable window) : base(window)
+            {
+            }
         }
     }
 }

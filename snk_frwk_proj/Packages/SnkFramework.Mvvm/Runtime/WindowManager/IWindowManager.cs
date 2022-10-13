@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core.View;
 
-namespace SnkFramework.Mvvm.Base
-
+namespace SnkFramework.Mvvm.Core
 {
     public interface IWindowManager
     {

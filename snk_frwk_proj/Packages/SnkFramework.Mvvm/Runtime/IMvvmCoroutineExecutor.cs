@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace SnkFramework.Mvvm.Base
+namespace SnkFramework.Mvvm.Core
 {
     public interface IMvvmCoroutineExecutor
     {

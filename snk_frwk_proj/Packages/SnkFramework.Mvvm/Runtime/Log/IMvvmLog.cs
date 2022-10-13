@@ -1,18 +1,21 @@
-namespace SnkFramework.Mvvm.Log
+namespace SnkFramework.Mvvm.Core
 {
-    public interface IMvvmLog
+    namespace Log
     {
-        void Info(object message);
-        void Warn(object message);
-        void Error(object message);
-        
-        void InfoFormat(string format, params object[] args);
-        void WarnFormat(string format, params object[] args);
-        void ErrorFormat(string format, params object[] args);
-        
-        bool IsInfoEnabled { get; }
-        bool IsWarnEnabled { get; }
-        bool IsErrorEnabled { get; }
-        bool IsErrorEnabledx{ get; }
+        public interface IMvvmLog
+        {
+            void Info(object message);
+            void Warn(object message);
+            void Error(object message);
+
+            void InfoFormat(string format, params object[] args);
+            void WarnFormat(string format, params object[] args);
+            void ErrorFormat(string format, params object[] args);
+
+            bool IsInfoEnabled { get; }
+            bool IsWarnEnabled { get; }
+            bool IsErrorEnabled { get; }
+            bool IsErrorEnabledx { get; }
+        }
     }
 }

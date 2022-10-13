@@ -1,13 +1,17 @@
-using SnkFramework.Mvvm.ViewModel;
+using SnkFramework.Mvvm.Core.ViewModel;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkUIPage : ISnkUIView
+    namespace View
     {
-    }
-    public interface ISnkUIPage<TViewOwner, TViewModel> : ISnkUIPage, ISnkUIView<TViewOwner, TViewModel>
-        where TViewOwner : class, ISnkViewOwner
-        where TViewModel : class, ISnkViewModel
-    {
+        public interface ISnkUIPage : ISnkUIView
+        {
+        }
+
+        public interface ISnkUIPage<TViewOwner, TViewModel> : ISnkUIPage, ISnkUIView<TViewOwner, TViewModel>
+            where TViewOwner : class, ISnkViewOwner
+            where TViewModel : class, ISnkViewModel
+        {
+        }
     }
 }

@@ -1,10 +1,13 @@
-namespace SnkFramework.Mvvm.Base
+namespace SnkFramework.Mvvm.Core
 {
-    public enum ANIM_TYPE
+    namespace View
     {
-        enter_anim,
-        exit_anim,
-        activation_anim,
-        passivation_anim
+        public enum ANIM_TYPE
+        {
+            enter_anim,
+            exit_anim,
+            activation_anim,
+            passivation_anim
+        }
     }
 }

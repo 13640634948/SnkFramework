@@ -1,8 +1,7 @@
 using SnkFramework.FluentBinding.Base;
-using SnkFramework.Mvvm.Log;
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core.Log;
 
-namespace SnkFramework.Mvvm.Base
+namespace SnkFramework.Mvvm.Core
 {
     public class SnkMvvmSetup
     {

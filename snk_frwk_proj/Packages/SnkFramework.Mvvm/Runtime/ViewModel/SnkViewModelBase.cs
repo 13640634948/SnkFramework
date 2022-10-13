@@ -1,11 +1,13 @@
 using Loxodon.Framework.Observables;
-using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.Log;
+using SnkFramework.Mvvm.Core.Log;
 
-namespace SnkFramework.Mvvm.ViewModel
+namespace SnkFramework.Mvvm.Core
 {
-    public abstract class SnkViewModelBase : ObservableObject,ISnkViewModel
+    namespace ViewModel
     {
-        protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+        public abstract class SnkViewModelBase : ObservableObject, ISnkViewModel
+        {
+            protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+        }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections;
-using SnkFramework.Mvvm.View;
-using SnkFramework.Mvvm.ViewModel;
+using SnkFramework.Mvvm.Core.View;
+using SnkFramework.Mvvm.Core.ViewModel;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.LayoutEngine

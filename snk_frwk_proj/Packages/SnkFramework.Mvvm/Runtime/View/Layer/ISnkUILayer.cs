@@ -1,36 +1,40 @@
 using System.Collections.Generic;
-namespace SnkFramework.Mvvm.View
+
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkUILayer : ISnkTransitionController
+    namespace View
     {
-         bool Activated { get; set; }
+        public interface ISnkUILayer : ISnkTransitionController
+        {
+            bool Activated { get; set; }
 
-        ISnkWindow Current { get; }
+            ISnkWindow Current { get; }
 
-        int Count { get; }
+            int Count { get; }
 
-        IEnumerator<ISnkWindow> Visibles();
+            IEnumerator<ISnkWindow> Visibles();
 
-        ISnkWindow Get(int index);
+            ISnkWindow Get(int index);
 
-        void Add(ISnkWindow window);
+            void Add(ISnkWindow window);
 
-        bool Remove(ISnkWindow window);
+            bool Remove(ISnkWindow window);
 
-        ISnkWindow RemoveAt(int index);
+            ISnkWindow RemoveAt(int index);
 
-        bool Contains(ISnkWindow window);
+            bool Contains(ISnkWindow window);
 
-        int IndexOf(ISnkWindow window);
+            int IndexOf(ISnkWindow window);
 
-        List<ISnkWindow> Find(bool visible);
+            List<ISnkWindow> Find(bool visible);
 
-        T Find<T>() where T : class, ISnkWindow;
+            T Find<T>() where T : class, ISnkWindow;
 
-        T Find<T>(string name) where T : class, ISnkWindow;
+            T Find<T>(string name) where T : class, ISnkWindow;
 
-        List<T> FindAll<T>() where T : class, ISnkWindow;
+            List<T> FindAll<T>() where T : class, ISnkWindow;
 
-        void Clear();
+            void Clear();
+        }
     }
 }

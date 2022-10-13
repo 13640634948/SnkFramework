@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkUIContainer
+    namespace View
     {
-        public List<SnkUIPage> mPageList { get; }
+        public interface ISnkUIContainer
+        {
+            public List<SnkUIPage> mPageList { get; }
 
-        public SnkUIPage GetPage(string name);
-        public TPage GetPage<TPage>(string name) where TPage : SnkUIPage;
-        public void AddView(SnkUIPage page);
-        public void RemoveView(SnkUIPage page);
+            public SnkUIPage GetPage(string name);
+            public TPage GetPage<TPage>(string name) where TPage : SnkUIPage;
+            public void AddView(SnkUIPage page);
+            public void RemoveView(SnkUIPage page);
+        }
     }
 }

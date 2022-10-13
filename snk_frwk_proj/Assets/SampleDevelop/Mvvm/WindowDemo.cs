@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Loxodon.Framework.Interactivity;
-using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.Core;
+using SnkFramework.Mvvm.Core.View;
 using SnkFramework.Mvvm.LayoutEngine;
 using SnkFramework.Mvvm.LayoutEngine.UGUI;
-using SnkFramework.Mvvm.View;
 using UnityEngine;
 
 namespace SampleDevelop.Mvvm

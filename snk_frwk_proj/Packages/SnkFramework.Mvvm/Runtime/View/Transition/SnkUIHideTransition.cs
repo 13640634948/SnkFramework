@@ -1,34 +1,36 @@
-using System;
 using System.Collections;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public class SnkUIHideTransition : SnkUITransition
+    namespace View
     {
-        private bool _dismiss;
-        private ISnkUILayer _uiLayer;
-
-        public SnkUIHideTransition(ISnkUILayer uiLayer, ISnkWindowControllable window, bool dismiss) : base(window)
+        public class SnkUIHideTransition : SnkUITransition
         {
-            this._uiLayer = uiLayer;
-            this._dismiss = dismiss;
-        }
+            private bool _dismiss;
+            private ISnkUILayer _uiLayer;
 
-        protected override IEnumerator DoTransition()
-        {
-            ISnkWindowControllable current = this.Window;
-            if (this._uiLayer.IndexOf(current) == 0 && current.mActivated)
+            public SnkUIHideTransition(ISnkUILayer uiLayer, ISnkWindowControllable window, bool dismiss) : base(window)
             {
-                yield return current.Passivate(this.AnimationDisabled);
+                this._uiLayer = uiLayer;
+                this._dismiss = dismiss;
             }
 
-            if (current.mVisibility)
+            protected override IEnumerator DoTransition()
             {
-                yield return current.DoHide(this.AnimationDisabled);
-            }
+                ISnkWindowControllable current = this.Window;
+                if (this._uiLayer.IndexOf(current) == 0 && current.mActivated)
+                {
+                    yield return current.Passivate(this.AnimationDisabled);
+                }
 
-            if (_dismiss)
-                current.DoDismiss();
+                if (current.mVisibility)
+                {
+                    yield return current.DoHide(this.AnimationDisabled);
+                }
+
+                if (_dismiss)
+                    current.DoDismiss();
+            }
         }
     }
 }

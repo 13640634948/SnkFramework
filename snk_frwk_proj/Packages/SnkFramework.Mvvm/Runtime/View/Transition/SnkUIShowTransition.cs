@@ -1,53 +1,57 @@
 using System;
 using System.Collections;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public class SnkUIShowTransition : SnkUITransition
+    namespace View
     {
-        private ISnkUILayer _uiLayer;
-        public SnkUIShowTransition(ISnkUILayer uiLayer, ISnkWindowControllable window) : base(window)
+        public class SnkUIShowTransition : SnkUITransition
         {
-            this._uiLayer = uiLayer;
-        }
+            private ISnkUILayer _uiLayer;
 
-        protected virtual ActionType Overlay(ISnkWindow previous, ISnkWindow current)
-        {
-            return ActionType.None;
-            /*
-            if (previous == null || previous.WindowType == WindowType.FULL)
+            public SnkUIShowTransition(ISnkUILayer uiLayer, ISnkWindowControllable window) : base(window)
+            {
+                this._uiLayer = uiLayer;
+            }
+
+            protected virtual ACT_TYPE Overlay(ISnkWindow previous, ISnkWindow current)
+            {
+                return ACT_TYPE.None;
+                /*
+                if (previous == null || previous.WindowType == WindowType.FULL)
+                    return ActionType.None;
+    
+                if (previous.WindowType == WindowType.POPUP)
+                    return ActionType.Dismiss;
+    
                 return ActionType.None;
+                */
+            }
 
-            if (previous.WindowType == WindowType.POPUP)
-                return ActionType.Dismiss;
-
-            return ActionType.None;
-            */
-        }
-        
-        protected override IEnumerator DoTransition()
+            protected override IEnumerator DoTransition()
             {
                 ISnkWindowControllable current = this.Window;
                 //IManageable previous = (IManageable)this.manager.GetVisibleWindow(layer);
-                ISnkWindowControllable previous = (ISnkWindowControllable)this._uiLayer.Current;
+                ISnkWindowControllable previous = (ISnkWindowControllable) this._uiLayer.Current;
                 if (previous != null)
                 {
                     //Passivate the previous window
                     if (previous.mActivated)
                     {
-                        yield return previous.Passivate(this.AnimationDisabled);;
+                        yield return previous.Passivate(this.AnimationDisabled);
+                        ;
                     }
 
-                    Func<ISnkWindow, ISnkWindow, ActionType> policy = this.OverlayPolicy;
+                    Func<ISnkWindow, ISnkWindow, ACT_TYPE> policy = this.OverlayPolicy;
                     if (policy == null)
                         policy = this.Overlay;
-                    ActionType actionType = policy(previous, current);
+                    ACT_TYPE actionType = policy(previous, current);
                     switch (actionType)
                     {
-                        case ActionType.Hide:
+                        case ACT_TYPE.Hide:
                             previous.DoHide(this.AnimationDisabled);
                             break;
-                        case ActionType.Dismiss:
+                        case ACT_TYPE.Dismiss:
                             yield return previous.DoHide(this.AnimationDisabled);
                             previous.DoDismiss();
                             /*
@@ -72,5 +76,6 @@ namespace SnkFramework.Mvvm.View
                     yield return current.Activate(this.AnimationDisabled);
                 }
             }
+        }
     }
 }

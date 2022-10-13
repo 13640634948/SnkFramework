@@ -1,9 +1,12 @@
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkTransitionController
+    namespace View
     {
-        public ISnkTransition Show(ISnkWindow window);
-        public ISnkTransition Hide(ISnkWindow window);
-        public ISnkTransition Dismiss(ISnkWindow window);
+        public interface ISnkTransitionController
+        {
+            public ISnkTransition Show(ISnkWindow window);
+            public ISnkTransition Hide(ISnkWindow window);
+            public ISnkTransition Dismiss(ISnkWindow window);
+        }
     }
 }

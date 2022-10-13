@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core.View;
 
-namespace SnkFramework.Mvvm.Base
+namespace SnkFramework.Mvvm.Core
 {
     public abstract class WindowManagerBase<TUILayer> : IWindowManager
         where TUILayer : class, ISnkUILayer, new()

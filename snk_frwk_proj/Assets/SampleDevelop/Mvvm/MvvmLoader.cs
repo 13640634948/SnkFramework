@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
-using SnkFramework.Mvvm.Base;
+using SnkFramework.Mvvm.Core;
+using SnkFramework.Mvvm.Core.View;
 using SnkFramework.Mvvm.LayoutEngine.UGUI;
-using SnkFramework.Mvvm.View;
 using UnityEngine;
 
 namespace SampleDevelop.Mvvm

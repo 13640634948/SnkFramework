@@ -1,90 +1,92 @@
 using System;
 using System.Collections;
-using SnkFramework.Mvvm.Base;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public abstract class SnkUIAnimation : SnkAnimation, ISnkUIAnimation
+    namespace View
     {
-        private Action _onStart;
-        private Action _onEnd;
-
-        private ANIM_TYPE animType;
-
-        public ANIM_TYPE AnimType
+        public abstract class SnkUIAnimation : SnkAnimation, ISnkUIAnimation
         {
-            get => this.animType;
-            set => this.animType = value;
-        }
+            private Action _onStart;
+            private Action _onEnd;
 
-        private ISnkView _view;
-        protected ISnkView mView => _view;
+            private ANIM_TYPE animType;
 
-        public override void Initialize(ISnkView view)
-        {
-            this._view = view;
-            switch (this.AnimType)
+            public ANIM_TYPE AnimType
             {
-                case ANIM_TYPE.enter_anim:
-                    this._view.mEnterAnimation = this;
-                    break;
-                case ANIM_TYPE.exit_anim:
-                    this._view.mExitAnimation = this;
-                    break;
-                case ANIM_TYPE.activation_anim:
-                    if (this._view is ISnkWindowView)
-                        (this._view as ISnkWindowView).mActivationAnimation = this;
-                    break;
-                case ANIM_TYPE.passivation_anim:
-                    if (this._view is ISnkWindowView)
-                        (this._view as ISnkWindowView).mPassivationAnimation = this;
-                    break;
+                get => this.animType;
+                set => this.animType = value;
             }
-        }
 
-        protected void OnStart()
-        {
-            try
+            private ISnkView _view;
+            protected ISnkView mView => _view;
+
+            public override void Initialize(ISnkView view)
             {
-                this._onStart.Invoke();
-                this._onStart = null;
+                this._view = view;
+                switch (this.AnimType)
+                {
+                    case ANIM_TYPE.enter_anim:
+                        this._view.mEnterAnimation = this;
+                        break;
+                    case ANIM_TYPE.exit_anim:
+                        this._view.mExitAnimation = this;
+                        break;
+                    case ANIM_TYPE.activation_anim:
+                        if (this._view is ISnkWindowView)
+                            (this._view as ISnkWindowView).mActivationAnimation = this;
+                        break;
+                    case ANIM_TYPE.passivation_anim:
+                        if (this._view is ISnkWindowView)
+                            (this._view as ISnkWindowView).mPassivationAnimation = this;
+                        break;
+                }
             }
-            catch (Exception)
+
+            protected void OnStart()
             {
+                try
+                {
+                    this._onStart.Invoke();
+                    this._onStart = null;
+                }
+                catch (Exception)
+                {
+                }
             }
-        }
 
-        protected void OnEnd()
-        {
-            try
+            protected void OnEnd()
             {
-                this._onEnd?.Invoke();
-                this._onEnd = null;
+                try
+                {
+                    this._onEnd?.Invoke();
+                    this._onEnd = null;
+                }
+                catch (Exception)
+                {
+                }
             }
-            catch (Exception)
+
+            public override ISnkAnimation OnStart(Action onStart)
             {
+                this._onStart += onStart;
+                return this;
             }
-        }
 
-        public override ISnkAnimation OnStart(Action onStart)
-        {
-            this._onStart += onStart;
-            return this;
-        }
+            public override ISnkAnimation OnEnd(Action onEnd)
+            {
+                this._onEnd += onEnd;
+                return this;
+            }
 
-        public override ISnkAnimation OnEnd(Action onEnd)
-        {
-            this._onEnd += onEnd;
-            return this;
-        }
+            //public virtual void Play()
+            public override ISnkAnimation Play()
+            {
+                SnkMvvmSetup.mCoroutineExecutor.RunOnCoroutineNoReturn(DoPlay());
+                return default;
+            }
 
-        //public virtual void Play()
-        public override ISnkAnimation Play()
-        {
-            SnkMvvmSetup.mCoroutineExecutor.RunOnCoroutineNoReturn(DoPlay());
-            return default;
+            protected abstract IEnumerator DoPlay();
         }
-
-        protected abstract IEnumerator DoPlay();
     }
 }

@@ -1,11 +1,14 @@
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public abstract partial class SnkUIPage : SnkUIView, ISnkUIPage
+    namespace View
     {
-        public override void Create()
+        public abstract partial class SnkUIPage : SnkUIView, ISnkUIPage
         {
-            this.mVisibility = false;
+            public override void Create()
+            {
+                this.mVisibility = false;
+            }
         }
     }
 }

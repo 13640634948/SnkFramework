@@ -1,7 +1,10 @@
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkViewOwner : System.IDisposable
+    namespace View
     {
-        public bool mInteractable { get; set; }
+        public interface ISnkViewOwner : System.IDisposable
+        {
+            public bool mInteractable { get; set; }
+        }
     }
 }

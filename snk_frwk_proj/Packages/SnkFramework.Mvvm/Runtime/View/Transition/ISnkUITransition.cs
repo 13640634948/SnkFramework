@@ -1,6 +1,9 @@
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkUITransition : ISnkTransition
+    namespace View
     {
+        public interface ISnkUITransition : ISnkTransition
+        {
+        }
     }
 }

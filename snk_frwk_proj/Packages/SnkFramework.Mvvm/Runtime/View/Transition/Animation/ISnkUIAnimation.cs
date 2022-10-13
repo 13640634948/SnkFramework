@@ -1,6 +1,9 @@
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkUIAnimation : ISnkAnimation
+    namespace View
     {
+        public interface ISnkUIAnimation : ISnkAnimation
+        {
+        }
     }
 }

@@ -1,6 +1,6 @@
 using Loxodon.Framework.Commands;
 using Loxodon.Framework.Interactivity;
-using SnkFramework.Mvvm.ViewModel;
+using SnkFramework.Mvvm.Core.ViewModel;
 
 namespace SampleDevelop.Mvvm
 {

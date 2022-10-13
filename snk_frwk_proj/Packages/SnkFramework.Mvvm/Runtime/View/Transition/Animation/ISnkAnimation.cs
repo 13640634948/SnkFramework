@@ -1,15 +1,18 @@
 using System;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkAnimation
+    namespace View
     {
-        public void Initialize(ISnkView view);
+        public interface ISnkAnimation
+        {
+            public void Initialize(ISnkView view);
 
-        ISnkAnimation OnStart(Action onStart);
+            ISnkAnimation OnStart(Action onStart);
 
-        ISnkAnimation OnEnd(Action onEnd);
+            ISnkAnimation OnEnd(Action onEnd);
 
-        ISnkAnimation Play();
+            ISnkAnimation Play();
+        }
     }
 }

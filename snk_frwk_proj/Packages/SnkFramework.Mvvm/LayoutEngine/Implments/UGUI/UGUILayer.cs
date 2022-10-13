@@ -1,4 +1,4 @@
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core.View;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,17 +1,20 @@
-using SnkFramework.Mvvm.ViewModel;
+using SnkFramework.Mvvm.Core.ViewModel;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkWindowView : ISnkUIPage
+    namespace View
     {
-        public ISnkAnimation mActivationAnimation { get; set; }
-        public ISnkAnimation mPassivationAnimation { get; set; }
-    }
+        public interface ISnkWindowView : ISnkUIPage
+        {
+            public ISnkAnimation mActivationAnimation { get; set; }
+            public ISnkAnimation mPassivationAnimation { get; set; }
+        }
 
-    public interface ISnkWindowView<TViewOwner,TViewModel> : ISnkWindowView, ISnkUIPage<TViewOwner,TViewModel>
-        where TViewOwner : class, ISnkViewOwner
-        where TViewModel : class, ISnkViewModel
-    {
-        
+        public interface ISnkWindowView<TViewOwner, TViewModel> : ISnkWindowView, ISnkUIPage<TViewOwner, TViewModel>
+            where TViewOwner : class, ISnkViewOwner
+            where TViewModel : class, ISnkViewModel
+        {
+
+        }
     }
 }

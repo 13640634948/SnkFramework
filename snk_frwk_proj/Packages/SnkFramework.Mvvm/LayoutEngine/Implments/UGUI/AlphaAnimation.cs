@@ -1,7 +1,7 @@
 using System.Collections;
-using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.Log;
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core;
+using SnkFramework.Mvvm.Core.Log;
+using SnkFramework.Mvvm.Core.View;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.LayoutEngine

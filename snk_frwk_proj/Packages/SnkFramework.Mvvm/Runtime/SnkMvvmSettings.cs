@@ -1,4 +1,4 @@
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
     public class SnkMvvmSettings : ISnkMvvmSettings
     {

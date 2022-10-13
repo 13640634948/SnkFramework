@@ -1,31 +1,34 @@
 using System.Collections;
 using Loxodon.Framework.Binding.Contexts;
-using SnkFramework.Mvvm.ViewModel;
+using SnkFramework.Mvvm.Core.ViewModel;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public interface ISnkView<TViewOwner, TViewModel> : ISnkView
-        where TViewOwner : class, ISnkViewOwner
-        where TViewModel : class, ISnkViewModel
+    namespace View
     {
-        public new TViewOwner mOwner { get; }
-        public new TViewModel mViewModel { get; }
-    }
+        public interface ISnkView<TViewOwner, TViewModel> : ISnkView
+            where TViewOwner : class, ISnkViewOwner
+            where TViewModel : class, ISnkViewModel
+        {
+            public new TViewOwner mOwner { get; }
+            public new TViewModel mViewModel { get; }
+        }
 
-    public interface ISnkView : ISnkViewControllable, IBindingContextOwner
-    {
-        public ISnkViewModel mViewModel { get; }
-        public ISnkViewOwner mOwner { get; }
-        public string mName { get; set; }
-        public bool mVisibility { get; set; }
-        public ISnkView mParentView { get; set; }
+        public interface ISnkView : ISnkViewControllable, IBindingContextOwner
+        {
+            public ISnkViewModel mViewModel { get; }
+            public ISnkViewOwner mOwner { get; }
+            public string mName { get; set; }
+            public bool mVisibility { get; set; }
+            public ISnkView mParentView { get; set; }
 
-        public void Create();
-        public bool mViewOwnerLoaded { get; }
-        public string mAssetPath { get; }
-        public void LoadViewOwner();
-        public IEnumerator LoadViewOwnerAsync();
+            public void Create();
+            public bool mViewOwnerLoaded { get; }
+            public string mAssetPath { get; }
+            public void LoadViewOwner();
+            public IEnumerator LoadViewOwnerAsync();
 
-        public void UnloadViewOwner();
+            public void UnloadViewOwner();
+        }
     }
 }

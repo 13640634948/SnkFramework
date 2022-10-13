@@ -1,22 +1,36 @@
 using System;
 
-namespace SnkFramework.Mvvm.View
+namespace SnkFramework.Mvvm.Core
 {
-    public class WindowStateEventArgs : EventArgs
+    namespace View
     {
-        private readonly WindowState oldState;
-        private readonly WindowState state;
-        private readonly ISnkWindow window;
-        public WindowStateEventArgs(ISnkWindow window, WindowState oldState, WindowState newState)
+        public class WindowStateEventArgs : EventArgs
         {
-            this.window = window;
-            this.oldState = oldState;
-            this.state = newState;
+            private readonly WindowState oldState;
+            private readonly WindowState state;
+            private readonly ISnkWindow window;
+
+            public WindowStateEventArgs(ISnkWindow window, WindowState oldState, WindowState newState)
+            {
+                this.window = window;
+                this.oldState = oldState;
+                this.state = newState;
+            }
+
+            public WindowState OldState
+            {
+                get { return this.oldState; }
+            }
+
+            public WindowState State
+            {
+                get { return this.state; }
+            }
+
+            public ISnkWindow Window
+            {
+                get { return this.window; }
+            }
         }
-
-        public WindowState OldState { get { return this.oldState; } }
-        public WindowState State { get { return this.state; } }
-
-        public ISnkWindow Window { get { return this.window; } }
     }
 }
