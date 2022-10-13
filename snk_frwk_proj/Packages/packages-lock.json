@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.cysharp.messagepipe": {
+      "version": "1.7.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.cysharp.unitask": {
+      "version": "2.3.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.snkframework.fluent-binding": {
       "version": "file:SnkFramework.FluentBinding",
       "depth": 0,
@@ -8,6 +22,12 @@
     },
     "com.snkframework.mvvm": {
       "version": "file:SnkFramework.Mvvm",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.snkframework.netty-connector": {
+      "version": "file:SnkFramework.NettyConnector",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
