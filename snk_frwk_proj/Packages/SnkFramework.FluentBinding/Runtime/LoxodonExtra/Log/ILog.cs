@@ -13,6 +13,5 @@ namespace Loxodon.Log
         bool IsInfoEnabled { get; }
         bool IsWarnEnabled { get; }
         bool IsErrorEnabled { get; }
-        bool IsErrorEnabledx{ get; }
     }
 }

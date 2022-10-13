@@ -5,7 +5,6 @@ namespace Loxodon.Log
         public bool IsInfoEnabled { get; set; } = true;
         public bool IsWarnEnabled { get; set; } = true;
         public bool IsErrorEnabled { get; set; } = true;
-        public bool IsErrorEnabledx { get; set; } = true;
 
         protected abstract void InternalOutputString(string flag, string format, params object[] args);
 
