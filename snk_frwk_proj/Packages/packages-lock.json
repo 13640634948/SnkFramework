@@ -26,12 +26,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.snkframework.netty-connector": {
-      "version": "file:SnkFramework.NettyConnector",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.burst": {
       "version": "1.7.4",
       "depth": 1,
