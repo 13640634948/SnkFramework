@@ -1,11 +1,12 @@
 using SnkFramework.Core.Base;
 using SnkFramework.Core.IoC;
 
-namespace SnkFramework.Runtime
+namespace SnkFramework.Core
 {
     public class Snk
     {
-        public static ISnkIoCProvider IoCProvider => SnkSingleton<ISnkIoCProvider>.Instance;
-
+        private static ISnkIoCProvider _ioCProvider;
+        public static ISnkIoCProvider IoCProvider 
+            => _ioCProvider ??= SnkSingleton<ISnkIoCProvider>.Instance;
     }
 }

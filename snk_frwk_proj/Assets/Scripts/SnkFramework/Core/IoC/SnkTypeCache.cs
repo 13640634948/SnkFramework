@@ -6,10 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Logging;
-//using MvvmCross.Logging;
 using SnkFramework.Core.Logging;
-//using UnityEditor.PackageManager;
 
 namespace SnkFramework.Core.IoC
 {

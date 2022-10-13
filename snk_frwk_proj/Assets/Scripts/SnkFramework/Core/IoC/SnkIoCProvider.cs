@@ -4,7 +4,7 @@
 
 using System;
 using System.Collections.Generic;
-//using MvvmCross.Base;
+
 using SnkFramework.Core.Base;
 
 namespace SnkFramework.Core.IoC

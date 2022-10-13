@@ -1,6 +1,3 @@
-using Microsoft.Extensions.Logging;
-using SnkFramework.Runtime;
-
 namespace SnkFramework.Core.Logging
 {
 #nullable enable
@@ -14,16 +11,6 @@ namespace SnkFramework.Core.Logging
             {
                 return _defaultLogger ??= GetLog("Default");
             }
-        }
-
-        public static ILogger<T>? GetLog<T>()
-        {
-            if (Snk.IoCProvider.TryResolve<ILoggerFactory>(out var loggerFactory))
-            {
-                return loggerFactory.CreateLogger<T>();
-            }
-
-            return null;
         }
 
         public static ILogger? GetLog(string categoryName)

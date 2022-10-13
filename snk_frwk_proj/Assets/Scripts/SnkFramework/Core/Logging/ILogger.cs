@@ -1,6 +1,6 @@
 using System;
 
-namespace Microsoft.Extensions.Logging
+namespace SnkFramework.Core.Logging
 {
     public enum LogLevel
     {

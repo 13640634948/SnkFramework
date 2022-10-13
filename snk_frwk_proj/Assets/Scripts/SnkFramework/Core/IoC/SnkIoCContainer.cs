@@ -6,14 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Logging;
-//using MvvmCross.Base;
-//using MvvmCross.Exceptions;
-//using MvvmCross.Logging;
+
 using SnkFramework.Core.Exceptions;
 using SnkFramework.Core.Extensions;
 using SnkFramework.Core.Logging;
-//using UnityEditor.PackageManager;
 
 namespace SnkFramework.Core.IoC
 {

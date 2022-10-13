@@ -6,10 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Logging;
-//using MvvmCross.Exceptions;
-//using MvvmCross.Logging;
-using SnkFramework.Runtime;
+
 using SnkFramework.Core.Exceptions;
 using SnkFramework.Core.Logging;
 
