@@ -61,7 +61,7 @@ namespace SampleDevelop.Mvvm
 
             if (Input.GetKeyDown(KeyCode.S))
             {
-                var window = _uguiWindowMgr.OpenWindow<LoginWindow>();
+                var window = _uguiWindowMgr.OpenWindow<LoginWindow>("normal");
                 ISnkAnimation[] anims =
                 {
                     new AlphaAnimation
@@ -90,7 +90,7 @@ namespace SampleDevelop.Mvvm
 
         private IEnumerator LoadWindowAsync()
         {
-            yield return _uguiWindowMgr.OpenWindowAsync<LoginWindow>(window =>
+            yield return _uguiWindowMgr.OpenWindowAsync<LoginWindow>("normal", window =>
             {
                 window.Show(mIgnoreAnimation);
                 this.loginWindowList.Add(window);

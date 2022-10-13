@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using SnkFramework.Mvvm.Base;
 using SnkFramework.Mvvm.View;
 using UnityEngine;
@@ -9,22 +6,14 @@ namespace SnkFramework.Mvvm.LayoutEngine
 {
     namespace UGUI
     {
-        public class UGUIWindowManager : WindowManagerBase
+        public class UGUIWindowManager : WindowManagerBase<UGUILayer>
         {
             public Camera mViewCamera { get; }
 
-            private Dictionary<LAYER, ISnkUILayer> _layerDict;
             public GameObject mOwner;
 
-            private IMvvmCoroutineExecutor _coroutineExecutor;
-            private ISnkTransitionExecutor _transitionExecutor;
-
-            public UGUIWindowManager(IMvvmCoroutineExecutor coroutineExecutor)
+            public UGUIWindowManager(IMvvmCoroutineExecutor coroutineExecutor) : base(coroutineExecutor)
             {
-                _coroutineExecutor = coroutineExecutor;
-                _transitionExecutor = new SnkTransitionPopupExecutor(_coroutineExecutor);
-
-                this._layerDict = new Dictionary<LAYER, ISnkUILayer>();
                 GameObject asset = Resources.Load<GameObject>("WindowRoot");
                 GameObject inst = GameObject.Instantiate(asset);
                 GameObject.DontDestroyOnLoad(inst);
@@ -33,25 +22,17 @@ namespace SnkFramework.Mvvm.LayoutEngine
 
                 int layerCount = (int) LAYER.COUNT;
                 for (int i = 0; i < layerCount; i++)
-                    this.CreateLayer((LAYER) i);
+                {
+                    string layerName = System.Enum.GetName(typeof(LAYER), (LAYER) i);
+                    this.CreateLayer(layerName);
+                }
             }
 
-            public override ISnkUILayer GetLayer(string layerName)
+            public override ISnkUILayer CreateLayer(string layerName)
             {
-                if (System.Enum.TryParse(layerName, out LAYER layer) == false)
+                if (this.TryGetLayer(layerName, out var layer))
                     return null;
 
-                if (this._layerDict.TryGetValue(layer, out ISnkUILayer layerTarget) == false)
-                    return null;
-                return layerTarget;
-            }
-
-            public ISnkUILayer CreateLayer(LAYER layer)
-            {
-                if (this._layerDict.TryGetValue(layer, out var tmpLayer))
-                    return tmpLayer;
-
-                string layerName = System.Enum.GetName(typeof(LAYER), layer);
                 GameObject asset = Resources.Load<GameObject>("UILayer");
                 GameObject inst = GameObject.Instantiate(asset);
                 inst.name = layerName;
@@ -63,33 +44,10 @@ namespace SnkFramework.Mvvm.LayoutEngine
                 canvas.sortingLayerID = SortingLayer.NameToID(layerName);
 
                 UGUILayer uguiLayer = new UGUILayer();
-                uguiLayer.mTransitionExecutor = _transitionExecutor;
+                uguiLayer.mTransitionExecutor = this.transitionExecutor;
                 uguiLayer.SetOwner(canvas);
-                this._layerDict.Add(layer, uguiLayer);
+                this.layerDict.Add(layerName, uguiLayer);
                 return uguiLayer;
-            }
-
-            public TWindow OpenWindow<TWindow>(bool ignoreAnimation = false) where TWindow : class, ISnkWindow, new()
-            {
-                var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
-                var window = new TWindow();
-                layer.Add(window);
-                window.LoadViewOwner();
-                window.Create();
-                window.Show(ignoreAnimation);
-                return window;
-            }
-
-            public IEnumerator OpenWindowAsync<TWindow>(Action<TWindow> callback, bool ignoreAnimation = false)
-                where TWindow : class, ISnkWindow, new()
-            {
-                var layer = SnkMvvmSetup.mWindowManager.GetLayer(Enum.GetName(typeof(LAYER), LAYER.normal));
-                var window = new TWindow();
-                layer.Add(window);
-                yield return window.LoadViewOwnerAsync();
-                window.Create();
-                window.Show(ignoreAnimation);
-                callback?.Invoke(window);
             }
         }
     }
