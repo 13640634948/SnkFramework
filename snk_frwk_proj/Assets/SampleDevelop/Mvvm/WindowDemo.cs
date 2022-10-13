@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Loxodon.Framework.Interactivity;
-using SnkFramework.Mvvm.Base;
-using SnkFramework.Mvvm.LayoutEngine;
-using SnkFramework.Mvvm.LayoutEngine.UGUI;
-using SnkFramework.Mvvm.View;
+using SnkFramework.Mvvm.Core;
+using SnkFramework.Mvvm.Core.View;
+using SnkFramework.Mvvm.Runtime;
+using SnkFramework.Mvvm.Runtime.UGUI;
 using UnityEngine;
 
 namespace SampleDevelop.Mvvm
@@ -17,7 +17,7 @@ namespace SampleDevelop.Mvvm
 
         private void Awake()
         {
-            _uguiWindowMgr = new UGUIWindowManager();
+            _uguiWindowMgr = new UGUIWindowManager(this);
             SnkMvvmSetup.Initialize(_uguiWindowMgr, this, new MvvmLoader(), new SnkMvvmLog());
         }
 
@@ -61,7 +61,7 @@ namespace SampleDevelop.Mvvm
 
             if (Input.GetKeyDown(KeyCode.S))
             {
-                var window = _uguiWindowMgr.OpenWindow<LoginWindow>();
+                var window = _uguiWindowMgr.OpenWindow<LoginWindow>("normal");
                 ISnkAnimation[] anims =
                 {
                     new AlphaAnimation
@@ -90,7 +90,7 @@ namespace SampleDevelop.Mvvm
 
         private IEnumerator LoadWindowAsync()
         {
-            yield return _uguiWindowMgr.OpenWindowAsync<LoginWindow>(window =>
+            yield return _uguiWindowMgr.OpenWindowAsync<LoginWindow>("normal", window =>
             {
                 window.Show(mIgnoreAnimation);
                 this.loginWindowList.Add(window);
