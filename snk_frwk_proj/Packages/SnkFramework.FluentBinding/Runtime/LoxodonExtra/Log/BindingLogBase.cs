@@ -8,34 +8,16 @@ namespace Loxodon.Log
 
         protected abstract void InternalOutputString(string flag, string format, params object[] args);
 
-        public void Info(object message)
-        {
-            InternalOutputString("Info", $"{message}");
-        }
+        public void Info(object message) => InternalOutputString("Info", $"{message}");
 
-        public void Warn(object message)
-        {
-            InternalOutputString("Warn", $"{message}");
-        }
+        public void Warn(object message) => InternalOutputString("Warn", $"{message}");
 
-        public void Error(object message)
-        {
-            InternalOutputString("Error", $"{message}");
-        }
+        public void Error(object message) => InternalOutputString("Error", $"{message}");
 
-        public void InfoFormat(string format, params object[] args)
-        {
-            InternalOutputString("Info", format, args);
-        }
+        public void InfoFormat(string format, params object[] args) => InternalOutputString("Info", format, args);
 
-        public void WarnFormat(string format, params object[] args)
-        {
-            InternalOutputString("Warn", format, args);
-        }
+        public void WarnFormat(string format, params object[] args) => InternalOutputString("Warn", format, args);
 
-        public void ErrorFormat(string format, params object[] args)
-        {
-            InternalOutputString("Error", format, args);
-        }
+        public void ErrorFormat(string format, params object[] args) => InternalOutputString("Error", format, args);
     }
 }
