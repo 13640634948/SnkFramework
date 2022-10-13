@@ -1,3 +1,4 @@
+using SnkFramework.Mvvm.Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -38,13 +39,18 @@ namespace SnkFramework.Mvvm.Runtime
                 {
                     if (this.gameObject == null)
                         return false;
-                    return this.mCanvasGroup.blocksRaycasts;
+                    if (SnkMvvmSetup.mSettings.mUseBlocksRaycastsInsteadOfInteractable)
+                        return this.mCanvasGroup.blocksRaycasts;
+                    return this.mCanvasGroup.interactable;
                 }
                 set
                 {
                     if (this.gameObject == null)
                         return;
-                    this.mCanvasGroup.blocksRaycasts = value;
+                    if (SnkMvvmSetup.mSettings.mUseBlocksRaycastsInsteadOfInteractable)
+                        this.mCanvasGroup.blocksRaycasts = value;
+                    else
+                        this.mCanvasGroup.interactable = value;
                 }
             }
         }
