@@ -61,7 +61,7 @@ namespace SnkFramework.Mvvm.Core
             /// </example>
             /// <param name="policy"></param>
             /// <returns></returns>
-            ISnkTransition Overlay(Func<ISnkWindow, ISnkWindow, ACT_TYPE> policy);
+            ISnkTransition Overlay(Func<ISnkWindow, ISnkWindow, ActionType> policy);
 
             /// <summary>
             /// 

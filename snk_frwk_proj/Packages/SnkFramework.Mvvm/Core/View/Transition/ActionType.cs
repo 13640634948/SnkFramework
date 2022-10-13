@@ -1,10 +1,9 @@
 namespace SnkFramework.Mvvm.Core.View
 {
-    public enum ACT_TYPE
+    public enum ActionType
     {
         None,
         Hide,
-        Show,
-        Dismiss,
+        Dismiss
     }
 }

@@ -14,9 +14,9 @@ namespace SnkFramework.Mvvm.Core
                 this._uiLayer = uiLayer;
             }
 
-            protected virtual ACT_TYPE Overlay(ISnkWindow previous, ISnkWindow current)
+            protected virtual ActionType Overlay(ISnkWindow previous, ISnkWindow current)
             {
-                return ACT_TYPE.None;
+                return ActionType.None;
                 /*
                 if (previous == null || previous.WindowType == WindowType.FULL)
                     return ActionType.None;
@@ -42,16 +42,16 @@ namespace SnkFramework.Mvvm.Core
                         ;
                     }
 
-                    Func<ISnkWindow, ISnkWindow, ACT_TYPE> policy = this.OverlayPolicy;
+                    Func<ISnkWindow, ISnkWindow, ActionType> policy = this.OverlayPolicy;
                     if (policy == null)
                         policy = this.Overlay;
-                    ACT_TYPE actionType = policy(previous, current);
+                    ActionType actionType = policy(previous, current);
                     switch (actionType)
                     {
-                        case ACT_TYPE.Hide:
+                        case ActionType.Hide:
                             previous.DoHide(this.AnimationDisabled);
                             break;
-                        case ACT_TYPE.Dismiss:
+                        case ActionType.Dismiss:
                             yield return previous.DoHide(this.AnimationDisabled);
                             previous.DoDismiss();
                             /*

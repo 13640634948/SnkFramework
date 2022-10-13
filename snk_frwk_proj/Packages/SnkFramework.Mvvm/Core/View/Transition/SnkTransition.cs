@@ -13,7 +13,7 @@ namespace SnkFramework.Mvvm.Core
             private bool done = false;
             private bool animationDisabled = false;
             private int layer = 0;
-            private Func<ISnkWindow, ISnkWindow, ACT_TYPE> overlayPolicy;
+            private Func<ISnkWindow, ISnkWindow, ActionType> overlayPolicy;
 
             private bool running = false;
 
@@ -84,7 +84,7 @@ namespace SnkFramework.Mvvm.Core
                 protected set { this.layer = value; }
             }
 
-            public virtual Func<ISnkWindow, ISnkWindow, ACT_TYPE> OverlayPolicy
+            public virtual Func<ISnkWindow, ISnkWindow, ActionType> OverlayPolicy
             {
                 get { return this.overlayPolicy; }
                 protected set { this.overlayPolicy = value; }
@@ -148,7 +148,7 @@ namespace SnkFramework.Mvvm.Core
                 return this;
             }
 
-            public ISnkTransition Overlay(Func<ISnkWindow, ISnkWindow, ACT_TYPE> policy)
+            public ISnkTransition Overlay(Func<ISnkWindow, ISnkWindow, ActionType> policy)
             {
                 if (this.running)
                 {
