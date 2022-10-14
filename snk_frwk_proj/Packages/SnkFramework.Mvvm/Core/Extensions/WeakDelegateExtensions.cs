@@ -7,6 +7,8 @@ namespace SnkFramework.Mvvm.Core
 {
     namespace Extensions
     {
+        
+        
         public static class WeakDelegateExtensions
         {
             private static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();

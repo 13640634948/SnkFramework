@@ -9,21 +9,19 @@ namespace SnkFramework.Mvvm.Core
         where TUILayer : class, ISnkUILayer, new()
     {
         protected Dictionary<string, TUILayer> layerDict;
-        protected ISnkMvvmCoroutineExecutor coroutineExecutor;
-        protected ISnkTransitionExecutor transitionExecutor;
+
 
         public abstract ISnkUILayer CreateLayer(string layerName);
 
-        public SnkMvvmManagerBase(ISnkMvvmCoroutineExecutor coroutineExecutor)
+        public SnkMvvmManagerBase()
         {
             layerDict = new Dictionary<string, TUILayer>();
-
-            this.coroutineExecutor = coroutineExecutor;
-            this.transitionExecutor = createTransitionExecutor(coroutineExecutor);
+            this.initialize();
         }
 
-        protected virtual ISnkTransitionExecutor createTransitionExecutor(ISnkMvvmCoroutineExecutor coroutineExecutor)
-            => new SnkTransitionPopupExecutor(coroutineExecutor);
+        protected virtual void initialize()
+        {
+        }
 
         public virtual ISnkUILayer GetLayer(string layerName)
         {

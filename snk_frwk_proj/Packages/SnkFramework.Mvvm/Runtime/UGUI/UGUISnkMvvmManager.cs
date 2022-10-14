@@ -8,12 +8,13 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public class UGUISnkMvvmManager : SnkMvvmManagerBase<UGUILayer>
         {
-            public Camera mViewCamera { get; }
+            public Camera mViewCamera { get; protected set; }
 
             public GameObject mOwner;
 
-            public UGUISnkMvvmManager(ISnkMvvmCoroutineExecutor coroutineExecutor) : base(coroutineExecutor)
+            protected override void initialize()
             {
+                base.initialize();
                 GameObject asset = Resources.Load<GameObject>("WindowRoot");
                 GameObject inst = GameObject.Instantiate(asset);
                 GameObject.DontDestroyOnLoad(inst);
@@ -44,7 +45,6 @@ namespace SnkFramework.Mvvm.Runtime
                 canvas.sortingLayerID = SortingLayer.NameToID(layerName);
 
                 UGUILayer uguiLayer = new UGUILayer();
-                uguiLayer.mTransitionExecutor = this.transitionExecutor;
                 uguiLayer.SetOwner(canvas);
                 this.layerDict.Add(layerName, uguiLayer);
                 return uguiLayer;

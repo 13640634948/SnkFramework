@@ -1,6 +1,6 @@
 using SnkFramework.Mvvm.Core;
 
-namespace SnkFramework.Mvvm.Runtime
+namespace SampleDevelop.Mvvm
 {
     public class UGUIMvvmSetting : ISnkMvvmSettings
     {

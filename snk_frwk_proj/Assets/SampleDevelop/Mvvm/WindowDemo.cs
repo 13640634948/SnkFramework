@@ -1,36 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Loxodon.Framework.Interactivity;
 using SnkFramework.Mvvm.Core;
 using SnkFramework.Mvvm.Core.View;
-using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.UGUI;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using SnkFramework.Mvvm;
 
 namespace SampleDevelop.Mvvm
 {
-    public class WindowDemo : MonoBehaviour, ISnkMvvmCoroutineExecutor
+    public class WindowDemo : MonoBehaviour, ISnkSetupMonitor
     {
         private List<LoginWindow> loginWindowList = new List<LoginWindow>();
-        private UGUISnkMvvmManager _uguiSnkMvvmMgr;
+        private UGUISnkMvvmManager _uguiSnkMvvmMgr => SnkIoCProvider.Instance.Resolve<ISnkMvvmManager>() as UGUISnkMvvmManager;
         public bool mIgnoreAnimation;
-
+        
+        public async Task InitializationComplete()
+            => await UniTask.WaitUntil(()=>_completed );
+        
+        private bool _completed = false;
+        
         private void Awake()
         {
-            _uguiSnkMvvmMgr = new UGUISnkMvvmManager(this);
-            SnkMvvmSetup.LoaderCreator = () => new SnkMvvmLoader();
-            SnkMvvmSetup.ManagerCreator = () => _uguiSnkMvvmMgr;
-            SnkMvvmSetup.LoggerCreator = () => new SnkMvvmLogger();
-            SnkMvvmSetup.SettingCreator = () => new UGUIMvvmSetting();
-            SnkMvvmSetup.CoroutineExecutorCreator = () => this;
-            SnkMvvmSetup.Initialize();
+            SnkMvvmSetup.RegisterSetupType<SnkDemoMvvmSetup>();
+            var setupSingleton = SnkDemoSetupSingleton.EnsureSingletonAvailable(SynchronizationContext.Current);
+            setupSingleton.PlatformSetup<SnkDemoMvvmSetup>().StateChanged += onSetupStateChanged;
+            setupSingleton.InitializeAndMonitor(this);
         }
 
-        void Start()
+        private void onSetupStateChanged(object sender, SnkMvvmSetupStateEventArgs args)
         {
+            Debug.Log("SetupState:" + args.SetupState);
         }
 
-        public void RunOnCoroutineNoReturn(IEnumerator routine) => StartCoroutine(routine);
+
+        private void Start()
+        {
+            _completed = true;
+        }
+
 
         void Update()
         {
@@ -61,7 +72,8 @@ namespace SampleDevelop.Mvvm
 
             if (Input.GetKeyDown(KeyCode.A))
             {
-                RunOnCoroutineNoReturn(LoadWindowAsync());
+                ISnkMvvmCoroutineExecutor executor = SnkIoCProvider.Instance.Resolve<ISnkMvvmCoroutineExecutor>();
+                executor.RunOnCoroutineNoReturn(LoadWindowAsync());
             }
 
             if (Input.GetKeyDown(KeyCode.S))
@@ -113,5 +125,6 @@ namespace SampleDevelop.Mvvm
             this.loginWindowList.Clear();
             this.loginWindowList = null;
         }
+
     }
 }
