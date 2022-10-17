@@ -2,6 +2,7 @@ using System.Threading;
 using MvvmCross;
 using MvvmCross.Core;
 using MvvmCross.UnityEngine.Core;
+using MvvmCross.UnityEngine.ViewModels;
 using MvvmCross.UnityEngine.Views.UGUI;
 using MvvmCross.ViewModels;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace DefaultNamespace
         public override void Initialize()
         {
             base.Initialize();
-            RegisterAppStart<MvxViewModel>();
+            RegisterAppStart<DemoViewModel>();
         }
     }
 
@@ -22,12 +23,20 @@ namespace DefaultNamespace
     {
     }
 
-    public class DemoViewModel : MvxViewModel
+    public class DemoViewModel : MvxUnityViewModel
     {
+        public DemoViewModel()
+        {
+            UnityEngine.Debug.Log("DemoViewModel.ctor");
+        }
     }
 
-    public class DemoView : MvxUGUIView
+    public class DemoView : MvxUGUIView<DemoViewModel>
     {
+        public DemoView()
+        {
+            UnityEngine.Debug.Log("DemoView.ctor");
+        }
     }
 
     public class MvxDemo : MonoBehaviour
