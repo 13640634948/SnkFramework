@@ -61,6 +61,7 @@ namespace MvvmCross.UnityEngine.Core
                 
             var coroutineExecutor = CreateCoroutineExecutor();
             iocProvider.RegisterSingleton<IMvxUnityCoroutineExecutor>(coroutineExecutor);
+            base.InitializeFirstChance(iocProvider);
         }
 
         protected virtual MvxUnityCoroutineExecutor CreateCoroutineExecutor() => new();
