@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 
 using MvvmCross.Core;
 using MvvmCross.IoC;
+using MvvmCross.Plugin;
 using MvvmCross.Presenters;
 using MvvmCross.UnityEngine.Executor;
 using MvvmCross.UnityEngine.Logging;
@@ -94,6 +95,12 @@ namespace MvvmCross.UnityEngine.Core
 
         protected override IMvxNameMapping CreateViewToViewModelNaming()
             => new MvxPostfixAwareViewToViewModelNameMapping("View", "ViewModel");
+
+        public override void LoadPlugins(IMvxPluginManager pluginManager)
+        {
+            base.LoadPlugins(pluginManager);
+            pluginManager.EnsurePluginLoaded<MvvmCross.Plugin.Messenger.Plugin>();
+        }
     }
     
     public abstract class MvxUnitySetup<TApplication> : MvxUnitySetup
