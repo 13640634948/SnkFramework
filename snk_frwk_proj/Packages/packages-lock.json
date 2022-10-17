@@ -7,6 +7,12 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.mvvmcross.unity3d": {
+      "version": "file:MvvmCrossForUnity3D",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.fluent-binding": {
       "version": "file:SnkFramework.FluentBinding",
       "depth": 0,
