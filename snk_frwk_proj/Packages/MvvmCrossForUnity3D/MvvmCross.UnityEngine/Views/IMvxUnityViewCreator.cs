@@ -3,7 +3,7 @@ using MvvmCross.ViewModels;
 
 namespace MvvmCross.UnityEngine.Views
 {
-    public interface IMvxUnityViewCreator 
+    public interface IMvxUnityViewCreator
     {
         IMvxUnityView CreateView(MvxViewModelRequest request);
 
