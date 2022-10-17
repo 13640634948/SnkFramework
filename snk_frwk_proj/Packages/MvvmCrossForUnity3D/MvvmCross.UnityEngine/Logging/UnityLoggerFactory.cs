@@ -9,13 +9,10 @@ namespace MvvmCross.UnityEngine.Logging
         }
 
         public ILogger CreateLogger(string categoryName)
-        {
-            throw new System.NotImplementedException();
-        }
+            => new UnityLogger();
 
         public void AddProvider(ILoggerProvider provider)
         {
-            throw new System.NotImplementedException();
         }
     }
 }
