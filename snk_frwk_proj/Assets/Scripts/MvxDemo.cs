@@ -1,9 +1,9 @@
 using System.Threading;
 using MvvmCross;
 using MvvmCross.Core;
-using MvvmCross.UnityEngine.Core;
-using MvvmCross.UnityEngine.ViewModels;
-using MvvmCross.UnityEngine.Views.UGUI;
+using MvvmCross.Unity.Core;
+using MvvmCross.Unity.ViewModels;
+using MvvmCross.Unity.Views.UGUI;
 using MvvmCross.ViewModels;
 using UnityEngine;
 
