@@ -7,7 +7,7 @@ namespace MvvmCross.Unity.Views.UGUI
     {
     }
     
-    public interface IMvxUGUIFullWindow<TViewModel> : IMvxUGUIFullWindow, IMvxUGUIPopupWindow<TViewModel>, IMvxUnityFullWindow<TViewModel, UIBehaviour>
+    public interface IMvxUGUIFullWindow<TViewModel> : IMvxUGUIFullWindow, IMvxUGUIPopupWindow<TViewModel>, IMvxUnityFullWindow<TViewModel, MvxUGUILayer,UIBehaviour>
         where TViewModel : class, IMvxUnityViewModel
     {
     }

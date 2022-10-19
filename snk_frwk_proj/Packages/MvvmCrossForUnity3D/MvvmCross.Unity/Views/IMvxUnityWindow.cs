@@ -15,10 +15,13 @@ namespace MvvmCross.Unity.Views
         
         public IEnumerator Show(bool animated);
         public IEnumerator Hide(bool animated);
+
+        public IMvxUnityLayer Layer { get; set; }
     }
     
-    public interface IMvxUnityWindow<TViewModel, TUnityComponent> : IMvxUnityWindow, IMvxUnityView<TViewModel, TUnityComponent>
+    public interface IMvxUnityWindow<TViewModel, TUnityLayer, TUnityComponent> : IMvxUnityWindow, IMvxUnityView<TViewModel, TUnityComponent>
         where TViewModel : class, IMvxUnityViewModel
+        where TUnityLayer : class, IMvxUnityLayer
         where TUnityComponent : UnityEngine.Component
     {
     }

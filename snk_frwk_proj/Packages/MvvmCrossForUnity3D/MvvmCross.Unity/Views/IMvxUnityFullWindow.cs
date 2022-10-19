@@ -7,8 +7,9 @@ namespace MvvmCross.Unity.Views
         
     }
 
-    public interface IMvxUnityFullWindow<TViewModel, TUnityComponent> : IMvxUnityFullWindow, IMvxUnityPopupWindow<TViewModel, TUnityComponent>
+    public interface IMvxUnityFullWindow<TViewModel,TUnityLayer, TUnityComponent> : IMvxUnityFullWindow, IMvxUnityPopupWindow<TViewModel, TUnityLayer, TUnityComponent>
         where TViewModel : class, IMvxUnityViewModel
+        where TUnityLayer : class, IMvxUnityLayer
         where TUnityComponent : UnityEngine.Component
     {
     }

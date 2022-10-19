@@ -5,9 +5,17 @@ using MvvmCross.Unity.ViewModels;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
+    public interface IMvxUGUILayer : IMvxUnityLayer
+    {
+        
+    }
+
     public abstract class MvxUGUIWindow<TViewModel> : MvxUGUIView<TViewModel>, IMvxUGUIWindow<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
     {
+        public IMvxUnityLayer Layer { get; set; }
+
+
         protected EventHandler? showingCalled;
         protected EventHandler<MvxValueEventArgs<bool>>? showedCalled;
 
@@ -71,5 +79,6 @@ namespace MvvmCross.Unity.Views.UGUI
 
             this.hiddenCalled?.Raise(this, animated);
         }
+
     }
 }
