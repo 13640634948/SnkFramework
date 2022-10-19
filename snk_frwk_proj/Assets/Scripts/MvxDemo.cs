@@ -31,7 +31,7 @@ namespace DefaultNamespace
         }
     }
 
-    public class DemoView : MvxUGUIView<DemoViewModel>
+    public class DemoView : MvxUGUIFullWindow<DemoViewModel>
     {
         public DemoView()
         {

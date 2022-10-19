@@ -5,28 +5,40 @@ using MvvmCross.Presenters.Attributes;
 using MvvmCross.Unity.Presenters.Attributes;
 using MvvmCross.Unity.Views;
 using MvvmCross.ViewModels;
-using UnityEngine;
 
 namespace MvvmCross.Unity.Presenters
 {
     public class MvxUnityViewPresenter : MvxAttributeViewPresenter, IMvxUnityViewPresenter
     {
+        private IMvxUnityViewCreator _viewCreator;
+        protected IMvxUnityViewCreator viewCreator => _viewCreator ??= Mvx.IoCProvider.Resolve<IMvxUnityViewCreator>();
         public override MvxBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
         {
             MvxBasePresentationAttribute attr = null;
-            if (viewType.IsSubclassOf(typeof(MvxUnityView)))
+            /*
+            if (viewType.IsSubclassOf(typeof(IMvxUnityPopupWindow)))
             {
-                attr = new MvxUnityViewPresentationAttribute();
+                attr = new MvxUnityPopupWindowAttribute();
             }
 
-            if (viewType.IsSubclassOf(typeof(MvxUnityWindow)))
+            if (viewType.IsSubclassOf(typeof(IMvxUnityFullWindow)))
             {
-                attr = new MvxUnityWindowPresentationAttribute();
+                attr = new MvxUnityFullWindowAttribute();
+            }
+            */
+
+            if (typeof(IMvxUnityPopupWindow).IsAssignableFrom(viewType))
+            {
+                attr = new MvxUnityPopupWindowAttribute();
+            }
+
+            if (typeof(IMvxUnityFullWindow).IsAssignableFrom(viewType))
+            {
+                attr = new MvxUnityPopupWindowAttribute();
             }
 
             if (attr == null)
-                throw new InvalidOperationException(
-                    $"Don't know how to create a presentation attribute for type {viewType}");
+                throw new InvalidOperationException($"Don't know how to create a presentation attribute for type {viewType}");
 
             attr.ViewType = viewType;
             attr.ViewModelType = viewModelType;
@@ -35,68 +47,38 @@ namespace MvvmCross.Unity.Presenters
 
         public override void RegisterAttributeTypes()
         {
-            AttributeTypesToActionsDictionary.Register<MvxUnityViewPresentationAttribute>(ShowView, CloseView);
-            AttributeTypesToActionsDictionary.Register<MvxUnityWindowPresentationAttribute>(ShowWindow, CloseWindow);
+            AttributeTypesToActionsDictionary.Register<MvxUnityPopupWindowAttribute>(ShowPopupWindow,
+                ClosePopupWindow);
+            AttributeTypesToActionsDictionary.Register<MvxUnityFullWindowAttribute>(ShowFullWindow,
+                CloseFullWindow);
         }
 
-        protected virtual Task<bool> ShowView(Type viewType,
-            MvxUnityViewPresentationAttribute attribute,
+        
+        protected virtual Task<bool> ShowPopupWindow(Type viewType,
+            MvxUnityPopupWindowAttribute attribute,
             MvxViewModelRequest request)
         {
-            ValidateArguments(viewType, attribute, request);
-
-            /*
-            var intent = CreateIntentForRequest(request);
-            if (attribute.Extras != null)
-                intent.PutExtras(attribute.Extras);
-
-            ShowIntent(intent, CreateActivityTransitionOptions(intent, attribute, request));
-            */
-            var viewObject = Activator.CreateInstance(viewType);
-
+             IMvxUnityView popupWindow = viewCreator.CreateView(request);
             return Task.FromResult(true);
         }
 
-        protected virtual Task<bool> CloseView(IMvxViewModel viewModel, MvxUnityViewPresentationAttribute? attribute)
-        {
-            /*
-            var currentView = CurrentActivity as IMvxView;
-
-            if (currentView == null)
-            {
-                _logger.Value?.Log(LogLevel.Warning, "Ignoring close for viewmodel - rootframe has no current page");
-                return Task.FromResult(false);
-            }
-
-            if (currentView.ViewModel != viewModel)
-            {
-                _logger.Value?.Log(LogLevel.Warning, "Ignoring close for viewmodel - rootframe's current page is not the view for the requested viewmodel");
-                return Task.FromResult(false);
-            }
-
-            // don't kill the dead
-            if (CurrentActivity.IsActivityAlive())
-                CurrentActivity!.Finish();
-*/
-            return Task.FromResult(true);
-        }
-
-
-        protected virtual Task<bool> ShowWindow(Type windowType,
-            MvxUnityWindowPresentationAttribute attribute,
-            MvxViewModelRequest request)
-        {
-            Debug.Log("windowType:" + windowType);
-            var viewObject = Activator.CreateInstance(windowType);
-            return Task.FromResult(true);
-        }
-
-
-        protected virtual Task<bool> CloseWindow(IMvxViewModel viewModel,
-            MvxUnityWindowPresentationAttribute? attribute)
+        protected virtual Task<bool> ClosePopupWindow(IMvxViewModel viewModel,
+            MvxUnityPopupWindowAttribute? attribute)
             => Task.FromResult(true);
 
-        private static void ValidateArguments(Type? view, MvxBasePresentationAttribute? attribute,
+        protected virtual Task<bool> ShowFullWindow(Type windowType,
+            MvxUnityFullWindowAttribute attribute,
+            MvxViewModelRequest request)
+        {
+            IMvxUnityView fullWindow = viewCreator.CreateView(request);
+            return Task.FromResult(true);
+        }
+
+        protected virtual Task<bool> CloseFullWindow(IMvxViewModel viewModel,
+            MvxUnityFullWindowAttribute? attribute)
+            => Task.FromResult(true);
+
+        protected void ValidateArguments(Type? view, MvxBasePresentationAttribute? attribute,
             MvxViewModelRequest? request)
         {
             if (view == null)
@@ -105,20 +87,20 @@ namespace MvvmCross.Unity.Presenters
             ValidateArguments(attribute, request);
         }
 
-        private static void ValidateArguments(MvxBasePresentationAttribute? attribute, MvxViewModelRequest? request)
+        protected void ValidateArguments(MvxBasePresentationAttribute? attribute, MvxViewModelRequest? request)
         {
             ValidateArguments(attribute);
 
             ValidateArguments(request);
         }
 
-        private static void ValidateArguments(MvxBasePresentationAttribute? attribute)
+        protected void ValidateArguments(MvxBasePresentationAttribute? attribute)
         {
             if (attribute == null)
                 throw new ArgumentNullException(nameof(attribute));
         }
 
-        private static void ValidateArguments(MvxViewModelRequest? request)
+        protected void ValidateArguments(MvxViewModelRequest? request)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
