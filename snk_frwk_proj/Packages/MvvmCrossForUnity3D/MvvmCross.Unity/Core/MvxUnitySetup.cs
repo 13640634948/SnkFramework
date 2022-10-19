@@ -8,6 +8,7 @@ using MvvmCross.Core;
 using MvvmCross.IoC;
 using MvvmCross.Plugin;
 using MvvmCross.Presenters;
+using MvvmCross.Unity.Base.ResourceService;
 using MvvmCross.Unity.Executor;
 using MvvmCross.Unity.Logging;
 using MvvmCross.Unity.Presenters;
@@ -60,12 +61,24 @@ namespace MvvmCross.Unity.Core
             InitializeLifetimeMonitor(iocProvider);
             RegisterPresenter(iocProvider);
                 
-            var coroutineExecutor = CreateCoroutineExecutor();
-            iocProvider.RegisterSingleton<IMvxUnityCoroutineExecutor>(coroutineExecutor);
             base.InitializeFirstChance(iocProvider);
         }
 
         protected virtual MvxUnityCoroutineExecutor CreateCoroutineExecutor() => new();
+
+        protected virtual MvxUnityResourceService CreateResourceService() => new();
+        protected override void InitializeLastChance(IMvxIoCProvider iocProvider)
+        {
+            base.InitializeLastChance(iocProvider);
+            
+            var coroutineExecutor = CreateCoroutineExecutor();
+            iocProvider.RegisterSingleton<IMvxUnityCoroutineExecutor>(coroutineExecutor);
+
+            var resourceService = CreateResourceService();
+            iocProvider.RegisterSingleton<IMvxUnityResourceService>(resourceService);
+            
+        }
+
 
 
         protected virtual void RegisterUnityViewCreator(IMvxIoCProvider iocProvider, IMvxUnityViewsContainer container)
