@@ -74,12 +74,12 @@ namespace MvvmCross.Unity.Core
             iocProvider.RegisterSingleton<IMvxUnityViewCreator>(container);
         }
 
-        protected virtual IMvxUnityViewsContainer CreateIosViewsContainer()
+        protected virtual IMvxUnityViewsContainer CreateUnityViewsContainer()
             => new MvxUnityViewsContainer();
 
         protected override IMvxViewsContainer CreateViewsContainer(IMvxIoCProvider iocProvider)
         {
-            var container = CreateIosViewsContainer();
+            var container = CreateUnityViewsContainer();
             RegisterUnityViewCreator(iocProvider, container);
             return container;
         }
