@@ -2,9 +2,14 @@ using System;
 using System.Threading.Tasks;
 using MvvmCross.Presenters;
 using MvvmCross.Presenters.Attributes;
+using MvvmCross.Unity.Base.ResourceService;
 using MvvmCross.Unity.Presenters.Attributes;
 using MvvmCross.Unity.Views;
 using MvvmCross.ViewModels;
+
+using Cysharp.Threading.Tasks;
+using MvvmCross.Unity.Views.UGUI;
+using UnityEngine;
 
 namespace MvvmCross.Unity.Presenters
 {
@@ -12,20 +17,15 @@ namespace MvvmCross.Unity.Presenters
     {
         private IMvxUnityViewCreator _viewCreator;
         protected IMvxUnityViewCreator viewCreator => _viewCreator ??= Mvx.IoCProvider.Resolve<IMvxUnityViewCreator>();
+
+        private IMvxUnityResourceService _resourceService;
+
+        protected IMvxUnityResourceService resourceServicer =>
+            this._resourceService ??= Mvx.IoCProvider.Resolve<IMvxUnityResourceService>();
+
         public override MvxBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
         {
             MvxBasePresentationAttribute attr = null;
-            /*
-            if (viewType.IsSubclassOf(typeof(IMvxUnityPopupWindow)))
-            {
-                attr = new MvxUnityPopupWindowAttribute();
-            }
-
-            if (viewType.IsSubclassOf(typeof(IMvxUnityFullWindow)))
-            {
-                attr = new MvxUnityFullWindowAttribute();
-            }
-            */
 
             if (typeof(IMvxUnityPopupWindow).IsAssignableFrom(viewType))
             {
@@ -38,7 +38,8 @@ namespace MvvmCross.Unity.Presenters
             }
 
             if (attr == null)
-                throw new InvalidOperationException($"Don't know how to create a presentation attribute for type {viewType}");
+                throw new InvalidOperationException(
+                    $"Don't know how to create a presentation attribute for type {viewType}");
 
             attr.ViewType = viewType;
             attr.ViewModelType = viewModelType;
@@ -53,25 +54,29 @@ namespace MvvmCross.Unity.Presenters
                 CloseFullWindow);
         }
 
-        
-        protected virtual Task<bool> ShowPopupWindow(Type viewType,
-            MvxUnityPopupWindowAttribute attribute,
-            MvxViewModelRequest request)
+        async protected virtual Task<IMvxUnityView> loadWindow(Type windowType, MvxViewModelRequest request)
         {
-             IMvxUnityView popupWindow = viewCreator.CreateView(request);
-            return Task.FromResult(true);
+            IMvxUnityView window = viewCreator.CreateView(request);
+            window.Appearing();
+            var asset = await resourceServicer.LoadBuildInResourceAsync<GameObject>("Prefab/" + windowType.Name);
+            window.Appeared(GameObject.Instantiate(asset).AddComponent<MvxUGUIOwner>());
+            return window;
+        }
+
+        async protected virtual Task<bool> ShowPopupWindow(Type viewType, MvxUnityPopupWindowAttribute attribute, MvxViewModelRequest request)
+        {
+            IMvxUnityView owner = await loadWindow(viewType, request);
+            return true;
         }
 
         protected virtual Task<bool> ClosePopupWindow(IMvxViewModel viewModel,
             MvxUnityPopupWindowAttribute? attribute)
             => Task.FromResult(true);
 
-        protected virtual Task<bool> ShowFullWindow(Type windowType,
-            MvxUnityFullWindowAttribute attribute,
-            MvxViewModelRequest request)
+        async protected virtual Task<bool> ShowFullWindow(Type windowType, MvxUnityFullWindowAttribute attribute, MvxViewModelRequest request)
         {
-            IMvxUnityView fullWindow = viewCreator.CreateView(request);
-            return Task.FromResult(true);
+            IMvxUnityView owner = await loadWindow(windowType, request);
+            return true;
         }
 
         protected virtual Task<bool> CloseFullWindow(IMvxViewModel viewModel,

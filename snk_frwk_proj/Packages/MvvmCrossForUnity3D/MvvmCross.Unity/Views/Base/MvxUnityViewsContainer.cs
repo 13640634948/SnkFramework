@@ -2,12 +2,15 @@ using System;
 using MvvmCross.Exceptions;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using UnityEngine;
 
 namespace MvvmCross.Unity.Views
 {
     public class MvxUnityViewsContainer : MvxViewsContainer, IMvxUnityViewsContainer
     {
         public MvxViewModelRequest CurrentRequest { get; private set; }
+        private IMvxViewModelLoader _viewModelLoader;
+        protected IMvxViewModelLoader viewModelLoader => _viewModelLoader ??= Mvx.IoCProvider.Resolve<IMvxViewModelLoader>();
 
         public IMvxUnityView CreateView(MvxViewModelRequest request)
         {
@@ -19,7 +22,11 @@ namespace MvvmCross.Unity.Views
                     throw new MvxException("View Type not found for " + request.ViewModelType);
 
                 var view = CreateViewOfType(viewType, request);
-                //view.Request = request;
+                if (request is MvxViewModelInstanceRequest instanceRequest)
+                    view.ViewModel = instanceRequest.ViewModelInstance;
+                else
+                    view.ViewModel = viewModelLoader.LoadViewModel(request, null);
+                view.Created(null);
                 return view;
             }
             finally

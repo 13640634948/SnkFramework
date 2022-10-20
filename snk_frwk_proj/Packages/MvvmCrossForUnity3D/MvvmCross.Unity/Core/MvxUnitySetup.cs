@@ -107,7 +107,7 @@ namespace MvvmCross.Unity.Core
             => new UnityLoggerFactory();
 
         protected override IMvxNameMapping CreateViewToViewModelNaming()
-            => new MvxPostfixAwareViewToViewModelNameMapping("View", "ViewModel");
+            => new MvxPostfixAwareViewToViewModelNameMapping("Window", "ViewModel");
 
         public override void LoadPlugins(IMvxPluginManager pluginManager)
         {

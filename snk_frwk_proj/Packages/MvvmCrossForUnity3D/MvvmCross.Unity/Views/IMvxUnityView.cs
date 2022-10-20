@@ -17,7 +17,7 @@ namespace MvvmCross.Unity.Views
 
         public void Created(MvxUnityBundle Bundle);
         public void Appearing();
-        public void Appeared();
+        public void Appeared(IMvxUnityOwner unityOwner);
         public IEnumerator Activate(bool animated);
         public IEnumerator Passivate(bool animated);
         public void Disappearing();

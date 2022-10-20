@@ -15,10 +15,11 @@ namespace MvvmCross.Unity.Views.UGUI
         public TViewModel? ViewModel { get; set; }
         public virtual IMvxBindingContext BindingContext { get; set; }
         public virtual IMvxUnityWindow ParentWindow { get; }
-        public IMvxUGUIOwner UnityOwner { get; }
-
-        IMvxUnityOwner IMvxUnityView.UnityOwner => UnityOwner;
-        public virtual CanvasGroup CanvasGroup => UnityOwner.CanvasGroup;
+        private IMvxUGUIOwner _unityOwner;
+        public IMvxUGUIOwner UnityOwner => _unityOwner;
+ 
+        IMvxUnityOwner IMvxUnityView.UnityOwner => _unityOwner;
+        public virtual CanvasGroup CanvasGroup => _unityOwner.CanvasGroup;
 
         public virtual object? DataContext
         {
@@ -34,14 +35,14 @@ namespace MvvmCross.Unity.Views.UGUI
 
         public virtual bool Visibility
         {
-            get => this.UnityOwner.IsActive;
-            set => this.UnityOwner.IsActive = value;
+            get => this._unityOwner.IsActive;
+            set => this._unityOwner.IsActive = value;
         }
 
         public virtual bool Interactable
         {
-            get => this.UnityOwner.IsInteractable;
-            set => this.UnityOwner.IsInteractable = value;
+            get => this._unityOwner.IsInteractable;
+            set => this._unityOwner.IsInteractable = value;
         }
 
         public MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel, IMvxUGUIOwner>, TViewModel> CreateBindingSet()
@@ -59,8 +60,9 @@ namespace MvvmCross.Unity.Views.UGUI
             this.ViewModel?.ViewAppearing();
         }
 
-        public virtual void Appeared()
+        public virtual void Appeared(IMvxUnityOwner unityOwner)
         {
+            _unityOwner = unityOwner as IMvxUGUIOwner;
             appearedCalled.Raise(this);
             this.ViewModel?.ViewAppeared();
         }
@@ -94,6 +96,7 @@ namespace MvvmCross.Unity.Views.UGUI
             dismissCalled.Raise(this);
             this.ViewModel?.ViewDestroy();
         }
+
 
         public virtual void Dispose()
         {
