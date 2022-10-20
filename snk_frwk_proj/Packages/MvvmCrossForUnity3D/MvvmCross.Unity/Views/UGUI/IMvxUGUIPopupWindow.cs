@@ -1,5 +1,4 @@
 using MvvmCross.Unity.ViewModels;
-using UnityEngine.EventSystems;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
@@ -7,7 +6,7 @@ namespace MvvmCross.Unity.Views.UGUI
     {
     }
     
-    public interface IMvxUGUIPopupWindow<TViewModel> : IMvxUGUIPopupWindow, IMvxUGUIWindow<TViewModel>, IMvxUnityPopupWindow<TViewModel, MvxUGUILayer,UIBehaviour>
+    public interface IMvxUGUIPopupWindow<TViewModel> : IMvxUGUIPopupWindow, IMvxUGUIWindow<TViewModel>, IMvxUnityPopupWindow<TViewModel, MvxUGUILayer,IMvxUGUIOwner>
         where TViewModel : class, IMvxUnityViewModel
     {
     }

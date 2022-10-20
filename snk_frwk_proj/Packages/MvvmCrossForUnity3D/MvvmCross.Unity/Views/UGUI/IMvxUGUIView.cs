@@ -1,6 +1,5 @@
 using MvvmCross.Unity.ViewModels;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
@@ -9,7 +8,7 @@ namespace MvvmCross.Unity.Views.UGUI
         public CanvasGroup CanvasGroup { get; }
     }
 
-    public interface IMvxUGUIView<TViewModel> : IMvxUGUIView, IMvxUnityView<TViewModel, UIBehaviour>
+    public interface IMvxUGUIView<TViewModel> : IMvxUGUIView, IMvxUnityView<TViewModel, IMvxUGUIOwner>
         where TViewModel : class, IMvxUnityViewModel
     {
     }

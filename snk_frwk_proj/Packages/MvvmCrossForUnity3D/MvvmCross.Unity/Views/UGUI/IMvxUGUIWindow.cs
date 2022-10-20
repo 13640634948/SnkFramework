@@ -1,5 +1,4 @@
 using MvvmCross.Unity.ViewModels;
-using UnityEngine.EventSystems;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
@@ -7,7 +6,7 @@ namespace MvvmCross.Unity.Views.UGUI
     {
     }
 
-    public interface IMvxUGUIWindow<TViewModel> : IMvxUGUIWindow, IMvxUnityWindow<TViewModel, MvxUGUILayer, UIBehaviour>, IMvxUGUIView<TViewModel>
+    public interface IMvxUGUIWindow<TViewModel> : IMvxUGUIWindow, IMvxUnityWindow<TViewModel, MvxUGUILayer, IMvxUGUIOwner>, IMvxUGUIView<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
     {
     }

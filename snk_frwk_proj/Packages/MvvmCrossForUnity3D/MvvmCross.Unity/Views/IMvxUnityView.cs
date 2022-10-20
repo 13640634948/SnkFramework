@@ -9,7 +9,7 @@ namespace MvvmCross.Unity.Views
 {
     public interface IMvxUnityView : IMvxView, IMvxBindingContextOwner, IDisposable
     {
-        public UnityEngine.Component UnityOwner { get; }
+        public IMvxUnityOwner UnityOwner { get; }
 
         public IMvxUnityWindow ParentWindow { get; }
         public bool Visibility { get; set; }
@@ -25,12 +25,12 @@ namespace MvvmCross.Unity.Views
         public void Dismiss();
     }
 
-    public interface IMvxUnityView<TViewModel, TUnityComponent> : IMvxUnityView, IMvxView<TViewModel>
+    public interface IMvxUnityView<TViewModel, TUnityOwner> : IMvxUnityView, IMvxView<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
-        where TUnityComponent : UnityEngine.Component
+        where TUnityOwner : class, IMvxUnityOwner
     {
-        public new TUnityComponent UnityOwner { get; }
+        public new TUnityOwner UnityOwner { get; }
 
-        MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel, TUnityComponent>, TViewModel> CreateBindingSet();
+        MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel, TUnityOwner>, TViewModel> CreateBindingSet();
     }
 }

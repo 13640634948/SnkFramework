@@ -6,10 +6,10 @@ namespace MvvmCross.Unity.Views
     {
     }
     
-    public interface IMvxUnityPopupWindow<TViewModel, TUnityLayer, TUnityComponent> : IMvxUnityPopupWindow, IMvxUnityWindow<TViewModel, TUnityLayer, TUnityComponent>
+    public interface IMvxUnityPopupWindow<TViewModel, TUnityLayer, TUnityOwner> : IMvxUnityPopupWindow, IMvxUnityWindow<TViewModel, TUnityLayer, TUnityOwner>
         where TViewModel : class, IMvxUnityViewModel
         where TUnityLayer: class, IMvxUnityLayer
-        where TUnityComponent : UnityEngine.Component
+        where TUnityOwner : class, IMvxUnityOwner
     {
     }
 }
