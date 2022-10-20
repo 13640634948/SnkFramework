@@ -1,23 +1,46 @@
+using System.Threading.Tasks;
+using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace MvvmCross.Unity.Base.ResourceService
 {
     public class MvxUnityResourceService : IMvxUnityResourceService
     {
-        public virtual Object LoadBuildInResource(string path) => Resources.Load(path);
+        public Object LoadBuildInResource(string path)
+            => Resources.Load(path);
 
-        public virtual TAsset LoadBuildInResource<TAsset>(string path) where TAsset : Object
-            => LoadBuildInResource(path) as TAsset;
+        public TAsset LoadBuildInResource<TAsset>(string path) where TAsset : Object
+            => Resources.Load<TAsset>(path);
 
-        public virtual ResourceRequest LoadBuildInResourceAsync(string path, System.Action<Object> onCompleted)
+        public async Task<Object> LoadBuildInResourceAsync(string path)
+            => await Resources.LoadAsync<Object>(path);
+
+        public async Task<TAsset> LoadBuildInResourceAsync<TAsset>(string path) where TAsset : Object
+            => await Resources.LoadAsync<TAsset>(path) as TAsset;
+
+        public async void LoadBuildInResourceAsync(string path, System.Action<Object> onCompleted)
+            => onCompleted?.Invoke(await LoadBuildInResourceAsync(path));
+
+        public async void LoadBuildInResourceAsync<TAsset>(string path, System.Action<TAsset> onCompleted)
+            where TAsset : Object
+            => onCompleted?.Invoke(await LoadBuildInResourceAsync(path) as TAsset);
+
+        public IEnumerator CoLoadBuildInResourceAsync(string path, System.Action<Object> onCompleted)
         {
+            if(onCompleted == null)
+                yield break;
             ResourceRequest request = Resources.LoadAsync(path);
-            request.completed += operation => onCompleted?.Invoke(request.asset);
-            return request;
+            yield return request;
+            onCompleted?.Invoke(request.asset);
         }
 
-        public virtual ResourceRequest LoadBuildInResourceAsync<TAsset>(string path, System.Action<TAsset> onCompleted)
+        public IEnumerator CoLoadBuildInResourceAsync<TAsset>(string path, System.Action<TAsset> onCompleted)
             where TAsset : Object
-            => LoadBuildInResourceAsync(path, asset => onCompleted(asset as TAsset));
+        {
+            if(onCompleted == null)
+                yield break;
+            yield return CoLoadBuildInResourceAsync(path, asset => onCompleted?.Invoke(asset as TAsset));
+        }
     }
 }
