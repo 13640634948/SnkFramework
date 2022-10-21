@@ -9,7 +9,6 @@ using MvvmCross.IoC;
 using MvvmCross.Plugin;
 using MvvmCross.Presenters;
 using MvvmCross.Unity.Base.ResourceService;
-using MvvmCross.Unity.Executor;
 using MvvmCross.Unity.Logging;
 using MvvmCross.Unity.Presenters;
 using MvvmCross.Unity.Views;
@@ -64,16 +63,12 @@ namespace MvvmCross.Unity.Core
             base.InitializeFirstChance(iocProvider);
         }
 
-        protected virtual MvxUnityCoroutineExecutor CreateCoroutineExecutor() => new();
 
         protected virtual MvxUnityResourceService CreateResourceService() => new();
         protected override void InitializeLastChance(IMvxIoCProvider iocProvider)
         {
             base.InitializeLastChance(iocProvider);
             
-            var coroutineExecutor = CreateCoroutineExecutor();
-            iocProvider.RegisterSingleton<IMvxUnityCoroutineExecutor>(coroutineExecutor);
-
             var resourceService = CreateResourceService();
             iocProvider.RegisterSingleton<IMvxUnityResourceService>(resourceService);
             
