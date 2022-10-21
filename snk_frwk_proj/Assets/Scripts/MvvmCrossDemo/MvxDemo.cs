@@ -1,4 +1,4 @@
-using System.Threading;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Core;
 using MvvmCross.Unity.Core;
@@ -7,27 +7,36 @@ using UnityEngine;
 
 namespace MvvmCross.Demo
 {
-    public class MvxDemo : MonoBehaviour
+    public class MvxDemo : MonoBehaviour, IMvxSetupMonitor
     {
-        void Start()
+        protected virtual void Awake()
         {
-            MvxSetup.RegisterSetupType<DemoSetup>();
-            var singleton = MvxUnitySetupSingleton.EnsureSingletonAvailable(SynchronizationContext.Current);
-            singleton.EnsureInitialized();
-            if (Mvx.IoCProvider.TryResolve(out IMvxAppStart startup) && !startup.IsStarted)
-            {
-                startup.StartAsync();
-            }
-            else
-            {
-                Debug.Log("found out startup");
-            }
+            this.RegisterSetupType<DemoSetup>();
+            MvxUnitySetupSingleton.EnsureSingletonAvailable().InitializeAndMonitor(this);
         }
 
-        private void OnApplicationQuit()
+        protected virtual void OnApplicationQuit()
         {
             MvxSingleton.ClearAllSingletons();
-            Debug.Log("OnApplicationQuit");
+        }
+
+        async public Task InitializationComplete()
+        {
+            await runAppStart(true);
+        }
+
+        protected Task runAppStart(bool async)
+        {
+            return Task.Run(() =>
+            {
+                if (Mvx.IoCProvider.TryResolve(out IMvxAppStart startup) && !startup.IsStarted)
+                {
+                    if (async)
+                        startup.StartAsync();
+                    else
+                        startup.Start();
+                }
+            });
         }
     }
 }
