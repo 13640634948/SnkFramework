@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.Core;
 using MvvmCross.Unity.Core;
+using MvvmCross.Unity.ViewModels;
 using MvvmCross.ViewModels;
 using UnityEngine;
 
@@ -24,19 +25,20 @@ namespace MvvmCross.Demo
 
         public Task InitializationComplete()
         {
-            return runAppStart(true);
+            MvxUnityViewModelParameter param = new DemoStartupViewModelParameter();
+            return runAppStart(true, param);
         }
 
-        protected Task runAppStart(bool async)
+        protected Task runAppStart(bool async, MvxUnityViewModelParameter vmParameter = null )
         {
             return Task.Run(() =>
             {
                 if (Mvx.IoCProvider.TryResolve(out IMvxAppStart startup) && !startup.IsStarted)
                 {
                     if (async)
-                        startup.StartAsync();
+                        startup.StartAsync(vmParameter);
                     else
-                        startup.Start();
+                        startup.Start(vmParameter);
                 }
             });
         }

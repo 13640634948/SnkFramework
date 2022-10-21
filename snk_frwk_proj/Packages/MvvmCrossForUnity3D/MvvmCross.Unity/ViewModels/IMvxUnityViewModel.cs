@@ -13,7 +13,7 @@ namespace MvvmCross.Unity.ViewModels
         void ViewHidden();
     }
     
-    public interface IMvxUnityViewModel<in TParameter, TResult> : IMvxUnityViewModel, IMvxViewModel<TParameter, TResult>
+    public interface IMvxUnityViewModel<in TParameter> : IMvxUnityViewModel, IMvxViewModel<TParameter>
     {
         
     }

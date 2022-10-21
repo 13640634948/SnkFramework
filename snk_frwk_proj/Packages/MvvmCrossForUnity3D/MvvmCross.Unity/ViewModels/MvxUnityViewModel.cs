@@ -21,7 +21,7 @@ namespace MvvmCross.Unity.ViewModels
         {
         }
     }
-    public abstract class MvxUnityViewModel<TParameter, TResult> : MvxUnityViewModel, IMvxUnityViewModel<TParameter, TResult>
+    public abstract class MvxUnityViewModel<TParameter> : MvxUnityViewModel, IMvxUnityViewModel<TParameter>
     {
         public virtual void Prepare(TParameter parameter)
         {

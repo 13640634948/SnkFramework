@@ -7,7 +7,7 @@ namespace MvvmCross.Demo
         public override void Initialize()
         {
             base.Initialize();
-            RegisterAppStart<DemoViewModel>();
+            RegisterAppStart<DemoViewModel, DemoStartupViewModelParameter>();
         }
     }
 }
