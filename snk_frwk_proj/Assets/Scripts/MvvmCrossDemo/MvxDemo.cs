@@ -22,5 +22,11 @@ namespace MvvmCross.Demo
                 Debug.Log("found out startup");
             }
         }
+
+        private void OnApplicationQuit()
+        {
+            MvxSingleton.ClearAllSingletons();
+            Debug.Log("OnApplicationQuit");
+        }
     }
 }
