@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 
 namespace MvvmCross.Unity.ViewModels
@@ -20,4 +21,13 @@ namespace MvvmCross.Unity.ViewModels
         {
         }
     }
+    public abstract class MvxUnityViewModel<TParameter, TResult> : MvxUnityViewModel, IMvxUnityViewModel<TParameter, TResult>
+    {
+        public virtual void Prepare(TParameter parameter)
+        {
+        }
+
+        public virtual TaskCompletionSource<object?>? CloseCompletionSource { get; set; }
+    }
+    
 }
