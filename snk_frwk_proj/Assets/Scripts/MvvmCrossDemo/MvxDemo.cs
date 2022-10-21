@@ -12,7 +12,9 @@ namespace MvvmCross.Demo
         protected virtual void Awake()
         {
             this.RegisterSetupType<DemoSetup>();
-            MvxUnitySetupSingleton.EnsureSingletonAvailable().InitializeAndMonitor(this);
+            var singleton = MvxUnitySetupSingleton.EnsureSingletonAvailable();
+            singleton.EnsureInitialized();
+            singleton.InitializeAndMonitor(this);
         }
 
         protected virtual void OnApplicationQuit()
@@ -20,9 +22,9 @@ namespace MvvmCross.Demo
             MvxSingleton.ClearAllSingletons();
         }
 
-        async public Task InitializationComplete()
+        public Task InitializationComplete()
         {
-            await runAppStart(true);
+            return runAppStart(true);
         }
 
         protected Task runAppStart(bool async)
