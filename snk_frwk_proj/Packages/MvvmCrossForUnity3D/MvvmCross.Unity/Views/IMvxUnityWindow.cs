@@ -24,5 +24,6 @@ namespace MvvmCross.Unity.Views
         where TUnityLayer : class, IMvxUnityLayer
         where TUnityOwner : class, IMvxUnityOwner
     {
+        public new TUnityLayer Layer { get; set; }
     }
 }

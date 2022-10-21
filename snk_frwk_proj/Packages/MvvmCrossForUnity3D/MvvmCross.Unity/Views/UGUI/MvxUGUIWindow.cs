@@ -5,24 +5,28 @@ using MvvmCross.Unity.ViewModels;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
-    public interface IMvxUGUILayer : IMvxUnityLayer
-    {
-        
-    }
-
     public abstract class MvxUGUIWindow<TViewModel> : MvxUGUIView<TViewModel>, IMvxUGUIWindow<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
     {
-        public IMvxUnityLayer Layer { get; set; }
-
-
         protected EventHandler? showingCalled;
         protected EventHandler<MvxValueEventArgs<bool>>? showedCalled;
 
         protected EventHandler? hidingCalled;
         protected EventHandler<MvxValueEventArgs<bool>>? hiddenCalled;
-
-
+        
+        private MvxUGUILayer _layer;
+        MvxUGUILayer IMvxUnityWindow<TViewModel, MvxUGUILayer, IMvxUGUIOwner>.Layer
+        {
+            get => _layer;
+            set => _layer = value;
+        }
+        
+        public IMvxUnityLayer Layer
+        {
+            get => _layer;
+            set => _layer = value as MvxUGUILayer;
+        }
+        
         public event EventHandler? ShowingCalled
         {
             add => showingCalled += value;
