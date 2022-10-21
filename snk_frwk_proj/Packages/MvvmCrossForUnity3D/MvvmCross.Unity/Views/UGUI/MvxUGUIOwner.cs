@@ -7,7 +7,7 @@ namespace MvvmCross.Unity.Views.UGUI
     {
         public UIBehaviour Owner { get; }
         public CanvasGroup CanvasGroup { get; }
-        public bool IsActive { get; set; }
+        public bool IsVisibility { get; set; }
         public bool IsInteractable { get; set; }
     }
 
@@ -20,7 +20,7 @@ namespace MvvmCross.Unity.Views.UGUI
         public UIBehaviour Owner => this;
         public CanvasGroup CanvasGroup => _canvasGroup ??= this.GetComponent<CanvasGroup>();
 
-        public bool IsActive
+        public bool IsVisibility
         {
             get
             {

@@ -35,8 +35,8 @@ namespace MvvmCross.Unity.Views.UGUI
 
         public virtual bool Visibility
         {
-            get => this._unityOwner.IsActive;
-            set => this._unityOwner.IsActive = value;
+            get => this._unityOwner.IsVisibility;
+            set => this._unityOwner.IsVisibility = value;
         }
 
         public virtual bool Interactable
