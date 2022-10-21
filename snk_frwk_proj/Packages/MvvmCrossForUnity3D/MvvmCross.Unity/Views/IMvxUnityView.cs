@@ -15,7 +15,7 @@ namespace MvvmCross.Unity.Views
         public bool Visibility { get; set; }
         public bool Interactable { get; set; }
 
-        public void Created(MvxUnityBundle Bundle);
+        public void Created(MvxUnityBundle bundle);
         public void Appearing();
         public void Appeared(IMvxUnityOwner unityOwner);
         public IEnumerator Activate(bool animated);

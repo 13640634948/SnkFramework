@@ -11,9 +11,9 @@ namespace MvvmCross.Demo
             UnityEngine.Debug.Log("DemoView.ctor");
         }
 
-        public override void Created(MvxUnityBundle Bundle)
+        public override void Created(MvxUnityBundle bundle)
         {
-            base.Created(Bundle);
+            base.Created(bundle);
             UnityEngine.Debug.Log("DemoFullWindow.Created");
         }
 

@@ -48,9 +48,9 @@ namespace MvvmCross.Unity.Views.UGUI
         public MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel, IMvxUGUIOwner>, TViewModel> CreateBindingSet()
             => this.CreateBindingSet<IMvxUnityView<TViewModel, IMvxUGUIOwner>, TViewModel>();
 
-        public virtual void Created(MvxUnityBundle Bundle)
+        public virtual void Created(MvxUnityBundle bundle)
         {
-            createCalled?.Raise(this, Bundle);
+            createCalled?.Raise(this, bundle);
             this.ViewModel?.ViewCreated();
         }
 
