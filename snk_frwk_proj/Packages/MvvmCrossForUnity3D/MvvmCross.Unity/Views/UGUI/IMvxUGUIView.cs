@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
-    public interface IMvxUGUIView : IMvxUnityView
+    public interface IMvxUGUIView : IMvxUnityView, IMvxUGUINode
     {
-        public CanvasGroup CanvasGroup { get; }
     }
 
     public interface IMvxUGUIView<TViewModel> : IMvxUGUIView, IMvxUnityView<TViewModel>
