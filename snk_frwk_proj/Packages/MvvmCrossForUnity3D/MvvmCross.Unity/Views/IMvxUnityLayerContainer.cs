@@ -1,7 +1,6 @@
 namespace MvvmCross.Unity.Views
-
 {
-    public interface IMvxUnityLayerLocator
+    public interface IMvxUnityLayerContainer
     {
         
     }
