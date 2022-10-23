@@ -4,7 +4,7 @@ using MvvmCross.Unity.Views.UGUI;
 
 namespace MvvmCross.Demo
 {
-    public class DemoFullWindow : MvxUGUIFullWindow<DemoViewModel>
+    public class DemoFullWindow : MvxUGUIWindow<DemoViewModel>
     {
         public DemoFullWindow()
         {

@@ -25,22 +25,7 @@ namespace MvvmCross.Unity.Presenters
 
         public override MvxBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
         {
-            MvxBasePresentationAttribute attr = null;
-
-            if (typeof(IMvxUnityPopupWindow).IsAssignableFrom(viewType))
-            {
-                attr = new MvxUnityPopupWindowAttribute();
-            }
-
-            if (typeof(IMvxUnityFullWindow).IsAssignableFrom(viewType))
-            {
-                attr = new MvxUnityPopupWindowAttribute();
-            }
-
-            if (attr == null)
-                throw new InvalidOperationException(
-                    $"Don't know how to create a presentation attribute for type {viewType}");
-
+            MvxBasePresentationAttribute attr = new MvxUnityWindowAttribute();
             attr.ViewType = viewType;
             attr.ViewModelType = viewModelType;
             return attr;
@@ -48,39 +33,19 @@ namespace MvvmCross.Unity.Presenters
 
         public override void RegisterAttributeTypes()
         {
-            AttributeTypesToActionsDictionary.Register<MvxUnityPopupWindowAttribute>(ShowPopupWindow,
-                ClosePopupWindow);
-            AttributeTypesToActionsDictionary.Register<MvxUnityFullWindowAttribute>(ShowFullWindow,
-                CloseFullWindow);
+            AttributeTypesToActionsDictionary.Register<MvxUnityWindowAttribute>(ShowWindow, CloseWindow);
         }
 
-        async protected virtual Task<IMvxUnityView> loadWindow(Type windowType, MvxViewModelRequest request)
+        async protected virtual Task<bool> ShowWindow(Type windowType, MvxUnityWindowAttribute attribute, MvxViewModelRequest request)
         {
             IMvxUnityView window = viewCreator.CreateView(request);
             window.Appearing();
             var asset = await resourceServicer.LoadBuildInResourceAsync<GameObject>("Prefab/" + windowType.Name);
             window.Appeared(GameObject.Instantiate(asset).AddComponent<MvxUGUIOwner>());
-            return window;
-        }
-
-        async protected virtual Task<bool> ShowPopupWindow(Type viewType, MvxUnityPopupWindowAttribute attribute, MvxViewModelRequest request)
-        {
-            IMvxUnityView owner = await loadWindow(viewType, request);
             return true;
         }
 
-        protected virtual Task<bool> ClosePopupWindow(IMvxViewModel viewModel,
-            MvxUnityPopupWindowAttribute? attribute)
-            => Task.FromResult(true);
-
-        async protected virtual Task<bool> ShowFullWindow(Type windowType, MvxUnityFullWindowAttribute attribute, MvxViewModelRequest request)
-        {
-            IMvxUnityView owner = await loadWindow(windowType, request);
-            return true;
-        }
-
-        protected virtual Task<bool> CloseFullWindow(IMvxViewModel viewModel,
-            MvxUnityFullWindowAttribute? attribute)
+        protected virtual Task<bool> CloseWindow(IMvxViewModel viewModel, MvxUnityWindowAttribute? attribute)
             => Task.FromResult(true);
 
         protected void ValidateArguments(Type? view, MvxBasePresentationAttribute? attribute,
