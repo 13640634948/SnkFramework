@@ -7,17 +7,15 @@ using MvvmCross.Views;
 
 namespace MvvmCross.Unity.Views
 {
-    public interface IMvxUnityView : IMvxView, IMvxBindingContextOwner, IDisposable
+    public interface IMvxUnityView : IMvxView, IMvxBindingContextOwner, IMvxUnityEventSourceView, IDisposable
     {
-        public IMvxUnityOwner UnityOwner { get; }
-
         public IMvxUnityWindow ParentWindow { get; }
         public bool Visibility { get; set; }
         public bool Interactable { get; set; }
 
         public void Created(MvxUnityBundle bundle);
         public void Appearing();
-        public void Appeared(IMvxUnityOwner unityOwner);
+        public void Appeared();
         public IEnumerator Activate(bool animated);
         public IEnumerator Passivate(bool animated);
         public void Disappearing();
@@ -25,12 +23,9 @@ namespace MvvmCross.Unity.Views
         public void Dismiss();
     }
 
-    public interface IMvxUnityView<TViewModel, TUnityOwner> : IMvxUnityView, IMvxView<TViewModel>
+    public interface IMvxUnityView<TViewModel> : IMvxUnityView, IMvxView<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
-        where TUnityOwner : class, IMvxUnityOwner
     {
-        public new TUnityOwner UnityOwner { get; }
-
-        MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel, TUnityOwner>, TViewModel> CreateBindingSet();
+        MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel>, TViewModel> CreateBindingSet();
     }
 }

@@ -3,16 +3,23 @@ using UnityEngine.EventSystems;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
-    [RequireComponent(typeof(CanvasGroup))]
-    public class MvxUGUIOwner : UIBehaviour, IMvxUGUIOwner
+    public class MvxUGUINode : UIBehaviour, IMvxUGUINode
     {
         private static readonly bool UseBlocksRaycastsInsteadOfInteractable = false;
 
-        private CanvasGroup _canvasGroup;
-        public UIBehaviour Owner => this;
-        public CanvasGroup CanvasGroup => _canvasGroup ??= this.GetComponent<CanvasGroup>();
+        public Canvas _canvas;
+        public Canvas Canvas => this._canvas ??= GetComponent<Canvas>();
 
-        public bool IsVisibility
+        public CanvasGroup _canvasGroup;
+        public CanvasGroup CanvasGroup => this._canvasGroup ??= GetComponent<CanvasGroup>();
+
+        public float Alpha
+        {
+            get => this.CanvasGroup.alpha;
+            set => this.CanvasGroup.alpha = value;
+        }
+
+        public bool Visibility
         {
             get
             {
@@ -32,7 +39,7 @@ namespace MvvmCross.Unity.Views.UGUI
             }
         }
 
-        public bool IsInteractable
+        public bool Interactable
         {
             get
             {

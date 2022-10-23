@@ -37,8 +37,9 @@ namespace MvvmCross.Unity.Views
         
         public virtual IMvxUnityView CreateViewOfType(Type viewType, MvxViewModelRequest request)
         {
-
-            var view = Activator.CreateInstance(viewType) as IMvxUnityView;
+            GameObject gameObject = new GameObject(viewType.Name);
+            IMvxUnityView view = gameObject.AddComponent(viewType) as IMvxUnityView;
+            //var view = Activator.CreateInstance(viewType) as IMvxUnityView;
             if (view == null)
                 throw new MvxException("View not loaded for " + viewType);
             return view;

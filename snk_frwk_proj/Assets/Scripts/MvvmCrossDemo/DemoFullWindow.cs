@@ -23,9 +23,9 @@ namespace MvvmCross.Demo
             UnityEngine.Debug.Log("DemoFullWindow.Appearing");
         }
 
-        public override void Appeared(IMvxUnityOwner unityOwner)
+        public override void Appeared()
         {
-            base.Appeared(unityOwner);
+            base.Appeared();
             UnityEngine.Debug.Log("DemoFullWindow.Appeared");
         }
     }

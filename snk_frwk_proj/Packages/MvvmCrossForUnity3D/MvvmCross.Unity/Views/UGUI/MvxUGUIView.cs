@@ -5,22 +5,16 @@ using MvvmCross.Unity.ViewModels;
 using MvvmCross.Unity.Views.Base;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
-using UnityEngine;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
-    public abstract class MvxUGUIView<TViewModel> : MvxUnityEventSourceView, IMvxUGUIView<TViewModel>
+    public abstract partial class MvxUGUIView<TViewModel> : MvxUGUINode, IMvxUGUIView<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
     {
         public TViewModel? ViewModel { get; set; }
         public virtual IMvxBindingContext BindingContext { get; set; }
         public virtual IMvxUnityWindow ParentWindow { get; }
-        private IMvxUGUIOwner _unityOwner;
-        public IMvxUGUIOwner UnityOwner => _unityOwner;
  
-        IMvxUnityOwner IMvxUnityView.UnityOwner => _unityOwner;
-        public virtual CanvasGroup CanvasGroup => _unityOwner.CanvasGroup;
-
         public virtual object? DataContext
         {
             get => BindingContext.DataContext;
@@ -33,20 +27,8 @@ namespace MvvmCross.Unity.Views.UGUI
             set => ViewModel = value as TViewModel;
         }
 
-        public virtual bool Visibility
-        {
-            get => this._unityOwner.IsVisibility;
-            set => this._unityOwner.IsVisibility = value;
-        }
-
-        public virtual bool Interactable
-        {
-            get => this._unityOwner.IsInteractable;
-            set => this._unityOwner.IsInteractable = value;
-        }
-
-        public MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel, IMvxUGUIOwner>, TViewModel> CreateBindingSet()
-            => this.CreateBindingSet<IMvxUnityView<TViewModel, IMvxUGUIOwner>, TViewModel>();
+        public MvxFluentBindingDescriptionSet<IMvxUnityView<TViewModel>, TViewModel> CreateBindingSet()
+            => this.CreateBindingSet<IMvxUnityView<TViewModel>, TViewModel>();
 
         public virtual void Created(MvxUnityBundle bundle)
         {
@@ -56,14 +38,13 @@ namespace MvvmCross.Unity.Views.UGUI
 
         public virtual void Appearing()
         {
-            appearingCalled.Raise(this);
+            appearingCalled?.Raise(this);
             this.ViewModel?.ViewAppearing();
         }
 
-        public virtual void Appeared(IMvxUnityOwner unityOwner)
+        public virtual void Appeared()
         {
-            _unityOwner = unityOwner as IMvxUGUIOwner;
-            appearedCalled.Raise(this);
+            appearedCalled?.Raise(this);
             this.ViewModel?.ViewAppeared();
         }
 

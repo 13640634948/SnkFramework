@@ -15,7 +15,7 @@ namespace MvvmCross.Unity.Views.UGUI
         protected EventHandler<MvxValueEventArgs<bool>>? hiddenCalled;
         
         private MvxUGUILayer _layer;
-        MvxUGUILayer IMvxUnityWindow<TViewModel, MvxUGUILayer, IMvxUGUIOwner>.Layer
+        MvxUGUILayer IMvxUnityWindow<TViewModel, MvxUGUILayer>.Layer
         {
             get => _layer;
             set => _layer = value;

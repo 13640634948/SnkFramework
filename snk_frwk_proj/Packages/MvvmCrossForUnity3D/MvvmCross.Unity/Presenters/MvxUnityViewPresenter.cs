@@ -41,7 +41,8 @@ namespace MvvmCross.Unity.Presenters
             IMvxUnityView window = viewCreator.CreateView(request);
             window.Appearing();
             var asset = await resourceServicer.LoadBuildInResourceAsync<GameObject>("Prefab/" + windowType.Name);
-            window.Appeared(GameObject.Instantiate(asset).AddComponent<MvxUGUIOwner>());
+            window.Appeared();
+            //window.Appeared(GameObject.Instantiate(asset).AddComponent<MvxUGUINode>());
             return true;
         }
 

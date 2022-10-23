@@ -19,10 +19,9 @@ namespace MvvmCross.Unity.Views
         public IMvxUnityLayer Layer { get; set; }
     }
     
-    public interface IMvxUnityWindow<TViewModel, TUnityLayer, TUnityOwner> : IMvxUnityWindow, IMvxUnityView<TViewModel, TUnityOwner>
+    public interface IMvxUnityWindow<TViewModel, TUnityLayer> : IMvxUnityWindow, IMvxUnityView<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
         where TUnityLayer : class, IMvxUnityLayer
-        where TUnityOwner : class, IMvxUnityOwner
     {
         public new TUnityLayer Layer { get; set; }
     }

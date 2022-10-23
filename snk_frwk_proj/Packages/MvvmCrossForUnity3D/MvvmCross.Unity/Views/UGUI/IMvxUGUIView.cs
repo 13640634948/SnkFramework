@@ -8,7 +8,7 @@ namespace MvvmCross.Unity.Views.UGUI
         public CanvasGroup CanvasGroup { get; }
     }
 
-    public interface IMvxUGUIView<TViewModel> : IMvxUGUIView, IMvxUnityView<TViewModel, IMvxUGUIOwner>
+    public interface IMvxUGUIView<TViewModel> : IMvxUGUIView, IMvxUnityView<TViewModel>
         where TViewModel : class, IMvxUnityViewModel
     {
     }
