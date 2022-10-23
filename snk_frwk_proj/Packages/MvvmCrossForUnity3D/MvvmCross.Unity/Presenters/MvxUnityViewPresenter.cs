@@ -1,15 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using MvvmCross.Presenters;
 using MvvmCross.Presenters.Attributes;
-using MvvmCross.Unity.Base.ResourceService;
 using MvvmCross.Unity.Presenters.Attributes;
 using MvvmCross.Unity.Views;
 using MvvmCross.ViewModels;
-
-using Cysharp.Threading.Tasks;
-using MvvmCross.Unity.Views.UGUI;
-using UnityEngine;
 
 namespace MvvmCross.Unity.Presenters
 {
@@ -17,6 +13,9 @@ namespace MvvmCross.Unity.Presenters
     {
         private IMvxUnityViewCreator _viewCreator;
         protected IMvxUnityViewCreator viewCreator => _viewCreator ??= Mvx.IoCProvider.Resolve<IMvxUnityViewCreator>();
+
+        private IMvxUnityLayerContainer _layerContainer;
+        protected IMvxUnityLayerContainer layerContainer => _layerContainer ??= Mvx.IoCProvider.Resolve<IMvxUnityLayerContainer>();
 
         public override MvxBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
         {
@@ -33,8 +32,14 @@ namespace MvvmCross.Unity.Presenters
 
         async protected virtual Task<bool> ShowWindow(Type windowType, MvxUnityWindowAttribute attribute, MvxViewModelRequest request)
         {
-            IMvxUnityView window = await viewCreator.CreateView(request);
+            IMvxUnityWindow window = await viewCreator.CreateView(request) as IMvxUnityWindow;
+            if (window == null)
+                throw new NullReferenceException("window is null");
+            window.Created(null);
             window.OnLoaded();
+            var layer = layerContainer.GetUnityLayer("normal");
+            layer.Add(window);
+            await layer.ShowTransition(window, true);
             return true;
         }
 

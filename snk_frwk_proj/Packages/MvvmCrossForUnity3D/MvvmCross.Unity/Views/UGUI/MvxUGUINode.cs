@@ -3,16 +3,18 @@ using UnityEngine.EventSystems;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
-    public class MvxUGUINode : UIBehaviour, IMvxUGUINode
+    public partial class MvxUGUINode : UIBehaviour, IMvxUGUINode
     {
         private static readonly bool UseBlocksRaycastsInsteadOfInteractable = false;
 
         public Canvas _canvas;
+        public UIBehaviour Owner => this;
         public Canvas Canvas => this._canvas ??= GetComponent<Canvas>();
 
         public CanvasGroup _canvasGroup;
         public CanvasGroup CanvasGroup => this._canvasGroup ??= GetComponent<CanvasGroup>();
-
+        private bool _activated = false;
+     
         public float Alpha
         {
             get => this.CanvasGroup.alpha;
@@ -36,9 +38,30 @@ namespace MvvmCross.Unity.Views.UGUI
                     return;
 
                 this.gameObject.SetActive(value);
+                
+                this.OnActivatedChanged();
+                this.raiseActivatedChanged();
             }
         }
-
+        
+        public bool Activated
+        {
+            get => this._activated;
+            protected set
+            {
+                if (this._activated == value)
+                    return;
+                this._activated = value;
+                this.OnActivatedChanged();
+                this.raiseActivatedChanged();
+            }
+        }
+        
+        protected virtual void OnActivatedChanged()
+        {
+            this.Interactable = this.Activated;
+        }
+        
         public bool Interactable
         {
             get

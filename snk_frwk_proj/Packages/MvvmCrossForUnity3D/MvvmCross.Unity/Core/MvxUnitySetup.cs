@@ -12,8 +12,10 @@ using MvvmCross.Unity.Base.ResourceService;
 using MvvmCross.Unity.Logging;
 using MvvmCross.Unity.Presenters;
 using MvvmCross.Unity.Views;
+using MvvmCross.Unity.Views.UGUI;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using UnityEngine;
 
 namespace MvvmCross.Unity.Core
 {
@@ -63,6 +65,22 @@ namespace MvvmCross.Unity.Core
             base.InitializeFirstChance(iocProvider);
         }
 
+        protected override void RegisterDefaultSetupDependencies(IMvxIoCProvider iocProvider)
+        {
+            base.RegisterDefaultSetupDependencies(iocProvider);
+            
+            GameObject layerContainerGameObject = new GameObject("MvxUnityLayerContainer");
+            var unityLayerContainer = layerContainerGameObject.AddComponent<MvxUGUILayerContainer>();
+            GameObject.DontDestroyOnLoad(layerContainerGameObject);
+            
+            GameObject layerGameObject = new GameObject("MvxUGUINormalLayer");
+            var uguiNormalLayer = layerGameObject.AddComponent<MvxUGUINormalLayer>();
+            unityLayerContainer.AddUnityLayer(uguiNormalLayer);
+            layerGameObject.transform.SetParent(layerContainerGameObject.transform);
+            
+            iocProvider.RegisterSingleton<IMvxUnityLayerContainer>(unityLayerContainer);
+        }
+
 
         protected virtual MvxUnityResourceService CreateResourceService() => new();
         protected override void InitializeLastChance(IMvxIoCProvider iocProvider)
@@ -71,7 +89,7 @@ namespace MvvmCross.Unity.Core
             
             var resourceService = CreateResourceService();
             iocProvider.RegisterSingleton<IMvxUnityResourceService>(resourceService);
-            
+
         }
 
 

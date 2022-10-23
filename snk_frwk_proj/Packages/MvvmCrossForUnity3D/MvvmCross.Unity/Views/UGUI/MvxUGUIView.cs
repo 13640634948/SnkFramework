@@ -45,7 +45,7 @@ namespace MvvmCross.Unity.Views.UGUI
             loadedCalled?.Raise(this);
             this.ViewModel?.ViewAppeared();
         }
-
+        
         public virtual IEnumerator Activate(bool animated)
         {
             activateCalled.Raise(this, animated);

@@ -4,7 +4,6 @@ using MvvmCross.Exceptions;
 using MvvmCross.Unity.Base.ResourceService;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
-using Unity.VisualScripting.YamlDotNet.Serialization.NodeDeserializers;
 using UnityEngine;
 
 namespace MvvmCross.Unity.Views
