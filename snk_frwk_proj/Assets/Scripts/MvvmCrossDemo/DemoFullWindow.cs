@@ -17,6 +17,13 @@ namespace MvvmCross.Demo
             UnityEngine.Debug.Log("DemoFullWindow.Created");
         }
 
+        public override void OnLoaded()
+        {
+            base.OnLoaded();
+            UnityEngine.Debug.Log("DemoFullWindow.OnLoaded");
+        }
+
+        /*
         public override void Appearing()
         {
             base.Appearing();
@@ -28,5 +35,6 @@ namespace MvvmCross.Demo
             base.Appeared();
             UnityEngine.Debug.Log("DemoFullWindow.Appeared");
         }
+        */
     }
 }

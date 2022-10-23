@@ -14,8 +14,7 @@ namespace MvvmCross.Unity.Views
         public bool Interactable { get; set; }
 
         public void Created(MvxUnityBundle bundle);
-        public void Appearing();
-        public void Appeared();
+        public void OnLoaded();
         public IEnumerator Activate(bool animated);
         public IEnumerator Passivate(bool animated);
         public void Disappearing();

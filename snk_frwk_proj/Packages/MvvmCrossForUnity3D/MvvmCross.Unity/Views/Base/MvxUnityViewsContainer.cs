@@ -1,7 +1,10 @@
 using System;
+using System.Threading.Tasks;
 using MvvmCross.Exceptions;
+using MvvmCross.Unity.Base.ResourceService;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using Unity.VisualScripting.YamlDotNet.Serialization.NodeDeserializers;
 using UnityEngine;
 
 namespace MvvmCross.Unity.Views
@@ -10,10 +13,18 @@ namespace MvvmCross.Unity.Views
     {
         public MvxViewModelRequest CurrentRequest { get; private set; }
         private IMvxViewModelLoader _viewModelLoader;
-        protected IMvxViewModelLoader viewModelLoader => _viewModelLoader ??= Mvx.IoCProvider.Resolve<IMvxViewModelLoader>();
 
-        public IMvxUnityView CreateView(MvxViewModelRequest request)
+        protected IMvxViewModelLoader viewModelLoader =>
+            _viewModelLoader ??= Mvx.IoCProvider.Resolve<IMvxViewModelLoader>();
+
+        private IMvxUnityResourceService _resourceService;
+
+        protected IMvxUnityResourceService resourceServicer =>
+            this._resourceService ??= Mvx.IoCProvider.Resolve<IMvxUnityResourceService>();
+
+        async public Task<IMvxUnityView> CreateView(MvxViewModelRequest request)
         {
+            IMvxUnityView view = default;
             try
             {
                 CurrentRequest = request;
@@ -21,24 +32,25 @@ namespace MvvmCross.Unity.Views
                 if (viewType == null)
                     throw new MvxException("View Type not found for " + request.ViewModelType);
 
-                var view = CreateViewOfType(viewType, request);
+                view = await CreateViewOfType(viewType, request);
                 if (request is MvxViewModelInstanceRequest instanceRequest)
                     view.ViewModel = instanceRequest.ViewModelInstance;
                 else
                     view.ViewModel = viewModelLoader.LoadViewModel(request, null);
                 view.Created(null);
-                return view;
             }
             finally
             {
                 CurrentRequest = null;
             }
+            return view;
         }
-        
-        public virtual IMvxUnityView CreateViewOfType(Type viewType, MvxViewModelRequest request)
+
+        async public virtual Task<IMvxUnityView> CreateViewOfType(Type viewType, MvxViewModelRequest request)
         {
-            GameObject gameObject = new GameObject(viewType.Name);
-            IMvxUnityView view = gameObject.AddComponent(viewType) as IMvxUnityView;
+            var asset = await resourceServicer.LoadBuildInResourceAsync<GameObject>("Prefab/" + viewType.Name);
+            GameObject inst = GameObject.Instantiate(asset);
+            IMvxUnityView view = inst.AddComponent(viewType) as IMvxUnityView;
             //var view = Activator.CreateInstance(viewType) as IMvxUnityView;
             if (view == null)
                 throw new MvxException("View not loaded for " + viewType);

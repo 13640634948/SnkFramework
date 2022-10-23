@@ -18,11 +18,6 @@ namespace MvvmCross.Unity.Presenters
         private IMvxUnityViewCreator _viewCreator;
         protected IMvxUnityViewCreator viewCreator => _viewCreator ??= Mvx.IoCProvider.Resolve<IMvxUnityViewCreator>();
 
-        private IMvxUnityResourceService _resourceService;
-
-        protected IMvxUnityResourceService resourceServicer =>
-            this._resourceService ??= Mvx.IoCProvider.Resolve<IMvxUnityResourceService>();
-
         public override MvxBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
         {
             MvxBasePresentationAttribute attr = new MvxUnityWindowAttribute();
@@ -38,11 +33,8 @@ namespace MvvmCross.Unity.Presenters
 
         async protected virtual Task<bool> ShowWindow(Type windowType, MvxUnityWindowAttribute attribute, MvxViewModelRequest request)
         {
-            IMvxUnityView window = viewCreator.CreateView(request);
-            window.Appearing();
-            var asset = await resourceServicer.LoadBuildInResourceAsync<GameObject>("Prefab/" + windowType.Name);
-            window.Appeared();
-            //window.Appeared(GameObject.Instantiate(asset).AddComponent<MvxUGUINode>());
+            IMvxUnityView window = await viewCreator.CreateView(request);
+            window.OnLoaded();
             return true;
         }
 

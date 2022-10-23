@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using MvvmCross.Base;
 using MvvmCross.Binding.BindingContext;
@@ -36,15 +37,12 @@ namespace MvvmCross.Unity.Views.UGUI
             this.ViewModel?.ViewCreated();
         }
 
-        public virtual void Appearing()
+        public virtual void OnLoaded()
         {
-            appearingCalled?.Raise(this);
-            this.ViewModel?.ViewAppearing();
-        }
-
-        public virtual void Appeared()
-        {
-            appearedCalled?.Raise(this);
+            //appearingCalled?.Raise(this);
+            //this.ViewModel?.ViewAppearing();
+            
+            loadedCalled?.Raise(this);
             this.ViewModel?.ViewAppeared();
         }
 
@@ -84,5 +82,6 @@ namespace MvvmCross.Unity.Views.UGUI
             disposeCalled?.Raise(this);
             this.ViewModel?.ViewDisappeared();
         }
+
     }
 }

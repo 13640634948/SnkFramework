@@ -11,15 +11,10 @@ namespace MvvmCross.Unity.Views.UGUI
             add => createCalled += value;
             remove => createCalled -= value;
         }
-        public event EventHandler AppearingCalled
+        public event EventHandler LoadedCalled
         {
-            add => appearingCalled += value;
-            remove => appearingCalled -= value;
-        }
-        public event EventHandler AppearedCalled
-        {
-            add => appearedCalled += value;
-            remove => appearedCalled -= value;
+            add => loadedCalled += value;
+            remove => loadedCalled -= value;
         }
         public event EventHandler<MvxValueEventArgs<bool>> ActivateCalled
         {
@@ -53,8 +48,7 @@ namespace MvvmCross.Unity.Views.UGUI
         }
 
         protected EventHandler<MvxValueEventArgs<MvxUnityBundle>>? createCalled;
-        protected EventHandler? appearingCalled;
-        protected EventHandler? appearedCalled;
+        protected EventHandler? loadedCalled;
         protected EventHandler<MvxValueEventArgs<bool>>? activateCalled;
         protected EventHandler<MvxValueEventArgs<bool>>? passivateCalled;
         protected EventHandler? disappearingCalled;
