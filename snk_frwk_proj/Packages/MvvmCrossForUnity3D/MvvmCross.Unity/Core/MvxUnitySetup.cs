@@ -98,10 +98,25 @@ namespace MvvmCross.Unity.Core
             iocProvider.RegisterSingleton<IMvxUnityLayerContainer>(unityLayerContainer);
         }
 
+        protected virtual ViewCamera CreateUnityViewCamera()
+        {
+            GameObject viewCameraGameObject = new GameObject("ViewCamera");
+            GameObject.DontDestroyOnLoad(viewCameraGameObject);
+            var viewCamera = viewCameraGameObject.AddComponent<ViewCamera>();
+            return viewCamera;
+        } 
+        
+        protected virtual void InitializeUnityViewCamera(IMvxIoCProvider iocProvider)
+        {
+            var viewCamera = CreateUnityViewCamera();
+            iocProvider.RegisterSingleton<IViewCamera>(viewCamera);
+        }
+
         protected override void RegisterDefaultSetupDependencies(IMvxIoCProvider iocProvider)
         {
             base.RegisterDefaultSetupDependencies(iocProvider);
 
+            InitializeUnityViewCamera(iocProvider);
             InitializeUnityLayerContainer(iocProvider);
         }
 

@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
-    public interface IMvxUnityDefaultLayer
-    {
-    }
-
     public interface IMvxUnityLayerBuilder
     {
         public void RegiestUnityLayerBuilder<TUnityLayer>()
@@ -28,11 +25,22 @@ namespace MvvmCross.Unity.Views.UGUI
 
         public IDictionary<string, IMvxUnityLayer> Build()
         {
+            IViewCamera viewCamera = Mvx.IoCProvider.Resolve<IViewCamera>();
+            
             IDictionary<string, IMvxUnityLayer> dict = new Dictionary<string, IMvxUnityLayer>();
             foreach (var kvp in _unityLayerTypeDict)
             {
                 GameObject layerGameObject = new GameObject(kvp.Key);
+                CanvasScaler scaler = layerGameObject.AddComponent<CanvasScaler>();
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920, 1080);
                 var layer = layerGameObject.AddComponent(kvp.Value) as IMvxUnityLayer;
+                if (layer is MvxUGUILayer uguiLayer)
+                {
+                    uguiLayer.Canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    uguiLayer.Canvas.worldCamera = viewCamera.Current;
+                }
+
                 dict.Add(kvp.Key, layer);
             }
             return dict;
