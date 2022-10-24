@@ -45,8 +45,11 @@ namespace MvvmCross.Unity.Views.UGUI
             this.ViewModel?.ViewAppeared();
         }
 
-        private IMvxTransition ActivateTransition;
-        private IMvxTransition PassivateTransition;
+        public IMvxTransition _activateTransition;
+        public IMvxTransition _passivateTransition;
+        public IMvxTransition ActivateTransition => _activateTransition??= new AlphaUITransition {view = this, from = 0, to = 1};
+        public IMvxTransition PassivateTransition=> _passivateTransition??= new AlphaUITransition {view = this, from = 1, to = 0};
+        
         public virtual IEnumerator Activate(bool animated)
         {
             activateCalled.Raise(this, animated);
@@ -57,24 +60,9 @@ namespace MvvmCross.Unity.Views.UGUI
             if (this.Activated == true)
                 yield break;
 
-            bool completed = false;
             if (animated && ActivateTransition != null)
-            {
-                this.ActivateTransition.OnStart(() =>
-                {
-
-                }).OnEnd(() =>
-                {
-                    this.Activated = true;
-                    completed = true;
-                }).Play();
-            }
-            else
-            {
-                this.Activated = true;
-                completed = true;
-            }
-            yield return new WaitUntil(() => completed);
+                yield return ActivateTransition.Transit();
+            this.Activated = true;
         }
 
         public virtual IEnumerator Passivate(bool animated)
@@ -87,24 +75,12 @@ namespace MvvmCross.Unity.Views.UGUI
             if (this.Activated == false)
                 yield break;
 
-            bool completed = false;
             this.Activated = false;
             
             if (animated && PassivateTransition != null)
             {
-                this.PassivateTransition.OnStart(() =>
-                {
-
-                }).OnEnd(() =>
-                {
-                    completed = true;
-                }).Play();
+                yield return PassivateTransition.Transit();
             }
-            else
-            {
-                completed = true;
-            }
-            yield return new WaitUntil(() => completed);
         }
 
         public virtual void Disappearing()
