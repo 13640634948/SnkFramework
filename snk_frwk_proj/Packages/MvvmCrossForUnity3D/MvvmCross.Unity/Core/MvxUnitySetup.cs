@@ -82,17 +82,27 @@ namespace MvvmCross.Unity.Core
         protected virtual void RegiestUnityLayerCreator(IMvxUnityLayerBuilder builder)
         {
             builder.RegiestUnityLayerBuilder<MvxUGUINormalLayer>();
+            builder.RegiestUnityLayerBuilder<MvxUGUIDialogueLayer>();
+            builder.RegiestUnityLayerBuilder<MvxUGUIPopupLayer>();
+            builder.RegiestUnityLayerBuilder<MvxUGUIGuideLayer>();
+            builder.RegiestUnityLayerBuilder<MvxUGUILoadingLayer>();
+            builder.RegiestUnityLayerBuilder<MvxUGUISystemLayer>();
         }
- 
-        protected override void RegisterDefaultSetupDependencies(IMvxIoCProvider iocProvider)
-        {
-            base.RegisterDefaultSetupDependencies(iocProvider);
 
+        protected virtual void InitializeUnityLayerContainer(IMvxIoCProvider iocProvider)
+        {
             var unityLayerContainer = CreateUnityLayerContainer();
             var builder = CreateUnityLayerBuilder();
             var unityLayerLookup = builder.Build();
             unityLayerContainer.AddAll(unityLayerLookup);
             iocProvider.RegisterSingleton<IMvxUnityLayerContainer>(unityLayerContainer);
+        }
+
+        protected override void RegisterDefaultSetupDependencies(IMvxIoCProvider iocProvider)
+        {
+            base.RegisterDefaultSetupDependencies(iocProvider);
+
+            InitializeUnityLayerContainer(iocProvider);
         }
 
         protected virtual MvxUnityResourceService CreateResourceService() => new();
