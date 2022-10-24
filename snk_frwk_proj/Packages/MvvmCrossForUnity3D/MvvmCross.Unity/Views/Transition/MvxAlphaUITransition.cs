@@ -1,42 +1,10 @@
-using System;
 using System.Collections;
-using System.Threading.Tasks;
-using MvvmCross.Unity.Views;
 using MvvmCross.Unity.Views.UGUI;
 using UnityEngine;
 
-namespace MvvmCross.Unity.Base
+namespace MvvmCross.Unity.Views.Transition
 {
-    public interface IMvxTransition
-    {
-        public IEnumerator Transit();
-    }
-
-    public interface IMvxUITransition : IMvxTransition
-    {
-    }
-
-    public abstract class MvxUITransition : IMvxUITransition
-    {
-        protected void onStart()
-        {
-        }
-
-        protected void onEnd()
-        {
-        }
-
-        public IEnumerator Transit()
-        {
-            onStart();
-            yield return onTransit();
-            onEnd();
-        }
-
-        protected abstract IEnumerator onTransit();
-    }
-
-    public class AlphaUITransition : MvxUITransition
+    public class MvxAlphaUITransition : MvxUITransition
     {
         public IMvxUGUINode view;
         public float from = 0;
@@ -78,5 +46,4 @@ namespace MvvmCross.Unity.Base
 
         }
     }
-
 }

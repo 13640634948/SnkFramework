@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using MvvmCross.Base;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Unity.Base;
 using MvvmCross.Unity.ViewModels;
 using MvvmCross.Unity.Views.Base;
+using MvvmCross.Unity.Views.Transition;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
-using UnityEngine;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
@@ -46,10 +45,15 @@ namespace MvvmCross.Unity.Views.UGUI
         }
 
         public IMvxTransition _activateTransition;
-        public IMvxTransition _passivateTransition;
-        public IMvxTransition ActivateTransition => _activateTransition??= new AlphaUITransition {view = this, from = 0, to = 1};
-        public IMvxTransition PassivateTransition=> _passivateTransition??= new AlphaUITransition {view = this, from = 1, to = 0};
         
+        public IMvxTransition _passivateTransition;
+        
+        public IMvxTransition ActivateTransition => _activateTransition ??= createActivateTransition();
+        public IMvxTransition PassivateTransition => _passivateTransition ??= createPassivateTransition();
+
+        protected IMvxTransition createActivateTransition() => null;//new MvxAlphaUITransition {view = this, from = 0, to = 1};
+        protected IMvxTransition createPassivateTransition() => null;//new MvxAlphaUITransition {view = this, from = 1, to = 0};
+
         public virtual IEnumerator Activate(bool animated)
         {
             activateCalled.Raise(this, animated);
