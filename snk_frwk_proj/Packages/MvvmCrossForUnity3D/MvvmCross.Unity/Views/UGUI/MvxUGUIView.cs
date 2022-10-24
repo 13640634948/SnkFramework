@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using MvvmCross.Base;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Unity.Base;
 using MvvmCross.Unity.ViewModels;
 using MvvmCross.Unity.Views.Base;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using UnityEngine;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
@@ -39,23 +41,70 @@ namespace MvvmCross.Unity.Views.UGUI
 
         public virtual void OnLoaded()
         {
-            //appearingCalled?.Raise(this);
-            //this.ViewModel?.ViewAppearing();
-            
             loadedCalled?.Raise(this);
             this.ViewModel?.ViewAppeared();
         }
-        
+
+        private IMvxTransition ActivateTransition;
+        private IMvxTransition PassivateTransition;
         public virtual IEnumerator Activate(bool animated)
         {
             activateCalled.Raise(this, animated);
-            yield break;
+            
+            if(this.Visibility == false)
+                throw new InvalidOperationException("The window is not visible.");
+
+            if (this.Activated == true)
+                yield break;
+
+            bool completed = false;
+            if (animated && ActivateTransition != null)
+            {
+                this.ActivateTransition.OnStart(() =>
+                {
+
+                }).OnEnd(() =>
+                {
+                    this.Activated = true;
+                    completed = true;
+                }).Play();
+            }
+            else
+            {
+                this.Activated = true;
+                completed = true;
+            }
+            yield return new WaitUntil(() => completed);
         }
 
         public virtual IEnumerator Passivate(bool animated)
         {
             passivateCalled.Raise(this, animated);
-            yield break;
+            
+            if(this.Visibility == false)
+                throw new InvalidOperationException("The window is not visible.");
+            
+            if (this.Activated == false)
+                yield break;
+
+            bool completed = false;
+            this.Activated = false;
+            
+            if (animated && PassivateTransition != null)
+            {
+                this.PassivateTransition.OnStart(() =>
+                {
+
+                }).OnEnd(() =>
+                {
+                    completed = true;
+                }).Play();
+            }
+            else
+            {
+                completed = true;
+            }
+            yield return new WaitUntil(() => completed);
         }
 
         public virtual void Disappearing()
