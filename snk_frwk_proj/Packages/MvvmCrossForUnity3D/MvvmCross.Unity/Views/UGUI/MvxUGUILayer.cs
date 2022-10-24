@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
@@ -22,7 +23,15 @@ namespace MvvmCross.Unity.Views.UGUI
         public void Add(IMvxUnityWindow window)
         {
             IMvxUGUIWindow uguiWindow = window as IMvxUGUIWindow;
-            uguiWindow.Owner.transform.SetParent(this.transform);
+            RectTransform child = uguiWindow.Owner.transform as RectTransform;
+            child.SetParent(this.transform);
+            
+            child.anchorMin = Vector2.zero;
+            child.anchorMax = Vector2.one;
+            child.offsetMin = Vector2.zero;
+            child.offsetMax = Vector2.zero;
+            child.anchoredPosition3D = Vector3.zero;
+            child.localScale = Vector3.one;
         }
 
         public void Remove(IMvxUnityWindow window)
