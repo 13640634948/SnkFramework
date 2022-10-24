@@ -31,7 +31,12 @@ namespace MvvmCross.Unity.Core
             _synchronizationContext = synchronizationContext;
         }
 
-        protected virtual MvxUnityApplicationLifetime CreateLifetimeMonitor() => new ();
+        protected virtual MvxUnityApplicationLifetime CreateLifetimeMonitor()
+        {
+            GameObject applicationLifetime = new GameObject(nameof(MvxUnityApplicationLifetime));
+            GameObject.DontDestroyOnLoad(applicationLifetime);
+            return applicationLifetime.AddComponent<MvxUnityApplicationLifetime>();
+        }
 
         protected virtual void InitializeLifetimeMonitor(IMvxIoCProvider iocProvider)
         {
