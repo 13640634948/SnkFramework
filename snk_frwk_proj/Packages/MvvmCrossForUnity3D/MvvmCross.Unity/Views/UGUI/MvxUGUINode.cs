@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace MvvmCross.Unity.Views.UGUI
 {
+    [RequireComponent(typeof(RectTransform), typeof(Canvas), typeof(CanvasGroup))]
     public partial class MvxUGUINode : UIBehaviour, IMvxUGUINode
     {
         private static readonly bool UseBlocksRaycastsInsteadOfInteractable = false;
