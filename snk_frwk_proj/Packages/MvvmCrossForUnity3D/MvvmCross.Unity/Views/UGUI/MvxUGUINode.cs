@@ -7,12 +7,14 @@ namespace MvvmCross.Unity.Views.UGUI
     {
         private static readonly bool UseBlocksRaycastsInsteadOfInteractable = false;
 
-        public Canvas _canvas;
         public UIBehaviour Owner => this;
+
+        private Canvas _canvas;
         public Canvas Canvas => this._canvas ??= GetComponent<Canvas>();
 
-        public CanvasGroup _canvasGroup;
+        private CanvasGroup _canvasGroup;
         public CanvasGroup CanvasGroup => this._canvasGroup ??= GetComponent<CanvasGroup>();
+        
         private bool _activated = false;
      
         public float Alpha
