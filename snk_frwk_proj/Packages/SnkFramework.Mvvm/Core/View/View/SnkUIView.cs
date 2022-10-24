@@ -9,7 +9,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public abstract partial class SnkUIView : ISnkUIView
         {
-            protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+            protected static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             protected readonly string UI_PREFAB_PATH_FORMAT = "UI/Prefabs/{0}";
             public virtual string mAssetPath => string.Format(UI_PREFAB_PATH_FORMAT, this.GetType().Name);
@@ -76,13 +76,15 @@ namespace SnkFramework.Mvvm.Core
 
             public virtual void LoadViewOwner()
             {
-                this.mOwner = SnkMvvmSetup.mLoader.LoadViewOwner(mAssetPath);
+                ISnkMvvmLoader loader = SnkIoCProvider.Instance.Resolve<ISnkMvvmLoader>();
+                this.mOwner = loader.LoadViewOwner(mAssetPath);
                 this.mViewOwnerLoaded = true;
             }
 
             public virtual IEnumerator LoadViewOwnerAsync()
             {
-                yield return SnkMvvmSetup.mLoader.LoadViewOwnerAsync(mAssetPath, owner => this.mOwner = owner);
+                ISnkMvvmLoader loader = SnkIoCProvider.Instance.Resolve<ISnkMvvmLoader>();
+                yield return loader.LoadViewOwnerAsync(mAssetPath, owner => this.mOwner = owner);
                 this.mViewOwnerLoaded = true;
             }
 

@@ -1,5 +1,18 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "2.3.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
+    "com.mvvmcross.unity3d": {
+      "version": "file:MvvmCrossForUnity3D",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.fluent-binding": {
       "version": "file:SnkFramework.FluentBinding",
       "depth": 0,
@@ -38,7 +51,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.15",
+      "version": "3.0.16",
       "depth": 0,
       "source": "registry",
       "dependencies": {

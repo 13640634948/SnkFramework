@@ -8,7 +8,7 @@ namespace SnkFramework.Mvvm.Core
     {
         public abstract class SnkTransition : ISnkTransition
         {
-            private static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+            protected static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             private ISnkWindowControllable window;
             private bool done = false;
@@ -125,8 +125,8 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.running)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("The transition is running.DisableAnimation failed.");
+                    if (Logger.IsWarnEnabled)
+                        Logger.WarnFormat("The transition is running.DisableAnimation failed.");
                     return this;
                 }
 
@@ -138,8 +138,8 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.running)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("The transition is running.sets the layer failed.");
+                    if (Logger.IsWarnEnabled)
+                        Logger.WarnFormat("The transition is running.sets the layer failed.");
                     return this;
                 }
 
@@ -151,8 +151,8 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.running)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("The transition is running.sets the policy failed.");
+                    if (Logger.IsWarnEnabled)
+                        Logger.WarnFormat("The transition is running.sets the policy failed.");
                     return this;
                 }
 
@@ -164,8 +164,8 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.running)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("The transition is running.OnStart failed.");
+                    if (Logger.IsWarnEnabled)
+                        Logger.WarnFormat("The transition is running.OnStart failed.");
                     return this;
                 }
 
@@ -177,8 +177,8 @@ namespace SnkFramework.Mvvm.Core
             {
                 if (this.running)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("The transition is running.OnStateChanged failed.");
+                    if (Logger.IsWarnEnabled)
+                        Logger.WarnFormat("The transition is running.OnStateChanged failed.");
                     return this;
                 }
 

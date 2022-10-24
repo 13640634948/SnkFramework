@@ -82,7 +82,8 @@ namespace SnkFramework.Mvvm.Core
             //public virtual void Play()
             public override ISnkAnimation Play()
             {
-                SnkMvvmSetup.mCoroutineExecutor.RunOnCoroutineNoReturn(DoPlay());
+                ISnkMvvmCoroutineExecutor executor = SnkIoCProvider.Instance.Resolve<ISnkMvvmCoroutineExecutor>();
+                executor.RunOnCoroutineNoReturn(DoPlay());
                 return default;
             }
 

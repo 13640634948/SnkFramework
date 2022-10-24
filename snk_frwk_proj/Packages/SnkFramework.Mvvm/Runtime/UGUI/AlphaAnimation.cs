@@ -10,7 +10,7 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public class AlphaAnimation : SnkUIAnimation
         {
-            protected static readonly IMvvmLog log = SnkMvvmSetup.mMvvmLog;
+            protected static readonly ISnkMvvmLogger Logger = SnkIoCProvider.Instance.Resolve<ISnkMvvmLogger>();
 
             [Range(0f, 1f)] public float from = 1f;
             [Range(0f, 1f)] public float to = 1f;
@@ -26,7 +26,7 @@ namespace SnkFramework.Mvvm.Runtime
                 this._window = view as IUGUIWindow;
                 if (_window == null)
                 {
-                    log.Error("View 类型错误");
+                    Logger.Error("View 类型错误");
                     return;
                 }
 

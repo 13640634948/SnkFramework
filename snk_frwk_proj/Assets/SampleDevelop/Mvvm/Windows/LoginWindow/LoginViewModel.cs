@@ -21,7 +21,7 @@ namespace SampleDevelop.Mvvm
 
         public LoginViewModel()
         {
-            this.mButtonCommand = new SimpleCommand(() => log.Info("LoginViewModel - mButtonCommand"));
+            this.mButtonCommand = new SimpleCommand(() => Logger.Info("LoginViewModel - mButtonCommand"));
             this._interactionFinished = new InteractionRequest(this);
         }
     }
