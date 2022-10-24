@@ -5,6 +5,7 @@ using MvvmCross.Presenters;
 using MvvmCross.Presenters.Attributes;
 using MvvmCross.Unity.Presenters.Attributes;
 using MvvmCross.Unity.Views;
+using MvvmCross.Unity.Views.UGUI;
 using MvvmCross.ViewModels;
 
 namespace MvvmCross.Unity.Presenters
@@ -37,7 +38,7 @@ namespace MvvmCross.Unity.Presenters
                 throw new NullReferenceException("window is null");
             window.Created(null);
             window.OnLoaded();
-            var layer = layerContainer.GetUnityLayer("normal");
+            var layer = layerContainer.GetUnityLayer<MvxUGUINormalLayer>();
             layer.Add(window);
             await layer.ShowTransition(window, true);
             return true;

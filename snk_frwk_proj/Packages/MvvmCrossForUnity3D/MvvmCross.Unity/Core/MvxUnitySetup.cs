@@ -65,34 +65,45 @@ namespace MvvmCross.Unity.Core
             base.InitializeFirstChance(iocProvider);
         }
 
+        protected virtual MvxUnityLayerContainer CreateUnityLayerContainer()
+        {
+            GameObject layerContainerGameObject = new GameObject(nameof(MvxUnityLayerContainer));
+            GameObject.DontDestroyOnLoad(layerContainerGameObject);
+            return layerContainerGameObject.AddComponent<MvxUnityLayerContainer>();
+        }
+
+        protected virtual MvxUnityLayerBuilder CreateUnityLayerBuilder()
+        {
+            MvxUnityLayerBuilder builder = new MvxUnityLayerBuilder();
+            RegiestUnityLayerCreator(builder);
+            return builder;
+        }
+
+        protected virtual void RegiestUnityLayerCreator(IMvxUnityLayerBuilder builder)
+        {
+            builder.RegiestUnityLayerBuilder<MvxUGUINormalLayer>();
+        }
+ 
         protected override void RegisterDefaultSetupDependencies(IMvxIoCProvider iocProvider)
         {
             base.RegisterDefaultSetupDependencies(iocProvider);
-            
-            GameObject layerContainerGameObject = new GameObject("MvxUnityLayerContainer");
-            var unityLayerContainer = layerContainerGameObject.AddComponent<MvxUGUILayerContainer>();
-            GameObject.DontDestroyOnLoad(layerContainerGameObject);
-            
-            GameObject layerGameObject = new GameObject("MvxUGUINormalLayer");
-            var uguiNormalLayer = layerGameObject.AddComponent<MvxUGUINormalLayer>();
-            unityLayerContainer.AddUnityLayer(uguiNormalLayer);
-            layerGameObject.transform.SetParent(layerContainerGameObject.transform);
-            
+
+            var unityLayerContainer = CreateUnityLayerContainer();
+            var builder = CreateUnityLayerBuilder();
+            var unityLayerLookup = builder.Build();
+            unityLayerContainer.AddAll(unityLayerLookup);
             iocProvider.RegisterSingleton<IMvxUnityLayerContainer>(unityLayerContainer);
         }
 
-
         protected virtual MvxUnityResourceService CreateResourceService() => new();
+        
         protected override void InitializeLastChance(IMvxIoCProvider iocProvider)
         {
             base.InitializeLastChance(iocProvider);
             
             var resourceService = CreateResourceService();
             iocProvider.RegisterSingleton<IMvxUnityResourceService>(resourceService);
-
         }
-
-
 
         protected virtual void RegisterUnityViewCreator(IMvxIoCProvider iocProvider, IMvxUnityViewsContainer container)
         {
