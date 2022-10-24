@@ -33,6 +33,8 @@ namespace MvvmCross.Unity.Presenters
 
         async protected virtual Task<bool> ShowWindow(Type windowType, MvxUnityWindowAttribute attribute, MvxViewModelRequest request)
         {
+            ValidateArguments(windowType, attribute, request);
+            
             IMvxUnityWindow window = await viewCreator.CreateView(request) as IMvxUnityWindow;
             if (window == null)
                 throw new NullReferenceException("window is null");
