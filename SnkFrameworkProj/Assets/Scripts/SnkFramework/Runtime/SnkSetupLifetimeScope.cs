@@ -8,11 +8,8 @@ using VContainer.Unity;
 
 namespace SnkFramework.Runtime
 {
-    public abstract class SnkSetupLifetimeScope : LifetimeScope, ISnkSetup
+    public abstract partial class SnkSetupLifetimeScope : LifetimeScope, ISnkSetup
     {
-        public abstract void InitializePrimary();
-        public abstract void InitializeSecondary();
-
         private readonly object _lock = new();
 
         private TaskCompletionSource<bool> _isInitialisedTaskCompletionSource;
@@ -20,18 +17,18 @@ namespace SnkFramework.Runtime
 
         private ISnkSetupMonitor _monitor;
 
-        public static Func<ISnkSetupMonitor> MonitorCreator = null;
+        public static Func<ISnkSetupMonitor> MonitorGetter = null;
 
         protected override async void Configure(IContainerBuilder builder)
         {
             _unitySynchronizationContext = SynchronizationContext.Current;
 
-            this._monitor = MonitorCreator?.Invoke();
+            this._monitor = MonitorGetter?.Invoke();
 
             if (_monitor == null)
-                EnsureInitialized();
+                EnsureInitialized(builder);
             else
-                InitializeAndMonitor(_monitor);
+                InitializeAndMonitor(builder, _monitor);
 
             await Task.WhenAny(_isInitialisedTaskCompletionSource.Task);
 
@@ -48,13 +45,13 @@ namespace SnkFramework.Runtime
             }
         }
 
-        public virtual void EnsureInitialized()
+        public virtual void EnsureInitialized(IContainerBuilder builder)
         {
             lock (_lock)
             {
                 if (_isInitialisedTaskCompletionSource == null)
                 {
-                    StartSetupInitialization();
+                    StartSetupInitialization(builder);
                 }
                 else
                 {
@@ -70,7 +67,7 @@ namespace SnkFramework.Runtime
             }
         }
 
-        public virtual void InitializeAndMonitor(ISnkSetupMonitor setupMonitor)
+        public virtual void InitializeAndMonitor(IContainerBuilder builder, ISnkSetupMonitor setupMonitor)
         {
             lock (_lock)
             {
@@ -89,20 +86,20 @@ namespace SnkFramework.Runtime
                     return;
                 }
 
-                StartSetupInitialization();
+                StartSetupInitialization(builder);
             }
         }
 
-        private void StartSetupInitialization()
+        private void StartSetupInitialization(IContainerBuilder builder)
         {
             _isInitialisedTaskCompletionSource = new TaskCompletionSource<bool>();
-            InitializePrimary();
+            InitializePrimary(builder);
             Task.Run(() =>
             {
                 ExceptionDispatchInfo setupException = null;
                 try
                 {
-                    InitializeSecondary();
+                    InitializeSecondary(builder);
                 }
                 catch (Exception ex)
                 {

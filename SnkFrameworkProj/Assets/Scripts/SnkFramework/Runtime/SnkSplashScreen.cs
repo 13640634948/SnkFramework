@@ -11,7 +11,7 @@ namespace SnkFramework.Runtime
         protected SnkSetupLifetimeScope setup;
         private void Awake()
         {
-            SnkSetupLifetimeScope.MonitorCreator = () => this;
+            SnkSetupLifetimeScope.MonitorGetter = () => this;
             setup = gameObject.AddComponent<TSetupLifetimeScope>();
         }
     }
