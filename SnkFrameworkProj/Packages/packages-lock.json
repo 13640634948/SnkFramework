@@ -21,6 +21,12 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.snkframework.downloader": {
+      "version": "file:SnkFramework.DownLoader",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.15.18",
       "depth": 0,
