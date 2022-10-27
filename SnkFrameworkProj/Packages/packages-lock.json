@@ -45,6 +45,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.patch-service": {
+      "version": "file:SnkFramework.PatchService",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.15.18",
       "depth": 0,
