@@ -1,6 +1,6 @@
 using VContainer;
 
-namespace SnkFramework.Runtime
+namespace SnkFramework.Runtime.Core.Setup
 {
     public interface ISnkSetup
     {

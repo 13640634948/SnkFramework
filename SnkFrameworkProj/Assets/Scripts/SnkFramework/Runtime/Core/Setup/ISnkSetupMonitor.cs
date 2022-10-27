@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SnkFramework.Runtime
+namespace SnkFramework.Runtime.Core.Setup
 {
     public interface ISnkSetupMonitor
     {

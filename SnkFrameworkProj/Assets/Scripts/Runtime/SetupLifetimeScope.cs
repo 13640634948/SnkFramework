@@ -1,4 +1,4 @@
-using SnkFramework.Runtime;
+using SnkFramework.Runtime.Core.Setup;
 using VContainer;
 
 namespace DefaultNamespace

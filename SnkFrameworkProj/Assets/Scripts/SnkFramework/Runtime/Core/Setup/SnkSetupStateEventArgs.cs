@@ -1,6 +1,6 @@
 using System;
 
-namespace SnkFramework.Runtime
+namespace SnkFramework.Runtime.Core.Setup
 {
     public class SnkSetupStateEventArgs : EventArgs
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace SnkFramework.Runtime
+namespace SnkFramework.Runtime.Core.Setup
 {
     public abstract partial class SnkSetupLifetimeScope : LifetimeScope, ISnkSetup
     {
