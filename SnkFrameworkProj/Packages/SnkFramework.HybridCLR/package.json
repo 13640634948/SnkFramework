@@ -9,5 +9,8 @@
     "framework",
     "core"
   ],
+  "author": {
+    "name": "BackFire.Studio"
+  },
   "description": "SnkFramework HybridCLR"
 }
