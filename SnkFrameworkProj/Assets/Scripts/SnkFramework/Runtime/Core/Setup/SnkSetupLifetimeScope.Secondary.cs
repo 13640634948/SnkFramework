@@ -14,6 +14,10 @@ namespace SnkFramework.Runtime.Core.Setup
             State = SnkSetupState.Initialized;
         }
 
+        /// <summary>
+        /// 尾初始化
+        /// </summary>
+        /// <param name="builder"></param>
         protected virtual void InitializeLastChance(IContainerBuilder builder)
         {
         }
