@@ -21,6 +21,12 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.snkframework": {
+      "version": "file:SnkFramework",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.downloader": {
       "version": "file:SnkFramework.DownLoader",
       "depth": 0,
