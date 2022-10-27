@@ -18,11 +18,6 @@ namespace SnkFramework.Mvvm
         //记录历史信息ViewHistory
     }
 
-    public interface ISnkViewDispatcher
-    {
-        public Task<bool> ShowViewModel(SnkViewModelRequest request);
-    }
-
 
     public class SnkMvvmService : SnkContainer<ISnkLayer>, ISnkMvvmService
     {
