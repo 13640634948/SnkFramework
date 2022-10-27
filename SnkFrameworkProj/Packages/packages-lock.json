@@ -39,6 +39,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.mvvm-ui": {
+      "version": "file:SnkFramework.MvvmUI",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.15.18",
       "depth": 0,
