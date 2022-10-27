@@ -1,6 +1,6 @@
 {
-  "name": "com.snkframework.patch-service",
-  "displayName": "Snk Patch Service",
+  "name": "com.snkframework.patcher",
+  "displayName": "Snk Patcher",
   "version": "2.4.7",
   "unity": "2019.4",
   "license": "MIT",
@@ -12,5 +12,5 @@
   "author": {
     "name": "BackFire.Studio"
   },
-  "description": "SnkFramework Patch Service"
+  "description": "SnkFramework Patcher"
 }

@@ -51,8 +51,8 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.snkframework.patch-service": {
-      "version": "file:SnkFramework.PatchService",
+    "com.snkframework.patcher": {
+      "version": "file:SnkFramework.Patcher",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
