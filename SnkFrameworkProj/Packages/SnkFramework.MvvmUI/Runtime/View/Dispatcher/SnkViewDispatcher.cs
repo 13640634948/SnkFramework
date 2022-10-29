@@ -13,7 +13,7 @@ namespace SnkFramework.Mvvm.Runtime.View
             _presenter = presenter;
         }
 
-        public async Task ShowViewModel(SnkViewModelRequest request)
-            => await ExecuteOnMainThreadAsync(() => _presenter.Show(request));
+        public async Task OpenViewModel(SnkViewModelRequest request)
+            => await ExecuteOnMainThreadAsync(() => _presenter.Open(request));
     }
 }
