@@ -1,4 +1,6 @@
 using System;
+using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime.Presenters
@@ -6,21 +8,10 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
     public class SnkViewModelRequest
     {
         public Type ViewModelType { get; set; }
-        public Type ViewType { get; set; }
-    }
-
-    public class SnkViewModelInstanceRequest : SnkViewModelRequest
-    {
         public ISnkViewModel ViewModelInstance { get; set; }
-
-        public SnkViewModelInstanceRequest()
-        {
-            
-        }
-
-        public SnkViewModelInstanceRequest(ISnkViewModel viewModelInstance)
-        {
-            ViewModelInstance = viewModelInstance;
-        }
+        public object Parameter { get; set; }
+        public Type ViewType { get; set; }
+        public ISnkView ViewInstance { get; set; }
+        public ISnkBundle Bundle { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace SnkFramework.Mvvm.Runtime
 
             public abstract SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType);
 
-            public abstract SnkBasePresentationAttribute? GetOverridePresentationAttribute(SnkViewModelRequest request, Type viewType);
+            public abstract SnkBasePresentationAttribute GetOverridePresentationAttribute(SnkViewModelRequest request, Type viewType);
 
         }
     }

@@ -9,9 +9,9 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public class SnkPresentationAttributeAction
         {
-            public Func<Type, ISnkPresentationAttribute, SnkViewModelRequest, Task<bool>>? ShowAction { get; set; }
+            public Func<ISnkPresentationAttribute, SnkViewModelRequest, Task<bool>> OpenAction { get; set; }
 
-            public Func<ISnkViewModel, ISnkPresentationAttribute, Task<bool>>? CloseAction { get; set; }
+            public Func<ISnkViewModel, ISnkPresentationAttribute, Task<bool>> CloseAction { get; set; }
         }
     }
 }

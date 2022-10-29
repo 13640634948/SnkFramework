@@ -13,5 +13,6 @@ namespace SnkFramework.Mvvm.Runtime
             /// <inheritdoc />
             public Type? ViewType { get; set; }
         }
+        
     }
 }

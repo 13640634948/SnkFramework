@@ -9,22 +9,24 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
-            public virtual Task<bool> Show(SnkViewModelRequest request)
+            public virtual Task<bool> Open(SnkViewModelRequest request)
             {
-                var attributeAction = GetPresentationAttributeAction(request, out SnkBasePresentationAttribute attribute);
+                var attributeAction = GetPresentationAttributeAction(request, out var attribute);
 
-                if (attributeAction.ShowAction != null && attribute.ViewType != null)
-                    return attributeAction.ShowAction.Invoke(attribute.ViewType, attribute, request);
+                if (attributeAction.OpenAction != null && attribute.ViewType != null)
+                    return attributeAction.OpenAction.Invoke(attribute, request);
 
                 return Task.FromResult(false);
             }
 
             public virtual Task<bool> Close(ISnkViewModel viewModel)
             {
-                return GetPresentationAttributeAction(
-                        new SnkViewModelInstanceRequest(viewModel), out SnkBasePresentationAttribute attribute)
-                    .CloseAction?
-                    .Invoke(viewModel, attribute) ?? Task.FromResult(false);
+                SnkViewModelRequest request = new SnkViewModelRequest();
+                request.ViewModelInstance = viewModel;
+                var attributeAction = GetPresentationAttributeAction(request, out var attribute);
+                if (attributeAction.CloseAction != null)
+                    return attributeAction.CloseAction.Invoke(viewModel, attribute);
+                return Task.FromResult(false);
             }
         }
     }

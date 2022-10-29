@@ -7,7 +7,7 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public interface ISnkViewPresenter
         {
-            Task<bool> Show(SnkViewModelRequest request);
+            Task<bool> Open(SnkViewModelRequest request);
 
             //Task<bool> ChangePresentation(MvxPresentationHint hint);
 
