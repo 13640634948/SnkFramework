@@ -3,7 +3,6 @@ using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
-using UnityEngine;
 
 namespace SnkFramework.Mvvm
 {
@@ -14,10 +13,6 @@ namespace SnkFramework.Mvvm
     public interface ISnkMvvmNavigation
     {
         //记录历史信息ViewHistory
-    }
-
-    public class SnkBehaviourOwner : MonoBehaviour
-    {
     }
 
     public class SnkMvvmService : SnkContainer<ISnkLayer>, ISnkMvvmService
