@@ -6,7 +6,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Presenters
     {
-        public abstract class SnkAttributeViewPresenter : SnkViewPresenter, ISnkAttributeViewPresenter
+        public abstract class SnkViewAttributeOrganizer : ISnkViewAttributeOrganizer
         {
             private IDictionary<Type, SnkPresentationAttributeAction> _attributeTypesToActionsDictionary;
 
