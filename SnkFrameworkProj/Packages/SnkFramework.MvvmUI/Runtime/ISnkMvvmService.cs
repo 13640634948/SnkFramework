@@ -22,7 +22,7 @@ namespace SnkFramework.Mvvm
 
         public async Task Navigate(SnkViewModelRequest request, ISnkViewModel viewModel)
         {
-            await this._viewDispatcher.ShowViewModel(request).ConfigureAwait(false);
+            await this._viewDispatcher.OpenViewModel(request).ConfigureAwait(false);
 
             if (viewModel.InitializeTask?.Task != null)
                 await viewModel.InitializeTask.Task.ConfigureAwait(false);
