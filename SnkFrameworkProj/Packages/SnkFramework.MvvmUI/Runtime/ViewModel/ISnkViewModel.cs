@@ -33,5 +33,10 @@ namespace SnkFramework.Mvvm.Runtime
 
             SnkNotifyTask InitializeTask { get; set; }
         }
+        
+        public interface ISnkViewModel<in TParameter> : ISnkViewModel
+        {
+            void Prepare(TParameter parameter);
+        }
     }
 }
