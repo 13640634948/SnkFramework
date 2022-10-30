@@ -21,7 +21,7 @@ namespace SnkFramework.Mvvm.Runtime
 
             public virtual Task<bool> Close(ISnkViewModel viewModel)
             {
-                SnkViewModelRequest request = new SnkViewModelRequest();
+                var request = new SnkViewModelInstanceRequest(viewModel);
                 request.ViewModelInstance = viewModel;
                 var attributeAction = GetPresentationAttributeAction(request, out var attribute);
                 if (attributeAction.CloseAction != null)

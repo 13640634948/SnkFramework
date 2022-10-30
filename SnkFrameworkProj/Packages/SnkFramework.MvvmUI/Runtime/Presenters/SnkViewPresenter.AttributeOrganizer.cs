@@ -72,7 +72,7 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
             //    throw new InvalidOperationException($"Cannot get view types from null {nameof(ViewsContainer)}");
 
             //var viewType = ViewsContainer.GetViewType(request.ViewModelType);
-            var viewType = request.ViewType;
+            Type viewType = default;// request.ViewType;
             if (viewType == null)
                 throw new InvalidOperationException($"Could not get View Type for ViewModel Type {request.ViewModelType}");
 

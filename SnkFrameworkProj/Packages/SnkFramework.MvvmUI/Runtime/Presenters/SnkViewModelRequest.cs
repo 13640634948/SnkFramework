@@ -8,10 +8,31 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
     public class SnkViewModelRequest
     {
         public Type ViewModelType { get; set; }
-        public ISnkViewModel ViewModelInstance { get; set; }
-        public object Parameter { get; set; }
-        public Type ViewType { get; set; }
-        public ISnkView ViewInstance { get; set; }
-        public ISnkBundle Bundle { get; set; }
+
+        public ISnkBundle ParameterBundle { get; set; }
+
+        public ISnkBundle PresentationBundle { get; set; }
+
+        public SnkViewModelRequest(Type viewModelType,
+            ISnkBundle parameterBundle = null,
+            ISnkBundle presentationBundle = null)
+        {
+            ViewModelType = viewModelType;
+            ParameterBundle = parameterBundle;
+            PresentationBundle = presentationBundle;
+        }
+    } 
+    
+    public class SnkViewModelRequest<TViewModel> : SnkViewModelRequest
+        where TViewModel : class, ISnkViewModel
+    {
+        public SnkViewModelRequest() : base(typeof(TViewModel))
+        {
+        }
+
+        public SnkViewModelRequest(ISnkBundle parameterBundle = null, ISnkBundle presentationBundle = null)
+            : base(typeof(TViewModel), parameterBundle, presentationBundle)
+        {
+        }
     }
 }

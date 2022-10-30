@@ -27,16 +27,5 @@ namespace SnkFramework.Mvvm
             if (viewModel.InitializeTask?.Task != null)
                 await viewModel.InitializeTask.Task.ConfigureAwait(false);
         }
-
-        public async Task<TViewModel> OpenWindow<TView, TViewModel>()
-            where TView : class, ISnkWindow
-            where TViewModel : class, ISnkViewModel
-        {
-            SnkViewModelRequest request = new SnkViewModelRequest();
-            request.ViewType = typeof(TView);
-            request.ViewModelType = typeof(TViewModel);
-            return default;
-        }
-        
     }
 }
