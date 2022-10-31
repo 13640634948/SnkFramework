@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,16 +9,12 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Presenters
     {
-        public class SnkViewBehaviour : UIBehaviour
-        {
-            
-        }
-
+ 
         public interface ISnkViewLoader
         {
-            Task<SnkViewBehaviour> CreateView(SnkViewModelRequest request);
+            Task<SnkUIBehaviour> CreateView(SnkViewModelRequest request);
 
-            Task<SnkViewBehaviour> CreateView(Type viewType);
+            Task<SnkUIBehaviour> CreateView(Type viewType);
         }
         
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter

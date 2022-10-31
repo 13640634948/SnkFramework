@@ -8,6 +8,7 @@ using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using SnkFramework.Mvvm.Runtime.Base;
 
 public class SnkViewFinder : ISnkViewFinder
 {
@@ -28,17 +29,17 @@ public class SnkViewLoader : ISnkViewLoader
         _viewFinder = viewFinder;
     }
 
-    public async Task<SnkViewBehaviour> CreateView(SnkViewModelRequest request)
+    public async Task<SnkUIBehaviour> CreateView(SnkViewModelRequest request)
     {
         var viewType = _viewFinder.GetViewType(request.ViewModelType);
         return await CreateView(viewType);
     }
 
-    public async Task<SnkViewBehaviour> CreateView(Type viewType)
+    public async Task<SnkUIBehaviour> CreateView(Type viewType)
     {
         var asset = await Resources.LoadAsync<GameObject>(viewType.Name);
         GameObject inst = GameObject.Instantiate(asset) as GameObject;
-        return inst.AddComponent(viewType) as SnkViewBehaviour;
+        return inst.AddComponent(viewType) as SnkUIBehaviour;
     }
 }
 

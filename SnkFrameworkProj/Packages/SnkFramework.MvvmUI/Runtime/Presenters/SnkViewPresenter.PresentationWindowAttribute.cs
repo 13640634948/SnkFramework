@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
@@ -8,7 +9,7 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
     {
         protected virtual async Task<bool> ShowWindow(ISnkPresentationAttribute attribute, SnkViewModelRequest request)
         {
-            SnkViewBehaviour viewBehaviour = await this._viewLoader.CreateView(request);
+            SnkUIBehaviour viewBehaviour = await this._viewLoader.CreateView(request);
             return true;
         }
 
