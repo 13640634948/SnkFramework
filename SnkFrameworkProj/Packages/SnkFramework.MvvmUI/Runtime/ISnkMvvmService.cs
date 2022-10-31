@@ -18,7 +18,9 @@ namespace SnkFramework.Mvvm
     public class SnkMvvmService : SnkContainer<ISnkLayer>, ISnkMvvmService
     {
         private ISnkMvvmNavigation _navigation;
-        private ISnkViewDispatcher _viewDispatcher { get; }
+        public ISnkViewDispatcher _viewDispatcher;
+
+        public ISnkViewModelLoader _viewModelLoader;
 
         public async Task Navigate(SnkViewModelRequest request, ISnkViewModel viewModel)
         {
@@ -26,6 +28,23 @@ namespace SnkFramework.Mvvm
 
             if (viewModel.InitializeTask?.Task != null)
                 await viewModel.InitializeTask.Task.ConfigureAwait(false);
+        }
+
+        public async Task<TViewModel> OpenWindow<TViewModel>(ISnkBundle presentationBundle = null)
+        where TViewModel : class, ISnkViewModel
+        {
+            var request = new SnkViewModelInstanceRequest(typeof(TViewModel))
+            {
+                PresentationBundle = presentationBundle
+            };
+            var viewModel = _viewModelLoader.LoadViewModel(request, null);
+            request.ViewModelInstance = viewModel;
+            
+            await this._viewDispatcher.OpenViewModel(request).ConfigureAwait(false);
+
+            if (viewModel.InitializeTask?.Task != null)
+                await viewModel.InitializeTask.Task.ConfigureAwait(false);
+            return viewModel as TViewModel;
         }
     }
 }

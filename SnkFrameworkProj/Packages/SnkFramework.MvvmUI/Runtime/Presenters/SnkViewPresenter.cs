@@ -1,18 +1,42 @@
 using System;
 using System.Threading.Tasks;
-using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SnkFramework.Mvvm.Runtime
 {
     namespace Presenters
     {
+        public class SnkViewBehaviour : UIBehaviour
+        {
+            
+        }
+
+        public interface ISnkViewLoader
+        {
+            Task<SnkViewBehaviour> CreateView(SnkViewModelRequest request);
+
+            Task<SnkViewBehaviour> CreateView(Type viewType);
+        }
+        
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
+            private ISnkViewFinder _viewFinder;
+            private ISnkViewLoader _viewLoader;
+
+            public SnkViewPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader)
+            {
+                this._viewFinder = viewFinder;
+                this._viewLoader = viewLoader;
+            }
+
             public virtual Task<bool> Open(SnkViewModelRequest request)
             {
                 var attributeAction = GetPresentationAttributeAction(request, out var attribute);
 
+                Debug.Log(attributeAction.OpenAction);
+                Debug.Log(attribute.ViewType);
                 if (attributeAction.OpenAction != null && attribute.ViewType != null)
                     return attributeAction.OpenAction.Invoke(attribute, request);
 

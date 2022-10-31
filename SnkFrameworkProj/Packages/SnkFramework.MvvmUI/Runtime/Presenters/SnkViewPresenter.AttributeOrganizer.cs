@@ -9,7 +9,9 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
 {
     public partial class SnkViewPresenter
     {
-        protected void internalRegisterAttributeTypes<TPresentationAttribute>(Func<ISnkPresentationAttribute, SnkViewModelRequest, Task<bool>> openAction, Func<ISnkViewModel, ISnkPresentationAttribute, Task<bool>> closeAction)
+        protected void internalRegisterAttributeTypes<TPresentationAttribute>(
+            Func<ISnkPresentationAttribute, SnkViewModelRequest, Task<bool>> openAction,
+            Func<ISnkViewModel, ISnkPresentationAttribute, Task<bool>> closeAction)
             where TPresentationAttribute : SnkBasePresentationAttribute
         {
             this.AttributeTypesToActionsDictionary[typeof(TPresentationAttribute)] =
@@ -21,15 +23,23 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
             internalRegisterAttributeTypes<SnkPresentationWindowAttribute>(ShowWindow, CloseWindow);
         }
 
-        
-        public override SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
-            => new SnkPresentationWindowAttribute();
 
-        public override SnkBasePresentationAttribute GetOverridePresentationAttribute(SnkViewModelRequest request, Type viewType)
+        public override SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
+        {
+            var attribute = new SnkPresentationWindowAttribute();
+            attribute.ViewModelType = viewModelType;
+            attribute.ViewType = viewType;
+            return attribute;
+        }
+
+        public override SnkBasePresentationAttribute GetOverridePresentationAttribute(SnkViewModelRequest request,
+            Type viewType)
             => null;
 
-        protected virtual SnkPresentationAttributeAction GetPresentationAttributeAction(SnkViewModelRequest request, out SnkBasePresentationAttribute attribute)
-        { if (request == null)
+        protected virtual SnkPresentationAttributeAction GetPresentationAttributeAction(SnkViewModelRequest request,
+            out SnkBasePresentationAttribute attribute)
+        {
+            if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
             var presentationAttribute = GetPresentationAttribute(request);
@@ -57,9 +67,10 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
                 return attributeAction;
             }
 
-            throw new KeyNotFoundException($"The type {attributeType.Name} is not configured in the presenter dictionary");
+            throw new KeyNotFoundException(
+                $"The type {attributeType.Name} is not configured in the presenter dictionary");
         }
-        
+
         public override SnkBasePresentationAttribute GetPresentationAttribute(SnkViewModelRequest request)
         {
             if (request == null)
@@ -72,9 +83,10 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
             //    throw new InvalidOperationException($"Cannot get view types from null {nameof(ViewsContainer)}");
 
             //var viewType = ViewsContainer.GetViewType(request.ViewModelType);
-            Type viewType = default;// request.ViewType;
+            Type viewType = this._viewFinder.GetViewType(request.ViewModelType);
             if (viewType == null)
-                throw new InvalidOperationException($"Could not get View Type for ViewModel Type {request.ViewModelType}");
+                throw new InvalidOperationException(
+                    $"Could not get View Type for ViewModel Type {request.ViewModelType}");
 
             var overrideAttribute = GetOverridePresentationAttribute(request, viewType);
             if (overrideAttribute != null)
@@ -97,7 +109,5 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
 
             return CreatePresentationAttribute(request.ViewModelType, viewType);
         }
-
-        
     }
 }
