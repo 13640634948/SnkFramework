@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm;
 using SnkFramework.Mvvm.Runtime.Presenters;
@@ -10,6 +8,8 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
+using UnityEngine.EventSystems;
+
 
 public class SnkViewFinder : ISnkViewFinder
 {
@@ -40,6 +40,7 @@ public class SnkViewLoader : ISnkViewLoader
     {
         var asset = await Resources.LoadAsync<GameObject>(viewType.Name);
         GameObject inst = GameObject.Instantiate(asset) as GameObject;
+        inst.name = viewType.Name;
         return inst.AddComponent(viewType) as SnkUIBehaviour;
     }
 }
@@ -49,17 +50,22 @@ public class MvvmDemo : MonoBehaviour
     private SnkMvvmService _mvvmService;
     private void Awake()
     {
+        GameObject viewCameraGameObject = new GameObject(nameof(SnkViewCamera));
+        viewCameraGameObject.hideFlags = HideFlags.HideInHierarchy;
+        ISnkViewCamera viewCamera = viewCameraGameObject.AddComponent<SnkViewCamera>();
+        GameObject.DontDestroyOnLoad(viewCameraGameObject);
+
         GameObject layerContainerGameObject = new GameObject(nameof(SnkLayerContainer));
         GameObject.DontDestroyOnLoad(layerContainerGameObject);
-        layerContainerGameObject.AddComponent<RectTransform>();
-        ISnkLayerContainer layerContainer = layerContainerGameObject.AddComponent<SnkLayerContainer>(); 
+        layerContainerGameObject.AddComponent<StandaloneInputModule>();
+        SnkLayerContainer layerContainer = layerContainerGameObject.AddComponent<SnkLayerContainer>(); 
         layerContainer.RegiestLayer<SnkUGUINormalLayer>();
         layerContainer.RegiestLayer<SnkUGUIDialogueLayer>();
         layerContainer.RegiestLayer<SnkUGUIGuideLayer>();
         layerContainer.RegiestLayer<SnkUGUITopLayer>();
         layerContainer.RegiestLayer<SnkUGUILoadingLayer>();
         layerContainer.RegiestLayer<SnkUGUISystemLayer>();
-        layerContainer.Build();
+        layerContainer.Build(viewCamera);
         
         
         ISnkViewFinder viewFinder = new SnkViewFinder();
