@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime.Presenters
@@ -13,7 +14,7 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
             SnkUIBehaviour viewBehaviour = await this._viewLoader.CreateView(request);
             SnkUGUINormalLayer layer = _layerContainer.GetLayer<SnkUGUINormalLayer>();
             layer.AddChild(viewBehaviour);
-            return true;
+            return await layer.Show((ISnkWindow)viewBehaviour);
         }
 
         protected virtual async Task<bool> CloseWindow(ISnkViewModel viewModel, ISnkPresentationAttribute attribute)

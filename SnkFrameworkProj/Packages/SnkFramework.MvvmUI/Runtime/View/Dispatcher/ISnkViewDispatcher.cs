@@ -5,6 +5,8 @@ namespace SnkFramework.Mvvm.Runtime.View
 {
     public interface ISnkViewDispatcher
     {
-        public Task OpenViewModel(SnkViewModelRequest request);
+        Task<bool> ShowViewModel(SnkViewModelRequest request);
+
+        Task<bool> ChangePresentation(SnkPresentationHint hint);
     }
 }

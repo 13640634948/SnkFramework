@@ -80,16 +80,21 @@ public class MvvmDemo : MonoBehaviour
         _mvvmService = new SnkMvvmService(dispatcher, viewModelLoader);
     }
 
+
+    private TestViewModel viewModel;
     // Start is called before the first frame update
     async void Start()
-    {
-        TestViewModel viewModel = await _mvvmService.OpenWindow<TestViewModel>();
+    { 
+        viewModel = await _mvvmService.OpenWindow<TestViewModel>();
         Debug.LogError(viewModel);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _mvvmService.Close(viewModel);
+        }
     }
 }

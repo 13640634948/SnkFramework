@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters;
+using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime.View
 {
@@ -13,7 +14,16 @@ namespace SnkFramework.Mvvm.Runtime.View
             _presenter = presenter;
         }
 
-        public async Task OpenViewModel(SnkViewModelRequest request)
-            => await ExecuteOnMainThreadAsync(() => _presenter.Open(request));
+        public async Task<bool> ShowViewModel(SnkViewModelRequest request)
+        {
+            await ExecuteOnMainThreadAsync(() => _presenter.Open(request));
+            return true;
+        }
+
+        public async Task<bool> ChangePresentation(SnkPresentationHint hint)
+        {
+            await ExecuteOnMainThreadAsync(() => _presenter.ChangePresentation(hint));
+            return true;
+        }
     }
 }

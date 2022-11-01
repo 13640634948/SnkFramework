@@ -27,7 +27,7 @@ namespace SnkFramework.Mvvm
         }
 
         public async Task<TViewModel> OpenWindow<TViewModel>(ISnkBundle presentationBundle = null)
-        where TViewModel : class, ISnkViewModel
+            where TViewModel : class, ISnkViewModel
         {
             var request = new SnkViewModelInstanceRequest(typeof(TViewModel))
             {
@@ -36,11 +36,17 @@ namespace SnkFramework.Mvvm
             var viewModel = _viewModelLoader.LoadViewModel(request, null);
             request.ViewModelInstance = viewModel;
             
-            await this._viewDispatcher.OpenViewModel(request).ConfigureAwait(false);
+            await this._viewDispatcher.ShowViewModel(request).ConfigureAwait(false);
 
             if (viewModel.InitializeTask?.Task != null)
                 await viewModel.InitializeTask.Task.ConfigureAwait(false);
             return viewModel as TViewModel;
+        }
+        
+        public virtual async Task<bool> Close(ISnkViewModel viewModel)
+        {
+            var hit = new SnkClosePresentationHint(viewModel);
+            return await this._viewDispatcher.ChangePresentation(hit).ConfigureAwait(false);
         }
     }
 }
