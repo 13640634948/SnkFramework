@@ -9,6 +9,7 @@ using SnkFramework.Mvvm.Runtime.ViewModel;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.Layer;
 
 public class SnkViewFinder : ISnkViewFinder
 {
@@ -48,15 +49,29 @@ public class MvvmDemo : MonoBehaviour
     private SnkMvvmService _mvvmService;
     private void Awake()
     {
-        _mvvmService = new SnkMvvmService();
+        GameObject layerContainerGameObject = new GameObject(nameof(SnkLayerContainer));
+        GameObject.DontDestroyOnLoad(layerContainerGameObject);
+        layerContainerGameObject.AddComponent<RectTransform>();
+        ISnkLayerContainer layerContainer = layerContainerGameObject.AddComponent<SnkLayerContainer>(); 
+        layerContainer.RegiestLayer<SnkUGUINormalLayer>();
+        layerContainer.RegiestLayer<SnkUGUIDialogueLayer>();
+        layerContainer.RegiestLayer<SnkUGUIGuideLayer>();
+        layerContainer.RegiestLayer<SnkUGUITopLayer>();
+        layerContainer.RegiestLayer<SnkUGUILoadingLayer>();
+        layerContainer.RegiestLayer<SnkUGUISystemLayer>();
+        layerContainer.Build();
+        
+        
         ISnkViewFinder viewFinder = new SnkViewFinder();
         ISnkViewLoader viewLoader = new SnkViewLoader(viewFinder);
-        ISnkViewPresenter presenter = new SnkViewPresenter(viewFinder,viewLoader);
-        _mvvmService._viewDispatcher = new SnkViewDispatcher(presenter);
+        ISnkViewPresenter presenter = new SnkViewPresenter(viewFinder,viewLoader,layerContainer);
+        ISnkViewDispatcher dispatcher = new SnkViewDispatcher(presenter);
 
         ISnkViewModelCreator viewModelCreator = new SnkViewModelCreator();
         ISnkViewModelLocator viewModelLocator = new SnkViewModelLocator(viewModelCreator);
-        _mvvmService._viewModelLoader = new SnkViewModelLoader(viewModelLocator);
+        ISnkViewModelLoader viewModelLoader = new SnkViewModelLoader(viewModelLocator);
+        
+        _mvvmService = new SnkMvvmService(dispatcher, viewModelLoader);
     }
 
     // Start is called before the first frame update

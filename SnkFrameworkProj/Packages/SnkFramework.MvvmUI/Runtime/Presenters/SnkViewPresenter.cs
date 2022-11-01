@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,11 +22,13 @@ namespace SnkFramework.Mvvm.Runtime
         {
             private ISnkViewFinder _viewFinder;
             private ISnkViewLoader _viewLoader;
+            private ISnkLayerContainer _layerContainer;
 
-            public SnkViewPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader)
+            public SnkViewPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader, ISnkLayerContainer layerContainer)
             {
                 this._viewFinder = viewFinder;
                 this._viewLoader = viewLoader;
+                this._layerContainer = layerContainer;
             }
 
             public virtual Task<bool> Open(SnkViewModelRequest request)

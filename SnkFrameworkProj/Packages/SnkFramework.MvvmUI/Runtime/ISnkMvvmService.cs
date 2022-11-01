@@ -3,31 +3,27 @@ using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SnkFramework.Mvvm
 {
     public interface ISnkMvvmService
     {
     }
-
-    public interface ISnkMvvmNavigation
-    {
-        //记录历史信息ViewHistory
-    }
+    
+    
 
     public class SnkMvvmService : SnkContainer<ISnkLayer>, ISnkMvvmService
     {
-        private ISnkMvvmNavigation _navigation;
-        public ISnkViewDispatcher _viewDispatcher;
+        private ISnkViewDispatcher _viewDispatcher;
 
-        public ISnkViewModelLoader _viewModelLoader;
+        private ISnkViewModelLoader _viewModelLoader;
 
-        public async Task Navigate(SnkViewModelRequest request, ISnkViewModel viewModel)
+        public SnkMvvmService(ISnkViewDispatcher viewDispatcher, ISnkViewModelLoader viewModelLoader)
         {
-            await this._viewDispatcher.OpenViewModel(request).ConfigureAwait(false);
-
-            if (viewModel.InitializeTask?.Task != null)
-                await viewModel.InitializeTask.Task.ConfigureAwait(false);
+            this._viewDispatcher = viewDispatcher;
+            this._viewModelLoader = viewModelLoader;
         }
 
         public async Task<TViewModel> OpenWindow<TViewModel>(ISnkBundle presentationBundle = null)
