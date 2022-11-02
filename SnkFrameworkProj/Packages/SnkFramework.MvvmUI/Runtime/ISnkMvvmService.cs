@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
+using SnkFramework.Mvvm.Runtime.Presenters.Hits;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
-using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace SnkFramework.Mvvm
 {

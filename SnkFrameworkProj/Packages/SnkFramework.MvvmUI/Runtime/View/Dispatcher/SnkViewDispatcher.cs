@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters;
-using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.Mvvm.Runtime.Presenters.Hits;
 
 namespace SnkFramework.Mvvm.Runtime.View
 {
