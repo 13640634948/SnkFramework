@@ -9,12 +9,12 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
 {
     public partial class SnkViewPresenter
     {
-        protected virtual async Task<bool> ShowWindow(ISnkPresentationAttribute attribute, SnkViewModelRequest request)
+        protected virtual async Task<bool> OpenWindow(ISnkPresentationAttribute attribute, SnkViewModelRequest request)
         {
             SnkWindow window = await this._viewLoader.CreateView(request);
             SnkUGUINormalLayer layer = _layerContainer.GetLayer<SnkUGUINormalLayer>();
             layer.AddChild(window);
-            return await layer.Show(window);
+            return await layer.Open(window);
         }
 
         protected virtual async Task<bool> CloseWindow(ISnkViewModel viewModel, ISnkPresentationAttribute attribute)
@@ -23,7 +23,7 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
             SnkUGUINormalLayer layer = _layerContainer.GetLayer<SnkUGUINormalLayer>();
             SnkWindow window = layer.GetChild(0);
             Debug.LogError("SnkViewPresenter.window:" + window);
-            var result = await layer.Dismiss(window);
+            var result = await layer.Close(window);
             if (result == false)
                 return false;
             Debug.LogError("SnkViewPresenter.UnloadView:" + window);

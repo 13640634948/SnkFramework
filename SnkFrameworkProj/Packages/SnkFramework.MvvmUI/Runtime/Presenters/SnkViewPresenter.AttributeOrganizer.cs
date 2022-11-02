@@ -20,7 +20,7 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
 
         public override void RegisterAttributeTypes()
         {
-            internalRegisterAttributeTypes<SnkPresentationWindowAttribute>(ShowWindow, CloseWindow);
+            internalRegisterAttributeTypes<SnkPresentationWindowAttribute>(OpenWindow, CloseWindow);
         }
 
 

@@ -38,9 +38,9 @@ namespace SnkFramework.Mvvm.Runtime.Layer
     
     public interface ISnkTransitionController
     {
-        public Task<bool>  Show(ISnkWindow window);
-        public Task<bool> Hide(ISnkWindow window);
-        public Task<bool> Dismiss(ISnkWindow window);
+        public Task<bool>  Open(ISnkWindow window);
+        //public Task<bool> Hide(ISnkWindow window);
+        public Task<bool> Close(ISnkWindow window);
     }
     
     [RequireComponent(typeof(CanvasScaler))]
@@ -73,19 +73,14 @@ namespace SnkFramework.Mvvm.Runtime.Layer
             return WindowList[index];
         }
 
-        public Task<bool> Show(ISnkWindow window)
+        public Task<bool> Open(ISnkWindow window)
         {
             var transition = new ShowWindowTransition(window);
             return this.transitionExecute(transition);
         }
 
-        public Task<bool> Hide(ISnkWindow window)
-        {
-            var transition = new HideWindowTransition(window, false);
-            return this.transitionExecute(transition);
-        }
 
-        public Task<bool> Dismiss(ISnkWindow window)
+        public Task<bool> Close(ISnkWindow window)
         {
             var transition = new HideWindowTransition(window, true);
             return this.transitionExecute(transition);
