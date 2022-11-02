@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using UnityEngine;
 
@@ -13,9 +14,11 @@ namespace SnkFramework.Mvvm.Runtime
  
         public interface ISnkViewLoader
         {
-            Task<SnkUIBehaviour> CreateView(SnkViewModelRequest request);
+            Task<SnkWindow> CreateView(SnkViewModelRequest request);
 
-            Task<SnkUIBehaviour> CreateView(Type viewType);
+            Task<SnkWindow> CreateView(Type viewType);
+
+            bool UnloadView(SnkWindow window);
         }
         
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter

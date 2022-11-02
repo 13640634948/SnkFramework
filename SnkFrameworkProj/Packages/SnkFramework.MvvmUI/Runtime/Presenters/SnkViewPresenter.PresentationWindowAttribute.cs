@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using UnityEngine;
 
 namespace SnkFramework.Mvvm.Runtime.Presenters
 {
@@ -11,14 +11,23 @@ namespace SnkFramework.Mvvm.Runtime.Presenters
     {
         protected virtual async Task<bool> ShowWindow(ISnkPresentationAttribute attribute, SnkViewModelRequest request)
         {
-            SnkUIBehaviour viewBehaviour = await this._viewLoader.CreateView(request);
+            SnkWindow window = await this._viewLoader.CreateView(request);
             SnkUGUINormalLayer layer = _layerContainer.GetLayer<SnkUGUINormalLayer>();
-            layer.AddChild(viewBehaviour);
-            return await layer.Show((ISnkWindow)viewBehaviour);
+            layer.AddChild(window);
+            return await layer.Show(window);
         }
 
         protected virtual async Task<bool> CloseWindow(ISnkViewModel viewModel, ISnkPresentationAttribute attribute)
         {
+            Debug.LogError("SnkViewPresenter.CloseWindow");
+            SnkUGUINormalLayer layer = _layerContainer.GetLayer<SnkUGUINormalLayer>();
+            SnkWindow window = layer.GetChild(0);
+            Debug.LogError("SnkViewPresenter.window:" + window);
+            var result = await layer.Dismiss(window);
+            if (result == false)
+                return false;
+            Debug.LogError("SnkViewPresenter.UnloadView:" + window);
+            this._viewLoader.UnloadView(window);
             return true;
         }
     }

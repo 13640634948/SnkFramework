@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.View;
@@ -50,19 +51,28 @@ namespace SnkFramework.Mvvm.Runtime.Layer
 
         public virtual string LayerName => this.GetType().Name;
 
+
+        public List<SnkWindow> WindowList = new List<SnkWindow>();
+
+
         protected virtual Task<bool> transitionExecute(ISnkTransition transition)
         {
             return transition.DoTransitionTask();
         }
 
-        public void AddChild(SnkUIBehaviour windowUIBehaviour)
+        public void AddChild(SnkWindow window)
         {
-            windowUIBehaviour.rectTransform.SetParent(rectTransform);
-            windowUIBehaviour.SetRectTransformIdentity();
-            windowUIBehaviour.canvas.overrideSorting = true;
+            WindowList.Add(window);
+            window.rectTransform.SetParent(rectTransform);
+            window.SetRectTransformIdentity();
+            window.canvas.overrideSorting = true;
         }
-        
-        
+
+        public SnkWindow GetChild(int index)
+        {
+            return WindowList[index];
+        }
+
         public Task<bool> Show(ISnkWindow window)
         {
             var transition = new ShowWindowTransition(window);

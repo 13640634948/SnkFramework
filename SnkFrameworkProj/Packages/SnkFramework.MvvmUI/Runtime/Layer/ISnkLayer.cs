@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.View;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,7 +12,9 @@ namespace SnkFramework.Mvvm.Runtime
         public interface ISnkLayer : ISnkBehaviourOwner
         {
             public string LayerName { get; }
-            public void AddChild(SnkUIBehaviour windowUIBehaviour);
+            public void AddChild(SnkWindow window);
+            public SnkWindow GetChild(int index);
+
         }
 
         public interface ISnkLayerContainer
