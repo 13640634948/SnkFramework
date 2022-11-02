@@ -1,10 +1,11 @@
-using Codice.CM.SEIDInfo;
-
-namespace SnkFramework.Mvvm.Runtime.ViewModel
+namespace SnkFramework.Mvvm.Runtime
 {
-    public interface ISnkViewModelCreator
+    namespace ViewModel
     {
-        public ISnkViewModel CreateViewModel(System.Type viewModelType);
-        public TViewModel CreateViewModel<TViewModel>() where TViewModel : class, ISnkViewModel, new();
+        public interface ISnkViewModelCreator
+        {
+            public ISnkViewModel CreateViewModel(System.Type viewModelType);
+            public TViewModel CreateViewModel<TViewModel>() where TViewModel : class, ISnkViewModel, new();
+        }
     }
 }

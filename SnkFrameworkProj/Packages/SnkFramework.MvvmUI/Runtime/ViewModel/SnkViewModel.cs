@@ -35,7 +35,7 @@ namespace SnkFramework.Mvvm.Runtime
 
             protected virtual void SaveStateToBundle(ISnkBundle bundle) { }
 
-            public abstract void Prepare();
+            public abstract void Prepare(ISnkBundle parameterBundle);
 
             public virtual Task Initialize() => Task.FromResult(true);
 

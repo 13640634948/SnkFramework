@@ -1,9 +1,12 @@
 using System.Threading.Tasks;
 
-namespace SnkFramework.Mvvm.Runtime.Layer
+namespace SnkFramework.Mvvm.Runtime
 {
-    public interface ISnkTransition
+    namespace Layer
     {
-        public Task<bool> DoTransitionTask();
+        public interface ISnkTransition
+        {
+            public Task<bool> DoTransitionTask();
+        }
     }
 }

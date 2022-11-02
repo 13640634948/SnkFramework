@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Threading.Tasks;
-using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
 using SnkFramework.Mvvm.Runtime.View;
-using SnkFramework.Mvvm.Runtime.ViewModel;
 
+[SnkPresentationWindow(LayerType = typeof(SnkUGUINormalLayer))]
 public class TestWindow : SnkWindow
 {
      

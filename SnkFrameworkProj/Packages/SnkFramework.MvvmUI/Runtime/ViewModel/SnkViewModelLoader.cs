@@ -2,69 +2,49 @@ using System;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
 
-namespace SnkFramework.Mvvm.Runtime.ViewModel
+namespace SnkFramework.Mvvm.Runtime
 {
-    public class SnkViewModelLoader : ISnkViewModelLoader
+    namespace ViewModel
     {
-        protected ISnkViewModelLocator _viewModelLocator;
-        public SnkViewModelLoader(ISnkViewModelLocator viewModelLocator)
+        public class SnkViewModelLoader : ISnkViewModelLoader
         {
-            _viewModelLocator = viewModelLocator;
-        }
+            protected ISnkViewModelLocator _viewModelLocator;
 
-        public ISnkViewModel LoadViewModel(SnkViewModelRequest request, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null)
-        {
-            try
+            public SnkViewModelLoader(ISnkViewModelLocator viewModelLocator)
             {
-                return _viewModelLocator.Load(request.ViewModelType!, request.ParameterBundle, savedState, navigationArgs);
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(
-                    $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
-            }
-        }
-
-        public ISnkViewModel LoadViewModel<TParameter>(SnkViewModelRequest request, TParameter param, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null)
-        {
-
-            try
-            {
-                return _viewModelLocator.Load(request.ViewModelType!, param, request.ParameterBundle, savedState, navigationArgs);
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(
-                    $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
-            }
-        }
-
-        public ISnkViewModel ReloadViewModel(ISnkViewModel viewModel, SnkViewModelRequest request, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null)
-        {
-            try
-            {
-                viewModel = _viewModelLocator.Reload(viewModel, request.ParameterBundle, savedState, navigationArgs);
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(
-                    $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
+                _viewModelLocator = viewModelLocator;
             }
 
-            return viewModel;
-        }
-
-        public ISnkViewModel ReloadViewModel<TParameter>(ISnkViewModel<TParameter> viewModel, TParameter param, SnkViewModelRequest request, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null)
-        {
-
-            try
+            public ISnkViewModel LoadViewModel(SnkViewModelRequest request, ISnkBundle savedState,
+                ISnkNavigateEventArgs navigationArgs = null)
             {
-                return _viewModelLocator.Reload(viewModel, param, request.ParameterBundle, savedState, navigationArgs);
+                try
+                {
+                    return _viewModelLocator.Load(request.ViewModelType!, request.ParameterBundle, savedState, navigationArgs);
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception(
+                        $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
+                }
             }
-            catch (Exception exception)
+
+
+            public ISnkViewModel ReloadViewModel(ISnkViewModel viewModel, SnkViewModelRequest request,
+                ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null)
             {
-                throw new Exception(
-                    $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
+                try
+                {
+                    viewModel = _viewModelLocator.Reload(viewModel, request.ParameterBundle, savedState,
+                        navigationArgs);
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception(
+                        $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
+                }
+
+                return viewModel;
             }
         }
     }

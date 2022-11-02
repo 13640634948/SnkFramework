@@ -53,6 +53,36 @@ public class SnkViewLoader : ISnkViewLoader
         return true;
     }
 }
+public class SnkUGUINormalLayer : SnkUILayer
+{
+}
+
+public class SnkUGUIDialogueLayer : SnkUILayer
+{
+}
+
+public class SnkUGUIGuideLayer : SnkUILayer
+{
+}
+
+public class SnkUGUITopLayer : SnkUILayer
+{
+}
+
+public class SnkUGUILoadingLayer : SnkUILayer
+{
+}
+
+public class SnkUGUISystemLayer : SnkUILayer
+{
+}
+
+public class DemoPresenter : SnkViewPresenter
+{
+    public DemoPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader, ISnkLayerContainer layerContainer) : base(viewFinder, viewLoader, layerContainer)
+    {
+    }
+}
 
 public class MvvmDemo : MonoBehaviour
 {
@@ -80,7 +110,7 @@ public class MvvmDemo : MonoBehaviour
 
         ISnkViewFinder viewFinder = new SnkViewFinder();
         ISnkViewLoader viewLoader = new SnkViewLoader(viewFinder);
-        ISnkViewPresenter presenter = new SnkViewPresenter(viewFinder, viewLoader, layerContainer);
+        ISnkViewPresenter presenter = new DemoPresenter(viewFinder, viewLoader, layerContainer);
         ISnkViewDispatcher dispatcher = new SnkViewDispatcher(presenter);
 
         ISnkViewModelCreator viewModelCreator = new SnkViewModelCreator();

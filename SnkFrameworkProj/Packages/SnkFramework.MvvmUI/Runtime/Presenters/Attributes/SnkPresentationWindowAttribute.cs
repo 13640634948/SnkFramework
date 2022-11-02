@@ -1,9 +1,10 @@
-using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
-
-namespace SnkFramework.Mvvm.Runtime.Presenters
+namespace SnkFramework.Mvvm.Runtime
 {
-    public class SnkPresentationWindowAttribute : SnkBasePresentationAttribute
+    namespace Presenters.Attributes
     {
-        
+        public class SnkPresentationWindowAttribute : SnkBasePresentationAttribute
+        {
+            public System.Type LayerType;
+        }
     }
 }

@@ -27,16 +27,12 @@ namespace SnkFramework.Mvvm.Runtime
 
             void SaveState(ISnkBundle state);
 
-            void Prepare();
+            void Prepare(ISnkBundle parameterBundle);
 
             Task Initialize();
 
             SnkNotifyTask InitializeTask { get; set; }
         }
         
-        public interface ISnkViewModel<in TParameter> : ISnkViewModel
-        {
-            void Prepare(TParameter parameter);
-        }
     }
 }

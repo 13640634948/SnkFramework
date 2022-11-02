@@ -7,17 +7,10 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public interface ISnkViewModelLoader
         {
-            ISnkViewModel LoadViewModel(SnkViewModelRequest request, ISnkBundle savedState,
-                ISnkNavigateEventArgs navigationArgs = null);
+            ISnkViewModel LoadViewModel(SnkViewModelRequest request, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null);
 
-            ISnkViewModel LoadViewModel<TParameter>(SnkViewModelRequest request, TParameter param,
-                ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null);
+            ISnkViewModel ReloadViewModel(ISnkViewModel viewModel, SnkViewModelRequest request, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null);
 
-            ISnkViewModel ReloadViewModel(ISnkViewModel viewModel, SnkViewModelRequest request, ISnkBundle savedState,
-                ISnkNavigateEventArgs navigationArgs = null);
-
-            ISnkViewModel ReloadViewModel<TParameter>(ISnkViewModel<TParameter> viewModel, TParameter param,
-                SnkViewModelRequest request, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null);
         }
     }
 }

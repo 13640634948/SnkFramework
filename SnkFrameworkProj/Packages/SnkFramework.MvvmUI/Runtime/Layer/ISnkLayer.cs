@@ -9,7 +9,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Layer
     {
-        public interface ISnkLayer : ISnkBehaviourOwner
+        public interface ISnkLayer : ISnkBehaviourOwner, ISnkTransitionController
         {
             public string LayerName { get; }
             public void AddChild(SnkWindow window);
@@ -22,6 +22,7 @@ namespace SnkFramework.Mvvm.Runtime
             public void RegiestLayer(System.Type layerType);
             public void RegiestLayer<TLayer>() where TLayer : SnkUILayer;
             public TLayer GetLayer<TLayer>() where TLayer : SnkUILayer;
+            public ISnkLayer GetLayer(System.Type layerType);
             public void Build(ISnkViewCamera viewCamera);
         }
 
@@ -38,9 +39,12 @@ namespace SnkFramework.Mvvm.Runtime
                 => _layerTypeList.Add(typeof(TLayer));
 
             public TLayer GetLayer<TLayer>() where TLayer : SnkUILayer
+                => GetLayer(typeof(TLayer)) as TLayer;
+
+            public ISnkLayer GetLayer(Type layerType)
             {
-                _layerDict.TryGetValue(typeof(TLayer), out var layer);
-                return layer as TLayer;
+                _layerDict.TryGetValue(layerType, out var layer);
+                return layer;
             }
 
             public void Build(ISnkViewCamera viewCamera)

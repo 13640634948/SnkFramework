@@ -55,6 +55,11 @@ public class TestViewModel : ObservableObject, ISnkViewModel
         //throw new System.NotImplementedException();
     }
 
+    public void Prepare(ISnkBundle parameterBundle)
+    {
+        //throw new System.NotImplementedException();
+    }
+
     public void Prepare()
     {
         //throw new System.NotImplementedException();

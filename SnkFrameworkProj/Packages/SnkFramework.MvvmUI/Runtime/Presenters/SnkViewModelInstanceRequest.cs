@@ -1,21 +1,24 @@
 using System;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
-namespace SnkFramework.Mvvm.Runtime.Presenters
+namespace SnkFramework.Mvvm.Runtime
 {
-    public class SnkViewModelInstanceRequest : SnkViewModelRequest
+    namespace Presenters
     {
-        public ISnkViewModel ViewModelInstance { get; set; }
-
-        public SnkViewModelInstanceRequest(Type viewModelType)
-            : base(viewModelType)
+        public class SnkViewModelInstanceRequest : SnkViewModelRequest
         {
-        }
+            public ISnkViewModel ViewModelInstance { get; set; }
 
-        public SnkViewModelInstanceRequest(ISnkViewModel viewModelInstance)
-            : base(viewModelInstance.GetType(), null, null)
-        {
-            ViewModelInstance = viewModelInstance;
+            public SnkViewModelInstanceRequest(Type viewModelType)
+                : base(viewModelType)
+            {
+            }
+
+            public SnkViewModelInstanceRequest(ISnkViewModel viewModelInstance)
+                : base(viewModelInstance.GetType(), null, null)
+            {
+                ViewModelInstance = viewModelInstance;
+            }
         }
     }
 }
