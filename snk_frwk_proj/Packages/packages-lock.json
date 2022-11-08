@@ -8,7 +8,7 @@
       "url": "https://package.openupm.com"
     },
     "com.mvvmcross.unity3d": {
-      "version": "file:MvvmCrossForUnity3D",
+      "version": "file:.MvvmCrossForUnity3D",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
