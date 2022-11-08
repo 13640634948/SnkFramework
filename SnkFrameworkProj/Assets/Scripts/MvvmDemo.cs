@@ -1,60 +1,12 @@
-using System;
-using System.Threading.Tasks;
-
 using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.Mvvm.Runtime.Layer;
-using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
-
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Cysharp.Threading.Tasks;
 
-public class SnkViewFinder : ISnkViewFinder
-{
-    public Type GetViewType(Type viewModelType)
-    {
-        return typeof(TestWindow);
-    }
-
-    public Type GetViewType<TViewModel>() where TViewModel : class, ISnkViewModel
-        => GetViewType(typeof(TViewModel));
-}
-
-public class SnkViewLoader : ISnkViewLoader
-{
-    private ISnkViewFinder _viewFinder;
-
-    public SnkViewLoader(ISnkViewFinder viewFinder)
-    {
-        _viewFinder = viewFinder;
-    }
-
-    public async Task<SnkWindow> CreateView(SnkViewModelRequest request)
-    {
-        var viewType = _viewFinder.GetViewType(request.ViewModelType);
-        return await CreateView(viewType);
-    }
-
-    public async Task<SnkWindow> CreateView(Type viewType)
-    {
-        var asset = await Resources.LoadAsync<GameObject>(viewType.Name);
-        GameObject inst = UnityEngine.Object.Instantiate(asset) as GameObject;
-        if (inst == null)
-            return null;
-        inst.name = viewType.Name;
-        return inst.AddComponent(viewType) as SnkWindow;
-    }
-
-    public bool UnloadView(SnkWindow window)
-    {
-        UnityEngine.Object.Destroy(window.gameObject);
-        return true;
-    }
-}
 public class SnkUGUINormalLayer : SnkUILayer
 {
 }
@@ -79,24 +31,6 @@ public class SnkUGUISystemLayer : SnkUILayer
 {
 }
 
-public class DemoPresenter : SnkViewPresenter
-{
-    public DemoPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader, ISnkLayerContainer layerContainer) : base(viewFinder, viewLoader, layerContainer)
-    {
-    }
-
-    public override SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
-    {
-        var attribute = base.CreatePresentationAttribute(viewModelType, viewType);
-        if (attribute is SnkPresentationWindowAttribute windowAttribute)
-        {
-            windowAttribute.LayerType = typeof(SnkUGUINormalLayer);
-        }
-
-        return attribute;
-    }
-}
-
 public class MvvmDemo : MonoBehaviour
 {
     private SnkMvvmService _mvvmService;
@@ -110,8 +44,7 @@ public class MvvmDemo : MonoBehaviour
 
         GameObject layerContainerGameObject = new GameObject(nameof(SnkLayerContainer));
         GameObject.DontDestroyOnLoad(layerContainerGameObject);
-        layerContainerGameObject.AddComponent<StandaloneInputModule>();
-        SnkLayerContainer layerContainer = layerContainerGameObject.AddComponent<SnkLayerContainer>();
+        var layerContainer = layerContainerGameObject.AddComponent<SnkLayerContainer>();
         layerContainer.RegiestLayer<SnkUGUINormalLayer>();
         layerContainer.RegiestLayer<SnkUGUIDialogueLayer>();
         layerContainer.RegiestLayer<SnkUGUIGuideLayer>();
@@ -119,7 +52,6 @@ public class MvvmDemo : MonoBehaviour
         layerContainer.RegiestLayer<SnkUGUILoadingLayer>();
         layerContainer.RegiestLayer<SnkUGUISystemLayer>();
         layerContainer.Build(viewCamera);
-
 
         ISnkViewFinder viewFinder = new SnkViewFinder();
         ISnkViewLoader viewLoader = new SnkViewLoader(viewFinder);

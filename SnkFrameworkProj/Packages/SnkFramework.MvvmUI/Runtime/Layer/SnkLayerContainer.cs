@@ -8,7 +8,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Layer
     {
-        [RequireComponent(typeof(RectTransform))]
+        [RequireComponent(typeof(RectTransform), typeof(StandaloneInputModule))]
         public class SnkLayerContainer : UIBehaviour, ISnkLayerContainer
         {
             private List<Type> _layerTypeList = new List<Type>();
