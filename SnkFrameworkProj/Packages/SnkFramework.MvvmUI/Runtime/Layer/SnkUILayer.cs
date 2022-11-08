@@ -35,9 +35,7 @@ namespace SnkFramework.Mvvm.Runtime
 
             public virtual SnkTransitionOperation Open(ISnkWindow window)
             {
-                Debug.Log("Layer.Open-Begin");
                 var operation = window.Activate();
-                Debug.Log("Layer.Open-End");
                 return operation;
             }
 
