@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using SnkFramework.Mvvm.Runtime.View;
 
 namespace SnkFramework.Mvvm.Runtime
 {
@@ -6,7 +7,7 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public interface ISnkTransition
         {
-            public Task<bool> DoTransitionTask();
+            public SnkTransitionOperation DoTransitionTask();
         }
     }
 }

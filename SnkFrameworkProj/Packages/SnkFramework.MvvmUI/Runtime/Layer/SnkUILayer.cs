@@ -21,11 +21,6 @@ namespace SnkFramework.Mvvm.Runtime
             public List<SnkWindow> WindowList = new List<SnkWindow>();
 
 
-            protected virtual Task<bool> transitionExecute(ISnkTransition transition)
-            {
-                return transition.DoTransitionTask();
-            }
-
             public void AddChild(SnkWindow window)
             {
                 WindowList.Add(window);
@@ -39,20 +34,18 @@ namespace SnkFramework.Mvvm.Runtime
                 return WindowList[index];
             }
 
-            public Task<bool> Open(ISnkWindow window)
+            public virtual SnkTransitionOperation Open(ISnkWindow window)
             {
-                var transition = new ShowWindowTransition(window);
-                return this.transitionExecute(transition);
+                Debug.Log("Layer.Open-Begin");
+                var operation = window.Activate();
+                Debug.Log("Layer.Open-End");
+                return operation;
             }
 
-
-            public Task<bool> Close(ISnkWindow window)
+            public virtual SnkTransitionOperation Close(ISnkWindow window)
             {
-                var transition = new HideWindowTransition(window, true);
-                return this.transitionExecute(transition);
+                return window.Passivate();
             }
         }
-
-      
     }
 }

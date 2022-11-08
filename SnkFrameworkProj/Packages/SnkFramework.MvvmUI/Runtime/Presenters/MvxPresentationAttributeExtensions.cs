@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime

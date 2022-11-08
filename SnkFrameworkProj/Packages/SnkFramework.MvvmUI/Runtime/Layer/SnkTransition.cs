@@ -3,7 +3,7 @@ using SnkFramework.Mvvm.Runtime.View;
 
 namespace SnkFramework.Mvvm.Runtime.Layer
 {
-    public abstract class SnkTransition : ISnkTransition
+    public class SnkTransition : ISnkTransition
     {
         protected ISnkWindow window;
 
@@ -12,9 +12,9 @@ namespace SnkFramework.Mvvm.Runtime.Layer
             this.window = window;
         }
 
-        public Task<bool> DoTransitionTask()
+        public SnkTransitionOperation DoTransitionTask()
         {
-            return Task.FromResult(true);
+            return new SnkTransitionOperation();
         }
     }
 }

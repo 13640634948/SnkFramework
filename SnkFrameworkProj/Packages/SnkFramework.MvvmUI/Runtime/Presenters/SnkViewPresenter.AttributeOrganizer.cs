@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
+using SnkFramework.Mvvm.Runtime.Presenters.Hits;
+using SnkFramework.Mvvm.Runtime.View;
 
 namespace SnkFramework.Mvvm.Runtime
 {
@@ -100,6 +102,7 @@ namespace SnkFramework.Mvvm.Runtime
 
                 return CreatePresentationAttribute(request.ViewModelType, viewType);
             }
+            
         }
     }
 }

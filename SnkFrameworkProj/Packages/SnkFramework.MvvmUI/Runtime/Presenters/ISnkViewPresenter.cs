@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters.Hits;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime

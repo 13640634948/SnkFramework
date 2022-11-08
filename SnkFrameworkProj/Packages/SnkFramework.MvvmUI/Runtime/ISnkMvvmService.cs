@@ -1,17 +1,30 @@
+using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
-using SnkFramework.Mvvm.Runtime.Presenters.Hits;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace SnkFramework.Mvvm
 {
     public interface ISnkMvvmService
     {
     }
-    
-    
+
+    public class UnitySyncContext
+    {
+        private static SynchronizationContext _context;
+
+        public static bool IsUnityThread=> _context == SynchronizationContext.Current;
+        public static void Initialization()
+        {
+            _context = SynchronizationContext.Current;
+        }
+
+    }
+
 
     public class SnkMvvmService : SnkContainer<ISnkLayer>, ISnkMvvmService
     {
@@ -21,6 +34,7 @@ namespace SnkFramework.Mvvm
 
         public SnkMvvmService(ISnkViewDispatcher viewDispatcher, ISnkViewModelLoader viewModelLoader)
         {
+            UnitySyncContext.Initialization();
             this._viewDispatcher = viewDispatcher;
             this._viewModelLoader = viewModelLoader;
         }
@@ -35,17 +49,18 @@ namespace SnkFramework.Mvvm
             var viewModel = _viewModelLoader.LoadViewModel(request, null);
             request.ViewModelInstance = viewModel;
             
+            Debug.Log("Svr.OpenWindow-Begin");
             await this._viewDispatcher.ShowViewModel(request).ConfigureAwait(false);
+            Debug.Log("Svr.OpenWindow-End");
 
             if (viewModel.InitializeTask?.Task != null)
                 await viewModel.InitializeTask.Task.ConfigureAwait(false);
             return viewModel as TViewModel;
         }
         
-        public virtual async Task<bool> Close(ISnkViewModel viewModel)
+        public virtual async Task<bool> CloseWindow(ISnkViewModel viewModel)
         {
-            var hit = new SnkClosePresentationHint(viewModel);
-            return await this._viewDispatcher.ChangePresentation(hit).ConfigureAwait(false);
+            return await this._viewDispatcher.HideViewModel(viewModel).ConfigureAwait(false);;
         }
     }
 }

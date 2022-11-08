@@ -139,7 +139,16 @@ public class MvvmDemo : MonoBehaviour
     async void Start()
     {
         viewModel = await _mvvmService.OpenWindow<TestViewModel>();
-        Debug.LogError(viewModel);
+        Debug.Log("OpenWindow Finish");
+
+        if (viewModel == null)
+        {
+            Debug.LogError("TestViewModel is null");
+        }
+        else
+        {
+            Debug.LogError(viewModel);
+        }
     }
 
     // Update is called once per frame
@@ -147,7 +156,7 @@ public class MvvmDemo : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            _mvvmService.Close(viewModel);
+            _mvvmService.CloseWindow(viewModel);
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
+using SnkFramework.Mvvm.Runtime.View;
 
 namespace SnkFramework.Mvvm.Runtime
 {

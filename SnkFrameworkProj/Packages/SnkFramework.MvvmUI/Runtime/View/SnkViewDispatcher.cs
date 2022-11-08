@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.Presenters.Hits;
+using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime
 {
@@ -19,6 +20,12 @@ namespace SnkFramework.Mvvm.Runtime
             public async Task<bool> ShowViewModel(SnkViewModelRequest request)
             {
                 await ExecuteOnMainThreadAsync(() => _presenter.Open(request));
+                return true;
+            }
+
+            public async Task<bool> HideViewModel(ISnkViewModel viewModel)
+            {
+                await ExecuteOnMainThreadAsync(() => _presenter.Close(viewModel));
                 return true;
             }
 

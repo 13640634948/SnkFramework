@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,6 +29,7 @@ namespace SnkFramework.Mvvm.Runtime
                 rectTransform.anchoredPosition3D = Vector3.zero;
                 rectTransform.localScale = Vector3.one;
             }
+            
         }
     }
 }

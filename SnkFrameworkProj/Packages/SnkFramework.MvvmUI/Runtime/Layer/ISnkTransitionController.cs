@@ -5,9 +5,8 @@ namespace SnkFramework.Mvvm.Runtime.Layer
 {
     public interface ISnkTransitionController
     {
-        public Task<bool> Open(ISnkWindow window);
+        public SnkTransitionOperation Open(ISnkWindow window);
 
-        //public Task<bool> Hide(ISnkWindow window);
-        public Task<bool> Close(ISnkWindow window);
+        public SnkTransitionOperation Close(ISnkWindow window);
     }
 }
