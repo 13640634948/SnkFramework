@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
@@ -13,17 +14,6 @@ namespace SnkFramework.Mvvm
     {
     }
 
-    public class UnitySyncContext
-    {
-        private static SynchronizationContext _context;
-
-        public static bool IsUnityThread=> _context == SynchronizationContext.Current;
-        public static void Initialization()
-        {
-            _context = SynchronizationContext.Current;
-        }
-
-    }
 
 
     public class SnkMvvmService : SnkContainer<ISnkLayer>, ISnkMvvmService
@@ -34,7 +24,6 @@ namespace SnkFramework.Mvvm
 
         public SnkMvvmService(ISnkViewDispatcher viewDispatcher, ISnkViewModelLoader viewModelLoader)
         {
-            UnitySyncContext.Initialization();
             this._viewDispatcher = viewDispatcher;
             this._viewModelLoader = viewModelLoader;
         }
