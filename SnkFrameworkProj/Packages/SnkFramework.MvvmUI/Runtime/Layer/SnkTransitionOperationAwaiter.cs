@@ -1,37 +1,40 @@
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
+using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Mvvm.Runtime.View;
 
-namespace SnkFramework.Mvvm.Runtime.View
+namespace SnkFramework.Mvvm.Runtime
 {
-    public struct SnkTransitionOperationAwaiter : ISnkAwaiter, ICriticalNotifyCompletion
+    namespace Layer
     {
-        private SnkTransitionOperation _transitionOperation;
-        private Action<SnkTransitionOperation> continuationAction;
-
-        public SnkTransitionOperationAwaiter(SnkTransitionOperation asyncOperation)
+        public struct SnkTransitionOperationAwaiter : ISnkAwaiter, ICriticalNotifyCompletion
         {
-            this._transitionOperation = asyncOperation;
-            this.continuationAction = null;
-        }
+            private SnkTransitionOperation _transitionOperation;
+            private Action<SnkTransitionOperation> continuationAction;
 
-        public bool IsCompleted => _transitionOperation.IsDone;
+            public SnkTransitionOperationAwaiter(SnkTransitionOperation asyncOperation)
+            {
+                this._transitionOperation = asyncOperation;
+                this.continuationAction = null;
+            }
 
-        public void GetResult()
-        {
-            Debug.Log("SnkTransitionOperation.GetResult:" + IsCompleted);
-            //if (!IsCompleted)
-            //    throw new Exception("The task is not finished yet");
-        }
+            public bool IsCompleted => _transitionOperation.IsDone;
 
-        public void OnCompleted(Action continuation)
-        {
-            UnsafeOnCompleted(continuation);
-        }
+            public void GetResult()
+            {
+                if (!IsCompleted)
+                    throw new Exception("The task is not finished yet");
+            }
 
-        public void UnsafeOnCompleted(Action continuation)
-        {
-            this._transitionOperation.onCompleted = continuation;
+            public void OnCompleted(Action continuation)
+            {
+                UnsafeOnCompleted(continuation);
+            }
+
+            public void UnsafeOnCompleted(Action continuation)
+            {
+                this._transitionOperation.onCompleted = continuation;
+            }
         }
     }
 }

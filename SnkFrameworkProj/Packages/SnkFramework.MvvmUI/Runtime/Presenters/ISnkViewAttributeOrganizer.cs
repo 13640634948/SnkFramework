@@ -11,7 +11,6 @@ namespace SnkFramework.Mvvm.Runtime
             IDictionary<Type, SnkPresentationAttributeAction> AttributeTypesToActionsDictionary { get; }
             void RegisterAttributeTypes();
 
-            //TODO: Maybe move those to helper class
             SnkBasePresentationAttribute GetPresentationAttribute(SnkViewModelRequest request);
             SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType);
             SnkBasePresentationAttribute GetOverridePresentationAttribute(SnkViewModelRequest request, Type viewType);

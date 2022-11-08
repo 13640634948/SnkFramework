@@ -2,14 +2,17 @@ using System;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.View;
 
-namespace SnkFramework.Mvvm.Runtime.Presenters
+namespace SnkFramework.Mvvm.Runtime
 {
-    public interface ISnkViewLoader
+    namespace Presenters
     {
-        Task<SnkWindow> CreateView(SnkViewModelRequest request);
+        public interface ISnkViewLoader
+        {
+            Task<SnkWindow> CreateView(SnkViewModelRequest request);
 
-        Task<SnkWindow> CreateView(Type viewType);
+            Task<SnkWindow> CreateView(Type viewType);
 
-        bool UnloadView(SnkWindow window);
+            bool UnloadView(SnkWindow window);
+        }
     }
 }

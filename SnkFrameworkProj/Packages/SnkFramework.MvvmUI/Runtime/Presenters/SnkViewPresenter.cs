@@ -57,7 +57,6 @@ namespace SnkFramework.Mvvm.Runtime
             public Task<bool> ChangePresentation(SnkPresentationHint hint)
             {
                 /*
-
                 if (await HandlePresentationChange(hint))
                 {
                     Debug.LogError("ChangePresentation-HandlePresentationChange");

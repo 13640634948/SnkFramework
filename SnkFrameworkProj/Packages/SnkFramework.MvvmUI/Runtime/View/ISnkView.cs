@@ -1,5 +1,4 @@
 using SnkFramework.Mvvm.Runtime.Base;
-using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime

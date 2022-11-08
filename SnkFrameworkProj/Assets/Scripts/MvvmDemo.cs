@@ -1,16 +1,17 @@
 using System;
 using System.Threading.Tasks;
-using SnkFramework.Mvvm;
+
+using SnkFramework.Mvvm.Runtime;
+using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
-using UnityEngine;
-using Cysharp.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
-using UnityEngine.EventSystems;
-using Object = UnityEngine.Object;
 
+using UnityEngine;
+using UnityEngine.EventSystems;
+using Cysharp.Threading.Tasks;
 
 public class SnkViewFinder : ISnkViewFinder
 {
@@ -41,7 +42,7 @@ public class SnkViewLoader : ISnkViewLoader
     public async Task<SnkWindow> CreateView(Type viewType)
     {
         var asset = await Resources.LoadAsync<GameObject>(viewType.Name);
-        GameObject inst = Object.Instantiate(asset) as GameObject;
+        GameObject inst = UnityEngine.Object.Instantiate(asset) as GameObject;
         if (inst == null)
             return null;
         inst.name = viewType.Name;
@@ -50,7 +51,7 @@ public class SnkViewLoader : ISnkViewLoader
 
     public bool UnloadView(SnkWindow window)
     {
-        Object.Destroy(window.gameObject);
+        UnityEngine.Object.Destroy(window.gameObject);
         return true;
     }
 }
