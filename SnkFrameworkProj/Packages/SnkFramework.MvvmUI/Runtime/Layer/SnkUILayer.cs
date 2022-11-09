@@ -60,17 +60,20 @@ namespace SnkFramework.Mvvm.Runtime
                 return WindowList[index];
             }
 
+            public bool RemoveChild(SnkWindow window)
+                => WindowList.Remove(window);
+
             public virtual SnkTransitionOperation Open(ISnkWindow window)
             {
                 bool animated = true;
-                var operation = window.Activate(animated);
+                var operation = window.Show(animated);
                 return operation;
             }
 
             public virtual SnkTransitionOperation Close(ISnkWindow window)
             {
                 bool animated = true;
-                return window.Passivate(animated);
+                return window.Hide(animated);
             }
         }
     }

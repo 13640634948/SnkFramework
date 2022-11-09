@@ -10,7 +10,8 @@ namespace SnkFramework.Mvvm.Runtime
             public string LayerName { get; }
             public void AddChild(SnkWindow window);
             public SnkWindow GetChild(int index);
-
+            public bool RemoveChild(SnkWindow window);
+            
             public SnkTransitionOperation Open(ISnkWindow window);
 
             public SnkTransitionOperation Close(ISnkWindow window);

@@ -12,7 +12,7 @@ namespace SnkFramework.Mvvm.Runtime
             public ISnkLayer Layer { get; }
             public SnkTransitionOperation Show(bool animated);
             public SnkTransitionOperation Hide(bool animated);
-
+            public SnkTransitionOperation Dismiss(bool animated);
             public void AddPage(ISnkPage page);
             public TViewModel AddPage<TViewModel>();
             public SnkTransitionOperation AddPageAsync<TViewModel>();

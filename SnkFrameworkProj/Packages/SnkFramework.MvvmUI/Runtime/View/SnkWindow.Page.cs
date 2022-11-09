@@ -6,7 +6,7 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public abstract partial class SnkWindow
         {
-            public ISnkLayer Layer { get; }
+            public ISnkLayer Layer { get; protected set; }
 
             public ISnkView Current { get; }
             public ISnkView NavigatorPrev { get; }

@@ -33,7 +33,7 @@ namespace SnkFramework.Mvvm.Runtime
 
             public void UnsafeOnCompleted(Action continuation)
             {
-                this._transitionOperation.onCompleted = continuation;
+                this._transitionOperation.onCompleted += continuation;
             }
         }
     }

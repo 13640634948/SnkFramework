@@ -28,7 +28,7 @@ namespace SnkFramework.Mvvm.Runtime
             /// </summary>
             event EventHandler ActivatedChanged;
             
-            public void Create(ISnkBundle bundle);
+            //public void Create(ISnkBundle bundle);
 
             public SnkTransitionOperation Activate(bool animated);
 

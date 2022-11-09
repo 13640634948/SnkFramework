@@ -14,7 +14,7 @@ namespace SnkFramework.Mvvm.Runtime.View
 
         private EventHandler activatedChanged;
         private EventHandler visibilityChanged;
-        
+
         public virtual bool Visibility
         {
             get => !this.IsDestroyed() && this.gameObject != null ? this.gameObject.activeSelf : false;
@@ -32,15 +32,40 @@ namespace SnkFramework.Mvvm.Runtime.View
 
         public event EventHandler ActivatedChanged
         {
-            add { lock (_lock) { this.activatedChanged += value; } }
-            remove { lock (_lock) { this.activatedChanged -= value; } }
+            add
+            {
+                lock (_lock)
+                {
+                    this.activatedChanged += value;
+                }
+            }
+            remove
+            {
+                lock (_lock)
+                {
+                    this.activatedChanged -= value;
+                }
+            }
         }
+
         public event EventHandler VisibilityChanged
         {
-            add { lock (_lock) { this.visibilityChanged += value; } }
-            remove { lock (_lock) { this.visibilityChanged -= value; } }
+            add
+            {
+                lock (_lock)
+                {
+                    this.visibilityChanged += value;
+                }
+            }
+            remove
+            {
+                lock (_lock)
+                {
+                    this.visibilityChanged -= value;
+                }
+            }
         }
-        
+
         public virtual bool Activated
         {
             get => this.activated;
@@ -55,14 +80,20 @@ namespace SnkFramework.Mvvm.Runtime.View
             }
         }
 
-        protected virtual void OnActivatedChanged() { }
-        protected virtual void OnVisibilityChanged() { }
-        
+        protected virtual void OnActivatedChanged()
+        {
+        }
+
+        protected virtual void OnVisibilityChanged()
+        {
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
             this.RaiseVisibilityChanged();
         }
+
         protected override void OnDisable()
         {
             this.RaiseVisibilityChanged();
@@ -94,14 +125,14 @@ namespace SnkFramework.Mvvm.Runtime.View
             }
         }
 
-        public abstract void Create(ISnkBundle bundle);
-
         public virtual SnkTransitionOperation Activate(bool animated)
         {
             SnkTransitionOperation operation = new SnkTransitionOperation();
             var routine = onActivateTransitioning(operation);
             if (routine != null && animated)
+            {
                 StartCoroutine(routine);
+            }
             return operation;
         }
 

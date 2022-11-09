@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
 using SnkFramework.Mvvm.Runtime.View;
@@ -13,8 +14,10 @@ namespace SnkFramework.Mvvm.Runtime
             {
                 SnkWindow window = await this._viewLoader.CreateView(request);
                 var windowAttribute = attribute as SnkPresentationWindowAttribute;
+                if (windowAttribute == null)
+                    throw new ArgumentNullException(nameof(windowAttribute) + " is null");
                 var layer = _layerContainer.GetLayer(windowAttribute.LayerType);
-                layer.AddChild(window);
+                window.Create(layer, null);
                 await layer.Open(window);
                 return true;
             }
@@ -22,6 +25,8 @@ namespace SnkFramework.Mvvm.Runtime
             protected virtual async Task<bool> CloseWindow(ISnkViewModel viewModel, ISnkPresentationAttribute attribute)
             {
                 var windowAttribute = attribute as SnkPresentationWindowAttribute;
+                if (windowAttribute == null)
+                    throw new ArgumentNullException(nameof(windowAttribute) + " is null");
                 var layer = _layerContainer.GetLayer(windowAttribute.LayerType);
                 SnkWindow window = layer.GetChild(0);
                 await layer.Close(window);
