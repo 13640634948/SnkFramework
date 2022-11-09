@@ -35,8 +35,8 @@ namespace SnkFramework.Mvvm.Runtime
                 {
                     GameObject layerGameObject = new GameObject();
                     SnkUILayer layer = layerGameObject.AddComponent(type) as SnkUILayer;
-                    layer.canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                    layer.canvas.worldCamera = viewCamera.ViewCamera;
+                    layer.Canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                    layer.Canvas.worldCamera = viewCamera.ViewCamera;
                     _layerDict.Add(type, layer);
                     layerGameObject.name = layer.LayerName;
                     layerGameObject.transform.SetParent(transform);

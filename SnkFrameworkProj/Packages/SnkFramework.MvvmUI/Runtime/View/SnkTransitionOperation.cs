@@ -15,5 +15,6 @@ namespace SnkFramework.Mvvm.Runtime
             public ISnkAwaiter GetAwaiter()
                 => new SnkTransitionOperationAwaiter(this);
         }
+
     }
 }

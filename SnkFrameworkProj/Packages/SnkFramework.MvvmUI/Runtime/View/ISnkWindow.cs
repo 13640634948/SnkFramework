@@ -5,7 +5,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace View
     {
-        public interface ISnkWindow : ISnkView, ISnkNavigator, ISnkContainer<ISnkPage>
+        public interface ISnkWindow : ISnkView, ISnkUINodeUnit, ISnkNavigator, ISnkContainer<ISnkPage>
         {
             public SnkWindowState WindowState { get; }
             public ISnkLayer Layer { get; }

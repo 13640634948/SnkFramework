@@ -9,24 +9,34 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Layer
     {
-        [RequireComponent(typeof(CanvasScaler))]
+        public interface ISnkUINodeUnit
+        {
+            public Canvas Canvas { get; }
+            public CanvasGroup CanvasGroup { get; }
+        }
+
+        [RequireComponent(typeof(Canvas), typeof(CanvasScaler),typeof(CanvasGroup) )]
         public abstract class SnkUILayer : SnkUIBehaviour, ISnkLayer
         {
+            private Canvas _canvas;
+            public Canvas Canvas => _canvas ??= GetComponent<Canvas>();
+            
             private CanvasScaler _canvasScaler;
-            public CanvasScaler canvasScaler => _canvasScaler ??= GetComponent<CanvasScaler>();
+            public CanvasScaler CanvasScaler => _canvasScaler ??= GetComponent<CanvasScaler>();
+
+            private CanvasGroup _canvasGroup;
+            public CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
 
             public virtual string LayerName => this.GetType().Name;
 
-
             public List<SnkWindow> WindowList = new List<SnkWindow>();
-
 
             public void AddChild(SnkWindow window)
             {
                 WindowList.Add(window);
                 window.rectTransform.SetParent(rectTransform);
                 window.rectTransform.Identity();
-                window.canvas.overrideSorting = true;
+                window.Canvas.overrideSorting = true;
             }
 
             public SnkWindow GetChild(int index)

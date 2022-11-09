@@ -5,7 +5,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Layer
     {
-        public interface ISnkLayer : ISnkBehaviourOwner
+        public interface ISnkLayer : ISnkBehaviourOwner, ISnkUINodeUnit
         {
             public string LayerName { get; }
             public void AddChild(SnkWindow window);
