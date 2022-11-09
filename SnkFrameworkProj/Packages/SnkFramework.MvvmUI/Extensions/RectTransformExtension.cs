@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace SnkFramework.Mvvm.Extensions
 {
     public static class RectTransformExtension

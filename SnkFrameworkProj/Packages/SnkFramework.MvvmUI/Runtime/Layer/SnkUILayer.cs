@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SnkFramework.Mvvm.Extensions;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.View;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace SnkFramework.Mvvm.Runtime
             {
                 WindowList.Add(window);
                 window.rectTransform.SetParent(rectTransform);
-                window.SetRectTransformIdentity();
+                window.rectTransform.Identity();
                 window.canvas.overrideSorting = true;
             }
 

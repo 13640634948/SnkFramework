@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using SnkFramework.Mvvm.Extensions;
 using SnkFramework.Mvvm.Runtime.Base;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,7 +40,7 @@ namespace SnkFramework.Mvvm.Runtime
                     _layerDict.Add(type, layer);
                     layerGameObject.name = layer.LayerName;
                     layerGameObject.transform.SetParent(transform);
-                    layer.SetRectTransformIdentity();
+                    layer.rectTransform.Identity();
                 }
             }
         }
