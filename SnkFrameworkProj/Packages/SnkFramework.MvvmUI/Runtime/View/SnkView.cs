@@ -9,7 +9,7 @@ namespace SnkFramework.Mvvm.Runtime.View
     public abstract class SnkView : SnkUIBehaviour, ISnkView
     {
         public virtual ISnkViewModel ViewModel { get; set; }
-        private readonly object _lock = new object();
+        protected readonly object _lock = new object();
         private bool activated;
 
         private EventHandler activatedChanged;

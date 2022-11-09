@@ -6,23 +6,20 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public abstract partial class SnkWindow
         {
+            public ISnkLayer Layer { get; }
+
             public ISnkView Current { get; }
             public ISnkView NavigatorPrev { get; }
             public ISnkView NavigatorNext { get; }
 
             public void Add(ISnkPage target)
             {
-                
             }
 
             public bool Remove(ISnkPage target)
             {
                 return true;
             }
-
-            public SnkWindowState WindowState { get; }
-            public ISnkLayer Layer { get; }
-
 
             public void AddPage(ISnkPage page)
             {

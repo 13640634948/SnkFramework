@@ -7,7 +7,8 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public interface ISnkWindow : ISnkView, ISnkUINodeUnit, ISnkNavigator, ISnkContainer<ISnkPage>
         {
-            public SnkWindowState WindowState { get; }
+            public WIN_STATE WindowState { get; }
+
             public ISnkLayer Layer { get; }
             public SnkTransitionOperation Show(bool animated);
             public SnkTransitionOperation Hide(bool animated);
