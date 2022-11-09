@@ -15,6 +15,35 @@ namespace SnkFramework.Mvvm.Runtime
             private CanvasGroup _canvasGroup;
             public CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
 
+            public virtual bool Interactable
+            {
+                get
+                {
+                    if (this.IsDestroyed() || this.gameObject == null)
+                        return false;
+
+                    //if (GlobalSetting.useBlocksRaycastsInsteadOfInteractable)
+                    return this.CanvasGroup.blocksRaycasts;
+                    //return this.CanvasGroup.interactable;
+                }
+                set
+                {
+                    if (this.IsDestroyed() || this.gameObject == null)
+                        return;
+
+                    //if (GlobalSetting.useBlocksRaycastsInsteadOfInteractable)
+                    this.CanvasGroup.blocksRaycasts = value;
+                    //else
+                    //    this.CanvasGroup.interactable = value;
+                }
+            }
+
+            protected override void OnActivatedChanged()
+            {
+                base.OnActivatedChanged();
+                this.Interactable = this.Activated;
+            }
+
             public override void Create(ISnkBundle bundle)
             {
             }
@@ -43,7 +72,7 @@ namespace SnkFramework.Mvvm.Runtime
             /// <param name="operation"></param>
             /// <returns></returns>
             protected virtual IEnumerator onShowTransitioning(SnkTransitionOperation operation) => default;
-            
+
             /// <summary>
             /// 隐藏动画实现
             /// </summary>

@@ -9,12 +9,6 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Layer
     {
-        public interface ISnkUINodeUnit
-        {
-            public Canvas Canvas { get; }
-            public CanvasGroup CanvasGroup { get; }
-        }
-
         [RequireComponent(typeof(Canvas), typeof(CanvasScaler),typeof(CanvasGroup) )]
         public abstract class SnkUILayer : SnkUIBehaviour, ISnkLayer
         {
@@ -26,6 +20,28 @@ namespace SnkFramework.Mvvm.Runtime
 
             private CanvasGroup _canvasGroup;
             public CanvasGroup CanvasGroup => _canvasGroup ??= GetComponent<CanvasGroup>();
+            public virtual bool Interactable
+            {
+                get
+                {
+                    if (this.IsDestroyed() || this.gameObject == null)
+                        return false;
+
+                    //if (GlobalSetting.useBlocksRaycastsInsteadOfInteractable)
+                    return this.CanvasGroup.blocksRaycasts;
+                    //return this.CanvasGroup.interactable;
+                }
+                set
+                {
+                    if (this.IsDestroyed() || this.gameObject == null)
+                        return;
+
+                    //if (GlobalSetting.useBlocksRaycastsInsteadOfInteractable)
+                    this.CanvasGroup.blocksRaycasts = value;
+                    //else
+                    //    this.CanvasGroup.interactable = value;
+                }
+            }
 
             public virtual string LayerName => this.GetType().Name;
 
