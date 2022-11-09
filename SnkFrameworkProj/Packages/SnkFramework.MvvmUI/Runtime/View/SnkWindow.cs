@@ -17,68 +17,57 @@ namespace SnkFramework.Mvvm.Runtime
 
             public void Create(ISnkBundle bundle)
             {
-                //this.canvasGroup.alpha = 0;
             }
 
-            public SnkTransitionOperation Activate()
+            public virtual SnkTransitionOperation Activate(bool animated)
             {
                 this.canvasGroup.alpha = 0;
                 SnkTransitionOperation operation = new SnkTransitionOperation();
-                StartCoroutine(ActivateAnimation(operation));
+                StartCoroutine(onActivateTransitioning(operation));
                 return operation;
             }
 
-            public SnkTransitionOperation Passivate() 
+            public virtual SnkTransitionOperation Passivate(bool animated)
             {
                 this.canvasGroup.alpha = 1;
                 SnkTransitionOperation operation = new SnkTransitionOperation();
-                StartCoroutine(PassivateAnimation(operation));
+                StartCoroutine(onPassivateTransitioning(operation));
                 return operation;
             }
-            
+
+            public virtual SnkTransitionOperation Show(bool animated)
+            {
+                this.canvasGroup.alpha = 1;
+                SnkTransitionOperation operation = new SnkTransitionOperation();
+                StartCoroutine(onPassivateTransitioning(operation));
+                return operation;
+            }
+
+
+            public virtual SnkTransitionOperation Hide(bool animated)
+            {
+                this.canvasGroup.alpha = 1;
+                SnkTransitionOperation operation = new SnkTransitionOperation();
+                StartCoroutine(onPassivateTransitioning(operation));
+                return operation;
+            }
+
             /// <summary>
             /// 激活动画实现
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator ActivateAnimation(SnkTransitionOperation operation)
-            {
-                float currTime = Time.realtimeSinceStartup;
-                float progress = 0;
-                while (progress <1.0f)
-                {
-                    var dt = Time.realtimeSinceStartup - currTime;
-                    progress = dt / 3.0f;
-                    this.canvasGroup.alpha = progress;
-                    yield return null;
-                }
-
-                this.canvasGroup.alpha = 1.0f;
-                operation.IsDone = true;
-                operation.onCompleted?.Invoke();
-            }
+            protected virtual IEnumerator onActivateTransitioning(SnkTransitionOperation operation) => default;
 
             /// <summary>
             /// 钝化动画实现
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator PassivateAnimation(SnkTransitionOperation operation)
-            {
-                float currTime = Time.realtimeSinceStartup;
-                float progress = 0;
-                while (progress <1.0f)
-                {
-                    var dt = Time.realtimeSinceStartup - currTime;
-                    progress = dt / 3.0f;
-                    this.canvasGroup.alpha = 1-progress;
-                    yield return null;
-                }
+            protected virtual IEnumerator onPassivateTransitioning(SnkTransitionOperation operation) => default;
+            protected virtual IEnumerator onShowTransitioning(SnkTransitionOperation operation) => default;
+            protected virtual IEnumerator onHideTransitioning(SnkTransitionOperation operation) => default;
 
-                this.canvasGroup.alpha = 0.0f;
-                operation.IsDone = true;
-                operation.onCompleted?.Invoke();
-            }
 
             public ISnkView Current { get; }
             public ISnkView NavigatorPrev { get; }
@@ -97,11 +86,6 @@ namespace SnkFramework.Mvvm.Runtime
             public SnkWindowState WindowState { get; }
             public ISnkLayer Layer { get; }
 
-            public SnkTransitionOperation  Show(bool animated) => default;
-
-
-            public SnkTransitionOperation  Hide(bool animated) => default;
-
 
             public void AddPage(ISnkPage page)
             {
@@ -113,7 +97,7 @@ namespace SnkFramework.Mvvm.Runtime
                 throw new System.NotImplementedException();
             }
 
-            public SnkTransitionOperation  AddPageAsync<TViewModel>() => default;
+            public SnkTransitionOperation AddPageAsync<TViewModel>() => default;
         }
     }
 }

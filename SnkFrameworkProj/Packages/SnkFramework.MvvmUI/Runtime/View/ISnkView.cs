@@ -26,9 +26,9 @@ namespace SnkFramework.Mvvm.Runtime
 
             public void Create(ISnkBundle bundle);
 
-            public SnkTransitionOperation Activate();
+            public SnkTransitionOperation Activate(bool animated);
 
-            public SnkTransitionOperation Passivate();
+            public SnkTransitionOperation Passivate(bool animated);
         }
     }
 }

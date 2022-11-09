@@ -35,13 +35,15 @@ namespace SnkFramework.Mvvm.Runtime
 
             public virtual SnkTransitionOperation Open(ISnkWindow window)
             {
-                var operation = window.Activate();
+                bool animated = true;
+                var operation = window.Activate(animated);
                 return operation;
             }
 
             public virtual SnkTransitionOperation Close(ISnkWindow window)
             {
-                return window.Passivate();
+                bool animated = true;
+                return window.Passivate(animated);
             }
         }
     }
