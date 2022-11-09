@@ -9,11 +9,20 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public partial class SnkViewPresenter
         {
+            /// <summary>
+            /// 注册视图属性
+            /// </summary>
             public override void RegisterAttributeTypes()
             {
                 AttributeTypesToActionsDictionary.Register<SnkPresentationWindowAttribute>(OpenWindow, CloseWindow);
             }
 
+            /// <summary>
+            /// 创建视图属性
+            /// </summary>
+            /// <param name="viewModelType"></param>
+            /// <param name="viewType"></param>
+            /// <returns></returns>
             public override SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
             {
                 var attribute = new SnkPresentationWindowAttribute();
@@ -22,10 +31,25 @@ namespace SnkFramework.Mvvm.Runtime
                 return attribute;
             }
 
+            /// <summary>
+            /// 重载视图属性（暂时无用）
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="viewType"></param>
+            /// <returns></returns>
             public override SnkBasePresentationAttribute GetOverridePresentationAttribute(SnkViewModelRequest request,
                 Type viewType)
                 => null;
 
+            /// <summary>
+            /// 获取属性动作
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="attribute"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            /// <exception cref="InvalidOperationException"></exception>
+            /// <exception cref="KeyNotFoundException"></exception>
             protected virtual SnkPresentationAttributeAction GetPresentationAttributeAction(SnkViewModelRequest request,
                 out SnkBasePresentationAttribute attribute)
             {

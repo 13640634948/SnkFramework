@@ -28,15 +28,19 @@ namespace SnkFramework.Mvvm.Runtime
                 return operation;
             }
 
-            public SnkTransitionOperation  Passivate() 
+            public SnkTransitionOperation Passivate() 
             {
                 this.canvasGroup.alpha = 1;
                 SnkTransitionOperation operation = new SnkTransitionOperation();
                 StartCoroutine(PassivateAnimation(operation));
                 return operation;
             }
-
             
+            /// <summary>
+            /// 激活动画实现
+            /// </summary>
+            /// <param name="operation"></param>
+            /// <returns></returns>
             protected virtual IEnumerator ActivateAnimation(SnkTransitionOperation operation)
             {
                 float currTime = Time.realtimeSinceStartup;
@@ -54,6 +58,11 @@ namespace SnkFramework.Mvvm.Runtime
                 operation.onCompleted?.Invoke();
             }
 
+            /// <summary>
+            /// 钝化动画实现
+            /// </summary>
+            /// <param name="operation"></param>
+            /// <returns></returns>
             protected virtual IEnumerator PassivateAnimation(SnkTransitionOperation operation)
             {
                 float currTime = Time.realtimeSinceStartup;
@@ -70,7 +79,6 @@ namespace SnkFramework.Mvvm.Runtime
                 operation.IsDone = true;
                 operation.onCompleted?.Invoke();
             }
-
 
             public ISnkView Current { get; }
             public ISnkView NavigatorPrev { get; }
