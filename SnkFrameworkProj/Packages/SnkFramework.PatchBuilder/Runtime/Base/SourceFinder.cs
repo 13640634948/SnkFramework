@@ -4,10 +4,10 @@ using System.IO;
 namespace SnkFramework.PatchBuilder.Runtime.Base
 {
     /// <summary>
-    /// 资源查找器
+    /// 资源探测器
     /// </summary>
     [System.Serializable]
-    public class SourceFinder
+    public class SourceFinder : ISourceFinder
     {
         /// <summary>
         /// 资源目录路径
@@ -25,12 +25,12 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
         public string[] ignores;
 
         /// <summary>
-        /// 构建资源文件信息对象
+        /// 尝试探测资源
         /// </summary>
         /// <param name="fileInfos">构建出的资源文件信息</param>
         /// <param name="dirFullPath">资源目录的根路径</param>
         /// <returns>操作结果：true：成功， false：失败</returns>
-        public bool TryBuild(out FileInfo[] fileInfos, out string dirFullPath)
+        public bool TrySurvey(out FileInfo[] fileInfos, out string dirFullPath)
         {
             fileInfos = null;
             dirFullPath = String.Empty;

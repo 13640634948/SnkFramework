@@ -143,13 +143,13 @@ namespace SnkFramework.PatchBuilder
             /// 生成资源信息列表
             /// </summary>
             /// <param name="version">信息列表的版本号</param>
-            /// <param name="sourceFinder">资源查找器</param>
+            /// <param name="sourceFinder">资源探测器</param>
             /// <returns>资源信息列表</returns>
-            private List<SourceInfo> GenerateSourceInfoList(int version, SourceFinder sourceFinder)
+            private List<SourceInfo> GenerateSourceInfoList(int version, ISourceFinder sourceFinder)
             {
                 List<SourceInfo> sourceInfoList = new List<SourceInfo>();
 
-                bool result = sourceFinder.TryBuild(out var fileInfos,  out var dirFullPath);
+                bool result = sourceFinder.TrySurvey(out var fileInfos,  out var dirFullPath);
                 if(result == false)
                     return null;
 
@@ -204,11 +204,11 @@ namespace SnkFramework.PatchBuilder
             /// <summary>
             /// 构建
             /// </summary>
-            /// <param name="sourceFinderList">资源查找器列表</param>
+            /// <param name="sourceFinderList">资源探测器列表</param>
             /// <param name="isForce">是否是强更补丁包</param>
             /// <param name="isCompress">是否进行压缩</param>
             /// <returns>补丁包信息</returns>
-            public Patcher Build(IEnumerable<SourceFinder> sourceFinderList, bool isForce = false, bool isCompress = false)
+            public Patcher Build(IEnumerable<ISourceFinder> sourceFinderList, bool isForce = false, bool isCompress = false)
             {
                 var prevVersion = _patcherManifest.lastVersion;
                 var currVersion = prevVersion + 1;
