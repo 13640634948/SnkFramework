@@ -1,6 +1,6 @@
 {
-  "name": "com.snkframework.patch-repo",
-  "displayName": "Snk PatchRepository",
+  "name": "com.snkframework.patch-builder",
+  "displayName": "Snk PatchBuilder",
   "version": "2.4.7",
   "unity": "2019.4",
   "license": "MIT",
@@ -12,5 +12,5 @@
   "author": {
     "name": "BackFire.Studio"
   },
-  "description": "SnkFramework PatchRepository"
+  "description": "SnkFramework PatchBuilder"
 }
