@@ -1,9 +1,9 @@
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchBuilder.Runtime
 {
     /// <summary>
     /// 补丁构建器设置
     /// </summary>
-    public class PatchBuilderSettings
+    public class SnkBuilderSettings
     {
         /// <summary>
         /// 构建数

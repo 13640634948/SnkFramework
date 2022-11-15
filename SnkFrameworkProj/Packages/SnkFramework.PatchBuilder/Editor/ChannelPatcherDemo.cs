@@ -1,3 +1,4 @@
+/*
 using SnkFramework.PatchBuilder.Editor;
 using SnkFramework.PatchBuilder.Runtime.Base;
 using UnityEngine;
@@ -9,17 +10,17 @@ namespace SnkFramework.PatchBuilder
         public class ChannelPatcherDemo : MonoBehaviour
         {
             private string repoName = "windf_iOS";
-            private ChannelPatchBuilder channelPatcher;
+            private SnkPatchBuilder snkPatcher;
 
             void Start()
             {
-                var sourcePaths = new SourceFinder[]
+                var sourcePaths = new SnkSourceFinder[]
                 {
                     new() { sourceDirPath = "Temp" },
                 };
 
-                channelPatcher = ChannelPatchBuilder.Load(repoName);
-                var patcher = channelPatcher.Build(sourcePaths);
+                snkPatcher = SnkPatchBuilder.Load(repoName);
+                var patcher = snkPatcher.Build(sourcePaths);
             }
 
             // Update is called once per frame
@@ -30,3 +31,4 @@ namespace SnkFramework.PatchBuilder
         }
     }
 }
+*/

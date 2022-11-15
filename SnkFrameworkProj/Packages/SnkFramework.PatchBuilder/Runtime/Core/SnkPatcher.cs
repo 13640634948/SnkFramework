@@ -1,7 +1,7 @@
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchBuilder.Runtime.Core
 {
     [System.Serializable]
-    public class Patcher
+    public class SnkPatcher
     {
         /// <summary>
         /// 补丁包名字

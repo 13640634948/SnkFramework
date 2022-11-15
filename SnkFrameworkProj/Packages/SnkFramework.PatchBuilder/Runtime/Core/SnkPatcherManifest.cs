@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchBuilder.Runtime.Core
 {
     /// <summary>
     /// 补丁包清单
     /// </summary>
     [System.Serializable]
-    public class PatcherManifest
+    public class SnkPatcherManifest
     {
         /// <summary>
         /// 最新版本号
@@ -21,6 +21,6 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
         /// <summary>
         /// 补丁包列表
         /// </summary>
-        public List<Patcher> patcherList = new List<Patcher>();
+        public List<SnkPatcher> patcherList = new List<SnkPatcher>();
     }
 }

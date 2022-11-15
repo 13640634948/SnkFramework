@@ -7,7 +7,7 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
     /// 资源探测器
     /// </summary>
     [System.Serializable]
-    public class SourceFinder : ISourceFinder
+    public class SnkSourceFinder : ISnkSourceFinder
     {
         /// <summary>
         /// 资源目录路径

@@ -1,6 +1,6 @@
 namespace SnkFramework.PatchBuilder.Runtime
 {
-    public class BUILDER_CONST
+    public class SNK_BUILDER_CONST
     {
         /* 补丁包仓库路径 */
         public const string REPO_ROOT_PATH = "PatcherRepository";

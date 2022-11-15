@@ -5,7 +5,7 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
     /// <summary>
     /// 资源探测器接口
     /// </summary>
-    public interface ISourceFinder
+    public interface ISnkSourceFinder
     {
         /// <summary>
         /// 尝试探测资源

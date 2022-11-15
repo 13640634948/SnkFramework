@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchBuilder.Runtime.Core
 {
     /// <summary>
     /// 资源差异清单
     /// </summary>
     [System.Serializable]
-    public class DiffManifest
+    public class SnkDiffManifest
     {
         /// <summary>
         /// 新增、更新的资源列表
         /// </summary>
-        public List<SourceInfo> addList;
+        public List<SnkSourceInfo> addList;
         
         /// <summary>
         /// 删除的资源名列表
