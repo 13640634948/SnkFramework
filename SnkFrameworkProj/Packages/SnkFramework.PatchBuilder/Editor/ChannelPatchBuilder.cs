@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SnkFramework.PatchBuilder.Runtime;
 using SnkFramework.PatchBuilder.Runtime.Base;
 using UnityEngine;
 
 namespace SnkFramework.PatchBuilder
 {
-    namespace Runtime
+    namespace Editor
     {
+        /// <summary>
+        /// 渠道补丁包构建器
+        /// </summary>
         public class ChannelPatchBuilder
         {
             /// <summary>
@@ -139,19 +143,20 @@ namespace SnkFramework.PatchBuilder
             /// 生成资源信息列表
             /// </summary>
             /// <param name="version">信息列表的版本号</param>
-            /// <param name="sourcePath">资源路径</param>
+            /// <param name="sourceFinder">资源查找器</param>
             /// <returns>资源信息列表</returns>
-            private List<SourceInfo> GenerateSourceInfoList(int version, SourcePath sourcePath)
+            private List<SourceInfo> GenerateSourceInfoList(int version, SourceFinder sourceFinder)
             {
                 List<SourceInfo> sourceInfoList = new List<SourceInfo>();
-                DirectoryInfo dirInfo = new DirectoryInfo(sourcePath.sourceDirPath);
-                if (dirInfo.Exists == false)
+
+                bool result = sourceFinder.TryBuild(out var fileInfos,  out var dirFullPath);
+                if(result == false)
                     return null;
 
-                foreach (var fileInfo in dirInfo.GetFiles("*.*", SearchOption.AllDirectories))
+                foreach (var fileInfo in fileInfos)
                 {
                     var sourceInfo = new SourceInfo();
-                    sourceInfo.name = fileInfo.FullName.Replace(dirInfo.Parent!.FullName, string.Empty).Substring(1);
+                    sourceInfo.name = fileInfo.FullName.Replace(dirFullPath, string.Empty).Substring(1);
                     sourceInfo.version = version;
                     sourceInfo.md5 = fileInfo.FullName.GetHashCode().ToString();
                     sourceInfo.size = fileInfo.Length;
@@ -199,11 +204,11 @@ namespace SnkFramework.PatchBuilder
             /// <summary>
             /// 构建
             /// </summary>
-            /// <param name="sourcePathList">资源路径列表</param>
+            /// <param name="sourceFinderList">资源查找器列表</param>
             /// <param name="isForce">是否是强更补丁包</param>
             /// <param name="isCompress">是否进行压缩</param>
             /// <returns>补丁包信息</returns>
-            public Patcher Build(IEnumerable<SourcePath> sourcePathList, bool isForce = false, bool isCompress = false)
+            public Patcher Build(IEnumerable<SourceFinder> sourceFinderList, bool isForce = false, bool isCompress = false)
             {
                 var prevVersion = _patcherManifest.lastVersion;
                 var currVersion = prevVersion + 1;
@@ -215,7 +220,7 @@ namespace SnkFramework.PatchBuilder
 
                 //生成当前目标目录的资源信息列表
                 var currSourceInfoList = new List<SourceInfo>();
-                foreach (var sourcePath in sourcePathList)
+                foreach (var sourcePath in sourceFinderList)
                 {
                     var list = GenerateSourceInfoList(currVersion, sourcePath);
                     if (list == null)

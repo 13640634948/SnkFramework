@@ -1,4 +1,4 @@
-using SnkFramework.PatchBuilder.Runtime;
+using SnkFramework.PatchBuilder.Editor;
 using SnkFramework.PatchBuilder.Runtime.Base;
 using UnityEngine;
 
@@ -13,7 +13,7 @@ namespace SnkFramework.PatchBuilder
 
             void Start()
             {
-                var sourcePaths = new SourcePath[]
+                var sourcePaths = new SourceFinder[]
                 {
                     new() { sourceDirPath = "Temp" },
                 };

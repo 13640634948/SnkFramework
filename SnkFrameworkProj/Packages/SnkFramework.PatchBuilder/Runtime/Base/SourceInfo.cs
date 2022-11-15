@@ -35,15 +35,15 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
         /// <returns>资源对象</returns>
         public static SourceInfo Parse(string content)
         {
-            string[] datas = content.Trim().Split(",");
-            if (datas.Length != 4)
+            var strings = content.Trim().Split(",");
+            if (strings.Length != 4)
                 throw new System.Exception("解析SourceInfo失败. content:" + content);
 
             var sourceInfo = new SourceInfo();
-            sourceInfo.name = datas[0];
-            sourceInfo.size = long.Parse(datas[1]);
-            sourceInfo.version = int.Parse(datas[2]);
-            sourceInfo.md5 = datas[3];
+            sourceInfo.name = strings[0];
+            sourceInfo.size = long.Parse(strings[1]);
+            sourceInfo.version = int.Parse(strings[2]);
+            sourceInfo.md5 = strings[3];
             return sourceInfo;
         }
 
