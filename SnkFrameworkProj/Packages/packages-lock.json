@@ -27,6 +27,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.cloud-repo": {
+      "version": "file:SnkFramework.CloudRepository",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.downloader": {
       "version": "file:SnkFramework.DownLoader",
       "depth": 0,
