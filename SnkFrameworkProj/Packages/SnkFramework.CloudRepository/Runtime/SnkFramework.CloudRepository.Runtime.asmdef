@@ -1,3 +1,18 @@
 {
-	"name": "SnkFramework.CloudRepository.Runtime"
+    "name": "SnkFramework.CloudRepository.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:bdb6584e7c10f456eb1f40cb75739311",
+        "GUID:ec3a9cb6bbe0442ba997445b3bda24f7",
+        "GUID:1d76bdaf18cc1461299ae332a1f26602"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
