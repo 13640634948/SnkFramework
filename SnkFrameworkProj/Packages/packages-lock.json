@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.coffee.upm-git-extension": {
+      "version": "https://github.com/mob-sakai/UpmGitExtension.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e949d3e741950d55be7e3d6c6924dcf8935bbec2"
+    },
     "com.cysharp.messagepipe": {
       "version": "1.7.4",
       "depth": 0,
