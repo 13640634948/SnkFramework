@@ -1,16 +1,17 @@
 {
   "name": "com.snkframework.patch-builder",
   "displayName": "Snk PatchBuilder",
-  "version": "2.4.7",
-  "unity": "2019.4",
+  "version": "0.1.0",
+  "unity": "2021.3",
   "license": "MIT",
   "keywords": [
     "snake",
     "framework",
-    "core"
+    "patch",
+    "builder"
   ],
   "author": {
-    "name": "BackFire.Studio"
+    "name": "ClaineLe"
   },
   "description": "SnkFramework PatchBuilder"
 }
