@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace SnkFramework.PatchBuilder.Runtime.Base
 {
@@ -13,12 +15,12 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
         /// 资源目录路径
         /// </summary>
         public string sourceDirPath;
-        
+
         /// <summary>
         /// 筛选关键字
         /// </summary>
         public string[] filters;
-        
+
         /// <summary>
         /// 忽略关键字
         /// </summary>
@@ -38,8 +40,49 @@ namespace SnkFramework.PatchBuilder.Runtime.Base
             if (dirInfo.Exists == false)
                 return false;
             dirFullPath = dirInfo.Parent!.FullName;
-            fileInfos =  dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            fileInfos = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
+            fileInfos = FiltersProcess(fileInfos);
+            fileInfos = IgnoreProcess(fileInfos);
             return true;
+        }
+
+        /// <summary>
+        /// 过滤
+        /// </summary>
+        /// <param name="fileInfos"></param>
+        /// <returns></returns>
+        private FileInfo[] FiltersProcess(FileInfo[] fileInfos)
+        {
+            if (filters == null || filters.Length == 0)
+                return fileInfos;
+            
+            return (from fileInfo in fileInfos
+                from filter in filters
+                where fileInfo.FullName.Contains(filter)
+                select fileInfo).ToArray();
+        }
+
+        /// <summary>
+        /// 忽略
+        /// </summary>
+        /// <param name="fileInfos"></param>
+        /// <returns></returns>
+        private FileInfo[] IgnoreProcess(FileInfo[] fileInfos)
+        {
+            if (ignores == null || ignores.Length == 0)
+                return fileInfos;
+
+            var list = new List<FileInfo>(fileInfos);
+            list.RemoveAll(fileInfo =>
+            {
+                foreach (var ignore in ignores)
+                {
+                    if (fileInfo.FullName.Contains(ignore))
+                        return true;
+                }
+                return false;
+            });
+            return list.ToArray();
         }
     }
 }
