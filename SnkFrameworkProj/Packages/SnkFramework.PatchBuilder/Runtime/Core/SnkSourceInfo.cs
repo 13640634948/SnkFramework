@@ -47,11 +47,7 @@ namespace SnkFramework.PatchBuilder.Runtime.Core
             return sourceInfo;
         }
 
-        /// <summary>
-        /// 数据对象序列化（SourceInfo）
-        /// </summary>
-        /// <returns>序列化后的字符串</returns>
-        public string ToSerializable()
+        public override string ToString()
             => string.Format($"{name},{size},{version},{md5}");
     }
     
@@ -62,7 +58,7 @@ namespace SnkFramework.PatchBuilder.Runtime.Core
     {
         public bool Equals(SnkSourceInfo x, SnkSourceInfo y)
             => y != null && x != null && x.name == y.name && x.md5 == y.md5;
-        
-        public int GetHashCode(SnkSourceInfo obj) => obj.ToString().GetHashCode();
+
+        public int GetHashCode(SnkSourceInfo obj) => obj.GetType().GetHashCode();
     }
 }
