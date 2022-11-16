@@ -4,9 +4,4 @@ namespace SnkFramework.CloudRepository.Runtime
     {
         
     }
-
-    public abstract class SnkCloudRepository : ISnkCloudRepository
-    {
-        
-    }
 }
