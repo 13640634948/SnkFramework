@@ -253,7 +253,7 @@ namespace SnkFramework.PatchBuilder
                     //添加新增或者更新的资源
                     _lastSourceInfoList.AddRange(diffManifest.addList);
 
-                    //将要赋值的资源
+                    //将要复制的资源
                     willMoveSourceList = diffManifest.addList;
 
                     //保存差异清单
@@ -266,7 +266,7 @@ namespace SnkFramework.PatchBuilder
                 //保存最新的资源清单
                 this.SaveLastSourceInfoList(_lastSourceInfoList);
 
-                //赋值资源文件
+                //复制资源文件
                 CopySourceTo(currPatcherPath, willMoveSourceList);
                 patcher.sourceCount = willMoveSourceList.Count;
                 patcher.totalSize = willMoveSourceList.Sum(a => a.size);
