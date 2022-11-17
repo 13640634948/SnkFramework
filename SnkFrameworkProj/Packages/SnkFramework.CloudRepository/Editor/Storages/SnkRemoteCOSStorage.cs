@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SnkFramework.CloudRepository.Runtime.Base;
+using SnkFramework.CloudRepository.Runtime.Storage;
 
 namespace SnkFramework.CloudRepository.Editor
 {
@@ -8,9 +9,9 @@ namespace SnkFramework.CloudRepository.Editor
         /// <summary>
         /// 腾讯云COS(Cloud Object Storage)
         /// </summary>
-        public class SnkRemoteCOSStorage : SnkRemoteStorage
+        public class SnkRemoteCOSStorage : SnkRemoteStorage, ISnkStorageDelete, ISnkStoragePut
         {
-            public SnkRemoteCOSStorage(SnkRemoteStorageSettings settings) : base(settings)
+            public SnkRemoteCOSStorage(SnkRemoteStorageSettings settings)
             {
             }
 
@@ -19,17 +20,17 @@ namespace SnkFramework.CloudRepository.Editor
                 throw new System.NotImplementedException();
             }
 
-            public override List<string> DeleteObjects(List<string> objectNameList)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public override bool PutObjects(string path, List<string> list)
-            {
-                throw new System.NotImplementedException();
-            }
-
             public override bool TakeObjects(string path, List<string> list)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public List<string> DeleteObjects(List<string> objectNameList)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            public bool PutObjects(string path, List<string> list)
             {
                 throw new System.NotImplementedException();
             }

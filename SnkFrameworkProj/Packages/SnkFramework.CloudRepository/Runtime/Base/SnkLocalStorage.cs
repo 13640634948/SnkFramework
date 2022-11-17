@@ -1,4 +1,3 @@
-
 using System.IO;
 
 namespace SnkFramework.CloudRepository.Runtime.Base
