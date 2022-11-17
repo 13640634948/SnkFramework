@@ -2,9 +2,9 @@ using SnkFramework.CloudRepository.Runtime.Base;
 
 namespace SnkFramework.CloudRepository.Runtime
 {
-    namespace RemoteRepository
+    namespace Storage
     {
-        public abstract class SnkRemoteRepository : SnkRepository, ISnkRemoteRepository
+        public class SnkRemoteIntranetStorage : SnkRemoteStorage
         {
         }
     }
