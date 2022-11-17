@@ -1,10 +1,10 @@
-using SnkFramework.CloudRepository.Runtime.Base;
+using SnkFramework.CloudRepository.Runtime.Storage;
 
 namespace SnkFramework.CloudRepository.Editor
 {
     namespace Storage
     {
-        public class SnkLocalPatcherStorage : SnkLocalStorage
+        public class SnkLocalPatcherStorage : SnkLocalPersistentStorage
         {
 
         }
