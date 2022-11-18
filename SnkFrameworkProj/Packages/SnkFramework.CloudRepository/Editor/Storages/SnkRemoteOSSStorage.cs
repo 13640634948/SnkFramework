@@ -32,14 +32,6 @@ namespace SnkFramework.CloudRepository.Editor
                 throw new System.NotImplementedException();
             }
 
-            protected void CleanPath(string fullPath)
-            {
-                FileInfo fileInfo = new FileInfo(fullPath);
-                if (fileInfo.Exists)
-                    fileInfo.Delete();
-                if (fileInfo.Directory!.Exists == false)
-                    fileInfo.Directory.Create();
-            }
 
             public override void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
             {
