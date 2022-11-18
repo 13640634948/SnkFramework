@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SnkFramework.CloudRepository.Runtime.Base
 {
@@ -8,7 +9,6 @@ namespace SnkFramework.CloudRepository.Runtime.Base
 
         public abstract List<SnkStorageObject> LoadObjectList(string path);
 
-        public abstract bool TakeObjects(string path, List<string> list);
-        
+        public abstract void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152);
     }
 }

@@ -30,11 +30,6 @@ namespace SnkFramework.CloudRepository.Runtime
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> CheckLocalWithRemote(string key)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public bool PreviewRemoteSyncToLocal(string key, ref List<string> localAddList, ref List<string> localDelList)
         {
             throw new System.NotImplementedException();

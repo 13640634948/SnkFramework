@@ -1,6 +1,11 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using OBS;
+using OBS.Model;
 using SnkFramework.CloudRepository.Runtime.Base;
 using SnkFramework.CloudRepository.Runtime.Storage;
+using UnityEngine;
 
 namespace SnkFramework.CloudRepository.Editor
 {
@@ -9,10 +14,18 @@ namespace SnkFramework.CloudRepository.Editor
         /// <summary>
         /// 华为云OBS(Object Storage Service)
         /// </summary>
-        public class SnkRemoteOBSStorage :  SnkRemoteStorage, ISnkStorageDelete, ISnkStoragePut
+        public class SnkRemoteOBSStorage : SnkRemoteStorage, ISnkStorageDelete, ISnkStoragePut
         {
-            public SnkRemoteOBSStorage(SnkRemoteStorageSettings settings) 
+            private ObsClient _obs;
+            private SnkRemoteStorageSettings _settings;
+
+            public SnkRemoteOBSStorage(SnkRemoteStorageSettings settings)
             {
+                Debug.Log("SnkRemoteOSSStorage-Ctor");
+                _settings = settings;
+                //var obsCfg = new ObsConfig();
+                //obsCfg.Endpoint = _settings.endPoint;
+                _obs = new ObsClient(_settings.accessKeyId, _settings.accessKeySecret, _settings.endPoint);
             }
 
             public override List<SnkStorageObject> LoadObjectList(string path)
@@ -20,9 +33,43 @@ namespace SnkFramework.CloudRepository.Editor
                 throw new System.NotImplementedException();
             }
 
-            public override bool TakeObjects(string path, List<string> list)
+            protected void CleanPath(string fullPath)
             {
-                throw new System.NotImplementedException();
+                FileInfo fileInfo = new FileInfo(fullPath);
+                if (fileInfo.Exists)
+                    fileInfo.Delete();
+                if (fileInfo.Directory!.Exists == false)
+                    fileInfo.Directory.Create();
+            }
+
+            public override void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 1024 * 1024 * 2)
+            {
+                try
+                {
+                    GetObjectRequest request = new GetObjectRequest();
+                    request.DownloadProgress += (_, status) => takeOperation.progress = status.TransferPercentage;
+                    request.BucketName = this._settings.bucketName;
+                    request.ObjectKey = key;
+
+                    _obs.BeginGetObject(request, ar =>
+                    {
+                        try
+                        {
+                            using var response = _obs.EndGetObject(ar);
+                            CleanPath(localPath);
+                            response.WriteResponseStreamToFile(localPath);
+                            takeOperation.SetResult();
+                        }
+                        catch (ObsException ex)
+                        {
+                            takeOperation.SetException(ex);
+                        }
+                    }, null);
+                }
+                catch (ObsException ex)
+                {
+                    takeOperation.SetException(ex);
+                }
             }
 
             public List<string> DeleteObjects(List<string> objectNameList)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SnkFramework.CloudRepository.Runtime.Base;
 
 namespace SnkFramework.CloudRepository.Runtime
@@ -13,7 +14,7 @@ namespace SnkFramework.CloudRepository.Runtime
                 throw new NotImplementedException();
             }
 
-            public override bool TakeObjects(string path, List<string> list)
+            public override void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
             {
                 throw new NotImplementedException();
             }
