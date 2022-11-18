@@ -32,8 +32,7 @@ namespace SnkFramework.CloudRepository.Editor
                 throw new System.NotImplementedException();
             }
 
-
-            public override void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
+            public override void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
             {
                 try
                 {

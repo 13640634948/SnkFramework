@@ -14,7 +14,7 @@ namespace SnkFramework.CloudRepository.Runtime
                 throw new NotImplementedException();
             }
 
-            public override void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
+            public override void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
             {
                 throw new NotImplementedException();
             }

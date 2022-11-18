@@ -22,6 +22,6 @@ namespace SnkFramework.CloudRepository.Runtime.Base
 
     public interface ISnkStorageTake
     {
-        public void TakeObjects(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 1024 * 1024 * 2);
+        public void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 1024 * 1024 * 2);
     }
 }
