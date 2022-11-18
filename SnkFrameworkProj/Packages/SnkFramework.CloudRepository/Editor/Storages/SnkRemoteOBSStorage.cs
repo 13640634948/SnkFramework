@@ -21,10 +21,7 @@ namespace SnkFramework.CloudRepository.Editor
 
             public SnkRemoteOBSStorage(SnkRemoteStorageSettings settings)
             {
-                Debug.Log("SnkRemoteOSSStorage-Ctor");
                 _settings = settings;
-                //var obsCfg = new ObsConfig();
-                //obsCfg.Endpoint = _settings.endPoint;
                 _obs = new ObsClient(_settings.accessKeyId, _settings.accessKeySecret, _settings.endPoint);
             }
 
