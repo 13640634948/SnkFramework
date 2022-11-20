@@ -1,13 +1,15 @@
 {
-    "name": "SnkFramework.CloudRepository.Tests",
+    "name": "SnkFramework.CloudRepository.Tests.Editor",
     "rootNamespace": "",
     "references": [
-        "UnityEditor.TestRunner",
         "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
         "SnkFramework.CloudRepository.Runtime",
         "SnkFramework.CloudRepository.Editor"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

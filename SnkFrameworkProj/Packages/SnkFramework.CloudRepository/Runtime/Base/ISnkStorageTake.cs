@@ -6,7 +6,7 @@ namespace SnkFramework.CloudRepository.Runtime.Base
     {
         public float progress;
         public Exception exception;
-        public bool isCompleted;
+        public bool isCompleted { get; private set; } = false;
 
         public void SetResult()
         {
@@ -16,7 +16,7 @@ namespace SnkFramework.CloudRepository.Runtime.Base
         public void SetException(Exception exception)
         {
             this.exception = exception;
-            this.isCompleted = false;
+            this.isCompleted = true;
         }
     }
 
