@@ -70,6 +70,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.template-for-upm.": {
+      "version": "file:SnkFramework.TemplateForUPM",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.15.18",
       "depth": 0,

@@ -1,0 +1,14 @@
+{
+    "name": "Undefined.Networkconnector.Editor.Tests",
+    "references": [
+        "Undefined.Networkconnector.Editor",
+        "Undefined.Networkconnector"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

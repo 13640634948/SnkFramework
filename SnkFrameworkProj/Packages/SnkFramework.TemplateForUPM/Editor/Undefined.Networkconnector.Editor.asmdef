@@ -1,0 +1,10 @@
+{
+    "name": "Undefined.Networkconnector.Editor",
+    "references": [
+      "Undefined.Networkconnector"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
