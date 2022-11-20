@@ -1,7 +1,7 @@
 {
   "name": "com.snkframework.fluent-binding",
   "displayName": "Snk FluentBinding",
-  "version": "2.4.7",
+  "version": "0.1.0",
   "unity": "2019.4",
   "license": "MIT",
   "keywords": [
@@ -17,7 +17,7 @@
     }
   ],
   "author": {
-    "name": "BackFire.Studio"
+    "name": "ClaineLe"
   },
   "description": "SnkFramework FluentBinding(by LoxodonFramework)"
 }
