@@ -6,36 +6,31 @@ namespace SnkFramework.CloudRepository.Runtime
 {
     public class SnkCloudRepository : ISnkCloudRepository
     {
-        protected ISnkLocalStorage localStorage { get; }
-        protected ISnkRemoteStorage remoteStorage { get; }
+        protected ISnkStorage fromStorage { get; }
+        protected ISnkStorage toStorage { get; }
         
-        internal SnkCloudRepository(ISnkLocalStorage localStorage, ISnkRemoteStorage remoteStorage)
+        internal SnkCloudRepository(ISnkStorage fromStorage, ISnkStorage toStorage)
         {
-            this.localStorage = localStorage;
-            this.remoteStorage = remoteStorage;
+            this.fromStorage = fromStorage;
+            this.toStorage = toStorage;
         }
 
-        public Task<string> TakeObject(string key)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<T> TakeObject<T>(string key) where T : ISnkStorageValueOf<T>
+        public bool Preview(string key)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<string> TakeObjectToFile(string key)
+        public Task<bool> PreviewAsync(string key)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool PreviewRemoteSyncToLocal(string key, ref List<string> localAddList, ref List<string> localDelList)
+        public bool Apply(string key)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool ExecuteSync(string key, ref float progress)
+        public Task<bool> ApplyAsync(string key)
         {
             throw new System.NotImplementedException();
         }
