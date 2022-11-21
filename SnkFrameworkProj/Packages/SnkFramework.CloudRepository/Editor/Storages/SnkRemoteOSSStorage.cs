@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Aliyun.OSS;
 using Aliyun.OSS.Common;
@@ -29,7 +31,34 @@ namespace SnkFramework.CloudRepository.Editor
 
             public override List<SnkStorageObject> LoadObjectList(string path)
             {
-                throw new System.NotImplementedException();
+                try
+                {
+                    ObjectListing result = null; 
+                    string nextMarker = string.Empty;
+                    do
+                    {
+                        // 每页列举的文件个数通过mMxKeys指定，超出指定数量的文件将分页显示。
+                        var listObjectsRequest = new ListObjectsRequest(this._settings.bucketName)
+                        {
+                            Marker = nextMarker,
+                            MaxKeys = 100
+                        };
+                        result = this._oss.ListObjects(listObjectsRequest);  
+                        Console.WriteLine("File:");
+                        foreach (var summary in result.ObjectSummaries)
+                        {
+                            Console.WriteLine("Name:{0}", summary.Key);
+                        }
+                        nextMarker = result.NextMarker;
+                    } while (result.IsTruncated);
+
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("List object failed. {0}", ex.Message);
+                }
+                return default;
             }
 
             public override void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
@@ -81,12 +110,33 @@ namespace SnkFramework.CloudRepository.Editor
 
             public List<string> DeleteObjects(List<string> objectNameList)
             {
-                throw new System.NotImplementedException();
+                try
+                {
+                    bool quietMode = true;
+                    var request = new DeleteObjectsRequest(this._settings.bucketName, objectNameList, quietMode);
+                    var result = this._oss.DeleteObjects(request);
+                    return request.Keys.ToList();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-
+            
             public bool PutObjects(string path, List<string> list)
             {
-                throw new System.NotImplementedException();
+                try
+                {
+                    // 上传文件。
+                    this._oss.PutObject(this._settings.bucketName, path, path);
+                    Console.WriteLine("Put object succeeded");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Put object failed, {0}", ex.Message);
+                }
+
+                return true;
             }
         }
     }
