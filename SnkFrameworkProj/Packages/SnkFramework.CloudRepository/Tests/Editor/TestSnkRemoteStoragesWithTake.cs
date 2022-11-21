@@ -9,7 +9,7 @@ namespace SnkFramework.CloudRepository.Tests
 {
     namespace Editor
     {
-        public class Test_SnkRemoteStorages
+        public class TestSnkRemoteStoragesWithTake
         {
             public static Func<SnkRemoteCOSStorageSettings> mRemoteCOSSettingsGetter = null;
             public static Func<SnkRemoteStorageSettings> mRemoteCBSSettingsGetter = null;
