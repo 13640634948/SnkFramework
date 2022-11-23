@@ -16,7 +16,7 @@ namespace SnkFramework.CloudRepository.Editor
         public class SnkRemoteCOSStorage : SnkEditorRemoteStorage<SnkCOSStorageSettings>
         {
             private readonly CosXml _cos;
-            private long mDurationSecond => this._settings.mDurationSecond;
+            private long mDurationSecond => this.settings.mDurationSecond;
             public SnkRemoteCOSStorage()
             {
                 var config = new CosXmlConfig.Builder()

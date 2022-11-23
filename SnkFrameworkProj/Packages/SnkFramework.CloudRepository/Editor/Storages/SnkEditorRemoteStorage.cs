@@ -6,11 +6,11 @@ namespace SnkFramework.CloudRepository.Editor.Storage
     public class SnkEditorRemoteStorage<T> : SnkRuntimeRemoteStorage
         where T : SnkStorageSettings,new()
     {
-        protected readonly T _settings = SnkStorageSettings.Load<T>();
-        public override string mEndPoint => _settings.mBucketName;
-        public override string mAccessKeyId =>  _settings.mAccessKeyId;
-        public override string mAccessKeySecret =>  _settings.mAccessKeySecret;
-        public override string mBucketName => _settings.mBucketName;
-        protected override bool mIsQuietDelete =>  _settings.mIsQuietDelete;
+        protected readonly T settings = SnkStorageSettings.Load<T>();
+        public override string mBucketName => settings.mBucketName;
+        public override string mEndPoint => settings.mEndPoint;
+        public override string mAccessKeyId =>  settings.mAccessKeyId;
+        public override string mAccessKeySecret =>  settings.mAccessKeySecret;
+        protected override bool mIsQuietDelete =>  settings.mIsQuietDelete;
     }
 }

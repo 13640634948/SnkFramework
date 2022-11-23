@@ -17,7 +17,7 @@ namespace SnkFramework.CloudRepository.Editor
         /// </summary>
         public class SnkRemoteOSSStorage : SnkEditorRemoteStorage<SnkOSSStorageSettings>
         {
-            private int mBuffSize => this._settings.mBuffSize;
+            private int mBuffSize => this.settings.mBuffSize;
 
             private readonly IOss _oss;
 
