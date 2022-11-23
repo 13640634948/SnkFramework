@@ -1,168 +1,159 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using SnkFramework.CloudRepository.Runtime.Base;
-using SnkFramework.CloudRepository.Runtime.Storage;
+using System.Linq;
 using COSXML;
 using COSXML.Auth;
 using COSXML.CosException;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
-using COSXML.Model.Tag;
-using COSXML.Transfer;
-using UnityEngine;
+using SnkFramework.CloudRepository.Editor.Settings;
 
-namespace SnkFramework.CloudRepository.Editor.Storage
+namespace SnkFramework.CloudRepository.Editor
 {
-    public class SnkRemoteCOSStorageSettings : SnkRemoteStorageSettings
+    namespace Storage
     {
-        public long durationSecond;
-    }
-
-    public class SnkRemoteCOSStorage : SnkRemoteStorage, ISnkStorageDelete, ISnkStoragePut
-    {
-        private CosXml _cos;
-        private SnkRemoteCOSStorageSettings _settings;
-
-        public SnkRemoteCOSStorage(SnkRemoteCOSStorageSettings settings)
+        public class SnkRemoteCOSStorage : SnkEditorRemoteStorage<SnkCOSStorageSettings>
         {
-            _settings = settings;
-
-            var config = new CosXmlConfig.Builder()
-                .SetRegion(settings.endPoint)
-                .Build();
-
-            string secretId = settings.accessKeyId;
-            string secretKey = settings.accessKeySecret;
-            long durationSecond = _settings.durationSecond;
-            var credentialProvider = new DefaultQCloudCredentialProvider(secretId, secretKey, durationSecond);
-            _cos = new CosXmlServer(config, credentialProvider);
-        }
-
-        public override List<SnkStorageObject> LoadObjectList(string path)
-        {
-            
-            try
+            private readonly CosXml _cos;
+            private long mDurationSecond => this._settings.mDurationSecond;
+            public SnkRemoteCOSStorage()
             {
-                var listObjectsRequest = new GetBucketRequest(this._settings.bucketName);
-                var result = this._cos.GetBucket(listObjectsRequest);
-                //result.listBucket.contentsList;
-            }
-            catch (CosClientException clientException)
-            {
-                //Console.WriteLine("ErrorCode: {0}", ex.ErrorCode);
-                //Console.WriteLine("ErrorMessage: {0}", ex.ErrorMessage);
-            }
-            catch (CosServerException serviceException)
-            {
-                //Console.WriteLine("ErrorCode: {0}", ex.ErrorCode);
-                //Console.WriteLine("ErrorMessage: {0}", ex.ErrorMessage);
+                var config = new CosXmlConfig.Builder()
+                    .SetRegion(this.mEndPoint)
+                    .Build();
+
+                var credentialProvider = new DefaultQCloudCredentialProvider(
+                    this.mAccessKeyId,
+                    this.mAccessKeySecret,
+                    this.mDurationSecond);
+
+                _cos = new CosXmlServer(config, credentialProvider);
             }
 
-            return default;
-        }
+            protected override (string,long)[] doLoadObjects(string prefixKey = null)
+            {
+                (string,long)[] resultArray = null;
+                try
+                {
+                    var request = new GetBucketRequest(this.mBucketName);
+                    if (string.IsNullOrEmpty(prefixKey) == false)
+                        request.SetPrefix(prefixKey);
+                    var result = this._cos.GetBucket(request);
+                    
+                    resultArray = result.listBucket.contentsList.Select(a => (a.key, a.size)).ToArray();
+                }
+                catch (CosClientException clientException)
+                {
+                    this.setException(clientException);
+                }
+                catch (CosServerException serviceException)
+                {
+                    this.setException(serviceException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
 
-        public override void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation,
-            int buffSize = 2097152)
-        {
-            Task.Run(() =>
+                return resultArray;
+            }
+
+            protected override string[] doTakeObjects(List<string> keyList, string localDirPath)
             {
                 try
                 {
-                    string bucket = this._settings.bucketName;
-                    string localFileName = Path.GetFileName(localPath);
-                    string localDir = Path.GetDirectoryName(localPath);
-
-                    GetObjectRequest request = new GetObjectRequest(bucket, key, localDir, localFileName);
-                    request.SetCosProgressCallback((completed, total) =>
+                    int totalCount = keyList.Count;
+                    float completedCount = 0;
+                    foreach (var key in keyList)
                     {
-                        takeOperation.progress = completed * 100.0f / total;
-                    });
-                    _cos.GetObject(request);
-                    takeOperation.SetResult();
+                        var count = completedCount;
+
+                        var localFileName = Path.GetFileName(key);
+                        var localDir = Path.Combine(localDirPath, Path.GetDirectoryName(key) ?? string.Empty);
+                        var request = new GetObjectRequest(this.mBucketName, key, localDir, localFileName);
+                        request.SetCosProgressCallback((completed, total) =>
+                        {
+                            this.updateProgress((count + completed * 100.0f / total) / totalCount);
+                        });
+                        _cos.GetObject(request);
+                        ++completedCount;
+                    }
                 }
-                catch (COSXML.CosException.CosClientException ex)
+                catch (CosClientException clientException)
                 {
-                    takeOperation.SetException(ex);
+                    this.setException(clientException);
                 }
-                catch (COSXML.CosException.CosServerException ex)
+                catch (CosServerException serviceException)
                 {
-                    takeOperation.SetException(ex);
+                    this.setException(serviceException);
                 }
-                catch (System.Exception ex)
+                catch (Exception exception)
                 {
-                    takeOperation.SetException(ex);
+                    this.setException(exception);
                 }
-            });
-        }
 
-        public List<string> DeleteObjects(List<string> objectNameList)
-        {
-            try
-            {
-                // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = this._settings.bucketName;
-                DeleteMultiObjectRequest request = new DeleteMultiObjectRequest(bucket);
-                //设置返回结果形式
-                request.SetDeleteQuiet(false);
-                //对象key
-                //string key = "exampleobject"; //对象键
-                List<string> objects = new List<string>();
-                //objects.Add(key);
-                objects.AddRange(objectNameList);
-                request.SetObjectKeys(objects);
-                //执行请求
-                DeleteMultiObjectResult result = this._cos.DeleteMultiObjects(request);
-                //请求成功
-                Console.WriteLine(result.GetResultInfo());
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                //请求失败
-                Console.WriteLine("CosClientException: " + clientEx);
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                //请求失败
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                return keyList.ToArray();
             }
 
-            return default;
-        }
-
-        public bool PutObjects(string path, List<string> list)
-        {
-            try
+            protected override string[] doPutObjects(List<string> keyList)
             {
-                // 存储桶名称，此处填入格式必须为 bucketname-APPID, 其中 APPID 获取参考 https://console.cloud.tencent.com/developer
-                string bucket = this._settings.bucketName;
-                string key = path;// "exampleobject"; //对象键
-                string srcPath = path;// @"temp-source-file";//本地文件绝对路径
-
-                PutObjectRequest request = new PutObjectRequest(bucket, key, srcPath);
-                //设置进度回调
-                request.SetCosProgressCallback(delegate (long completed, long total)
+                try
                 {
-                    Console.WriteLine(String.Format("progress = {0:##.##}%", completed * 100.0 / total));
-                });
-                //执行请求
-                PutObjectResult result = this._cos.PutObject(request);
-                //对象的 eTag
-                string eTag = result.eTag;
-            }
-            catch (COSXML.CosException.CosClientException clientEx)
-            {
-                //请求失败
-                Console.WriteLine("CosClientException: " + clientEx);
-            }
-            catch (COSXML.CosException.CosServerException serverEx)
-            {
-                //请求失败
-                Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                    int totalCount = keyList.Count;
+                    float completedCount = 0;
+                    foreach (var key in keyList)
+                    {
+                        PutObjectRequest request = new PutObjectRequest(this.mBucketName, key, key);
+                        var count = completedCount;
+                        request.SetCosProgressCallback(delegate(long completed, long total)
+                        {
+                            this.updateProgress((count + completed * 100.0f / total) / totalCount);
+                        });
+                        this._cos.PutObject(request);
+                        ++completedCount;
+                    }
+                }
+                catch (CosClientException clientException)
+                {
+                    this.setException(clientException);
+                }
+                catch (CosServerException serviceException)
+                {
+                    this.setException(serviceException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
             }
 
-            return true;
+            protected override string[] doDeleteObjects(List<string> keyList)
+            {
+                try
+                {
+                    var request = new DeleteMultiObjectRequest(this.mBucketName);
+                    request.SetDeleteQuiet(this.mIsQuietDelete);
+                    request.SetObjectKeys(keyList);
+                    this._cos.DeleteMultiObjects(request);
+                }
+                catch (CosClientException clientException)
+                {
+                    this.setException(clientException);
+                }
+                catch (CosServerException serviceException)
+                {
+                    this.setException(serviceException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
+            }
         }
     }
 }

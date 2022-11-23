@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Aliyun.OSS;
 using Aliyun.OSS.Common;
-using CodiceApp.EventTracking;
-using SnkFramework.CloudRepository.Runtime.Base;
+using SnkFramework.CloudRepository.Editor.Settings;
+using SnkFramework.CloudRepository.Editor.Window;
 using SnkFramework.CloudRepository.Runtime.Storage;
-using UnityEngine;
 
 namespace SnkFramework.CloudRepository.Editor
 {
@@ -18,125 +15,148 @@ namespace SnkFramework.CloudRepository.Editor
         /// <summary>
         /// 阿里云OSS(Object Storage Service)
         /// </summary>
-        public class SnkRemoteOSSStorage : SnkRemoteStorage, ISnkStorageDelete, ISnkStoragePut
+        public class SnkRemoteOSSStorage : SnkEditorRemoteStorage<SnkOSSStorageSettings>
         {
-            private IOss _oss;
-            private SnkRemoteStorageSettings _settings;
+            private int mBuffSize => this._settings.mBuffSize;
 
-            public SnkRemoteOSSStorage(SnkRemoteStorageSettings settings)
+            private readonly IOss _oss;
+
+            public SnkRemoteOSSStorage()
             {
-                _settings = settings;
-                _oss = new OssClient(settings.endPoint, settings.accessKeyId, settings.accessKeySecret);
+                _oss = new OssClient(this.mEndPoint, this.mAccessKeyId, this.mAccessKeySecret);
             }
 
-            public override List<SnkStorageObject> LoadObjectList(string path)
+            protected override (string,long)[] doLoadObjects(string prefixKey = null)
             {
+                var keyList = new List<(string,long)>();
                 try
                 {
-                    ObjectListing result = null; 
-                    string nextMarker = string.Empty;
+                    ObjectListing result;
+                    var request = new ListObjectsRequest(this.mBucketName)
+                    {
+                        MaxKeys = 1000,
+                        Prefix = prefixKey,
+                    };
+
                     do
                     {
-                        // 每页列举的文件个数通过mMxKeys指定，超出指定数量的文件将分页显示。
-                        var listObjectsRequest = new ListObjectsRequest(this._settings.bucketName)
-                        {
-                            Marker = nextMarker,
-                            MaxKeys = 100
-                        };
-                        result = this._oss.ListObjects(listObjectsRequest);  
-                        Console.WriteLine("File:");
-                        foreach (var summary in result.ObjectSummaries)
-                        {
-                            Console.WriteLine("Name:{0}", summary.Key);
-                        }
-                        nextMarker = result.NextMarker;
+                        result = this._oss.ListObjects(request);
+                        keyList.AddRange(result.ObjectSummaries.Select(entry => (entry.Key, entry.Size)));
+                        request.Marker = result.NextMarker;
                     } while (result.IsTruncated);
-
-                    
                 }
-                catch (Exception ex)
+                catch (OssException ossException)
                 {
-                    Console.WriteLine("List object failed. {0}", ex.Message);
+                    this.setException(ossException);
                 }
-                return default;
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
             }
 
-            public override void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 2097152)
+            protected override string[] doTakeObjects(List<string> keyList, string localDirPath)
             {
                 try
                 {
-                    var request = new GetObjectRequest(this._settings.bucketName, key);
-                    
-                    request.StreamTransferProgress += (_, args) =>
+                    int totalCount = keyList.Count;
+                    float completedCount = 0;
+
+                    foreach (var key in keyList)
                     {
-                        takeOperation.progress = args.TransferredBytes * 100 / (float)args.TotalBytes;
-                    };
-                    
-                    _oss.BeginGetObject(request, ar =>
-                    {
-                        try
+                        var count = completedCount;
+
+                        var request = new GetObjectRequest(this.mBucketName, key);
+                        request.StreamTransferProgress += (_, args) =>
                         {
-                            using var ossObject = _oss.EndGetObject(ar);
-                            using (var requestStream = ossObject.Content)
+                            this.updateProgress((count + args.TransferredBytes * 100 / (float)args.TotalBytes) /
+                                                totalCount);
+                        };
+
+                        var ossObject = _oss.GetObject(request);
+                        using (var requestStream = ossObject.Content)
+                        {
+                            var buf = new byte[mBuffSize];
+                            string localFilePath = Path.Combine(localDirPath, key);
+                            EnsurePathExists(localFilePath);
+                            using (var fs = File.Open(localFilePath, FileMode.OpenOrCreate))
                             {
-                                byte[] buf = new byte[buffSize];
-                                CleanPath(localPath);
-                                using (var fs = File.Open(localPath, FileMode.OpenOrCreate))
-                                {
-                                    var len = 0;
-                                    while ((len = requestStream.Read(buf, 0, buffSize)) != 0)
-                                        fs.Write(buf, 0, len);
-                                    fs.Close();
-                                }
-                                takeOperation.SetResult();
+                                var len = 0;
+                                while ((len = requestStream.Read(buf, 0, mBuffSize)) != 0)
+                                    fs.Write(buf, 0, len);
+                                fs.Close();
                             }
                         }
-                        catch (Exception e)
+
+                        ++completedCount;
+                    }
+                }
+                catch (OssException ossException)
+                {
+                    this.setException(ossException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
+            }
+
+            protected override string[] doPutObjects(List<string> keyList)
+            {
+                try
+                {
+                    int totalCount = keyList.Count;
+                    float completedCount = 0;
+                    foreach (var key in keyList)
+                    {
+                        var count = completedCount;
+                        using (var fs = File.Open(key, FileMode.Open))
                         {
-                            takeOperation.SetException(e);
+                            var putObjectRequest = new PutObjectRequest(this.mBucketName, key, fs);
+                            putObjectRequest.StreamTransferProgress += (_, args) =>
+                            {
+                                this.updateProgress((count + args.TransferredBytes * 100 / (float)args.TotalBytes) /
+                                                    totalCount);
+                            };
+                            this._oss.PutObject(putObjectRequest);
                         }
-                    }, null);
+
+                        ++completedCount;
+                    }
                 }
-                catch (OssException ex)
+                catch (OssException ossException)
                 {
-                    takeOperation.SetException(ex);
+                    this.setException(ossException);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    takeOperation.SetException(ex);
+                    this.setException(exception);
                 }
+
+                return keyList.ToArray();
             }
 
-
-            public List<string> DeleteObjects(List<string> objectNameList)
+            protected override string[] doDeleteObjects(List<string> keyList)
             {
                 try
                 {
-                    bool quietMode = true;
-                    var request = new DeleteObjectsRequest(this._settings.bucketName, objectNameList, quietMode);
-                    var result = this._oss.DeleteObjects(request);
-                    return request.Keys.ToList();
+                    var request = new DeleteObjectsRequest(this.mBucketName, keyList, this.mIsQuietDelete);
+                    this._oss.DeleteObjects(request);
                 }
-                catch (Exception ex)
+                catch (OssException ossException)
                 {
-                    throw ex;
+                    this.setException(ossException);
                 }
-            }
-            
-            public bool PutObjects(string path, List<string> list)
-            {
-                try
+                catch (Exception exception)
                 {
-                    // 上传文件。
-                    this._oss.PutObject(this._settings.bucketName, path, path);
-                    Console.WriteLine("Put object succeeded");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Put object failed, {0}", ex.Message);
+                    this.setException(exception);
                 }
 
-                return true;
+                return keyList.ToArray();
             }
         }
     }

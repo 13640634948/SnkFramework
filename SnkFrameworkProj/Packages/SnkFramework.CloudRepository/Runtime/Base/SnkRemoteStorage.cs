@@ -1,17 +1,14 @@
-
-using System.IO;
+using System;
 
 namespace SnkFramework.CloudRepository.Runtime.Base
 {
     public abstract class SnkRemoteStorage : SnkStorage, ISnkRemoteStorage
     {
-        protected void CleanPath(string fullPath)
-        {
-            FileInfo fileInfo = new FileInfo(fullPath);
-            if (fileInfo.Exists)
-                fileInfo.Delete();
-            if (fileInfo.Directory!.Exists == false)
-                fileInfo.Directory.Create();
-        }
+        public virtual string mEndPoint => throw new NotImplementedException();
+        public virtual string mAccessKeyId => throw new NotImplementedException();
+        public virtual string mAccessKeySecret => throw new NotImplementedException();
+        public virtual string mBucketName => throw new NotImplementedException();
+        protected virtual bool mIsQuietDelete => true;
+        
     }
 }

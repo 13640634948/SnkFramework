@@ -1,11 +1,9 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using OBS;
 using OBS.Model;
-using SnkFramework.CloudRepository.Runtime.Base;
-using SnkFramework.CloudRepository.Runtime.Storage;
-using UnityEngine;
+using SnkFramework.CloudRepository.Editor.Settings;
 
 namespace SnkFramework.CloudRepository.Editor
 {
@@ -14,108 +12,136 @@ namespace SnkFramework.CloudRepository.Editor
         /// <summary>
         /// 华为云OBS(Object Storage Service)
         /// </summary>
-        public class SnkRemoteOBSStorage : SnkRemoteStorage, ISnkStorageDelete, ISnkStoragePut
+        public class SnkRemoteOBSStorage : SnkEditorRemoteStorage<SnkOBSStorageSettings>
         {
-            private ObsClient _obs;
-            private SnkRemoteStorageSettings _settings;
+            private readonly ObsClient _obs;
 
-            public SnkRemoteOBSStorage(SnkRemoteStorageSettings settings)
+            public SnkRemoteOBSStorage()
             {
-                _settings = settings;
-                _obs = new ObsClient(_settings.accessKeyId, _settings.accessKeySecret, _settings.endPoint);
+                _obs = new ObsClient(mAccessKeyId, mAccessKeySecret, mEndPoint);
             }
 
-            public override List<SnkStorageObject> LoadObjectList(string path)
+            protected override (string,long)[] doLoadObjects(string prefixKey = null)
             {
+                var keyList = new List<(string,long)>();
                 try
                 {
-                    ListObjectsRequest request = new ListObjectsRequest();
                     ListObjectsResponse response;
-                    request.BucketName = this._settings.bucketName;
-                    request.MaxKeys = 1000;
-                    request.Prefix = string.Empty;//文件前缀
+                    var request = new ListObjectsRequest
+                    {
+                        BucketName = this.mBucketName,
+                        MaxKeys = 1000,
+                        Prefix = prefixKey,
+                    };
+
                     do
                     {
                         response = this._obs.ListObjects(request);
-                        foreach (ObsObject entry in response.ObsObjects)
-                        {
-                            //Console.WriteLine("key = {0} size = {1}", entry.ObjectKey, entry.Size);
-                        }
+                        keyList.AddRange(response.ObsObjects.Select(entry => (entry.ObjectKey, entry.Size)));
                         request.Marker = response.NextMarker;
-                    }
-                    while (response.IsTruncated);
+                    } while (response.IsTruncated);
                 }
-                catch (ObsException ex)
+                catch (ObsException obsException)
                 {
-                    //Console.WriteLine("ErrorCode: {0}", ex.ErrorCode);
-                    //Console.WriteLine("ErrorMessage: {0}", ex.ErrorMessage);
+                    this.setException(obsException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
                 }
 
-                return default;
+                return keyList.ToArray();
             }
 
-            public override void TakeObject(string key, string localPath, SnkStorageTakeOperation takeOperation, int buffSize = 1024 * 1024 * 2)
+            protected override string[] doTakeObjects(List<string> keyList, string localDirPath)
             {
                 try
                 {
-                    GetObjectRequest request = new GetObjectRequest();
-                    request.DownloadProgress += (_, status) => takeOperation.progress = status.TransferPercentage;
-                    request.BucketName = this._settings.bucketName;
-                    request.ObjectKey = key;
-
-                    _obs.BeginGetObject(request, ar =>
+                    int totalCount = keyList.Count;
+                    float completedCount = 0;
+                    foreach (var key in keyList)
                     {
-                        try
+                        var count = completedCount;
+                        var request = new GetObjectRequest
                         {
-                            using var response = _obs.EndGetObject(ar);
-                            CleanPath(localPath);
-                            response.WriteResponseStreamToFile(localPath);
-                            takeOperation.SetResult();
-                        }
-                        catch (ObsException ex)
-                        {
-                            takeOperation.SetException(ex);
-                        }
-                    }, null);
+                            BucketName = this.mBucketName,
+                            ObjectKey = key
+                        };
+                        request.DownloadProgress += (_, status) =>
+                            this.updateProgress((count + status.TransferPercentage) / totalCount);
+                        var response = _obs.GetObject(request);
+                        response.WriteResponseStreamToFile( System.IO.Path.Combine(localDirPath, request.ObjectKey));
+                        ++completedCount;
+                    }
                 }
-                catch (ObsException ex)
+                catch (ObsException obsException)
                 {
-                    takeOperation.SetException(ex);
+                    this.setException(obsException);
                 }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
             }
 
-            public List<string> DeleteObjects(List<string> objectNameList)
+            protected override string[] doPutObjects(List<string> keyList)
             {
                 try
                 {
-                    DeleteObjectsRequest request = new DeleteObjectsRequest();
-                    request.BucketName = "bucketname";
-                    request.Quiet = true;
-                    //request.AddKey("objectname1");
-                    //request.AddKey("objectname2");
-                    DeleteObjectsResponse response = this._obs.DeleteObjects(request);
-                    //Console.WriteLine("Delete objects response: {0}", response.StatusCode);
-                    return default;
+                    int totalCount = keyList.Count;
+                    float completedCount = 0;
+                    foreach (var key in keyList)
+                    {
+                        var count = completedCount;
+                        var request = new PutObjectRequest
+                        {
+                            BucketName = this.mBucketName,
+                            ObjectKey = key,
+                            FilePath = key,
+                        };
+                        request.UploadProgress += (_, status) =>
+                            this.updateProgress((count + status.TransferPercentage) / totalCount);
+                        _obs.PutObject(request);
+                        ++completedCount;
+                    }
                 }
-                catch (ObsException ex)
+                catch (ObsException obsException)
                 {
-                    throw ex;
-                    //Console.WriteLine("ErrorCode: {0}", ex.ErrorCode);
-                    //Console.WriteLine("ErrorMessage: {0}", ex.ErrorMessage);
-                } 
+                    this.setException(obsException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
             }
 
-            public bool PutObjects(string path, List<string> list)
+            protected override string[] doDeleteObjects(List<string> keyList)
             {
-                PutObjectRequest request = new PutObjectRequest()
+                try
                 {
-                    BucketName = this._settings.bucketName,//待传入目标桶名
-                    ObjectKey = path,   //待传入对象名(不是本地文件名，是文件上传到桶里后展现的对象名)
-                    FilePath = path,//待上传的本地文件路径，需要指定到具体的文件名
-                };
-                PutObjectResponse response = this._obs.PutObject(request);
-                //Console.WriteLine("put object response: {0}", response.StatusCode);
-                return true;
+                    var request = new DeleteObjectsRequest
+                    {
+                        BucketName = this.mBucketName,
+                        Quiet = this.mIsQuietDelete,
+                    };
+                    foreach (var str in keyList)
+                        request.AddKey(str);
+                    this._obs.DeleteObjects(request);
+                }
+                catch (ObsException obsException)
+                {
+                    this.setException(obsException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return keyList.ToArray();
             }
         }
     }
