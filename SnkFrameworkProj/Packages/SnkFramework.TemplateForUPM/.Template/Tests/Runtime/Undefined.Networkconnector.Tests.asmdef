@@ -1,0 +1,11 @@
+{
+    "name": "Undefined.Networkconnector.Tests",
+    "references": [
+        "Undefined.Networkconnector"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}
