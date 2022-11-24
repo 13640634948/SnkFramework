@@ -76,6 +76,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.patch-svr": {
+      "version": "file:SnkFramework.PatchService",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.template-for-upm.": {
       "version": "file:SnkFramework.TemplateForUPM",
       "depth": 0,
