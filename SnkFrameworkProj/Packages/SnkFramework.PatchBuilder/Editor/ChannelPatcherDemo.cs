@@ -1,4 +1,4 @@
-/*
+using SnkFramework.PatchBuilder.Editor;
 using SnkFramework.PatchBuilder.Runtime.Base;
 using UnityEditor;
 
@@ -30,4 +30,3 @@ namespace SnkFramework.PatchBuilder
         }
     }
 }
-*/
