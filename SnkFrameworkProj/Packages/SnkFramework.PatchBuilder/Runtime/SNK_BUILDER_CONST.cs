@@ -24,7 +24,7 @@ namespace SnkFramework.PatchBuilder.Runtime
         public const string PATCHER_FILE_NAME = "patch_manifest.json";
 
         /* 补丁包名字格式 */
-        public const string PATCHER_NAME_FORMATER = "patcher_{0}_{1}({2})";
+        public const string PATCHER_NAME_FORMATER = "patcher_{0}-{1}_B{2}";
 
     }
 }
