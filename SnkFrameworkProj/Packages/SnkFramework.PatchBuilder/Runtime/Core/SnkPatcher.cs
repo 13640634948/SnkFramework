@@ -27,10 +27,5 @@ namespace SnkFramework.PatchBuilder.Runtime.Core
         /// 是否强制更新
         /// </summary>
         public bool isForce;
-        
-        /// <summary>
-        /// 是否压缩
-        /// </summary>
-        public bool isCompress;
     }
 }

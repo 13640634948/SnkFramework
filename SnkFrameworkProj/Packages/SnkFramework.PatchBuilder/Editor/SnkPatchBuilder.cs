@@ -234,7 +234,7 @@ namespace SnkFramework.PatchBuilder
             /// <param name="isForce">是否是强更补丁包</param>
             /// <param name="isCompress">是否进行压缩</param>
             /// <returns>补丁包信息</returns>
-            public SnkPatcher Build(IEnumerable<ISnkSourceFinder> sourceFinderList, bool isForce = false, bool isCompress = false)
+            public SnkPatcher Build(IEnumerable<ISnkSourceFinder> sourceFinderList, bool isForce = false)
             {
                 var prevVersion = _patcherManifest.lastVersion;
                 var currVersion = prevVersion + 1;
@@ -243,7 +243,6 @@ namespace SnkFramework.PatchBuilder
                 {
                     version = currVersion,
                     isForce = isForce,
-                    isCompress = isCompress
                 };
 
                 //生成当前目标目录的资源信息列表
@@ -297,8 +296,9 @@ namespace SnkFramework.PatchBuilder
                 CopySourceTo(currPatcherPath, willMoveSourceList);
                 patcher.sourceCount = willMoveSourceList.Count;
                 
+                
                 //压缩
-                if (patcher.isCompress && Compressor != null)
+                if (SNK_BUILDER_CONST.COMPRESS_MODE)
                 {
                     FileInfo zipFileInfo = new FileInfo(currPatcherPath + ".zip");
                     Compressor.Compress(currPatcherPath, zipFileInfo.FullName, CompressionLevel.Optimal, true);

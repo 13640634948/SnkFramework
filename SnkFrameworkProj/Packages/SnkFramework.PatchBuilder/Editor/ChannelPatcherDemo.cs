@@ -25,7 +25,7 @@ namespace SnkFramework.PatchBuilder
                 };
 
                 snkPatcher = SnkPatchBuilder.Load(repoName);
-                var patcher = snkPatcher.Build(sourcePaths, false, true);
+                var patcher = snkPatcher.Build(sourcePaths, false);
             }
         }
     }

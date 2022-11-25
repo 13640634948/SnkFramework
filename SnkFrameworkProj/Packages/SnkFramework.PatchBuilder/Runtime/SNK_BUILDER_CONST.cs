@@ -2,6 +2,9 @@ namespace SnkFramework.PatchBuilder.Runtime
 {
     public class SNK_BUILDER_CONST
     {
+        /* 压缩模式 */
+        public const bool COMPRESS_MODE = false;
+        
         /* 补丁包仓库路径 */
         public const string REPO_ROOT_PATH = "PatcherRepository";
 
