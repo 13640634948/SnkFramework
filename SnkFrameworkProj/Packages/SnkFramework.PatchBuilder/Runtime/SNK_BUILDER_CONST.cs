@@ -5,6 +5,9 @@ namespace SnkFramework.PatchBuilder.Runtime
         /* 压缩模式 */
         public const bool COMPRESS_MODE = false;
         
+        /* 压缩文件后缀 */
+        public const string COMPRESS_FILE_SUFFIX = ".zip";
+        
         /* 补丁包仓库路径 */
         public const string REPO_ROOT_PATH = "PatcherRepository";
 

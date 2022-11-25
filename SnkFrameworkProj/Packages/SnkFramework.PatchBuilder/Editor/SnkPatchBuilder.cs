@@ -300,7 +300,7 @@ namespace SnkFramework.PatchBuilder
                 //压缩
                 if (SNK_BUILDER_CONST.COMPRESS_MODE)
                 {
-                    FileInfo zipFileInfo = new FileInfo(currPatcherPath + ".zip");
+                    FileInfo zipFileInfo = new FileInfo(currPatcherPath + SNK_BUILDER_CONST.COMPRESS_FILE_SUFFIX);
                     Compressor.Compress(currPatcherPath, zipFileInfo.FullName, CompressionLevel.Optimal, true);
                     Directory.Delete(currPatcherPath, true);
                     patcher.totalSize = zipFileInfo.Length;
