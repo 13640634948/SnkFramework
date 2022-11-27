@@ -73,7 +73,8 @@ namespace SnkFramework.PatchBuilder
 
                 this._settings = LoadSettings();
                 this._patcherManifest = LoadPatcherManifest();
-                this._lastSourceInfoList = LoadLastSourceInfoList();
+                if(string.IsNullOrEmpty(this._patcherManifest.lastPatcherName) == false) 
+                    this._lastSourceInfoList = LoadLastSourceInfoList(this._patcherManifest.lastPatcherName);
             }
 
             /// <summary>
@@ -142,9 +143,9 @@ namespace SnkFramework.PatchBuilder
             /// 加载最新资源信息列表
             /// </summary>
             /// <returns>最新资源信息列表</returns>
-            private List<SnkSourceInfo> LoadLastSourceInfoList()
+            private List<SnkSourceInfo> LoadLastSourceInfoList(string patcherName)
             {
-                FileInfo fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.SOURCE_FILE_NAME));
+                FileInfo fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, patcherName, SNK_BUILDER_CONST.SOURCE_FILE_NAME));
                 if (fileInfo.Exists == false)
                     return null;
                 string jsonString = File.ReadAllText(fileInfo.FullName);
@@ -155,9 +156,9 @@ namespace SnkFramework.PatchBuilder
             /// 保存最新资源信息列表
             /// </summary>
             /// <param name="sourceInfoList">最新资源信息列表</param>
-            private void SaveLastSourceInfoList(List<SnkSourceInfo> sourceInfoList)
+            private void SaveLastSourceInfoList(List<SnkSourceInfo> sourceInfoList, string patcherName)
             {
-                string manifestPath = Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
+                string manifestPath = Path.Combine(ChannelRepoPath, patcherName, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
                 File.WriteAllText(manifestPath, this.JsonParser.ToJson(sourceInfoList));
             }
 
@@ -257,8 +258,11 @@ namespace SnkFramework.PatchBuilder
 
                 //拼接补丁包名字
                 patcher.name = string.Format(SNK_BUILDER_CONST.PATCHER_NAME_FORMATER, prevVersion,currVersion, ++_settings.buildNum);
-                string currPatcherPath = Path.Combine(ChannelRepoPath, patcher.name);
+                string patcherDirPath = Path.Combine(ChannelRepoPath, patcher.name);
 
+                if (Directory.Exists(patcherDirPath) == false)
+                    Directory.CreateDirectory(patcherDirPath);
+                
                 List<SnkSourceInfo> willMoveSourceList;
                 if (_lastSourceInfoList == null)
                 {
@@ -283,26 +287,26 @@ namespace SnkFramework.PatchBuilder
                     willMoveSourceList = diffManifest.addList;
 
                     //保存差异清单
-                    var diffManifestFileInfo = new FileInfo(Path.Combine(currPatcherPath, SNK_BUILDER_CONST.DIFF_FILE_NAME));
-                    if (diffManifestFileInfo.Directory!.Exists == false)
-                        diffManifestFileInfo.Directory.Create();
+                    var diffManifestFileInfo = new FileInfo(Path.Combine(patcherDirPath, SNK_BUILDER_CONST.DIFF_FILE_NAME));
+                    if(diffManifestFileInfo.Exists)
+                        diffManifestFileInfo.Delete();
                     File.WriteAllText(diffManifestFileInfo.FullName, this.JsonParser.ToJson(diffManifest));
                 }
                 
                 //保存最新的资源清单
-                this.SaveLastSourceInfoList(_lastSourceInfoList);
+                this.SaveLastSourceInfoList(_lastSourceInfoList, patcher.name);
                 
                 //复制资源文件
-                CopySourceTo(currPatcherPath, willMoveSourceList);
+                CopySourceTo(patcherDirPath, willMoveSourceList);
                 patcher.sourceCount = willMoveSourceList.Count;
                 
                 
                 //压缩
                 if (SNK_BUILDER_CONST.COMPRESS_MODE)
                 {
-                    FileInfo zipFileInfo = new FileInfo(currPatcherPath + SNK_BUILDER_CONST.COMPRESS_FILE_SUFFIX);
-                    Compressor.Compress(currPatcherPath, zipFileInfo.FullName, CompressionLevel.Optimal, true);
-                    Directory.Delete(currPatcherPath, true);
+                    FileInfo zipFileInfo = new FileInfo(patcherDirPath + SNK_BUILDER_CONST.COMPRESS_FILE_SUFFIX);
+                    Compressor.Compress(patcherDirPath, zipFileInfo.FullName, CompressionLevel.Optimal, true);
+                    Directory.Delete(patcherDirPath, true);
                     patcher.totalSize = zipFileInfo.Length;
                 }
                 else
