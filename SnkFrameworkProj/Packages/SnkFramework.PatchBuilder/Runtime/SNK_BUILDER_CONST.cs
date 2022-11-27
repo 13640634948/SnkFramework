@@ -18,7 +18,7 @@ namespace SnkFramework.PatchBuilder.Runtime
         public const string SOURCE_FILE_NAME = "source_manifest.json";
         
         /* 差异清单文件名 */
-        public const string DIFF_FILE_NAME = "diff_manifest.json";
+        public const string DIFF_FILE_NAME = ".diff_manifest.json";
         
         /* 补丁包清单文件名 */
         public const string PATCHER_FILE_NAME = "patch_manifest.json";
