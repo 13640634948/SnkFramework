@@ -12,7 +12,7 @@ namespace SnkFramework.PatchBuilder.Runtime
         public const string REPO_ROOT_PATH = "PatcherRepository";
 
         /* 设置文件文件名 */
-        public const string SETTING_FILE_NAME = ".setting";
+        public const string SETTING_FILE_NAME = ".setting.json";
         
         /* 资源清单文件名 */
         public const string SOURCE_FILE_NAME = "source_manifest.json";
@@ -20,11 +20,14 @@ namespace SnkFramework.PatchBuilder.Runtime
         /* 差异清单文件名 */
         public const string DIFF_FILE_NAME = ".diff_manifest.json";
         
-        /* 补丁包清单文件名 */
-        public const string PATCHER_FILE_NAME = "patch_manifest.json";
+        /* 版本信息文件 */
+        public const string VERSION_INFO_FILE_NAME = "version_info.json";
+        
+        /* 版本资源目录格式 */
+        public const string VERSION_DIR_NAME_FORMATER = "version_{0}_{1}_b{2}";
 
-        /* 补丁包名字格式 */
-        public const string PATCHER_NAME_FORMATER = "patcher_{0}-{1}_B{2}";
+        /* 版本资源中间目录 */
+        public const string VERSION_SOURCE_MID_DIR_PATH = "source_files";
 
     }
 }

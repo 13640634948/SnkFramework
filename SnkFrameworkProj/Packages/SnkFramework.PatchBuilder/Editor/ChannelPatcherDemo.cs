@@ -16,16 +16,16 @@ namespace SnkFramework.PatchBuilder
 
                 var sourcePaths = new SnkSourceFinder[]
                 {
-                    new() 
-                        { 
-                            sourceDirPath = "ProjectSettings", 
-                            //filters = new [] {"FSTimeGet"},
-                            //ignores = new [] {"aebe", "407"},
-                        },
+                    new()
+                    {
+                        sourceDirPath = "ProjectSettings",
+                        //filters = new [] {"FSTimeGet"},
+                        //ignores = new [] {"aebe", "407"},
+                    },
                 };
 
                 snkPatcher = SnkPatchBuilder.Load(repoName);
-                var patcher = snkPatcher.Build(sourcePaths, false);
+                snkPatcher.Build(sourcePaths, false);
             }
         }
     }
