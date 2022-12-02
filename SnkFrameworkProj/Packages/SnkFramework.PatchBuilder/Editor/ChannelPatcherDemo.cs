@@ -8,12 +8,10 @@ namespace SnkFramework.PatchBuilder
     {
         static public class ChannelPatcherDemo
         {
-            [MenuItem("SnkPatcher/Demo")]
-            public static void Test()
+            private static void internalTest(bool force)
             {
                 string repoName = "windf_iOS";
                 SnkPatchBuilder snkPatcher;
-
                 var sourcePaths = new SnkSourceFinder[]
                 {
                     new()
@@ -25,7 +23,19 @@ namespace SnkFramework.PatchBuilder
                 };
 
                 snkPatcher = SnkPatchBuilder.Load(repoName);
-                snkPatcher.Build(sourcePaths, false);
+                snkPatcher.Build(sourcePaths, force);
+            }
+
+            [MenuItem("SnkPatcher/Demo-TestWeak")]
+            public static void TestWeak()
+            {
+                internalTest(false);
+            }
+            
+            [MenuItem("SnkPatcher/Demo-TestForce")]
+            public static void TestForce()
+            {
+                internalTest(true);
             }
         }
     }

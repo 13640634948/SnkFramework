@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SnkFramework.PatchBuilder.Runtime.Core
 {
     public class SnkVersionInfos
@@ -8,13 +10,13 @@ namespace SnkFramework.PatchBuilder.Runtime.Core
         public int appVersion;
 
         /// <summary>
-        /// 弱资源版本
+        /// 资源版本
         /// </summary>
-        public int weakResVersion;
+        public int resVersion;
 
         /// <summary>
-        /// 强资源版本
+        /// 历史版本
         /// </summary>
-        public int forceResVersion;
+        public List<int> histories;
     }
 }

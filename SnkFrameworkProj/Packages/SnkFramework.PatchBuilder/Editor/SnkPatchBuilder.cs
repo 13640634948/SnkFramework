@@ -72,7 +72,7 @@ namespace SnkFramework.PatchBuilder
 
                 this._settings = LoadSettings();
                 if (!LoadVersionInfos(out this._versionInfos)) return;
-                var patcherName = this.GetPatcherName(this._settings.buildNum);
+                var patcherName = this.GetVersionDirectoryName(this._settings.buildNum);
                 if(string.IsNullOrEmpty(patcherName) == false) 
                     this._lastSourceInfoList = LoadLastSourceInfoList(patcherName);
             }
@@ -116,12 +116,20 @@ namespace SnkFramework.PatchBuilder
                 File.WriteAllText(fileInfo.FullName,this.JsonParser.ToJson(settings));
             }
 
+            /// <summary>
+            /// 加载版本信息
+            /// </summary>
+            /// <param name="versionInfos">版本信息引用对象</param>
+            /// <returns>结果，true：成功，false：失败</returns>
             private bool LoadVersionInfos(out SnkVersionInfos versionInfos)
             {
                 var fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME));
                 if (fileInfo.Exists == false)
                 { 
-                    versionInfos = new SnkVersionInfos();
+                    versionInfos = new SnkVersionInfos
+                    {
+                        histories = new List<int>()
+                    };
                     return false;
                 }
 
@@ -130,6 +138,10 @@ namespace SnkFramework.PatchBuilder
                 return true;
             }
 
+            /// <summary>
+            /// 保存版本信息
+            /// </summary>
+            /// <param name="versionInfos">版本信息对象</param>
             private void SaveVersionInfos(SnkVersionInfos versionInfos)
             {
                 string versionInfosPath = Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
@@ -174,6 +186,7 @@ namespace SnkFramework.PatchBuilder
                 if(result == false)
                     return null;
 
+                string dirName = this.GetVersionDirectoryName(this._versionInfos.resVersion);
                 foreach (var fileInfo in fileInfos)
                 {
                     var sourceInfo = new SnkSourceInfo
@@ -181,7 +194,8 @@ namespace SnkFramework.PatchBuilder
                         name = fileInfo.FullName.Replace(dirFullPath, string.Empty).Substring(1),
                         version = version,
                         md5 = fileInfo.FullName.GetHashCode().ToString(),
-                        size = fileInfo.Length
+                        size = fileInfo.Length,
+                        dir = dirName,
                     };
                     sourceInfoList.Add(sourceInfo);
                 }
@@ -226,9 +240,14 @@ namespace SnkFramework.PatchBuilder
                 }
             }
 
-            private string GetPatcherName(int buildNum)
+            /// <summary>
+            /// 获取版本目录名
+            /// </summary>
+            /// <param name="buildNum">构建号</param>
+            /// <returns>版本目录名</returns>
+            private string GetVersionDirectoryName(int buildNum)
             {
-                return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, this._versionInfos.forceResVersion, this._versionInfos.weakResVersion, buildNum);
+                return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, this._versionInfos.resVersion, buildNum);
             }
 
             /// <summary>
@@ -243,24 +262,24 @@ namespace SnkFramework.PatchBuilder
                 if(appVersion > 0)
                     this._versionInfos.appVersion = appVersion;
                 
-                var currResVersion = ++this._versionInfos.weakResVersion;
-                if (isResForce) 
-                    this._versionInfos.forceResVersion = currResVersion;
-
+                var resVersion = ++this._versionInfos.resVersion;
+                this._versionInfos.histories.Add(resVersion * (isResForce ? -1 : 1));
+                
                 //生成当前目标目录的资源信息列表
                 var currSourceInfoList = new List<SnkSourceInfo>();
                 foreach (var sourcePath in sourceFinderList)
                 {
-                    var list = GenerateSourceInfoList(currResVersion, sourcePath);
+                    var list = GenerateSourceInfoList(resVersion, sourcePath);
                     if (list == null)
                         continue;
                     currSourceInfoList.AddRange(list);
                 }
 
                 //拼接补丁包名字
-                string patcherName =this.GetPatcherName(++this._settings.buildNum);
-                string patcherDirPath = Path.Combine(ChannelRepoPath, patcherName);
+                string dirName =this.GetVersionDirectoryName(++this._settings.buildNum);
+                string patcherDirPath = Path.Combine(ChannelRepoPath, dirName);
 
+                //路径有效性
                 if (Directory.Exists(patcherDirPath) == false)
                     Directory.CreateDirectory(patcherDirPath);
                 
@@ -295,27 +314,13 @@ namespace SnkFramework.PatchBuilder
                 }
                 
                 //保存最新的资源清单
-                this.SaveLastSourceInfoList(_lastSourceInfoList, patcherName);
-                
-                /*
-                //压缩
-                if (SNK_BUILDER_CONST.COMPRESS_MODE)
-                {
-                    FileInfo zipFileInfo = new FileInfo(patcherDirPath + SNK_BUILDER_CONST.COMPRESS_FILE_SUFFIX);
-                    Compressor.Compress(patcherDirPath, zipFileInfo.FullName, CompressionLevel.Optimal, true);
-                    Directory.Delete(patcherDirPath, true);
-                    patcher.totalSize = zipFileInfo.Length;
-                }
-                else
-                {
-                    patcher.totalSize = willMoveSourceList.Sum(a => a.size);
-                }
-                */
-                
+                this.SaveLastSourceInfoList(_lastSourceInfoList, dirName);
+
                 //复制资源文件
                 string patchSourceRootDirPath = Path.Combine(patcherDirPath, SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH);
                 CopySourceTo(patchSourceRootDirPath, willMoveSourceList);
 
+                //保存版本信息
                 this.SaveVersionInfos(this._versionInfos);
                 
                 //保存设置文件
