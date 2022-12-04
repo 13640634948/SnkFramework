@@ -1,7 +1,10 @@
 {
     "name": "SnkFramework.PatchService.Runime",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:2d32753ef0fa9459bbef1793c3e5f2ea",
+        "GUID:04f4826efd875496dbc3fa41bf3845b4"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
