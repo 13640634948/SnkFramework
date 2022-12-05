@@ -1,6 +1,6 @@
 {
-  "name": "com.snkframework.assetbundle-svr",
-  "displayName": "Snk AssetBundleService",
+  "name": "com.snk-framework.assetbundle-svr",
+  "displayName": "Snk AssetBundle Service",
   "version": "0.1.0",
   "unity": "2021.3",
 
