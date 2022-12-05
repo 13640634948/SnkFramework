@@ -5,9 +5,6 @@ namespace SnkFramework.PatchBuilder.Runtime
     /// </summary>
     public class SnkBuilderSettings
     {
-        /// <summary>
-        /// 构建数
-        /// </summary>
-        public int buildNum;
+        
     }
 }

@@ -72,7 +72,7 @@ namespace SnkFramework.PatchBuilder
 
                 this._settings = LoadSettings();
                 if (!LoadVersionInfos(out this._versionInfos)) return;
-                var patcherName = this.GetVersionDirectoryName(this._settings.buildNum);
+                var patcherName = this.GetVersionDirectoryName();
                 if(string.IsNullOrEmpty(patcherName) == false) 
                     this._lastSourceInfoList = LoadLastSourceInfoList(patcherName);
             }
@@ -186,7 +186,7 @@ namespace SnkFramework.PatchBuilder
                 if(result == false)
                     return null;
 
-                string dirName = this.GetVersionDirectoryName(this._versionInfos.resVersion);
+                string dirName = this.GetVersionDirectoryName();
                 foreach (var fileInfo in fileInfos)
                 {
                     var sourceInfo = new SnkSourceInfo
@@ -245,9 +245,9 @@ namespace SnkFramework.PatchBuilder
             /// </summary>
             /// <param name="buildNum">构建号</param>
             /// <returns>版本目录名</returns>
-            private string GetVersionDirectoryName(int buildNum)
+            private string GetVersionDirectoryName()
             {
-                return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, this._versionInfos.resVersion, buildNum);
+                return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, this._versionInfos.resVersion);
             }
 
             /// <summary>
@@ -276,7 +276,7 @@ namespace SnkFramework.PatchBuilder
                 }
 
                 //拼接补丁包名字
-                string dirName =this.GetVersionDirectoryName(++this._settings.buildNum);
+                string dirName =this.GetVersionDirectoryName();
                 string patcherDirPath = Path.Combine(ChannelRepoPath, dirName);
 
                 //路径有效性
