@@ -52,6 +52,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.doc-generator": {
+      "version": "file:com.snkframework.doc-generator",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.hybrid-clr": {
       "version": "file:com.snkframework.hybrid-clr",
       "depth": 0,
