@@ -1,0 +1,11 @@
+{
+  "name": "com.snkframework.assetbundle-svr",
+  "displayName": "Snk AssetBundleService",
+  "version": "0.1.0",
+  "unity": "2021.3",
+
+  "author": {
+    "name": "ClaineLe"
+  },
+  "description": "SnkFramework AssetBundleService"
+}

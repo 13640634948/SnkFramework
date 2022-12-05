@@ -1,0 +1,14 @@
+{
+    "name": "SnkFramework.Network.FileStorage.Runtime",
+    "rootNamespace": "SnkFramework.Network.FileStorage.Runtime",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

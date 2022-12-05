@@ -1,0 +1,18 @@
+{
+    "name": "SnkFramework.Network.Connector.Editor",
+    "rootNamespace": "SnkFramework.Network.Connector.Editor",
+    "references": [
+        "SnkFramework.AssetBundleService.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
