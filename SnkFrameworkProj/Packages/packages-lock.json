@@ -29,61 +29,61 @@
       "url": "https://package.openupm.com"
     },
     "com.snkframework": {
-      "version": "file:SnkFramework",
+      "version": "file:com.snkframework",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.snkframework.addr-file": {
+      "version": "file:com.snkframework.addr-file",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.snkframework.asset-svr": {
+      "version": "file:com.snkframework.asset-svr",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.snkframework.assetbundle-svr": {
-      "version": "file:SnkFramework.AssetBundleService",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.cloud-repo": {
-      "version": "file:SnkFramework.CloudRepository",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.downloader": {
-      "version": "file:SnkFramework.DownLoader",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.fluent-binding": {
-      "version": "file:SnkFramework.FluentBinding",
+      "version": "file:com.snkframework.assetbundle-svr",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.snkframework.hybrid-clr": {
-      "version": "file:SnkFramework.HybridCLR",
+      "version": "file:com.snkframework.hybrid-clr",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.snkframework.mvvm-ui": {
-      "version": "file:SnkFramework.MvvmUI",
+      "version": "file:com.snkframework.mvvm-ui",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
-    "com.snkframework.patch-builder": {
-      "version": "file:SnkFramework.PatchBuilder",
+    "com.snkframework.network.connector": {
+      "version": "file:com.snkframework.network.connector",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.snkframework.network.file-storage": {
+      "version": "file:com.snkframework.network.file-storage",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.snkframework.network.web": {
+      "version": "file:com.snkframework.network.web",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.snkframework.patch-svr": {
-      "version": "file:SnkFramework.PatchService",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.template-for-upm.": {
-      "version": "file:SnkFramework.TemplateForUPM",
+      "version": "file:com.snkframework.patch-svr",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

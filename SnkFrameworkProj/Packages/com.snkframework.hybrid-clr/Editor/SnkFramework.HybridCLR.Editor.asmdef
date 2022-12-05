@@ -1,0 +1,14 @@
+{
+    "name": "SnkFramework.HybridCLR.Editor",
+    "rootNamespace": "SnkFramework.HybridCLR.Editor",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
