@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace SnkFramework.Network.FileStorage
 {
-    namespace Runtime.Base
+    namespace Runtime
     {
-        public interface ISnkStorage
+        public interface ISnkRuntimeStorage
         {
             public string StorageName { get; }
 
@@ -16,8 +16,6 @@ namespace SnkFramework.Network.FileStorage
 
             public (string, long)[] LoadObjects(string prefixKey = null);
             public string[] TakeObjects(List<string> keyList, string localDirPath);
-            public string[] PutObjects(List<string> keyList);
-            public string[] DeleteObjects(List<string> keyList);
         }
     }
 }

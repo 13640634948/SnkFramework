@@ -12,7 +12,7 @@ namespace SnkFramework.Network.FileStorage
         /// <summary>
         /// 阿里云OSS(Object Storage Service)
         /// </summary>
-        public class SnkOSSStorage : SnkEditorStorageBase<SnkOSSStorageSettings>
+        public class SnkOSSStorage : SnkEditorStorage<SnkOSSStorageSettings>
         {
             private int mBuffSize => this.settings.mBuffSize;
 

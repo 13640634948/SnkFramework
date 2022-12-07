@@ -4,14 +4,14 @@ using System.IO;
 
 namespace SnkFramework.Network.FileStorage
 {
-    namespace Runtime.Base
+    namespace Runtime
     {
-        public abstract class SnkStorage : ISnkStorage
+        public class SnkRuntimeStorage : ISnkRuntimeStorage
         {
             public virtual string StorageName => this.GetType().Name;
-            public STORAGE_STATE mStorageState { get; private set; }
-            public Exception mException { get; private set; }
-            public float mProgress { get; private set; }
+            public STORAGE_STATE mStorageState { get; protected set; }
+            public Exception mException { get; protected set; }
+            public float mProgress { get; protected set; }
 
             protected void setException(Exception exception)
             {
@@ -23,11 +23,6 @@ namespace SnkFramework.Network.FileStorage
                 this.mProgress = progress;
             }
 
-            protected abstract (string, long)[] doLoadObjects(string prefixKey = null);
-            protected abstract string[] doTakeObjects(List<string> keyList, string localDirPath);
-            protected abstract string[] doPutObjects(List<string> keyList);
-            protected abstract string[] doDeleteObjects(List<string> keyList);
-
             protected void EnsurePathExists(string fullPath)
             {
                 FileInfo fileInfo = new FileInfo(fullPath);
@@ -36,6 +31,13 @@ namespace SnkFramework.Network.FileStorage
                 if (fileInfo.Directory!.Exists == false)
                     fileInfo.Directory.Create();
             }
+
+            protected virtual (string, long)[] doLoadObjects(string prefixKey = null)
+                => throw new System.NotImplementedException();
+
+            protected virtual string[] doTakeObjects(List<string> keyList, string localDirPath)
+                => throw new System.NotImplementedException();
+
 
             public (string, long)[] LoadObjects(string prefixKey = null)
             {
@@ -65,33 +67,6 @@ namespace SnkFramework.Network.FileStorage
                 return result;
             }
 
-            public string[] PutObjects(List<string> keyList)
-            {
-                if (this.mStorageState != STORAGE_STATE.none)
-                    return default;
-                mStorageState = STORAGE_STATE.putting;
-                this.mProgress = 0;
-
-                var result = doPutObjects(keyList);
-
-                this.mProgress = 1.0f;
-                mStorageState = STORAGE_STATE.none;
-                return result;
-            }
-
-            public string[] DeleteObjects(List<string> keyList)
-            {
-                if (this.mStorageState != STORAGE_STATE.none)
-                    return default;
-                mStorageState = STORAGE_STATE.deleting;
-                this.mProgress = 0;
-
-                var result = doDeleteObjects(keyList);
-
-                this.mProgress = 1.0f;
-                mStorageState = STORAGE_STATE.none;
-                return result;
-            }
         }
     }
 }

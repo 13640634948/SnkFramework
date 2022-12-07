@@ -12,7 +12,7 @@ namespace SnkFramework.Network.FileStorage
 {
     namespace Editor
     {
-        public class SnkCOSStorage : SnkEditorStorageBase<SnkCOSStorageSettings>
+        public class SnkCOSStorage : SnkEditorStorage<SnkCOSStorageSettings>
         {
             private readonly CosXml _cos;
             private long mDurationSecond => this.settings.mDurationSecond;

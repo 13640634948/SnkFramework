@@ -11,7 +11,7 @@ namespace SnkFramework.Network.FileStorage
         /// <summary>
         /// 华为云OBS(Object Storage Service)
         /// </summary>
-        public class SnkOBSStorage : SnkEditorStorageBase<SnkOBSStorageSettings>
+        public class SnkOBSStorage : SnkEditorStorage<SnkOBSStorageSettings>
         {
             private readonly ObsClient _obs;
 

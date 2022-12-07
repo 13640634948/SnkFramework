@@ -1,6 +1,6 @@
 namespace SnkFramework.Network.FileStorage
 {
-    namespace Runtime.Base
+    namespace Runtime
     {
         public enum STORAGE_STATE
         {
