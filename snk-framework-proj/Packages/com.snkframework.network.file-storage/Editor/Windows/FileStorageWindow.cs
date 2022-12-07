@@ -11,7 +11,7 @@ namespace SnkFramework.Network.FileStorage
             private SnkCOSStorageSettings _mCosSetting = new();
             private SnkOBSStorageSettings _mObsSetting = new();
 
-            [MenuItem("Window/SnkFramework/Cloud Repository")]
+            [MenuItem("Window/SnkFramework/File Storage")]
             public static void ShowWindow()
             {
                 var window =
@@ -27,7 +27,7 @@ namespace SnkFramework.Network.FileStorage
                 EditorPrefs.SetString(key, json);
             }
 
-            private void InitCloudRepositoryWindow()
+            private void InitFileStorageWindow()
             {
                 _mOssSetting = SnkStorageSettings.Load<SnkOSSStorageSettings>();
                 _mCosSetting = SnkStorageSettings.Load<SnkCOSStorageSettings>();
@@ -43,7 +43,7 @@ namespace SnkFramework.Network.FileStorage
 
             private void OnEnable()
             {
-                InitCloudRepositoryWindow();
+                InitFileStorageWindow();
             }
 
             private void OnGUISnkStorageSettings(SnkStorageSettings settings)

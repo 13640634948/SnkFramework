@@ -4,7 +4,7 @@ namespace SnkFramework.Network.FileStorage
 {
     namespace Runtime.Base
     {
-        public abstract class SnkRemoteStorage : SnkStorage, ISnkRemoteStorage
+        public abstract class SnkRemoteStorage : SnkStorage
         {
             public virtual string mEndPoint => throw new NotImplementedException();
             public virtual string mAccessKeyId => throw new NotImplementedException();

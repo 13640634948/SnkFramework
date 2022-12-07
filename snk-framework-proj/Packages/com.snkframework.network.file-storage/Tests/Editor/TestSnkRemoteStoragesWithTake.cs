@@ -35,7 +35,7 @@ namespace SnkFramework.Netwokr.FileStorage
                 yield return ExecuteRemoteStorage<SnkRemoteOBSStorage>();
             }
 
-            private bool checkValid(ISnkRemoteStorage storage)
+            private bool checkValid(ISnkStorage storage)
             {
                 if (storage.mException != null)
                 {
@@ -46,9 +46,9 @@ namespace SnkFramework.Netwokr.FileStorage
             }
 
             protected IEnumerator ExecuteRemoteStorage<TRemoteStorage>()
-                where TRemoteStorage : class, ISnkRemoteStorage, new()
+                where TRemoteStorage : class, ISnkStorage, new()
             {
-                ISnkRemoteStorage storage = default;
+                ISnkStorage storage = default;
                 try
                 {
                     storage = new TRemoteStorage();
@@ -57,7 +57,7 @@ namespace SnkFramework.Netwokr.FileStorage
                 {
                     Debug.LogException(e);
                     Debug.LogError("创建远端仓库对象失败，请检查配置是否正确。type:" + typeof(TRemoteStorage).FullName);
-                    Debug.LogError("请到菜单：Window/SnkFramework/Cloud Repository 配置基础参数");
+                    Debug.LogError("请到菜单：Window/SnkFramework/File Storage 配置基础参数");
                 }
                 
                 if(storage == null)
@@ -110,21 +110,21 @@ namespace SnkFramework.Netwokr.FileStorage
                 Debug.Log("[" + tag + "-End]");
             }
 
-            private void ExecuteRemoteStorageWithLoad(ISnkRemoteStorage storage)
+            private void ExecuteRemoteStorageWithLoad(ISnkStorage storage)
             {
                 var infos = storage.LoadObjects();
                 var keys = infos.Select(a => a.Item1).ToArray();
                 Output("Load", keys);
             }
 
-            private void ExecuteRemoteStorageWithPut(ISnkRemoteStorage storage)
+            private void ExecuteRemoteStorageWithPut(ISnkStorage storage)
             {
                 string[] files = System.IO.Directory.GetFiles("ProjectSettings", "*.*", SearchOption.AllDirectories);
                 var keys = storage.PutObjects(files.ToList());
                 Output("Put", keys);
             }
 
-            private void ExecuteRemoteStorageWithTake(ISnkRemoteStorage storage, string localDirPath)
+            private void ExecuteRemoteStorageWithTake(ISnkStorage storage, string localDirPath)
             {
                 var remoteInfos = storage.LoadObjects();
                 var remoteKeys = remoteInfos.Select(a => a.Item1).ToArray();
@@ -132,7 +132,7 @@ namespace SnkFramework.Netwokr.FileStorage
                 Output("Take", keys);
             }
 
-            private void ExecuteRemoteStorageWithDelete(ISnkRemoteStorage storage)
+            private void ExecuteRemoteStorageWithDelete(ISnkStorage storage)
             {
                 var remoteInfos = storage.LoadObjects();
                 var remoteKeys = remoteInfos.Select(a => a.Item1).ToArray();
