@@ -74,8 +74,10 @@ namespace SnkFramework.Netwokr.FileStorage
                 ExecuteRemoteStorageWithLoad(storage);
                 if(checkValid(storage) == false)
                     yield break;
+
+                string tmpDirPath = "Tmp" + typeof(TRemoteStorage).Name;
                 
-                ExecuteRemoteStorageWithTake(storage, "Tmp" + typeof(TRemoteStorage).Name);
+                ExecuteRemoteStorageWithTake(storage, tmpDirPath);
                 if(checkValid(storage) == false)
                     yield break;
                 
@@ -86,6 +88,10 @@ namespace SnkFramework.Netwokr.FileStorage
                 ExecuteRemoteStorageWithLoad(storage);
                 if(checkValid(storage) == false)
                     yield break;
+                
+                if(Directory.Exists(tmpDirPath))
+                    Directory.Delete(tmpDirPath, true);
+                
                 Debug.Log("Test Completed============================");
             }
 
