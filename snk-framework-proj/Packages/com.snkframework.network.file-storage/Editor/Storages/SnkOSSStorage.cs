@@ -12,13 +12,13 @@ namespace SnkFramework.Network.FileStorage
         /// <summary>
         /// 阿里云OSS(Object Storage Service)
         /// </summary>
-        public class SnkRemoteOSSStorage : SnkEditorRemoteStorage<SnkOSSStorageSettings>
+        public class SnkOSSStorage : SnkEditorStorageBase<SnkOSSStorageSettings>
         {
             private int mBuffSize => this.settings.mBuffSize;
 
             private readonly IOss _oss;
 
-            public SnkRemoteOSSStorage()
+            public SnkOSSStorage()
             {
                 _oss = new OssClient(this.mEndPoint, this.mAccessKeyId, this.mAccessKeySecret);
             }

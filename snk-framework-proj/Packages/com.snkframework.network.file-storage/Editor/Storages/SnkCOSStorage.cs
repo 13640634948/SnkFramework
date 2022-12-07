@@ -12,12 +12,12 @@ namespace SnkFramework.Network.FileStorage
 {
     namespace Editor
     {
-        public class SnkRemoteCOSStorage : SnkEditorRemoteStorage<SnkCOSStorageSettings>
+        public class SnkCOSStorage : SnkEditorStorageBase<SnkCOSStorageSettings>
         {
             private readonly CosXml _cos;
             private long mDurationSecond => this.settings.mDurationSecond;
 
-            public SnkRemoteCOSStorage()
+            public SnkCOSStorage()
             {
                 var config = new CosXmlConfig.Builder()
                     .SetRegion(this.mEndPoint)

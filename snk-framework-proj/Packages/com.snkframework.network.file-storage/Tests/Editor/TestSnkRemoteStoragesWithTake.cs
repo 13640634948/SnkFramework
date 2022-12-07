@@ -18,21 +18,21 @@ namespace SnkFramework.Netwokr.FileStorage
             public IEnumerator SnkRemoteCOSStorageWithEnumeratorPasses()
             {
                 Debug.Log("开始测试：腾讯云对象仓库测试");
-                yield return ExecuteRemoteStorage<SnkRemoteCOSStorage>();
+                yield return ExecuteRemoteStorage<SnkCOSStorage>();
             }
 
             [UnityTest] //阿里云对象仓库测试
             public IEnumerator SnkRemoteOSSStorageWithEnumeratorPasses()
             {
                 Debug.Log("开始测试：阿里云对象仓库测试");
-                yield return ExecuteRemoteStorage<SnkRemoteOSSStorage>();
+                yield return ExecuteRemoteStorage<SnkOSSStorage>();
             }
 
             [UnityTest] //华为云对象仓库测试
             public IEnumerator SnkRemoteOBSStorageWithEnumeratorPasses()
             {
                 Debug.Log("开始测试：华为云对象仓库测试");
-                yield return ExecuteRemoteStorage<SnkRemoteOBSStorage>();
+                yield return ExecuteRemoteStorage<SnkOBSStorage>();
             }
 
             private bool checkValid(ISnkStorage storage)
