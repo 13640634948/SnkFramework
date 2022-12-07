@@ -1,12 +1,11 @@
-using SnkFramework.CloudRepository.Editor.Settings;
 using UnityEditor;
 using UnityEngine;
 
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Window
+    namespace Editor
     {
-        public class CloudRepositoryWindow : EditorWindow
+        public class FileStorageWindow : EditorWindow
         {
             private SnkOSSStorageSettings _mOssSetting = new();
             private SnkCOSStorageSettings _mCosSetting = new();
@@ -16,7 +15,7 @@ namespace SnkFramework.CloudRepository.Editor
             public static void ShowWindow()
             {
                 var window =
-                    GetWindow<CloudRepositoryWindow>(L10n.Tr("Cloud Repository"), typeof(CloudRepositoryWindow));
+                    GetWindow<FileStorageWindow>(L10n.Tr("File Storage"), typeof(FileStorageWindow));
                 window.minSize = new Vector2(445, 385);
                 window.Show();
             }
@@ -67,7 +66,8 @@ namespace SnkFramework.CloudRepository.Editor
                 using (var ds = new EditorGUI.DisabledScope(this._mCosSetting.mIsEnable == false))
                 {
                     OnGUISnkStorageSettings(this._mCosSetting);
-                    this._mCosSetting.mDurationSecond = EditorGUILayout.LongField("mDurationSecond", _mCosSetting.mDurationSecond);
+                    this._mCosSetting.mDurationSecond =
+                        EditorGUILayout.LongField("mDurationSecond", _mCosSetting.mDurationSecond);
                 }
 
                 GUILayout.Space(18);

@@ -1,14 +1,17 @@
 using System;
 
-namespace SnkFramework.CloudRepository.Runtime.Base
+namespace SnkFramework.Network.FileStorage
 {
-    public abstract class SnkRemoteStorage : SnkStorage, ISnkRemoteStorage
+    namespace Runtime.Base
     {
-        public virtual string mEndPoint => throw new NotImplementedException();
-        public virtual string mAccessKeyId => throw new NotImplementedException();
-        public virtual string mAccessKeySecret => throw new NotImplementedException();
-        public virtual string mBucketName => throw new NotImplementedException();
-        protected virtual bool mIsQuietDelete => true;
-        
+        public abstract class SnkRemoteStorage : SnkStorage, ISnkRemoteStorage
+        {
+            public virtual string mEndPoint => throw new NotImplementedException();
+            public virtual string mAccessKeyId => throw new NotImplementedException();
+            public virtual string mAccessKeySecret => throw new NotImplementedException();
+            public virtual string mBucketName => throw new NotImplementedException();
+            protected virtual bool mIsQuietDelete => true;
+
+        }
     }
 }

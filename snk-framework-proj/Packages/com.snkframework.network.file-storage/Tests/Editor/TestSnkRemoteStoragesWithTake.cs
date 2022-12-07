@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SnkFramework.CloudRepository.Editor.Storage;
-using SnkFramework.CloudRepository.Runtime.Base;
+using SnkFramework.Network.FileStorage.Editor;
+using SnkFramework.Network.FileStorage.Runtime.Base;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace SnkFramework.CloudRepository.Tests
+namespace SnkFramework.Netwokr.FileStorage
 {
-    namespace Editor
+    namespace Tests.Editor
     {
         public class TestSnkRemoteStoragesWithTake
         {

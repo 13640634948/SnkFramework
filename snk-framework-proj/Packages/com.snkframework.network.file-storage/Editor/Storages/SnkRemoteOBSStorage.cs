@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using OBS;
 using OBS.Model;
-using SnkFramework.CloudRepository.Editor.Settings;
 
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Storage
+    namespace Editor
     {
         /// <summary>
         /// 华为云OBS(Object Storage Service)
@@ -21,9 +20,9 @@ namespace SnkFramework.CloudRepository.Editor
                 _obs = new ObsClient(mAccessKeyId, mAccessKeySecret, mEndPoint);
             }
 
-            protected override (string,long)[] doLoadObjects(string prefixKey = null)
+            protected override (string, long)[] doLoadObjects(string prefixKey = null)
             {
-                var keyList = new List<(string,long)>();
+                var keyList = new List<(string, long)>();
                 try
                 {
                     ListObjectsResponse response;
@@ -70,7 +69,7 @@ namespace SnkFramework.CloudRepository.Editor
                         request.DownloadProgress += (_, status) =>
                             this.updateProgress((count + status.TransferPercentage) / totalCount);
                         var response = _obs.GetObject(request);
-                        response.WriteResponseStreamToFile( System.IO.Path.Combine(localDirPath, request.ObjectKey));
+                        response.WriteResponseStreamToFile(System.IO.Path.Combine(localDirPath, request.ObjectKey));
                         ++completedCount;
                     }
                 }

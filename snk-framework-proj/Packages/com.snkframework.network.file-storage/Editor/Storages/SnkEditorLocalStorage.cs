@@ -1,8 +1,8 @@
-using SnkFramework.CloudRepository.Runtime.Storage;
+using SnkFramework.Network.FileStorage.Runtime;
 
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Storage
+    namespace Editor
     {
         public class SnkEditorLocalStorage : SnkRuntimeLocalStorage
         {

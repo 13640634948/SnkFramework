@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Settings
+    namespace Editor
     {
         public abstract class SnkStorageSettings
         {
             public bool mIsEnable;
-            
+
             public string mEndPoint;
             public string mAccessKeyId;
             public string mAccessKeySecret;

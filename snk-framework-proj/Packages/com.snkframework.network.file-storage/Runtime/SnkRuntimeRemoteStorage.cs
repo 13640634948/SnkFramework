@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
-using SnkFramework.CloudRepository.Runtime.Base;
+using SnkFramework.Network.FileStorage.Runtime.Base;
 
-namespace SnkFramework.CloudRepository.Runtime
+
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Storage
+    namespace Runtime
     {
         public class SnkRuntimeRemoteStorage : SnkRemoteStorage
         {
-            protected override (string,long)[] doLoadObjects(string prefixKey = null)
+            protected override (string, long)[] doLoadObjects(string prefixKey = null)
             {
                 throw new NotImplementedException();
             }

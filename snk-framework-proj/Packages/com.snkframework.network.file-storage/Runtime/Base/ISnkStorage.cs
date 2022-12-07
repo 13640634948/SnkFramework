@@ -1,20 +1,23 @@
 using System.Collections.Generic;
 
-namespace SnkFramework.CloudRepository.Runtime.Base
+namespace SnkFramework.Network.FileStorage
 {
-    public interface ISnkStorage
+    namespace Runtime.Base
     {
-        public string StorageName { get; }
+        public interface ISnkStorage
+        {
+            public string StorageName { get; }
 
-        public STORAGE_STATE mStorageState { get; }
+            public STORAGE_STATE mStorageState { get; }
 
-        public System.Exception mException { get; }
+            public System.Exception mException { get; }
 
-        public float mProgress { get; }
+            public float mProgress { get; }
 
-        public (string,long)[] LoadObjects(string prefixKey = null);
-        public string[] TakeObjects(List<string> keyList, string localDirPath);
-        public string[] PutObjects(List<string> keyList);
-        public string[] DeleteObjects(List<string> keyList);
+            public (string, long)[] LoadObjects(string prefixKey = null);
+            public string[] TakeObjects(List<string> keyList, string localDirPath);
+            public string[] PutObjects(List<string> keyList);
+            public string[] DeleteObjects(List<string> keyList);
+        }
     }
 }

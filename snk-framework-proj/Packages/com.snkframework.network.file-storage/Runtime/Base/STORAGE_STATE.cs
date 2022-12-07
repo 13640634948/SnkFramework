@@ -1,11 +1,14 @@
-namespace SnkFramework.CloudRepository.Runtime.Base
+namespace SnkFramework.Network.FileStorage
 {
-    public enum STORAGE_STATE
+    namespace Runtime.Base
     {
-        none,
-        loading,
-        takeing,
-        putting,
-        deleting
+        public enum STORAGE_STATE
+        {
+            none,
+            loading,
+            takeing,
+            putting,
+            deleting
+        }
     }
 }

@@ -1,6 +1,6 @@
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Settings
+    namespace Editor
     {
         public class SnkOBSStorageSettings : SnkStorageSettings
         {

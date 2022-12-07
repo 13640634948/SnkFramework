@@ -4,13 +4,10 @@ using System.IO;
 using System.Linq;
 using Aliyun.OSS;
 using Aliyun.OSS.Common;
-using SnkFramework.CloudRepository.Editor.Settings;
-using SnkFramework.CloudRepository.Editor.Window;
-using SnkFramework.CloudRepository.Runtime.Storage;
 
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Storage
+    namespace Editor
     {
         /// <summary>
         /// 阿里云OSS(Object Storage Service)
@@ -26,9 +23,9 @@ namespace SnkFramework.CloudRepository.Editor
                 _oss = new OssClient(this.mEndPoint, this.mAccessKeyId, this.mAccessKeySecret);
             }
 
-            protected override (string,long)[] doLoadObjects(string prefixKey = null)
+            protected override (string, long)[] doLoadObjects(string prefixKey = null)
             {
-                var keyList = new List<(string,long)>();
+                var keyList = new List<(string, long)>();
                 try
                 {
                     ObjectListing result;

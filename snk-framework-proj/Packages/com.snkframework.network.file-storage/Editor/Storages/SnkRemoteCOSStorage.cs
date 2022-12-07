@@ -7,16 +7,16 @@ using COSXML.Auth;
 using COSXML.CosException;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
-using SnkFramework.CloudRepository.Editor.Settings;
 
-namespace SnkFramework.CloudRepository.Editor
+namespace SnkFramework.Network.FileStorage
 {
-    namespace Storage
+    namespace Editor
     {
         public class SnkRemoteCOSStorage : SnkEditorRemoteStorage<SnkCOSStorageSettings>
         {
             private readonly CosXml _cos;
             private long mDurationSecond => this.settings.mDurationSecond;
+
             public SnkRemoteCOSStorage()
             {
                 var config = new CosXmlConfig.Builder()
@@ -31,16 +31,16 @@ namespace SnkFramework.CloudRepository.Editor
                 _cos = new CosXmlServer(config, credentialProvider);
             }
 
-            protected override (string,long)[] doLoadObjects(string prefixKey = null)
+            protected override (string, long)[] doLoadObjects(string prefixKey = null)
             {
-                (string,long)[] resultArray = null;
+                (string, long)[] resultArray = null;
                 try
                 {
                     var request = new GetBucketRequest(this.mBucketName);
                     if (string.IsNullOrEmpty(prefixKey) == false)
                         request.SetPrefix(prefixKey);
                     var result = this._cos.GetBucket(request);
-                    
+
                     resultArray = result.listBucket.contentsList.Select(a => (a.key, a.size)).ToArray();
                 }
                 catch (CosClientException clientException)

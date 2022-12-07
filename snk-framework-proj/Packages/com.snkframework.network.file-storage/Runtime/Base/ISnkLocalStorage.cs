@@ -1,6 +1,9 @@
-namespace SnkFramework.CloudRepository.Runtime.Base
+namespace SnkFramework.Network.FileStorage
 {
-    public interface ISnkLocalStorage : ISnkStorage
+    namespace Runtime.Base
     {
+        public interface ISnkLocalStorage : ISnkStorage
+        {
+        }
     }
 }
