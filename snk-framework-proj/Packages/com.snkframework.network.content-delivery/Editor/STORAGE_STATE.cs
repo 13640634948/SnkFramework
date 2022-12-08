@@ -1,4 +1,4 @@
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
     namespace Runtime
     {

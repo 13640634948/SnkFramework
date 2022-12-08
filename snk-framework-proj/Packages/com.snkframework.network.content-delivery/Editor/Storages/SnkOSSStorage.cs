@@ -5,14 +5,14 @@ using System.Linq;
 using Aliyun.OSS;
 using Aliyun.OSS.Common;
 
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
     namespace Editor
     {
         /// <summary>
         /// 阿里云OSS(Object Storage Service)
         /// </summary>
-        public class SnkOSSStorage : SnkEditorStorage<SnkOSSStorageSettings>
+        public class SnkOSSStorage : SnkContentDeliveryStorage<SnkOSSStorageSettings>
         {
             private int mBuffSize => this.settings.mBuffSize;
 

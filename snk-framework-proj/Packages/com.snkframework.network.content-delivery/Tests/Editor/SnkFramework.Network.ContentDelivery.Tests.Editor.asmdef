@@ -1,9 +1,8 @@
 {
-    "name": "SnkFramework.Network.FileStorage.Tests.Editor",
-    "rootNamespace": "SnkFramework.Network.FileStorage.Tests.Editor",
+    "name": "SnkFramework.Network.ContentDelivery.Tests.Editor",
+    "rootNamespace": "SnkFramework.Network.ContentDelivery.Tests.Editor",
     "references": [
-        "SnkFramework.Network.FileStorage.Runtime",
-        "SnkFramework.Network.FileStorage.Editor",
+        "SnkFramework.Network.ContentDelivery.Editor",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

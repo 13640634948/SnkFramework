@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using SnkFramework.Network.ContentDelivery.Runtime;
 
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
-    namespace Runtime
+    namespace Editor
     {
-        public interface ISnkRuntimeStorage
-        {
-            public string StorageName { get; }
+        public interface ISnkContentDeliveryStorage
+        {            public string StorageName { get; }
 
             public STORAGE_STATE mStorageState { get; }
 
@@ -16,6 +16,8 @@ namespace SnkFramework.Network.FileStorage
 
             public (string, long)[] LoadObjects(string prefixKey = null);
             public string[] TakeObjects(List<string> keyList, string localDirPath);
+            public string[] PutObjects(List<string> keyList);
+            public string[] DeleteObjects(List<string> keyList);
         }
     }
 }

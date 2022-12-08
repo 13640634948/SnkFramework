@@ -1,11 +1,11 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
     namespace Editor
     {
-        public class FileStorageWindow : EditorWindow
+        public class ContentDeliveryWindow : EditorWindow
         {
             private SnkOSSStorageSettings _mOssSetting = new();
             private SnkCOSStorageSettings _mCosSetting = new();
@@ -15,7 +15,7 @@ namespace SnkFramework.Network.FileStorage
             public static void ShowWindow()
             {
                 var window =
-                    GetWindow<FileStorageWindow>(L10n.Tr("File Storage"), typeof(FileStorageWindow));
+                    GetWindow<ContentDeliveryWindow>(L10n.Tr("File Storage"), typeof(ContentDeliveryWindow));
                 window.minSize = new Vector2(445, 385);
                 window.Show();
             }

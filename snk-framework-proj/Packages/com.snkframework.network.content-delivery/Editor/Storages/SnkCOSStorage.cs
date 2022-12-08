@@ -8,11 +8,11 @@ using COSXML.CosException;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
 
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
     namespace Editor
     {
-        public class SnkCOSStorage : SnkEditorStorage<SnkCOSStorageSettings>
+        public class SnkCOSStorage : SnkContentDeliveryStorage<SnkCOSStorageSettings>
         {
             private readonly CosXml _cos;
             private long mDurationSecond => this.settings.mDurationSecond;

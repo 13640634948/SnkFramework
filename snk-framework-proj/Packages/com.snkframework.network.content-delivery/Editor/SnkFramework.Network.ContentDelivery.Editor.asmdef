@@ -1,6 +1,6 @@
 {
-    "name": "SnkFramework.Network.FileStorage.Runtime",
-    "rootNamespace": "SnkFramework.Network.FileStorage.Runtime",
+    "name": "SnkFramework.Network.ContentDelivery.Editor",
+    "rootNamespace": "SnkFramework.Network.ContentDelivery.Editor",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -10,5 +10,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

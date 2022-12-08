@@ -4,14 +4,14 @@ using System.Linq;
 using OBS;
 using OBS.Model;
 
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
     namespace Editor
     {
         /// <summary>
         /// 华为云OBS(Object Storage Service)
         /// </summary>
-        public class SnkOBSStorage : SnkEditorStorage<SnkOBSStorageSettings>
+        public class SnkOBSStorage : SnkContentDeliveryStorage<SnkOBSStorageSettings>
         {
             private readonly ObsClient _obs;
 

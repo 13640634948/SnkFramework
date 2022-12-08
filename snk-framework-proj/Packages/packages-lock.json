@@ -76,8 +76,8 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.snkframework.network.file-storage": {
-      "version": "file:com.snkframework.network.file-storage",
+    "com.snkframework.network.content-delivery": {
+      "version": "file:com.snkframework.network.content-delivery",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

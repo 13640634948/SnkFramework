@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SnkFramework.Network.FileStorage
+namespace SnkFramework.Network.ContentDelivery
 {
     namespace Editor
     {
