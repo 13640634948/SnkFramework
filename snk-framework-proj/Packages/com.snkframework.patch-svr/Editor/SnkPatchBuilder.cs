@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,8 +50,12 @@ namespace SnkFramework.PatchService
             /// Json解析器
             /// </summary>
             private ISnkPatchJsonParser _jsonParser;
-            private ISnkPatchJsonParser JsonParser => this._jsonParser ?? new SnkPatchJsonParser();
-            
+
+            private ISnkPatchJsonParser JsonParser => this._jsonParser ?? throw new NullReferenceException("没有配置json解析器");
+
+            public void RegisterJsonParser<TJsonParser>() where TJsonParser : class,ISnkPatchJsonParser,new()
+                =>this._jsonParser = new TJsonParser();
+
             /// <summary>
             /// 从渠道名加载渠道补丁包构建器
             /// </summary>

@@ -59,15 +59,6 @@ namespace SnkFramework.PatchService
             {
                 internalTest(true,true);
             }
-
-            [MenuItem("SnkPatcher/HttpGet")]
-            public static void ssss()
-            {
-                IEnumerable<int> unupgradedList;
-                SnkPatchService patchService = new SnkPatchService();
-                patchService.Initialize();
-            }
-            
         }
     }
 }

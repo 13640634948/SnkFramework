@@ -1,13 +1,29 @@
 using System.IO;
 using System.Threading.Tasks;
 using SnkFramework.PatchService.Runtime.Core;
-using UnityEngine;
 
 namespace SnkFramework.PatchService.Runtime
 {
+    public class PatchSettings
+    {
+        public string repoRootPath;
+
+        public  string channelName;
+
+        public string[] remoteURLArrays;
+    }
+    
+    
+
     public class SnkLocalSourceRepository : ISnkLocalSourceRepository
     {
+        
         public int Version { get; private set; } = 0;
+        private PatchSettings _settings;
+
+
+
+
         public Task Initialize()
         {
             string path = "persistentDataPath/.client";
@@ -20,9 +36,13 @@ namespace SnkFramework.PatchService.Runtime
             return Task.CompletedTask;
         }
 
+        void ISnkSourceRepository.SetupSettings(PatchSettings settings)
+        {
+            this._settings = settings;
+        }
+
         public bool Exist(string sourceKey)
         {
-            Debug.Log("Exist:" + sourceKey);
             return false;
         }
 
