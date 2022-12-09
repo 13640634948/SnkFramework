@@ -24,7 +24,7 @@ namespace SnkFramework.Mvvm.Runtime
         /// 注册层级对象到层级容器中
         /// </summary>
         /// <param name="container"></param>
-        protected abstract void RegiestLayer(ISnkLayerContainer container);
+        protected abstract void RegisterLayer(ISnkLayerContainer container);
         
         /// <summary>
         /// 视图查找器
@@ -98,7 +98,7 @@ namespace SnkFramework.Mvvm.Runtime
         protected ISnkLayerContainer InitializeLayerContainer(ISnkViewCamera viewCamera)
         {
             var layerContainer = CreateLayerContainer();
-            RegiestLayer(layerContainer);
+            RegisterLayer(layerContainer);
             layerContainer.Build(viewCamera);
             return layerContainer;
         }

@@ -26,7 +26,7 @@ namespace SnkFramework.Mvvm.Demo
                 return layerContainerGameObject.AddComponent<SnkLayerContainer>();
             }
 
-            protected override void RegiestLayer(ISnkLayerContainer container)
+            protected override void RegisterLayer(ISnkLayerContainer container)
             {
                 container.RegiestLayer<DemoUGUINormalLayer>();
                 container.RegiestLayer<DemoUGUIDialogueLayer>();
