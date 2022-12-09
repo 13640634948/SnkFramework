@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SnkFramework.PatchBuilder.Runtime.Core
+namespace SnkFramework.PatchService.Runtime.Core
 {
     public class SnkVersionInfos
     {

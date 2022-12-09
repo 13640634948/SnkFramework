@@ -2,7 +2,8 @@
     "name": "SnkFramework.PatchService.Editor",
     "rootNamespace": "SnkFramework.PatchService.Editor",
     "references": [
-        "SnkFramework.PatchService.Runime"
+        "SnkFramework.PatchService.Runime",
+        "SnkFramework.Network.ContentDelivery.Editor"
     ],
     "includePlatforms": [
         "Editor"

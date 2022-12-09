@@ -1,4 +1,4 @@
-namespace SnkFramework.PatchBuilder.Runtime
+namespace SnkFramework.PatchService.Runtime
 {
     public class SNK_BUILDER_CONST
     {

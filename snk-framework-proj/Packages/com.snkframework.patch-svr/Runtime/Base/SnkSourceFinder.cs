@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchService.Runtime.Base
 {
     /// <summary>
     /// 资源探测器

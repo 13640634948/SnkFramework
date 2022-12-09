@@ -1,14 +1,18 @@
-using SnkFramework.PatchBuilder.Editor;
-using SnkFramework.PatchBuilder.Runtime.Base;
+using System.Collections.Generic;
+using System.IO;
+using SnkFramework.Network.ContentDelivery.Editor;
+using SnkFramework.PatchService.Editor;
+using SnkFramework.PatchService.Runtime;
+using SnkFramework.PatchService.Runtime.Base;
 using UnityEditor;
 
-namespace SnkFramework.PatchBuilder
+namespace SnkFramework.PatchService
 {
     namespace Demo
     {
         static public class ChannelPatcherDemo
         {
-            private static void internalTest(bool force)
+            private static void internalTest(bool force, bool upload = false)
             {
                 string repoName = "windf_iOS";
                 SnkPatchBuilder snkPatcher;
@@ -24,6 +28,12 @@ namespace SnkFramework.PatchBuilder
 
                 snkPatcher = SnkPatchBuilder.Load(repoName);
                 snkPatcher.Build(sourcePaths, force);
+                if (upload)
+                {
+                    SnkCOSStorage storage = new SnkCOSStorage();
+                    string[] keys = Directory.GetFiles(Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH,repoName), "*.*", SearchOption.AllDirectories);
+                    storage.PutObjects(new List<string>(keys));
+                }
             }
 
             [MenuItem("SnkPatcher/Demo-TestWeak")]
@@ -37,6 +47,27 @@ namespace SnkFramework.PatchBuilder
             {
                 internalTest(true);
             }
+            
+            [MenuItem("SnkPatcher/Demo-TestWeak_Upload")]
+            public static void TestWeak_Upload()
+            {
+                internalTest(false,true);
+            }
+            
+            [MenuItem("SnkPatcher/Demo-TestForce_Upload")]
+            public static void TestForce_Upload()
+            {
+                internalTest(true,true);
+            }
+
+            [MenuItem("SnkPatcher/HttpGet")]
+            public static void ssss()
+            {
+                IEnumerable<int> unupgradedList;
+                SnkPatchService patchService = new SnkPatchService();
+                patchService.Initialize();
+            }
+            
         }
     }
 }

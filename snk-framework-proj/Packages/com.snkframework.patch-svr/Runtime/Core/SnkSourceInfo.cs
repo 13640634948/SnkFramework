@@ -1,4 +1,4 @@
-namespace SnkFramework.PatchBuilder.Runtime.Core
+namespace SnkFramework.PatchService.Runtime.Core
 {
     /// <summary>
     /// 资源信息

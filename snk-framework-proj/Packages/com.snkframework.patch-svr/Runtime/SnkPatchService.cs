@@ -3,40 +3,41 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using SnkFramework.PatchBuilder.Runtime.Core;
+using SnkFramework.PatchService.Runtime.Core;
+using UnityEngine;
 
 namespace SnkFramework.PatchService.Runtime
 {
     public class SnkPatchService : ISnkPatchService
     {
-        private ISnkLocalPatchStorage _localStorage;
-        private ISnkRemotePatchStorage _remoteStorage;
+        private ISnkLocalSourceRepository _localRepo;
+        private ISnkRemoteSourceRepository _remoteRepo;
 
         private bool _initialized = false;
 
-        public Func<ISnkLocalPatchStorage> localPatchStorageCreator;
-        public Func<ISnkRemotePatchStorage> remotePatchStorageCreator;
-        
-        protected void AvailableCheck()
+        public Func<ISnkLocalSourceRepository> localPatchStorageCreator = () => new SnkLocalSourceRepository();
+        public Func<ISnkRemoteSourceRepository> remotePatchStorageCreator = () => new SnkRemoteSourceRepository();
+
+        private void AvailableCheck()
         {
             if (_initialized == false)
                 throw new SnkException("PatchService is not initialized");
-            if (_localStorage == null)
+            if (_localRepo == null)
                 throw new SnkException("ILocalPatchStorage is null");
-            if (_remoteStorage == null)
+            if (_remoteRepo == null)
                 throw new SnkException("IRemotePatchStorage is null");
         }
-        
+
         public async Task Initialize()
         {
             if (_initialized)
                 return;
 
-            this._localStorage = this.localPatchStorageCreator();
-            this._remoteStorage = this.remotePatchStorageCreator();
-            
-            await this._localStorage.Initialize();
-            await this._remoteStorage.Initialize();
+            this._localRepo = this.localPatchStorageCreator();
+            this._remoteRepo = this.remotePatchStorageCreator();
+
+            await this._localRepo.Initialize();
+            await this._remoteRepo.Initialize();
             _initialized = true;
         }
 
@@ -48,13 +49,13 @@ namespace SnkFramework.PatchService.Runtime
         public bool IsLatestVersion(ref IEnumerable<int> unupgradedList)
         {
             this.AvailableCheck();
-            if (this._localStorage.Version == this._remoteStorage.Version)
+            if (this._localRepo.Version == this._remoteRepo.Version)
                 return true;
 
-            unupgradedList= from version in this._remoteStorage.GetResVersionHistories()
-                where Math.Abs(version) > this._localStorage.Version
-                select this._localStorage.Version;
-             
+            unupgradedList = from version in this._remoteRepo.GetResVersionHistories()
+                where Math.Abs(version) > this._localRepo.Version
+                select Math.Abs(version);
+
             return false;
         }
 
@@ -65,7 +66,7 @@ namespace SnkFramework.PatchService.Runtime
         /// <param name="from">从from版本</param>
         /// <param name="to">到to版本</param>
         /// <returns>升级资源列表</returns>
-        public SnkDiffManifest CollectUpgradSourceInfoList(int from, int to)
+        public async Task<SnkDiffManifest> CollectUpgradSourceInfoList(int from, int to)
         {
             SnkDiffManifest resultDiffManifest = new SnkDiffManifest()
             {
@@ -73,14 +74,16 @@ namespace SnkFramework.PatchService.Runtime
                 delList = new List<string>()
             };
 
-            for (var i = from; i < to; i++)
+            for (var i = from; i <= to; i++)
             {
-                var list = this._remoteStorage.GetDiffManifest(i);
-                
+                var list = await this._remoteRepo.GetDiffManifest(i);
+                if(list == null)
+                    continue;
+                Debug.Log("[" +i+"]addCnt:" + list.addList.Count + ", delCnt:" + list.delList.Count);
                 //移除所有变化的资源
                 resultDiffManifest.addList.RemoveAll(a => list.addList.Exists(b => a.name == b.name));
                 resultDiffManifest.delList.RemoveAll(a => list.delList.Exists(b => a == b));
-                
+
                 //添加新版本中的资源
                 resultDiffManifest.addList.AddRange(list.addList);
                 resultDiffManifest.delList.AddRange(list.delList);
@@ -95,15 +98,16 @@ namespace SnkFramework.PatchService.Runtime
         /// <param name="sourceKey">资源Key</param>
         /// <param name="equalityComparer">比较器</param>
         /// <returns>比对结果</returns>
-        private SnkSourceCompareResult CompareLocalWithRemote(string sourceKey, IEqualityComparer<SnkSourceInfo> equalityComparer = null)
+        private SnkSourceCompareResult CompareLocalWithRemote(string sourceKey,
+            IEqualityComparer<SnkSourceInfo> equalityComparer = null)
         {
-            if (this._localStorage.Exist(sourceKey) == false)
+            if (this._localRepo.Exist(sourceKey) == false)
                 return SnkSourceCompareResult.local_does_not_exist;
-            if (this._remoteStorage.Exist(sourceKey) == false)
+            if (this._remoteRepo.Exist(sourceKey) == false)
                 return SnkSourceCompareResult.remote_does_not_exist;
 
-            var localSourceInfo = this._localStorage.GetSourceInfo(sourceKey);
-            var remoteSourceInfo = this._remoteStorage.GetSourceInfo(sourceKey);
+            var localSourceInfo = this._localRepo.GetSourceInfo(sourceKey);
+            var remoteSourceInfo = this._remoteRepo.GetSourceInfo(sourceKey);
 
             var equality = false;
             if (equalityComparer != null)
@@ -112,7 +116,7 @@ namespace SnkFramework.PatchService.Runtime
                 equality = localSourceInfo.md5 == remoteSourceInfo.md5;
             return equality ? SnkSourceCompareResult.same : SnkSourceCompareResult.not_same;
         }
-        
+
         /// <summary>
         /// 预览补丁同步信息
         /// </summary>
@@ -126,9 +130,11 @@ namespace SnkFramework.PatchService.Runtime
             {
                 var compareResult = CompareLocalWithRemote(sourceInfo.name);
                 if (compareResult == SnkSourceCompareResult.remote_does_not_exist)
-                    throw new SnkException("remote is not exist. sourceKey:" + Path.Combine(sourceInfo.dir, sourceInfo.name));
+                    throw new SnkException("remote is not exist. sourceKey:" +
+                                           Path.Combine(sourceInfo.dir, sourceInfo.name));
                 promise.SourceInfoList.Add(sourceInfo);
             }
+
             return promise;
         }
 
@@ -138,12 +144,11 @@ namespace SnkFramework.PatchService.Runtime
         /// <param name="promise"></param>
         public void ApplyPatch(SnkPatchSynchronyPromise promise)
         {
-            string localPath = this._localStorage.LocalPath;
+            string localPath = this._localRepo.LocalPath;
             foreach (var sourceInfo in promise.SourceInfoList)
             {
-                this._remoteStorage.TakeFileToLocal(localPath, sourceInfo.name);
+                this._remoteRepo.TakeFileToLocal(localPath, sourceInfo.name, sourceInfo.version);
             }
         }
-
     }
 }

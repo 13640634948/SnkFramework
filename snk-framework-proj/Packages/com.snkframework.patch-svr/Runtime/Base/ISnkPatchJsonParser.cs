@@ -1,4 +1,4 @@
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchService.Runtime.Base
 {
     /// <summary>
     /// Json解析器接口

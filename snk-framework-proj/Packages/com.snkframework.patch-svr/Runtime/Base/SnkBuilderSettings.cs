@@ -1,4 +1,4 @@
-namespace SnkFramework.PatchBuilder.Runtime
+namespace SnkFramework.PatchService.Runtime
 {
     /// <summary>
     /// 补丁构建器设置

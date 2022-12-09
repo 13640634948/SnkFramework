@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using SnkFramework.PatchBuilder.Runtime.Core;
+using SnkFramework.PatchService.Runtime.Core;
 
 namespace SnkFramework.PatchService.Runtime
 {
-    public interface ISnkPatchStorage
+    public interface ISnkSourceRepository
     {
         public int Version { get; }
         public Task Initialize();

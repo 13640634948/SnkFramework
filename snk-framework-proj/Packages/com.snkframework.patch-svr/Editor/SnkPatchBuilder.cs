@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SnkFramework.PatchBuilder.Runtime;
-using SnkFramework.PatchBuilder.Runtime.Base;
-using SnkFramework.PatchBuilder.Runtime.Core;
+using SnkFramework.PatchService.Runtime;
+using SnkFramework.PatchService.Runtime.Base;
+using SnkFramework.PatchService.Runtime.Core;
 
-namespace SnkFramework.PatchBuilder
+namespace SnkFramework.PatchService
 {
     namespace Editor
     {

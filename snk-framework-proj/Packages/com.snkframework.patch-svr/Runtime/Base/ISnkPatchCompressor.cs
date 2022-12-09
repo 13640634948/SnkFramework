@@ -1,6 +1,6 @@
 using System.IO.Compression;
 
-namespace SnkFramework.PatchBuilder.Runtime.Base
+namespace SnkFramework.PatchService.Runtime.Base
 {
     /// <summary>
     /// 压缩器接口
