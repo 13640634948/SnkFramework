@@ -1,44 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
-using UnityEngine.Networking;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SnkFramework.Network.Web
 {
     public class SnkWeb
     {
-        public static IEnumerator HttpGet(string uri, System.Action<bool, string> onCompleted)
+        public static async Task<(bool, string)> HttpGet(string uri)
         {
-            using var webRequest = UnityWebRequest.Get(uri);
-            yield return webRequest.SendWebRequest();
-            if(webRequest.result == UnityWebRequest.Result.Success)
-                onCompleted?.Invoke(true,webRequest.downloadHandler.text);
-            else
-                onCompleted?.Invoke(false,webRequest.error);
-        }
-        public static IEnumerator HttpPost(string uri, Dictionary<string,string> formDict, System.Action<bool, string> onCompleted)
-        {
-            WWWForm form = new WWWForm();
-            foreach (var kvp in formDict)
-                form.AddField(kvp.Key, kvp.Value);
+            var request = WebRequest.CreateHttp(uri);
+            request.Method = "GET";
+            using var response = await request.GetResponseAsync() as HttpWebResponse;
 
-            using var webRequest = UnityWebRequest.Post(uri,form);
-            yield return webRequest.SendWebRequest();
-            if(webRequest.result == UnityWebRequest.Result.Success)
-                onCompleted?.Invoke(true,webRequest.downloadHandler.text);
-            else
-                onCompleted?.Invoke(false,webRequest.error);
+            if (response is { StatusCode: HttpStatusCode.OK })
+            {
+                await using var stream = response.GetResponseStream();
+                if (stream != null)
+                {
+                    using var streamReader = new StreamReader(stream, Encoding.UTF8);
+                    var context = await streamReader.ReadToEndAsync();
+                    return (true, context);
+                }
+            }
+
+            return (false, null);
         }
 
-        public static IEnumerator HttpDownload(string uri, string dirPath, System.Action<bool> onCompleted)
+        public static async Task<bool> HttpDownload(string uri, string dirPath)
         {
-            using var webRequest = UnityWebRequest.Get(uri);
-            string fileName = Path.GetFileName(uri);
-            string localFilePath = Path.Combine(dirPath, fileName);
-            webRequest.downloadHandler = new DownloadHandlerFile(localFilePath);
-            yield return webRequest.SendWebRequest();
-            onCompleted?.Invoke(webRequest.result == UnityWebRequest.Result.Success);
+            var request = WebRequest.CreateHttp(uri);
+            request.Method = "GET";
+            using var response = await request.GetResponseAsync() as HttpWebResponse;
+            if (response is not { StatusCode: HttpStatusCode.OK }) 
+                return false;
+
+            var buffer = new byte[1024 * 1024 * 2];
+            var fileName = Path.GetFileName(uri);
+            var localFilePath = Path.Combine(dirPath, fileName);
+            if (System.IO.File.Exists(localFilePath))
+                System.IO.File.Delete(localFilePath);
+            
+            await using var fileStream = new FileStream(localFilePath, FileMode.CreateNew);
+            await using var stream = response.GetResponseStream();
+            if (stream == null)
+                return false;
+            
+            var len = await stream.ReadAsync(buffer, 0, buffer.Length);
+            await fileStream.WriteAsync(buffer, 0, len);
+            
+            await fileStream.FlushAsync();
+            fileStream.Close();
+            
+            return true;
         }
     }
 }
