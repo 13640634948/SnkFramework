@@ -8,6 +8,8 @@ public class PatchServiceDemo : MonoBehaviour
     public async void Start()
     {
         PatchSettings settings = new PatchSettings();
+        settings.repoRootPath = "PersistentDataPath";
+        settings.channelName = "windf_iOS";
         _patchService = SnkPatchService.CreatePatchService(settings);
         try
         {
