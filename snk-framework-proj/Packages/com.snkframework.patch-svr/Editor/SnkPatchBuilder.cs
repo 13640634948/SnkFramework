@@ -252,34 +252,28 @@ namespace SnkFramework.PatchService
                     Directory.CreateDirectory(patcherDirPath);
                 
                 List<SnkSourceInfo> willMoveSourceList;
-                if (_lastSourceInfoList == null)
-                {
-                    //生成初始资源包（拓展包）
-                    _lastSourceInfoList = new List<SnkSourceInfo>();
-                    _lastSourceInfoList = currSourceInfoList;
-                    willMoveSourceList = currSourceInfoList;
-                }
-                else
-                {
-                    //生成差异列表
-                    var diffManifest = PatchHelper.GenerateDiffManifest(_lastSourceInfoList, currSourceInfoList);
+                
+                //首次构建资源包时，没有上一个版本资源
+                _lastSourceInfoList ??= new List<SnkSourceInfo>();
+                
+                //生成差异列表
+                var diffManifest = PatchHelper.GenerateDiffManifest(_lastSourceInfoList, currSourceInfoList);
 
-                    //移除所有变化的资源
-                    _lastSourceInfoList.RemoveAll(a => diffManifest.addList.Exists(b => a.name == b.name));
-                    _lastSourceInfoList.RemoveAll(a => diffManifest.delList.Exists(b => a.name == b));
+                //移除所有变化的资源
+                _lastSourceInfoList.RemoveAll(a => diffManifest.addList.Exists(b => a.name == b.name));
+                _lastSourceInfoList.RemoveAll(a => diffManifest.delList.Exists(b => a.name == b));
 
-                    //添加新增或者更新的资源
-                    _lastSourceInfoList.AddRange(diffManifest.addList);
+                //添加新增或者更新的资源
+                _lastSourceInfoList.AddRange(diffManifest.addList);
 
-                    //将要复制的资源
-                    willMoveSourceList = diffManifest.addList;
+                //将要复制的资源
+                willMoveSourceList = diffManifest.addList;
 
-                    //保存差异清单
-                    var diffManifestFileInfo = new FileInfo(Path.Combine(patcherDirPath, SNK_BUILDER_CONST.DIFF_FILE_NAME));
-                    if(diffManifestFileInfo.Exists)
-                        diffManifestFileInfo.Delete();
-                    File.WriteAllText(diffManifestFileInfo.FullName, this.JsonParser.ToJson(diffManifest));
-                }
+                //保存差异清单
+                var diffManifestFileInfo = new FileInfo(Path.Combine(patcherDirPath, SNK_BUILDER_CONST.DIFF_FILE_NAME));
+                if(diffManifestFileInfo.Exists)
+                    diffManifestFileInfo.Delete();
+                File.WriteAllText(diffManifestFileInfo.FullName, this.JsonParser.ToJson(diffManifest));
                 
                 //保存最新的资源清单
                 this.SaveLastSourceInfoList(_lastSourceInfoList, dirName);
