@@ -67,7 +67,7 @@ namespace SnkFramework.PatchService.Runtime
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);            
             MD5CryptoServiceProvider md5Provider = new MD5CryptoServiceProvider();            
             byte[] buffer = md5Provider.ComputeHash(fs);            
-            string resule = BitConverter.ToString(buffer);           
+            string resule = BitConverter.ToString(buffer).Replace("-", string.Empty);
             md5Provider.Clear();            
             fs.Close();           
             return resule;        
@@ -97,7 +97,7 @@ namespace SnkFramework.PatchService.Runtime
             string md5 = BitConverter.ToString(hashAlgorithm.Hash);                        
             hashAlgorithm.Clear();            
             inputStream.Close();            
-            return md5;        
+            return md5.Replace("-", string.Empty);        
         }
     }
 }
