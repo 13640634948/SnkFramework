@@ -93,6 +93,9 @@ namespace SnkFramework.PatchService.Runtime
                 if (list == null)
                     throw new NullReferenceException("获取远端DiffManife.json失败。resVersion:" + currVersion);
                 
+                //移除新增列表中删除
+                resultDiffManifest.addList.RemoveAll(a => list.delList.Exists(b => a.name == b));
+                
                 //移除所有变化的资源
                 resultDiffManifest.addList.RemoveAll(a => list.addList.Exists(b => a.name == b.name));
                 resultDiffManifest.delList.RemoveAll(a => list.delList.Exists(b => a == b));
