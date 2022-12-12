@@ -20,7 +20,7 @@ namespace SnkFramework.PatchService
                 {
                     new()
                     {
-                        sourceDirPath = "ProjectSettings",
+                        sourceDirPath = "ProjectSettingsDemo",
                         //filters = new [] {"FSTimeGet"},
                         //ignores = new [] {"aebe", "407"},
                     },
