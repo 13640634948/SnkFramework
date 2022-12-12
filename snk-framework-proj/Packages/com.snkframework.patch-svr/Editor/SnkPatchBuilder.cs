@@ -51,10 +51,10 @@ namespace SnkFramework.PatchService
             /// </summary>
             private ISnkPatchJsonParser _jsonParser;
 
-            private ISnkPatchJsonParser JsonParser => this._jsonParser ?? throw new NullReferenceException("没有配置json解析器");
+            private ISnkPatchJsonParser JsonParser => this._jsonParser ?? RegisterJsonParser<SnkPatchJsonParser>();// throw new NullReferenceException("没有配置json解析器");
 
-            public void RegisterJsonParser<TJsonParser>() where TJsonParser : class,ISnkPatchJsonParser,new()
-                =>this._jsonParser = new TJsonParser();
+            public ISnkPatchJsonParser RegisterJsonParser<TJsonParser>() where TJsonParser : class,ISnkPatchJsonParser,new()
+                =>this._jsonParser = new TJsonParser(); 
 
             /// <summary>
             /// 从渠道名加载渠道补丁包构建器
