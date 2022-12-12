@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SnkFramework.Network.ContentDelivery.Editor;
 using SnkFramework.PatchService.Editor;
 using SnkFramework.PatchService.Runtime;
@@ -30,9 +31,10 @@ namespace SnkFramework.PatchService
                 snkPatcher.Build(sourcePaths, force);
                 if (upload)
                 {
-                    SnkCOSStorage storage = new SnkCOSStorage();
-                    string[] keys = Directory.GetFiles(Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH,repoName), "*.*", SearchOption.AllDirectories);
-                    storage.PutObjects(new List<string>(keys));
+                    var storage = new SnkCOSStorage();
+                    var keys = Directory.GetFiles(Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH,repoName), "*.*", SearchOption.AllDirectories);
+                    var list = keys.Where(key => !Path.GetFileName(key).StartsWith(".")).ToList();
+                    storage.PutObjects(list);
                 }
             }
 
