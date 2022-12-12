@@ -145,6 +145,8 @@ namespace SnkFramework.PatchService.Runtime
             {
                 this._remoteRepo.TakeFileToLocal(localPath, sourceInfo.name, sourceInfo.version);
             }
+
+            this._localRepo.UpdateLocalResVersion(this._remoteRepo.Version);
         }
     }
 }

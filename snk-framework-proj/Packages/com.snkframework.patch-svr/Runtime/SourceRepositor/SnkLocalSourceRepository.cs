@@ -35,6 +35,17 @@ namespace SnkFramework.PatchService.Runtime
 
             return Task.CompletedTask;
         }
+        
+        public void UpdateLocalResVersion(int resVersion)
+        {
+            string path = "persistentDataPath/.client";
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            File.WriteAllText(path, resVersion.ToString());
+            this.Version = resVersion;
+        }
 
         void ISnkSourceRepository.SetupSettings(PatchSettings settings)
         {
