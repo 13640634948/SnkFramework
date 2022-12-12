@@ -81,7 +81,7 @@ namespace SnkFramework.PatchService
 
                 this._settings = LoadSettings();
                 if (!LoadVersionInfos(out this._versionInfos)) return;
-                var patcherName = this.GetVersionDirectoryName();
+                var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.resVersion);
                 if (string.IsNullOrEmpty(patcherName) == false)
                     this._lastSourceInfoList = LoadLastSourceInfoList(patcherName);
             }
@@ -187,32 +187,24 @@ namespace SnkFramework.PatchService
             /// <param name="version">信息列表的版本号</param>
             /// <param name="sourceFinder">资源探测器</param>
             /// <returns>资源信息列表</returns>
-            private List<SnkSourceInfo> GenerateSourceInfoList(int version, ISnkSourceFinder sourceFinder)
+            private List<SnkSourceInfo> GenerateSourceInfoList(int resVersion, ISnkSourceFinder sourceFinder)
             {
                 var result = sourceFinder.TrySurvey(out var fileInfos, out var dirFullPath);
                 if (result == false)
                     return null;
 
-                var dirName = this.GetVersionDirectoryName();
+                var dirName = PatchHelper.GetVersionDirectoryName(resVersion);
 
                 return fileInfos.Select(fileInfo => new SnkSourceInfo
                     {
                         name = fileInfo.FullName.Replace(dirFullPath, string.Empty).Substring(1),
-                        version = version,
+                        version = resVersion,
                         md5 = fileInfo.FullName.GetHashCode().ToString(),
                         size = fileInfo.Length,
                         dir = dirName,
                     }).ToList();
             }
 
-            /// <summary>
-            /// 获取版本目录名
-            /// </summary>
-            /// <returns>版本目录名</returns>
-            private string GetVersionDirectoryName()
-            {
-                return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, this._versionInfos.resVersion);
-            }
 
             /// <summary>
             /// 构建
@@ -241,7 +233,7 @@ namespace SnkFramework.PatchService
                 }
 
                 //拼接补丁包名字
-                var dirName = this.GetVersionDirectoryName();
+                var dirName = PatchHelper.GetVersionDirectoryName(resVersion);
                 var patcherDirPath = Path.Combine(ChannelRepoPath, dirName);
 
                 //路径有效性

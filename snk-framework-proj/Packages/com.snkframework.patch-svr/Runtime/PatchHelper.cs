@@ -7,6 +7,16 @@ namespace SnkFramework.PatchService.Runtime
 {
     public class PatchHelper
     {
+        
+        /// <summary>
+        /// 获取版本目录名
+        /// </summary>
+        /// <returns>版本目录名</returns>
+        public static string GetVersionDirectoryName(int version)
+        {
+            return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, version);
+        }
+        
         /// <summary>
         /// 生成资源差异清单
         /// </summary>
