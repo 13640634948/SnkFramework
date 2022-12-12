@@ -199,7 +199,7 @@ namespace SnkFramework.PatchService
                     {
                         name = fileInfo.FullName.Replace(dirFullPath, string.Empty).Substring(1),
                         version = resVersion,
-                        md5 = fileInfo.FullName.GetHashCode().ToString(),
+                        md5 = PatchHelper.getMD5ByMD5CryptoService(fileInfo.FullName),
                         size = fileInfo.Length,
                         dir = dirName,
                     }).ToList();
