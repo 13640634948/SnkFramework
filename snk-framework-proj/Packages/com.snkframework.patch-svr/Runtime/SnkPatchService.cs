@@ -65,19 +65,10 @@ namespace SnkFramework.PatchService.Runtime
         /// 当前是否是最新版本
         /// </summary>
         /// <returns>bool:最新版本；SnkDiffManifest：升级到最新版本的差异列表</returns>
-        public async Task<(bool,SnkDiffManifest)> IsLatestVersion()
+        public bool IsLatestVersion()
         {
             this.AvailableCheck();
-            if (this._localRepo.Version == this._remoteRepo.Version)
-                return (true, null);
-
-            var unupgradedList = from version in this._remoteRepo.GetResVersionHistories()
-                where Math.Abs(version) > this._localRepo.Version
-                select Math.Abs(version);
-
-            var list = unupgradedList.ToList();
-            var diffManifest = await CollectUpgradSourceInfoList(list[0], list[^1]);
-            return (false, diffManifest);
+            return this._localRepo.Version == this._remoteRepo.Version;
         }
 
         /// <summary>
@@ -86,19 +77,22 @@ namespace SnkFramework.PatchService.Runtime
         /// <param name="from">从from版本</param>
         /// <param name="to">到to版本</param>
         /// <returns>升级资源列表</returns>
-        private async Task<SnkDiffManifest> CollectUpgradSourceInfoList(int from, int to)
+        public async Task<SnkDiffManifest> PreviewPatchSynchronyPromise()
         {
-            SnkDiffManifest resultDiffManifest = new SnkDiffManifest()
-            {
-                addList = new List<SnkSourceInfo>(),
-                delList = new List<string>()
-            };
+            var resultDiffManifest = new SnkDiffManifest();
 
-            for (var i = from; i <= to; i++)
+            //从远端版本列表中，筛选出比本地版本号大的资源版本
+            var upgradeList = (from version in this._remoteRepo.GetResVersionHistories()
+                where Math.Abs(version) > this._localRepo.Version
+                select Math.Abs(version)).ToList();
+
+            var currVersion = upgradeList[0];//第一个版本
+            while (currVersion <= upgradeList[^1])//最后一个版本
             {
-                var list = await this._remoteRepo.GetDiffManifest(i);
-                if(list == null)
-                    continue;
+                var list = await this._remoteRepo.GetDiffManifest(currVersion);
+                if (list == null)
+                    throw new NullReferenceException("获取远端DiffManife.json失败。resVersion:" + currVersion);
+                
                 //移除所有变化的资源
                 resultDiffManifest.addList.RemoveAll(a => list.addList.Exists(b => a.name == b.name));
                 resultDiffManifest.delList.RemoveAll(a => list.delList.Exists(b => a == b));
@@ -106,8 +100,10 @@ namespace SnkFramework.PatchService.Runtime
                 //添加新版本中的资源
                 resultDiffManifest.addList.AddRange(list.addList);
                 resultDiffManifest.delList.AddRange(list.delList);
-            }
 
+                ++currVersion;
+            }
+            
             return resultDiffManifest;
         }
 
@@ -136,34 +132,13 @@ namespace SnkFramework.PatchService.Runtime
         }
 
         /// <summary>
-        /// 预览补丁同步信息
-        /// </summary>
-        /// <param name="diffManifest"></param>
-        /// <returns></returns>
-        /// <exception cref="SnkException"></exception>
-        public SnkPatchSynchronyPromise PreviewPatchSynchronyPromise(SnkDiffManifest diffManifest)
-        {
-            var promise = new SnkPatchSynchronyPromise();
-            foreach (var sourceInfo in diffManifest.addList)
-            {
-                var compareResult = CompareLocalWithRemote(sourceInfo.name);
-                if (compareResult == SnkSourceCompareResult.remote_does_not_exist)
-                    throw new SnkException("remote is not exist. sourceKey:" +
-                                           Path.Combine(sourceInfo.dir, sourceInfo.name));
-                promise.SourceInfoList.Add(sourceInfo);
-            }
-
-            return promise;
-        }
-
-        /// <summary>
         /// 应用补丁
         /// </summary>
         /// <param name="promise"></param>
-        public void ApplyPatch(SnkPatchSynchronyPromise promise)
+        public void ApplyPatch(SnkDiffManifest diffManifest)
         {
             string localPath = this._localRepo.LocalPath;
-            foreach (var sourceInfo in promise.SourceInfoList)
+            foreach (var sourceInfo in diffManifest.addList)
             {
                 this._remoteRepo.TakeFileToLocal(localPath, sourceInfo.name, sourceInfo.version);
             }

@@ -6,8 +6,8 @@ namespace SnkFramework.PatchService.Runtime
     public interface ISnkPatchService
     {
         public Task Initialize();
-        public Task<(bool, SnkDiffManifest)> IsLatestVersion();
-        public SnkPatchSynchronyPromise PreviewPatchSynchronyPromise(SnkDiffManifest diffManifest);
-        public void ApplyPatch(SnkPatchSynchronyPromise promise);
+        public bool IsLatestVersion();
+        public Task<SnkDiffManifest> PreviewPatchSynchronyPromise();
+        public void ApplyPatch(SnkDiffManifest diffManifest);
     }
 }

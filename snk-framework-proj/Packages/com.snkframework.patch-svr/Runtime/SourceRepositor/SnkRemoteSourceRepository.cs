@@ -60,8 +60,6 @@ namespace SnkFramework.PatchService.Runtime
 
         public async Task<SnkDiffManifest> GetDiffManifest(int version)
         {
-            if (version == 1)
-                return null;
             string uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, SNK_BUILDER_CONST.DIFF_FILE_NAME);
             var list = await InternalGet<SnkDiffManifest>(string.Format(uri, version));
             return list;
