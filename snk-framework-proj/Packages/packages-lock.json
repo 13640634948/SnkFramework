@@ -7,22 +7,8 @@
       "dependencies": {},
       "hash": "e949d3e741950d55be7e3d6c6924dcf8935bbec2"
     },
-    "com.cysharp.messagepipe": {
-      "version": "1.7.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
-    "com.cysharp.messagepipe.vcontainer": {
-      "version": "1.7.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.cysharp.unitask": {
-      "version": "2.3.2",
+      "version": "2.3.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -132,7 +118,7 @@
       }
     },
     "com.unity.ide.rider": {
-      "version": "3.0.16",
+      "version": "3.0.17",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -141,7 +127,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.16",
+      "version": "2.0.17",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -257,7 +243,7 @@
       "url": "https://packages.unity.com"
     },
     "jp.hadashikick.vcontainer": {
-      "version": "1.11.1",
+      "version": "1.12.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
