@@ -209,43 +209,6 @@ namespace SnkFramework.PatchService
             }
 
             /// <summary>
-            /// 生成资源差异清单
-            /// </summary>
-            /// <param name="prevSourceInfoList">上一个版本的资源信息列表</param>
-            /// <param name="currSourceInfoList">当前版本的资源列表</param>
-            /// <returns>资源差异清单</returns>
-            private SnkDiffManifest GenerateDiffManifest(IReadOnlyCollection<SnkSourceInfo> prevSourceInfoList, IReadOnlyCollection<SnkSourceInfo> currSourceInfoList)
-            {
-                if (prevSourceInfoList == null)
-                    return null;
-                var comparer = new SnkSourceInfoComparer();
-
-                var diffManifest = new SnkDiffManifest
-                {
-                    delList = prevSourceInfoList.Except(currSourceInfoList, comparer).Select(a => a.name).ToList(),
-                    addList = currSourceInfoList.Except(prevSourceInfoList, comparer).ToList()
-                };
-                return diffManifest;
-            }
-
-            /// <summary>
-            /// 复制资源文件到指定目录下
-            /// </summary>
-            /// <param name="toDirectoryFullPath">目标目录的绝对路径</param>
-            /// <param name="sourceInfoList">需要复制的资源信息列表</param>
-            private void CopySourceTo(string toDirectoryFullPath, List<SnkSourceInfo> sourceInfoList)
-            {
-                foreach (var sourceInfo in sourceInfoList)
-                {
-                    var fromFileInfo = new FileInfo(sourceInfo.name);
-                    var toFileInfo = new FileInfo(Path.Combine(toDirectoryFullPath, sourceInfo.name));
-                    if (toFileInfo.Directory!.Exists == false)
-                        toFileInfo.Directory.Create();
-                    fromFileInfo.CopyTo(toFileInfo.FullName);
-                }
-            }
-
-            /// <summary>
             /// 获取版本目录名
             /// </summary>
             /// <param name="buildNum">构建号</param>
@@ -299,7 +262,7 @@ namespace SnkFramework.PatchService
                 else
                 {
                     //生成差异列表
-                    var diffManifest = GenerateDiffManifest(_lastSourceInfoList, currSourceInfoList);
+                    var diffManifest = PatchHelper.GenerateDiffManifest(_lastSourceInfoList, currSourceInfoList);
 
                     //移除所有变化的资源
                     _lastSourceInfoList.RemoveAll(a => diffManifest.addList.Exists(b => a.name == b.name));
@@ -323,7 +286,7 @@ namespace SnkFramework.PatchService
 
                 //复制资源文件
                 string patchSourceRootDirPath = Path.Combine(patcherDirPath, SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH);
-                CopySourceTo(patchSourceRootDirPath, willMoveSourceList);
+                PatchHelper.CopySourceTo(patchSourceRootDirPath, willMoveSourceList);
 
                 //保存版本信息
                 this.SaveVersionInfos(this._versionInfos);
