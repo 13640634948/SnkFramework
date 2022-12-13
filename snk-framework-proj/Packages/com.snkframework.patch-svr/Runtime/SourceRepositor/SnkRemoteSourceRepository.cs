@@ -46,14 +46,12 @@ namespace SnkFramework.PatchService.Runtime
         private async Task<T> InternalGet<T>(string uri) where T : class
         {
             var (result, jsonString) = await SnkWeb.HttpGet(uri);
-            if (result == false)
-                return null;
-            return SnkPatchService.jsonParser.FromJson<T>(jsonString);
+            return result == false ? null : SnkPatchService.jsonParser.FromJson<T>(jsonString);
         }
 
         public async Task<List<SnkSourceInfo>> GetSourceInfoList(int version)
         {
-            string uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
             var list = await InternalGet<List<SnkSourceInfo>>(string.Format(uri, version));
             return list;
         }
@@ -74,7 +72,9 @@ namespace SnkFramework.PatchService.Runtime
                 SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER,
                 SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH, key);
             var uri = string.Format(tmpPath, version);
-            var result = await SnkWeb.HttpDownload(uri, localDirName);
+            var result = await SnkWeb.HttpDownload(uri, Path.Combine(localDirName, key));
+            if (result == false)
+                throw new Exception("[Download-Error]" + uri);
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using SnkFramework.PatchService.Runtime.Core;
@@ -21,9 +23,6 @@ namespace SnkFramework.PatchService.Runtime
         public int Version { get; private set; } = 0;
         private PatchSettings _settings;
 
-
-
-
         public Task Initialize()
         {
             string path = "persistentDataPath/.client";
@@ -32,7 +31,6 @@ namespace SnkFramework.PatchService.Runtime
                 string text = File.ReadAllText(path);
                 Version = int.Parse(text.Trim());
             }
-
             return Task.CompletedTask;
         }
         
@@ -60,6 +58,24 @@ namespace SnkFramework.PatchService.Runtime
         public SnkSourceInfo GetSourceInfo(string key)
         {
             throw new System.NotImplementedException();
+        }
+
+        public async Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
+        {
+            var list = new List<SnkSourceInfo>();
+            var filePaths = Directory.GetFiles(this._settings.repoRootPath, "*.*", SearchOption.AllDirectories);
+            foreach (var filePath in filePaths)
+            {
+                if(Path.GetFileName(filePath).StartsWith("."))
+                    continue;
+                var info = new SnkSourceInfo
+                {
+                    name = filePath.Replace(this._settings.repoRootPath + "/", string.Empty),
+                    md5 = PatchHelper.getMD5ByMD5CryptoService(filePath)
+                };
+                list.Add(info);
+            }
+            return list;
         }
 
         public string LocalPath { get; }

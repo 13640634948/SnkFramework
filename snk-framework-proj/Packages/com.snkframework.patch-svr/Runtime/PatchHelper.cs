@@ -18,23 +18,23 @@ namespace SnkFramework.PatchService.Runtime
         {
             return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, version);
         }
-        
+
+        private static IEqualityComparer<SnkSourceInfo> comparer = new SnkSourceInfoComparer();
         /// <summary>
         /// 生成资源差异清单
         /// </summary>
         /// <param name="prevSourceInfoList">上一个版本的资源信息列表</param>
         /// <param name="currSourceInfoList">当前版本的资源列表</param>
         /// <returns>资源差异清单</returns>
-        public static SnkDiffManifest GenerateDiffManifest(IReadOnlyCollection<SnkSourceInfo> prevSourceInfoList, IReadOnlyCollection<SnkSourceInfo> currSourceInfoList)
+        public static SnkDiffManifest GenerateDiffManifest(IReadOnlyCollection<SnkSourceInfo> leftList, IReadOnlyCollection<SnkSourceInfo> rightList)
         {
-            if (prevSourceInfoList == null)
+            if (leftList == null || rightList == null)
                 return null;
-            var comparer = new SnkSourceInfoComparer();
-
+            
             var diffManifest = new SnkDiffManifest
             {
-                delList = prevSourceInfoList.Except(currSourceInfoList, comparer).Select(a => a.name).ToList(),
-                addList = currSourceInfoList.Except(prevSourceInfoList, comparer).ToList()
+                delList = leftList.Except(rightList, comparer).Select(a => a.name).ToList(),
+                addList = rightList.Except(leftList, comparer).ToList()
             };
             return diffManifest;
         }

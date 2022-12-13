@@ -11,7 +11,7 @@ namespace SnkFramework.PatchService
 {
     namespace Demo
     {
-        static public class ChannelPatcherDemo
+        public static class ChannelPatcherDemo
         {
             private static void internalTest(bool force, bool upload = false)
             {
@@ -23,7 +23,7 @@ namespace SnkFramework.PatchService
                     {
                         sourceDirPath = "ProjectSettingsDemo",
                         //filters = new [] {"FSTimeGet"},
-                        //ignores = new [] {"aebe", "407"},
+                        ignores = new [] {".DS_Store"},
                     },
                 };
 

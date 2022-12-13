@@ -15,6 +15,9 @@ namespace SnkFramework.PatchService.Runtime
         private ISnkLocalSourceRepository _localRepo;
         private ISnkRemoteSourceRepository _remoteRepo;
 
+        public int LocalResVersion => this._localRepo.Version;
+        public int RemoteResVersion=> this._remoteRepo.Version;
+        
         private bool _initialized = false;
 
         public static ISnkPatchService CreatePatchService(PatchSettings settings)
@@ -109,36 +112,12 @@ namespace SnkFramework.PatchService.Runtime
             
             return resultDiffManifest;
         }
-
-        /// <summary>
-        /// 比对本地文件与远端文件是否一致
-        /// </summary>
-        /// <param name="sourceKey">资源Key</param>
-        /// <param name="equalityComparer">比较器</param>
-        /// <returns>比对结果</returns>
-        private SnkSourceCompareResult CompareLocalWithRemote(string sourceKey, IEqualityComparer<SnkSourceInfo> equalityComparer = null)
-        {
-            if (this._localRepo.Exist(sourceKey) == false)
-                return SnkSourceCompareResult.local_does_not_exist;
-            if (this._remoteRepo.Exist(sourceKey) == false)
-                return SnkSourceCompareResult.remote_does_not_exist;
-
-            var localSourceInfo = this._localRepo.GetSourceInfo(sourceKey);
-            var remoteSourceInfo = this._remoteRepo.GetSourceInfo(sourceKey);
-
-            var equality = false;
-            if (equalityComparer != null)
-                equality = equalityComparer.Equals(localSourceInfo, remoteSourceInfo);
-            else
-                equality = localSourceInfo.md5 == remoteSourceInfo.md5;
-            return equality ? SnkSourceCompareResult.same : SnkSourceCompareResult.not_same;
-        }
-
+ 
         /// <summary>
         /// 应用补丁
         /// </summary>
         /// <param name="promise"></param>
-        public void ApplyPatch(SnkDiffManifest diffManifest)
+        public void ApplyDiffManifest(SnkDiffManifest diffManifest)
         {
             string localPath = this._localRepo.LocalPath;
             foreach (var sourceInfo in diffManifest.addList)
@@ -148,5 +127,15 @@ namespace SnkFramework.PatchService.Runtime
 
             this._localRepo.UpdateLocalResVersion(this._remoteRepo.Version);
         }
+
+        public async Task<SnkDiffManifest> PreviewRollBackTo(int version)
+        {
+            var localList = await this._localRepo.GetSourceInfoList();
+            var remoteList = await this._remoteRepo.GetSourceInfoList(version);
+            return PatchHelper.GenerateDiffManifest(localList, remoteList);
+        }
+
+        public async Task<SnkDiffManifest> PreviewRepairSourceToLatestVersion()
+            => await PreviewRollBackTo(this._remoteRepo.Version);
     }
 }
