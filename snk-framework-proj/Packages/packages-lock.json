@@ -80,6 +80,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.settings-mgr": {
+      "version": "file:com.snkframework.settings-mgr",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "1.15.18",
       "depth": 0,
