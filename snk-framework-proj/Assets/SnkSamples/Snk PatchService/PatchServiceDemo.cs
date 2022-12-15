@@ -18,13 +18,13 @@ public class PatchServiceDemo : MonoBehaviour
     public int SourceRollBackToVersion = -1;
     public async void Start()
     {
-        var settings = new PatchSettings
+        var settings = new SnkPatchSettings
         {
             repoRootPath = "PersistentDataPath",
             channelName = "windf_iOS"
         };
         
-        _patchService = SnkPatchService.CreatePatchService(settings);
+        _patchService = await SnkPatchService.CreatePatchService(settings);
         try
         {
             await _patchService.Initialize();
