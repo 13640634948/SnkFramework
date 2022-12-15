@@ -7,13 +7,7 @@ namespace SnkFramework.PatchService.Runtime
     public interface ISnkSourceRepository
     {
         public int Version { get; }
-        public Task Initialize();
-
-        internal void SetupSettings(PatchSettings settings);
-
-        public bool Exist(string sourceKey);
-        public SnkSourceInfo GetSourceInfo(string key);
+        public Task Initialize(SnkPatchSettings settings); 
         public Task<List<SnkSourceInfo>> GetSourceInfoList(int version=-1);
-
     }
 }

@@ -18,11 +18,14 @@ namespace SnkFramework.PatchService.Runtime
         public int LocalResVersion => this._localRepo.Version;
         public int RemoteResVersion=> this._remoteRepo.Version;
         
+        private SnkPatchSettings _settings;
+
         private bool _initialized = false;
 
-        public static ISnkPatchService CreatePatchService(PatchSettings settings)
-            => CreatePatchService<SnkLocalSourceRepository, SnkRemoteSourceRepository>(settings);
-        public static ISnkPatchService CreatePatchService<TLocalRepository, TRemoteRepository>(PatchSettings settings)
+        public static async Task<ISnkPatchService> CreatePatchService(SnkPatchSettings settings)
+            => await CreatePatchService<SnkLocalSourceRepository, SnkRemoteSourceRepository>(settings);
+        
+        public static async Task<ISnkPatchService> CreatePatchService<TLocalRepository, TRemoteRepository>(SnkPatchSettings settings)
             where TLocalRepository : class, ISnkLocalSourceRepository, new()
             where TRemoteRepository : class, ISnkRemoteSourceRepository, new()
         {
@@ -32,15 +35,20 @@ namespace SnkFramework.PatchService.Runtime
                 _localRepo = new TLocalRepository(),
                 _remoteRepo = new TRemoteRepository()
             };
-
-            service._localRepo.SetupSettings(settings);
-            service._remoteRepo.SetupSettings(settings);
+            await service.Initialize();
             return service;
         }
 
         protected SnkPatchService()
         {
             
+        }
+
+        public async Task Initialize()
+        {
+            await this._localRepo.Initialize(this._settings);
+            await this._remoteRepo.Initialize(this._settings);
+            this._initialized = true;
         }
 
         private void AvailableCheck()
@@ -51,17 +59,6 @@ namespace SnkFramework.PatchService.Runtime
                 throw new SnkException("ILocalPatchStorage is null");
             if (_remoteRepo == null)
                 throw new SnkException("IRemotePatchStorage is null");
-        }
-
-        private PatchSettings _settings;
-        public async Task Initialize()
-        {
-            if (_initialized)
-                return;
-
-            await this._localRepo.Initialize();
-            await this._remoteRepo.Initialize();
-            _initialized = true;
         }
 
         /// <summary>
@@ -128,7 +125,7 @@ namespace SnkFramework.PatchService.Runtime
             this._localRepo.UpdateLocalResVersion(this._remoteRepo.Version);
         }
 
-        public async Task<SnkDiffManifest> PreviewRollBackTo(int version)
+        private async Task<SnkDiffManifest> PreviewRollBackTo(int version)
         {
             var localList = await this._localRepo.GetSourceInfoList();
             var remoteList = await this._remoteRepo.GetSourceInfoList(version);

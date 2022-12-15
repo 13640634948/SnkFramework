@@ -7,22 +7,17 @@ using SnkFramework.PatchService.Runtime.Core;
 
 namespace SnkFramework.PatchService.Runtime
 {
-    public class SnkRemoteSourceRepository : ISnkRemoteSourceRepository
+    public class SnkRemoteSourceRepository : SnkSourceRepository, ISnkRemoteSourceRepository
     {
         private const string ROOTPATH = "https://windfantasy-1255691311.cos.ap-beijing.myqcloud.com/PatcherRepository";
-        public int Version => _versionInfos.resVersion;
+        public override int Version => _versionInfos.resVersion;
 
         private SnkVersionInfos _versionInfos;
-        private PatchSettings _settings;
-  
-        void ISnkSourceRepository.SetupSettings(PatchSettings settings)
-        {
-            this._settings = settings;
-        }
 
-        public async Task Initialize()
+        public override async Task Initialize(SnkPatchSettings settings)
         {
-            string uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
+            await base.Initialize(settings);
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
             var (result, jsonString) = await SnkWeb.HttpGet(uri);
             if (result == false)
             {
@@ -31,37 +26,20 @@ namespace SnkFramework.PatchService.Runtime
             _versionInfos = SnkPatchService.jsonParser.FromJson<SnkVersionInfos>(jsonString);
         }
 
-        public bool Exist(string sourceKey)
-        {
-            throw new System.NotImplementedException();
-        }
+        public IEnumerable<int> GetResVersionHistories() => this._versionInfos.histories;
 
-        public SnkSourceInfo GetSourceInfo(string key)
+        private async Task<T> InternalGet<T>(int version, string fileName) where T : class
         {
-            throw new System.NotImplementedException();
-        }
-
-        public List<int> GetResVersionHistories() => this._versionInfos.histories;
-
-        private async Task<T> InternalGet<T>(string uri) where T : class
-        {
-            var (result, jsonString) = await SnkWeb.HttpGet(uri);
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, fileName);
+            var (result, jsonString) = await SnkWeb.HttpGet(string.Format(uri, version));
             return result == false ? null : SnkPatchService.jsonParser.FromJson<T>(jsonString);
         }
 
-        public async Task<List<SnkSourceInfo>> GetSourceInfoList(int version)
-        {
-            var uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
-            var list = await InternalGet<List<SnkSourceInfo>>(string.Format(uri, version));
-            return list;
-        }
+        public override async Task<List<SnkSourceInfo>> GetSourceInfoList(int version)
+            => await InternalGet<List<SnkSourceInfo>>(version, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
 
         public async Task<SnkDiffManifest> GetDiffManifest(int version)
-        {
-            string uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, SNK_BUILDER_CONST.DIFF_FILE_NAME);
-            var list = await InternalGet<SnkDiffManifest>(string.Format(uri, version));
-            return list;
-        }
+            => await InternalGet<SnkDiffManifest>(version, SNK_BUILDER_CONST.DIFF_FILE_NAME);
 
         public async Task TakeFileToLocal(string dirPath, string key, int version)
         {
