@@ -27,7 +27,7 @@ namespace SnkFramework.Network.Web
             return (false, null);
         }
 
-        public static async Task<bool> HttpDownload(string uri, string dirPath)
+        public static async Task<bool> HttpDownload(string uri, string savePath)
         {
             var request = WebRequest.CreateHttp(uri);
             request.Method = "GET";
@@ -36,12 +36,13 @@ namespace SnkFramework.Network.Web
                 return false;
 
             var buffer = new byte[1024 * 1024 * 2];
-            var fileName = Path.GetFileName(uri);
-            var localFilePath = Path.Combine(dirPath, fileName);
-            if (System.IO.File.Exists(localFilePath))
-                System.IO.File.Delete(localFilePath);
+            var fileInfo = new FileInfo(savePath);
+            if(fileInfo.Exists)
+                fileInfo.Delete();
+            if(fileInfo.Directory.Exists == false)
+                fileInfo.Directory.Create();
             
-            await using var fileStream = new FileStream(localFilePath, FileMode.CreateNew);
+            await using var fileStream = new FileStream(fileInfo.FullName, FileMode.CreateNew);
             await using var stream = response.GetResponseStream();
             if (stream == null)
                 return false;
