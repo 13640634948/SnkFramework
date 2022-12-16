@@ -12,7 +12,7 @@ namespace SnkFramework.PatchService.Runtime
         public Task Initialize();
         public bool IsLatestVersion();
         public Task<SnkDiffManifest> PreviewPatchSynchronyPromise();
-        public void ApplyDiffManifest(SnkDiffManifest diffManifest);
+        public Task ApplyDiffManifest(SnkDiffManifest diffManifest);
         public Task<SnkDiffManifest> PreviewRepairSourceToLatestVersion();
     }
 }

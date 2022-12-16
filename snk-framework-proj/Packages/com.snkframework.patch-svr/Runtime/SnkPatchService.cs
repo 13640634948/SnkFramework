@@ -114,14 +114,13 @@ namespace SnkFramework.PatchService.Runtime
         /// 应用补丁
         /// </summary>
         /// <param name="promise"></param>
-        public void ApplyDiffManifest(SnkDiffManifest diffManifest)
+        public async Task ApplyDiffManifest(SnkDiffManifest diffManifest)
         {
             string localPath = this._localRepo.LocalPath;
             foreach (var sourceInfo in diffManifest.addList)
             {
-                this._remoteRepo.TakeFileToLocal(localPath, sourceInfo.name, sourceInfo.version);
+                await this._remoteRepo.TakeFileToLocal(localPath, sourceInfo.name, sourceInfo.version);
             }
-
             this._localRepo.UpdateLocalResVersion(this._remoteRepo.Version);
         }
 

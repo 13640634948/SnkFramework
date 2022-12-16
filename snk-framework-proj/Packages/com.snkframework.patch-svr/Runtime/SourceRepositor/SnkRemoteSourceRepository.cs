@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using SnkFramework.Network.Web;
 using SnkFramework.PatchService.Runtime.Core;
+using UnityEngine;
 
 namespace SnkFramework.PatchService.Runtime
 {
@@ -43,14 +44,17 @@ namespace SnkFramework.PatchService.Runtime
 
         public async Task TakeFileToLocal(string dirPath, string key, int version)
         {
+            var uriFormat = Path.Combine(ROOTPATH, _settings.channelName,
+                SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER,
+                SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH, key);
+            var uri = string.Format(uriFormat, version);
+            
             var localDirName = this._settings.repoRootPath;
             if (Directory.Exists(localDirName) == false)
                 Directory.CreateDirectory(localDirName);
-            var tmpPath = Path.Combine(ROOTPATH, _settings.channelName,
-                SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER,
-                SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH, key);
-            var uri = string.Format(tmpPath, version);
-            var result = await SnkWeb.HttpDownload(uri, Path.Combine(localDirName, key));
+            var savePath = Path.Combine(localDirName, key);
+            
+            var result = await SnkWeb.HttpDownload(uri, savePath);
             if (result == false)
                 throw new Exception("[Download-Error]" + uri);
         }

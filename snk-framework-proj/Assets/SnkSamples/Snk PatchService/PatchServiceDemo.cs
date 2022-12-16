@@ -21,7 +21,8 @@ public class PatchServiceDemo : MonoBehaviour
         var settings = new SnkPatchSettings
         {
             repoRootPath = "PersistentDataPath",
-            channelName = "windf_iOS"
+            channelName = "windf_iOS",
+            clientSettingsFileName = ".settings"
         };
         
         _patchService = await SnkPatchService.CreatePatchService(settings);
@@ -42,7 +43,7 @@ public class PatchServiceDemo : MonoBehaviour
                     return;
                 var diffManifest = await _patchService.PreviewPatchSynchronyPromise();
                 Debug.Log("count:" + diffManifest.addList.Count + ", size:" + diffManifest.addList.Sum(a=>a.size));
-                _patchService.ApplyDiffManifest(diffManifest);
+                await _patchService.ApplyDiffManifest(diffManifest);
             }
         }
         catch (Exception e)
