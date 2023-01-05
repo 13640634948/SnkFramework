@@ -41,13 +41,6 @@ namespace SnkFramework.PatchService
             private string ChannelRepoPath => Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, _channelName);
 
             /// <summary>
-            /// 压缩器
-            /// </summary>
-            private ISnkPatchCompressor _compressor;
-
-            private ISnkPatchCompressor Compressor => _compressor ?? new SnkPatchCompressor();
-
-            /// <summary>
             /// Json解析器
             /// </summary>
             private ISnkPatchJsonParser _jsonParser;
@@ -95,9 +88,8 @@ namespace SnkFramework.PatchService
             /// 重写压缩器
             /// </summary>
             /// <typeparam name="TCompressor">压缩器类型</typeparam>
-            public void OverrideCompressor<TCompressor>() where TCompressor : class, ISnkPatchCompressor, new()
-                => this._compressor = new TCompressor();
-
+            //public void OverrideCompressor<TCompressor>() where TCompressor : class, ISnkPatchCompressor, new()
+            //    => this._compressor = new TCompressor();
 
             /// <summary>
             /// 加载版本信息
