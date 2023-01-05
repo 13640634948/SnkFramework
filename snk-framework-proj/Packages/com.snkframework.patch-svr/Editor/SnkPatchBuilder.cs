@@ -23,7 +23,7 @@ namespace SnkFramework.PatchService
             /// <summary>
             /// 设置文件
             /// </summary>
-            private readonly SnkBuilderSettings _settings;
+            //private readonly SnkBuilderSettings _settings;
 
             /// <summary>
             /// 版本信息
@@ -78,8 +78,6 @@ namespace SnkFramework.PatchService
             private SnkPatchBuilder(string channelName)
             {
                 this._channelName = channelName;
-
-                this._settings = LoadSettings();
                 if (!LoadVersionInfos(out this._versionInfos)) return;
                 var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.resVersion);
                 if (string.IsNullOrEmpty(patcherName) == false)
@@ -100,30 +98,6 @@ namespace SnkFramework.PatchService
             public void OverrideCompressor<TCompressor>() where TCompressor : class, ISnkPatchCompressor, new()
                 => this._compressor = new TCompressor();
 
-            /// <summary>
-            /// 加载设置文件
-            /// </summary>
-            /// <returns>设置文件</returns>
-            private SnkBuilderSettings LoadSettings()
-            {
-                var fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.SETTING_FILE_NAME));
-                if (fileInfo.Exists == false)
-                    this.SaveSettings(new SnkBuilderSettings());
-                var jsonString = File.ReadAllText(fileInfo.FullName);
-                return this.JsonParser.FromJson<SnkBuilderSettings>(jsonString);
-            }
-
-            /// <summary>
-            /// 保存设置文件
-            /// </summary>
-            /// <param name="settings">设置文件</param>
-            private void SaveSettings(SnkBuilderSettings settings)
-            {
-                var fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.SETTING_FILE_NAME));
-                if (fileInfo.Directory!.Exists == false)
-                    fileInfo.Directory.Create();
-                File.WriteAllText(fileInfo.FullName, this.JsonParser.ToJson(settings));
-            }
 
             /// <summary>
             /// 加载版本信息
@@ -273,7 +247,7 @@ namespace SnkFramework.PatchService
                 this.SaveVersionInfos(this._versionInfos);
 
                 //保存设置文件
-                this.SaveSettings(_settings);
+                //this.SaveSettings(_settings);
             }
         }
     }
