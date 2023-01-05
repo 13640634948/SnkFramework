@@ -38,7 +38,7 @@ namespace SnkFramework.PatchService
             /// <summary>
             /// 渠道仓库根目录
             /// </summary>
-            private string ChannelRepoPath => Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, _channelName);
+            private string ChannelRepoPath;// = Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, _channelName);
 
             /// <summary>
             /// Json解析器
@@ -58,9 +58,9 @@ namespace SnkFramework.PatchService
             /// </summary>
             /// <param name="channelName">渠道名字</param>
             /// <returns>补丁包构建器</returns>
-            public static SnkPatchBuilder Load(string channelName)
+            public static SnkPatchBuilder Load(string channelName, Version appVersion)
             {
-                var builder = new SnkPatchBuilder(channelName);
+                var builder = new SnkPatchBuilder(channelName, appVersion);
                 return builder;
             }
 
@@ -68,11 +68,13 @@ namespace SnkFramework.PatchService
             /// 构建方法
             /// </summary>
             /// <param name="channelName"></param>
-            private SnkPatchBuilder(string channelName)
+            private SnkPatchBuilder(string channelName, Version appVersion)
             {
                 this._channelName = channelName;
-                if (!LoadVersionInfos(out this._versionInfos)) return;
-                var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.resVersion);
+                ChannelRepoPath = Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, _channelName, appVersion.ToString());
+                if (!LoadVersionInfos(out this._versionInfos)) 
+                    return;
+                
                 var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.histories[^1].version);
                 if (string.IsNullOrEmpty(patcherName) == false)
                     this._lastSourceInfoList = LoadLastSourceInfoList(patcherName);
@@ -142,9 +144,9 @@ namespace SnkFramework.PatchService
             /// </summary>
             /// <param name="sourceInfoList">最新资源信息列表</param>
             /// <param name="versionDirName">版本目录名</param>
-            private void SaveLastSourceInfoList(List<SnkSourceInfo> sourceInfoList, string versionDirName)
+            private void SaveLastSourceInfoList(List<SnkSourceInfo> sourceInfoList, string patcherName)
             {
-                var manifestPath = Path.Combine(ChannelRepoPath, versionDirName, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
+                var manifestPath = Path.Combine(ChannelRepoPath, patcherName, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
                 File.WriteAllText(manifestPath, this.JsonParser.ToJson(sourceInfoList));
             }
 

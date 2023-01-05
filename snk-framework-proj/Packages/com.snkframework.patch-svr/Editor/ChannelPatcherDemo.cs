@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace SnkFramework.PatchService
                     },
                 };
 
-                snkPatcher = SnkPatchBuilder.Load(repoName);
+                snkPatcher = SnkPatchBuilder.Load(repoName, Version.Parse("0.0.2"));
                 snkPatcher.Build(sourcePaths, force);
                 if (upload)
                 {
