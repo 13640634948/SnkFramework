@@ -21,11 +21,6 @@ namespace SnkFramework.PatchService
             private readonly string _channelName;
 
             /// <summary>
-            /// 设置文件
-            /// </summary>
-            //private readonly SnkBuilderSettings _settings;
-
-            /// <summary>
             /// 版本信息
             /// </summary>
             private readonly SnkVersionInfos _versionInfos;
@@ -38,7 +33,7 @@ namespace SnkFramework.PatchService
             /// <summary>
             /// 渠道仓库根目录
             /// </summary>
-            private string ChannelRepoPath;// = Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, _channelName);
+            private string ChannelRepoPath;
 
             /// <summary>
             /// Json解析器
@@ -47,7 +42,7 @@ namespace SnkFramework.PatchService
 
             private ISnkPatchJsonParser JsonParser =>
                 this._jsonParser ??
-                RegisterJsonParser<SnkPatchJsonParser>(); // throw new NullReferenceException("没有配置json解析器");
+                RegisterJsonParser<SnkPatchJsonParser>();
 
             public ISnkPatchJsonParser RegisterJsonParser<TJsonParser>()
                 where TJsonParser : class, ISnkPatchJsonParser, new()
@@ -86,13 +81,6 @@ namespace SnkFramework.PatchService
             /// <typeparam name="TJsonParser"></typeparam>
             public void OverrideJsonParser<TJsonParser>() where TJsonParser : class, ISnkPatchJsonParser, new()
                 => this._jsonParser = new TJsonParser();
-
-            /// <summary>
-            /// 重写压缩器
-            /// </summary>
-            /// <typeparam name="TCompressor">压缩器类型</typeparam>
-            //public void OverrideCompressor<TCompressor>() where TCompressor : class, ISnkPatchCompressor, new()
-            //    => this._compressor = new TCompressor();
 
             /// <summary>
             /// 加载版本信息
@@ -251,8 +239,6 @@ namespace SnkFramework.PatchService
                 //保存版本信息
                 this.SaveVersionInfos(this._versionInfos);
 
-                //保存设置文件
-                //this.SaveSettings(_settings);
             }
         }
     }
