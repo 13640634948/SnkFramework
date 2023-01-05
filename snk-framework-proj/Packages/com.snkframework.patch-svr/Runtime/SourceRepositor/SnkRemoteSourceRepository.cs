@@ -31,8 +31,8 @@ namespace SnkFramework.PatchService.Runtime
 
         private async Task<T> InternalGet<T>(int version, string fileName) where T : class
         {
-            var uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, fileName);
-            var (result, jsonString) = await SnkWeb.HttpGet(string.Format(uri, version));
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, PatchHelper.GetVersionDirectoryName(version), fileName);
+            var (result, jsonString) = await SnkWeb.HttpGet(uri);
             return result == false ? null : SnkPatchService.jsonParser.FromJson<T>(jsonString);
         }
 
@@ -44,10 +44,9 @@ namespace SnkFramework.PatchService.Runtime
 
         public async Task TakeFileToLocal(string dirPath, string key, int version)
         {
-            var uriFormat = Path.Combine(ROOTPATH, _settings.channelName,
-                SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER,
+            var uri = Path.Combine(ROOTPATH, _settings.channelName,
+                PatchHelper.GetVersionDirectoryName(version),
                 SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH, key);
-            var uri = string.Format(uriFormat, version);
             
             var localDirName = this._settings.repoRootPath;
             if (Directory.Exists(localDirName) == false)

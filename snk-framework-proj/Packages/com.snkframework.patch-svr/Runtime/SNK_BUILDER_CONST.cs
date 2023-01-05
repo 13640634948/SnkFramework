@@ -18,7 +18,7 @@ namespace SnkFramework.PatchService.Runtime
         public const string VERSION_INFO_FILE_NAME = "version_info.json";
         
         /* 版本资源目录格式 */
-        public const string VERSION_DIR_NAME_FORMATER = "version_{0}";
+        //public const string VERSION_DIR_NAME_FORMATER = "version_{0}";
 
         /* 版本资源中间目录 */
         public const string VERSION_SOURCE_MID_DIR_PATH = "source_files";

@@ -14,10 +14,7 @@ namespace SnkFramework.PatchService.Runtime
         /// 获取版本目录名
         /// </summary>
         /// <returns>版本目录名</returns>
-        public static string GetVersionDirectoryName(int version)
-        {
-            return string.Format(SNK_BUILDER_CONST.VERSION_DIR_NAME_FORMATER, version);
-        }
+        public static string GetVersionDirectoryName(int version) => version.ToString();
 
         private static IEqualityComparer<SnkSourceInfo> comparer = new SnkSourceInfoComparer();
         /// <summary>
