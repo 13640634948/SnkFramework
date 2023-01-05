@@ -11,7 +11,7 @@ namespace SnkFramework.PatchService.Runtime
     public class SnkRemoteSourceRepository : SnkSourceRepository, ISnkRemoteSourceRepository
     {
         private const string ROOTPATH = "https://windfantasy-1255691311.cos.ap-beijing.myqcloud.com/PatcherRepository";
-        public override int Version => _versionInfos.resVersion;
+        public override int Version => _versionInfos.histories[^1].version;
 
         private SnkVersionInfos _versionInfos;
 
@@ -27,7 +27,7 @@ namespace SnkFramework.PatchService.Runtime
             _versionInfos = SnkPatchService.jsonParser.FromJson<SnkVersionInfos>(jsonString);
         }
 
-        public IEnumerable<int> GetResVersionHistories() => this._versionInfos.histories;
+        public IEnumerable<VersionMeta> GetResVersionHistories() => this._versionInfos.histories;
 
         private async Task<T> InternalGet<T>(int version, string fileName) where T : class
         {

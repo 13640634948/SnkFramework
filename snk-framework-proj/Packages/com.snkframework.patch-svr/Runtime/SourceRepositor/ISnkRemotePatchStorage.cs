@@ -6,7 +6,7 @@ namespace SnkFramework.PatchService.Runtime
 {
     public interface ISnkRemoteSourceRepository : ISnkSourceRepository
     {
-        public IEnumerable<int> GetResVersionHistories();
+        public IEnumerable<VersionMeta> GetResVersionHistories();
 
         public Task<SnkDiffManifest> GetDiffManifest(int version);
 

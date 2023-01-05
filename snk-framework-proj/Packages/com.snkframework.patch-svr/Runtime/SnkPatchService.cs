@@ -82,9 +82,9 @@ namespace SnkFramework.PatchService.Runtime
             var resultDiffManifest = new SnkDiffManifest();
 
             //从远端版本列表中，筛选出比本地版本号大的资源版本
-            var upgradeList = (from version in this._remoteRepo.GetResVersionHistories()
-                where Math.Abs(version) > this._localRepo.Version
-                select Math.Abs(version)).ToList();
+            var upgradeList = (from versionMeta in this._remoteRepo.GetResVersionHistories()
+                where Math.Abs(versionMeta.version) > this._localRepo.Version
+                select Math.Abs(versionMeta.version)).ToList();
 
             var currVersion = upgradeList[0];//第一个版本
             while (currVersion <= upgradeList[^1])//最后一个版本

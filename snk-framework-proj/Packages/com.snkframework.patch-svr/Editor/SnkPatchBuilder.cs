@@ -73,6 +73,7 @@ namespace SnkFramework.PatchService
                 this._channelName = channelName;
                 if (!LoadVersionInfos(out this._versionInfos)) return;
                 var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.resVersion);
+                var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.histories[^1].version);
                 if (string.IsNullOrEmpty(patcherName) == false)
                     this._lastSourceInfoList = LoadLastSourceInfoList(patcherName);
             }
@@ -103,7 +104,7 @@ namespace SnkFramework.PatchService
                 {
                     versionInfos = new SnkVersionInfos
                     {
-                        histories = new List<int>()
+                        histories = new List<VersionMeta>()
                     };
                     return false;
                 }
@@ -185,8 +186,10 @@ namespace SnkFramework.PatchService
                 if (appVersion > 0)
                     this._versionInfos.appVersion = appVersion;
 
-                var resVersion = ++this._versionInfos.resVersion;
-                this._versionInfos.histories.Add(resVersion * (isResForce ? -1 : 1));
+
+                var resVersion = 0;
+                if(this._versionInfos.histories.Count > 0)
+                    resVersion = this._versionInfos.histories[^1].version + 1;
 
                 //生成当前目标目录的资源信息列表
                 var currSourceInfoList = new List<SnkSourceInfo>();
@@ -235,6 +238,14 @@ namespace SnkFramework.PatchService
                 var patchSourceRootDirPath = Path.Combine(patcherDirPath, SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH);
                 PatchHelper.CopySourceTo(patchSourceRootDirPath, willMoveSourceList);
 
+                var versionMeta = new VersionMeta
+                {
+                    version = resVersion,
+                    size = diffManifest.addList.Sum(a => a.size),
+                    count = diffManifest.addList.Count
+                };
+                this._versionInfos.histories.Add(versionMeta);
+                
                 //保存版本信息
                 this.SaveVersionInfos(this._versionInfos);
 
