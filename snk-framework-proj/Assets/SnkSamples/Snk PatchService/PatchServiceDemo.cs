@@ -1,50 +1,34 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using SnkFramework.Network.Web;
 using SnkFramework.PatchService.Runtime;
-using SnkFramework.PatchService.Runtime.Core;
 using UnityEngine;
 
 public class PatchServiceDemo : MonoBehaviour
 {
-    private const string ROOTPATH = "https://windfantasy-1255691311.cos.ap-beijing.myqcloud.com/PatcherRepository";
-
-    public SnkDiffManifest diffManifest;
-    public List<SnkSourceInfo> localList;
-    public List<SnkSourceInfo> remoteList;
     private ISnkPatchService _patchService;
-    public int SourceRollBackToVersion = -1;
     public async void Start()
     {
-        var settings = new SnkPatchSettings
-        {
-            repoRootPath = "PersistentDataPath",
-            channelName = "windf_iOS",
-            clientSettingsFileName = ".settings"
-        };
-        
-        _patchService = await SnkPatchService.CreatePatchService(settings);
+        _patchService = new SnkPatchService();
         try
         {
-            await _patchService.Initialize();
+            var settings = new SnkPatchSettings
+            {
+                appVersion = "0.0.2",
+                repoRootPath = "PersistentAssets",
+                channelName = "windf_iOS",
+                versionFileName = "version.txt"
+            };
+            
+            await _patchService.Initialize(settings);
             Debug.Log("init - finish");
 
-            if (SourceRollBackToVersion >= 0)
-            {
-                diffManifest = await _patchService.PreviewRepairSourceToLatestVersion();
-            }
-            else
-            {
-                var isLatestVersion = _patchService.IsLatestVersion();
-                Debug.Log("isLatestVersion:" + isLatestVersion);
-                if(isLatestVersion)
-                    return;
-                var diffManifest = await _patchService.PreviewPatchSynchronyPromise();
-                Debug.Log("count:" + diffManifest.addList.Count + ", size:" + diffManifest.addList.Sum(a=>a.size));
-                await _patchService.ApplyDiffManifest(diffManifest);
-            }
+            var versionCompare = _patchService.LocalResVersion.CompareTo(_patchService.RemoteResVersion);
+            Debug.Log("versionCompare:" + versionCompare);
+            if(versionCompare >= 0)//本地版本 >= 远端版本
+                return;
+            var diffManifest = await _patchService.PreviewPatchSynchronyPromise();
+            Debug.Log("count:" + diffManifest.addList.Count + ", size:" + diffManifest.addList.Sum(a=>a.size));
+            await _patchService.ApplyDiffManifest(diffManifest);
         }
         catch (Exception e)
         {
