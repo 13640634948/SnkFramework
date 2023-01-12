@@ -10,7 +10,7 @@ namespace SnkFramework.PatchService.Runtime
 
         public Task<SnkDiffManifest> GetDiffManifest(int version);
 
-        public Task TakeFileToLocal(string dirPath, string key, int version);
-        
+        public Task TakeFileToLocal(string dirPath, string key, int resVersion);
+
     }
 }

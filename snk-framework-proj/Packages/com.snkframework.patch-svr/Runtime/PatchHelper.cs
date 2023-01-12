@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using SnkFramework.PatchService.Runtime.Base;
 using SnkFramework.PatchService.Runtime.Core;
 
 namespace SnkFramework.PatchService.Runtime
@@ -16,24 +17,27 @@ namespace SnkFramework.PatchService.Runtime
         /// <returns>版本目录名</returns>
         public static string GetVersionDirectoryName(int version) => version.ToString();
 
-        private static IEqualityComparer<SnkSourceInfo> comparer = new SnkSourceInfoComparer();
+        public static IEqualityComparer<SnkSourceInfo> comparer = new SnkSourceInfoComparer();
+
         /// <summary>
-        /// 生成资源差异清单
+        /// 生成资源信息列表
         /// </summary>
-        /// <param name="prevSourceInfoList">上一个版本的资源信息列表</param>
-        /// <param name="currSourceInfoList">当前版本的资源列表</param>
-        /// <returns>资源差异清单</returns>
-        public static SnkDiffManifest GenerateDiffManifest(IReadOnlyCollection<SnkSourceInfo> leftList, IReadOnlyCollection<SnkSourceInfo> rightList)
+        /// <param name="version">信息列表的版本号</param>
+        /// <param name="sourceFinder">资源探测器</param>
+        /// <returns>资源信息列表</returns>
+        public static List<SnkSourceInfo> GenerateSourceInfoList(int resVersion, ISnkSourceFinder sourceFinder)
         {
-            if (leftList == null || rightList == null)
+            var result = sourceFinder.TrySurvey(out var fileInfos, out var dirFullPath);
+            if (result == false)
                 return null;
-            
-            var diffManifest = new SnkDiffManifest
+
+            return fileInfos.Select(fileInfo => new SnkSourceInfo
             {
-                delList = leftList.Except(rightList, comparer).Select(a => a.name).ToList(),
-                addList = rightList.Except(leftList, comparer).ToList()
-            };
-            return diffManifest;
+                name = fileInfo.FullName.Replace(dirFullPath, string.Empty).Substring(1),
+                version = resVersion,
+                md5 = getMD5ByMD5CryptoService(fileInfo.FullName),
+                size = fileInfo.Length,
+            }).ToList();
         }
 
         /// <summary>

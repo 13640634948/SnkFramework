@@ -9,7 +9,7 @@ namespace SnkFramework.PatchService.Runtime
         public int LocalResVersion { get; }
         public int RemoteResVersion { get; }
 
-        public Task Initialize();
+        public Task Initialize(SnkPatchSettings settings);
         public bool IsLatestVersion();
         public Task<SnkDiffManifest> PreviewPatchSynchronyPromise();
         public Task ApplyDiffManifest(SnkDiffManifest diffManifest);

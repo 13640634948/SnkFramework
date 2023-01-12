@@ -7,6 +7,7 @@ using SnkFramework.PatchService.Editor;
 using SnkFramework.PatchService.Runtime;
 using SnkFramework.PatchService.Runtime.Base;
 using UnityEditor;
+using UnityEngine;
 
 namespace SnkFramework.PatchService
 {
@@ -14,9 +15,10 @@ namespace SnkFramework.PatchService
     {
         public static class ChannelPatcherDemo
         {
-            private static void internalTest(bool force, bool upload = false)
+            static string ChannelName = "windf_iOS";
+
+            private static void internalTest(bool upload = false)
             {
-                string repoName = "windf_iOS";
                 SnkPatchBuilder snkPatcher;
                 var sourcePaths = new SnkSourceFinder[]
                 {
@@ -28,40 +30,32 @@ namespace SnkFramework.PatchService
                     },
                 };
 
-                snkPatcher = SnkPatchBuilder.Load(repoName, Version.Parse("0.0.2"));
-                snkPatcher.Build(sourcePaths, force);
+                SnkPatchBuilder.Build(ChannelName, Version.Parse("0.0.2"), sourcePaths);
+
                 if (upload)
-                {
-                    var storage = new SnkCOSStorage();
-                    var keys = Directory.GetFiles(Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH,repoName), "*.*", SearchOption.AllDirectories);
-                    var list = keys.Where(key => !Path.GetFileName(key).StartsWith(".")).ToList();
-                    storage.PutObjects(list);
-                }
+                    Upload();
             }
 
-            [MenuItem("SnkPatcher/Demo-TestWeak")]
-            public static void TestWeak()
+            [MenuItem("SnkPatcher/Demo-Test")]
+            public static void Test()
             {
-                internalTest(false);
+                internalTest();
             }
             
-            [MenuItem("SnkPatcher/Demo-TestForce")]
-            public static void TestForce()
+            [MenuItem("SnkPatcher/Demo-Test_Upload")]
+            public static void Test_Upload()
             {
                 internalTest(true);
             }
-            
-            [MenuItem("SnkPatcher/Demo-TestWeak_Upload")]
-            public static void TestWeak_Upload()
-            {
-                internalTest(false,true);
+            [MenuItem("SnkPatcher/Upload")]
+            public static void Upload()
+            {                
+                var storage = new SnkCOSStorage();
+                var keys = Directory.GetFiles(Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH,ChannelName), "*.*", SearchOption.AllDirectories);
+                var list = keys.Where(key => !Path.GetFileName(key).StartsWith(".")).ToList();
+                storage.PutObjects(list);
             }
             
-            [MenuItem("SnkPatcher/Demo-TestForce_Upload")]
-            public static void TestForce_Upload()
-            {
-                internalTest(true,true);
-            }
         }
     }
 }

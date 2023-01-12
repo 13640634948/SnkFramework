@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 using SnkFramework.PatchService.Runtime.Base;
 using SnkFramework.PatchService.Runtime.Core;
 
@@ -18,36 +17,19 @@ namespace SnkFramework.PatchService.Runtime
         public int LocalResVersion => this._localRepo.Version;
         public int RemoteResVersion=> this._remoteRepo.Version;
         
-        private SnkPatchSettings _settings;
 
         private bool _initialized = false;
 
-        public static async Task<ISnkPatchService> CreatePatchService(SnkPatchSettings settings)
-            => await CreatePatchService<SnkLocalSourceRepository, SnkRemoteSourceRepository>(settings);
-        
-        public static async Task<ISnkPatchService> CreatePatchService<TLocalRepository, TRemoteRepository>(SnkPatchSettings settings)
-            where TLocalRepository : class, ISnkLocalSourceRepository, new()
-            where TRemoteRepository : class, ISnkRemoteSourceRepository, new()
+        public SnkPatchService(ISnkLocalSourceRepository localRepo = null, ISnkRemoteSourceRepository remoteRepo = null)
         {
-            var service = new SnkPatchService
-            {
-                _settings = settings,
-                _localRepo = new TLocalRepository(),
-                _remoteRepo = new TRemoteRepository()
-            };
-            await service.Initialize();
-            return service;
+            _localRepo = localRepo ?? new SnkLocalSourceRepository();
+            _remoteRepo = remoteRepo ?? new SnkRemoteSourceRepository();
         }
 
-        protected SnkPatchService()
-        {
-            
-        }
-
-        public async Task Initialize()
-        {
-            await this._localRepo.Initialize(this._settings);
-            await this._remoteRepo.Initialize(this._settings);
+        public async Task Initialize(SnkPatchSettings settings)
+        { 
+            await this._localRepo.Initialize(settings);
+            await this._remoteRepo.Initialize(settings);
             this._initialized = true;
         }
 
@@ -79,35 +61,27 @@ namespace SnkFramework.PatchService.Runtime
         /// <returns>升级资源列表</returns>
         public async Task<SnkDiffManifest> PreviewPatchSynchronyPromise()
         {
-            var resultDiffManifest = new SnkDiffManifest();
-
             //从远端版本列表中，筛选出比本地版本号大的资源版本
             var upgradeList = (from versionMeta in this._remoteRepo.GetResVersionHistories()
                 where Math.Abs(versionMeta.version) > this._localRepo.Version
                 select Math.Abs(versionMeta.version)).ToList();
-
-            var currVersion = upgradeList[0];//第一个版本
-            while (currVersion <= upgradeList[^1])//最后一个版本
-            {
-                var list = await this._remoteRepo.GetDiffManifest(currVersion);
-                if (list == null)
-                    throw new NullReferenceException("获取远端DiffManife.json失败。resVersion:" + currVersion);
-                
-                //移除新增列表中删除
-                resultDiffManifest.addList.RemoveAll(a => list.delList.Exists(b => a.name == b));
-                
-                //移除所有变化的资源
-                resultDiffManifest.addList.RemoveAll(a => list.addList.Exists(b => a.name == b.name));
-                resultDiffManifest.delList.RemoveAll(a => list.delList.Exists(b => a == b));
-
-                //添加新版本中的资源
-                resultDiffManifest.addList.AddRange(list.addList);
-                resultDiffManifest.delList.AddRange(list.delList);
-
-                ++currVersion;
-            }
             
-            return resultDiffManifest;
+            var remoteManifest = await this._remoteRepo.GetSourceInfoList(upgradeList[^1]);
+            if (remoteManifest == null)
+                throw new NullReferenceException("获取远端manifest.json失败。resVersion:" + upgradeList[^1]);
+
+            var finder = new SnkSourceFinder
+            {
+                sourceDirPath = this._localRepo.LocalPath
+            };
+            var localManifest = PatchHelper.GenerateSourceInfoList(-1, finder);
+
+
+            return new SnkDiffManifest
+            {
+                addList = remoteManifest.Except(localManifest, PatchHelper.comparer).ToList(),
+                delList = localManifest.Except(remoteManifest, PatchHelper.comparer).Select(a => a.name).ToList(),
+            };
         }
  
         /// <summary>
@@ -116,7 +90,12 @@ namespace SnkFramework.PatchService.Runtime
         /// <param name="promise"></param>
         public async Task ApplyDiffManifest(SnkDiffManifest diffManifest)
         {
-            string localPath = this._localRepo.LocalPath;
+            var localPath = Path.Combine(this._localRepo.LocalPath, SNK_BUILDER_CONST.PATCH_ASSETS_DIR_NAME);
+            foreach (var filePath in diffManifest.delList)
+            {
+                File.Delete(filePath);
+            }  
+            
             foreach (var sourceInfo in diffManifest.addList)
             {
                 await this._remoteRepo.TakeFileToLocal(localPath, sourceInfo.name, sourceInfo.version);
@@ -128,7 +107,12 @@ namespace SnkFramework.PatchService.Runtime
         {
             var localList = await this._localRepo.GetSourceInfoList();
             var remoteList = await this._remoteRepo.GetSourceInfoList(version);
-            return PatchHelper.GenerateDiffManifest(localList, remoteList);
+            
+            return new SnkDiffManifest
+            {
+                addList = remoteList.Except(localList, PatchHelper.comparer).ToList(),
+                delList = localList.Except(remoteList, PatchHelper.comparer).Select(a => a.name).ToList(),
+            };
         }
 
         public async Task<SnkDiffManifest> PreviewRepairSourceToLatestVersion()

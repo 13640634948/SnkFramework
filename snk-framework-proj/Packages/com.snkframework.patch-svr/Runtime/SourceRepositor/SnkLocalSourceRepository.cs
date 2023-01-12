@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using SnkFramework.PatchService.Runtime.Base;
 using SnkFramework.PatchService.Runtime.Core;
+using UnityEngine;
 
 namespace SnkFramework.PatchService.Runtime
 {
@@ -9,30 +11,35 @@ namespace SnkFramework.PatchService.Runtime
     {
         private int _version = -1;
         public override int Version => _version;
-        public string LocalPath { get; }
+        public string LocalPath => this._settings.repoRootPath;
 
-        private string setingsPath;
+        private string _versionFilePath;
 
         public override async Task Initialize(SnkPatchSettings settings)
         {
             await base.Initialize(settings);
-            setingsPath = Path.Combine(settings.repoRootPath, _settings.clientSettingsFileName);
+            _versionFilePath = Path.Combine(settings.repoRootPath, _settings.versionFileName);
+            var dirInfo = new DirectoryInfo(settings.repoRootPath);
+            if(dirInfo.Exists == false)
+                dirInfo.Create();
             this._version = await LoadLocalResVersion();
+            Debug.Log("初始化本地仓库");
+            Debug.Log("本地资源版本号:" + _version);
         }
 
         private async Task<int> LoadLocalResVersion()
         {
             var version = -1;
-            if (!File.Exists(setingsPath)) 
+            if (!File.Exists(_versionFilePath)) 
                 return version;
-            var text = await File.ReadAllTextAsync(setingsPath);
+            var text = await File.ReadAllTextAsync(_versionFilePath);
             version = int.Parse(text.Trim());
             return version;
         }
 
         public void UpdateLocalResVersion(int resVersion)
         {
-            const string path = "persistentDataPath/.client";
+            var path = Path.Combine(this._settings.repoRootPath, _settings.versionFileName);
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -43,21 +50,12 @@ namespace SnkFramework.PatchService.Runtime
 
         public override async Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
         {
-            var list = new List<SnkSourceInfo>();
-            var filePaths = Directory.GetFiles(_settings.repoRootPath, "*.*", SearchOption.AllDirectories);
-            foreach (var filePath in filePaths)
+            var sourceFinder = new SnkSourceFinder()
             {
-                if(Path.GetFileName(filePath).StartsWith("."))
-                    continue;
-                var info = new SnkSourceInfo
-                {
-                    name = filePath.Replace(_settings.repoRootPath + "/", string.Empty),
-                    md5 = PatchHelper.getMD5ByMD5CryptoService(filePath)
-                };
-                list.Add(info);
-            }
-            return list;
+                sourceDirPath = Path.Combine(this._settings.repoRootPath, this._settings.versionFileName),
+            };
+            return PatchHelper.GenerateSourceInfoList(version, sourceFinder);
         }
 
     }
-}
+}//

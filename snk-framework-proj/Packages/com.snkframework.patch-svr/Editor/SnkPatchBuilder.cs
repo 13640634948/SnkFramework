@@ -16,229 +16,117 @@ namespace SnkFramework.PatchService
         public class SnkPatchBuilder
         {
             /// <summary>
-            /// 渠道名
-            /// </summary>
-            private readonly string _channelName;
-
-            /// <summary>
-            /// 版本信息
-            /// </summary>
-            private readonly SnkVersionInfos _versionInfos;
-
-            /// <summary>
-            /// 最新资源列表
-            /// </summary>
-            private List<SnkSourceInfo> _lastSourceInfoList;
-
-            /// <summary>
-            /// 渠道仓库根目录
-            /// </summary>
-            private string ChannelRepoPath;
-
-            /// <summary>
             /// Json解析器
             /// </summary>
-            private ISnkPatchJsonParser _jsonParser;
+            private static ISnkPatchJsonParser s_jsonParser;
 
-            private ISnkPatchJsonParser JsonParser =>
-                this._jsonParser ??
-                RegisterJsonParser<SnkPatchJsonParser>();
-
-            public ISnkPatchJsonParser RegisterJsonParser<TJsonParser>()
-                where TJsonParser : class, ISnkPatchJsonParser, new()
-                => this._jsonParser = new TJsonParser();
-
-            /// <summary>
-            /// 从渠道名加载渠道补丁包构建器
-            /// </summary>
-            /// <param name="channelName">渠道名字</param>
-            /// <returns>补丁包构建器</returns>
-            public static SnkPatchBuilder Load(string channelName, Version appVersion)
-            {
-                var builder = new SnkPatchBuilder(channelName, appVersion);
-                return builder;
-            }
-
-            /// <summary>
-            /// 构建方法
-            /// </summary>
-            /// <param name="channelName"></param>
-            private SnkPatchBuilder(string channelName, Version appVersion)
-            {
-                this._channelName = channelName;
-                ChannelRepoPath = Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, _channelName, appVersion.ToString());
-                if (!LoadVersionInfos(out this._versionInfos)) 
-                    return;
-                
-                var patcherName = PatchHelper.GetVersionDirectoryName(this._versionInfos.histories[^1].version);
-                if (string.IsNullOrEmpty(patcherName) == false)
-                    this._lastSourceInfoList = LoadLastSourceInfoList(patcherName);
-            }
-
-            /// <summary>
-            /// 重写Json解析器
-            /// </summary>
-            /// <typeparam name="TJsonParser"></typeparam>
-            public void OverrideJsonParser<TJsonParser>() where TJsonParser : class, ISnkPatchJsonParser, new()
-                => this._jsonParser = new TJsonParser();
-
+            private static ISnkPatchJsonParser JsonParser => s_jsonParser ?? new SnkPatchJsonParser();
+ 
             /// <summary>
             /// 加载版本信息
             /// </summary>
             /// <param name="versionInfos">版本信息引用对象</param>
             /// <returns>结果，true：成功，false：失败</returns>
-            private bool LoadVersionInfos(out SnkVersionInfos versionInfos)
+            private static SnkVersionInfos LoadVersionInfos(string appVersionPath)
             {
-                var fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME));
+                var fileInfo = new FileInfo(Path.Combine(appVersionPath, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME));
                 if (fileInfo.Exists == false)
                 {
-                    versionInfos = new SnkVersionInfos
+                    SnkVersionInfos versionInfos = new SnkVersionInfos
                     {
                         histories = new List<VersionMeta>()
                     };
-                    return false;
+                    return versionInfos;
                 }
 
                 var jsonString = File.ReadAllText(fileInfo.FullName);
-                versionInfos = this.JsonParser.FromJson<SnkVersionInfos>(jsonString);
-                return true;
-            }
-
-            /// <summary>
-            /// 保存版本信息
-            /// </summary>
-            /// <param name="versionInfos">版本信息对象</param>
-            private void SaveVersionInfos(SnkVersionInfos versionInfos)
-            {
-                var versionInfosPath = Path.Combine(ChannelRepoPath, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
-                File.WriteAllText(versionInfosPath, this.JsonParser.ToJson(versionInfos));
+                return JsonParser.FromJson<SnkVersionInfos>(jsonString);
             }
 
             /// <summary>
             /// 加载最新资源信息列表
             /// </summary>
             /// <returns>最新资源信息列表</returns>
-            private List<SnkSourceInfo> LoadLastSourceInfoList(string patcherName)
+            private static IEnumerable<SnkSourceInfo> loadHistorySourceInfoList(string appVersionPath, int version)
             {
-                var fileInfo = new FileInfo(Path.Combine(ChannelRepoPath, patcherName, SNK_BUILDER_CONST.SOURCE_FILE_NAME));
+                var patcherName = PatchHelper.GetVersionDirectoryName(version);
+                if (string.IsNullOrEmpty(patcherName))
+                    return null;
+                
+                var fileInfo = new FileInfo(Path.Combine(appVersionPath, patcherName, SNK_BUILDER_CONST.MANIFEST_FILE_NAME));
                 if (fileInfo.Exists == false)
                     return null;
                 var jsonString = File.ReadAllText(fileInfo.FullName);
-                return this.JsonParser.FromJson<List<SnkSourceInfo>>(jsonString);
+                return JsonParser.FromJson<List<SnkSourceInfo>>(jsonString);
             }
-
-            /// <summary>
-            /// 保存最新资源信息列表
-            /// </summary>
-            /// <param name="sourceInfoList">最新资源信息列表</param>
-            /// <param name="versionDirName">版本目录名</param>
-            private void SaveLastSourceInfoList(List<SnkSourceInfo> sourceInfoList, string patcherName)
+ 
+            public static void Build(string channelName, Version appVersion, IEnumerable<ISnkSourceFinder> sourceFinderList)
             {
-                var manifestPath = Path.Combine(ChannelRepoPath, patcherName, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
-                File.WriteAllText(manifestPath, this.JsonParser.ToJson(sourceInfoList));
-            }
-
-            /// <summary>
-            /// 生成资源信息列表
-            /// </summary>
-            /// <param name="version">信息列表的版本号</param>
-            /// <param name="sourceFinder">资源探测器</param>
-            /// <returns>资源信息列表</returns>
-            private List<SnkSourceInfo> GenerateSourceInfoList(int resVersion, ISnkSourceFinder sourceFinder)
-            {
-                var result = sourceFinder.TrySurvey(out var fileInfos, out var dirFullPath);
-                if (result == false)
-                    return null;
-
-                var dirName = PatchHelper.GetVersionDirectoryName(resVersion);
-
-                return fileInfos.Select(fileInfo => new SnkSourceInfo
-                    {
-                        name = fileInfo.FullName.Replace(dirFullPath, string.Empty).Substring(1),
-                        version = resVersion,
-                        md5 = PatchHelper.getMD5ByMD5CryptoService(fileInfo.FullName),
-                        size = fileInfo.Length,
-                        dir = dirName,
-                    }).ToList();
-            }
-
-
-            /// <summary>
-            /// 构建
-            /// </summary>
-            /// <param name="sourceFinderList">资源探测器列表</param>
-            /// <param name="isResForce">是否是强制版本资源</param>
-            /// <param name="appVersion">应用版本</param>
-            /// <returns>补丁包信息</returns>
-            public void Build(IEnumerable<ISnkSourceFinder> sourceFinderList, bool isResForce = false,
-                int appVersion = 0)
-            {
-                if (appVersion > 0)
-                    this._versionInfos.appVersion = appVersion;
-
-
+                
+                var appVersionPath = Path.Combine(SNK_BUILDER_CONST.REPO_ROOT_PATH, channelName, appVersion.ToString());
+                
+                var lastSourceInfoList = new List<SnkSourceInfo>();
                 var resVersion = 0;
-                if(this._versionInfos.histories.Count > 0)
-                    resVersion = this._versionInfos.histories[^1].version + 1;
+                
+                var versionInfos = LoadVersionInfos(appVersionPath);
+                if (versionInfos.histories.Count > 0)
+                {
+                    var lastResVersion = versionInfos.histories[^1].version;
+                    resVersion = lastResVersion + 1;
+                    lastSourceInfoList.AddRange(loadHistorySourceInfoList(appVersionPath, lastResVersion));// new List<SnkSourceInfo>();
+                }
 
                 //生成当前目标目录的资源信息列表
                 var currSourceInfoList = new List<SnkSourceInfo>();
                 foreach (var sourcePath in sourceFinderList)
                 {
-                    var list = GenerateSourceInfoList(resVersion, sourcePath);
+                    var list = PatchHelper.GenerateSourceInfoList(resVersion, sourcePath);
                     if (list == null)
                         continue;
                     currSourceInfoList.AddRange(list);
                 }
 
-                //拼接补丁包名字
-                var dirName = PatchHelper.GetVersionDirectoryName(resVersion);
-                var patcherDirPath = Path.Combine(ChannelRepoPath, dirName);
-
-                //路径有效性
-                if (Directory.Exists(patcherDirPath) == false)
-                    Directory.CreateDirectory(patcherDirPath);
-
-                //首次构建资源包时，没有上一个版本资源
-                _lastSourceInfoList ??= new List<SnkSourceInfo>();
-
                 //生成差异列表
-                var diffManifest = PatchHelper.GenerateDiffManifest(_lastSourceInfoList, currSourceInfoList);
+                var diffManifest = new SnkDiffManifest
+                {
+                    addList = currSourceInfoList.Except(lastSourceInfoList, PatchHelper.comparer).ToList(),
+                    delList = lastSourceInfoList.Except(currSourceInfoList, PatchHelper.comparer).Select(a => a.name).ToList(),
+                };
+                
+                // 删除资源
+                lastSourceInfoList.RemoveAll(a => diffManifest.delList.Exists(b => a.name == b));
+                
+                //新增资源，更新资源
+                lastSourceInfoList.RemoveAll(a => diffManifest.addList.Exists(b => a.name == b.name));
+                lastSourceInfoList.AddRange(diffManifest.addList);
 
-                //移除所有变化的资源
-                _lastSourceInfoList.RemoveAll(a => diffManifest.addList.Exists(b => a.name == b.name));
-                _lastSourceInfoList.RemoveAll(a => diffManifest.delList.Exists(b => a.name == b));
-
-                //添加新增或者更新的资源
-                _lastSourceInfoList.AddRange(diffManifest.addList);
-
-                //将要复制的资源
-                var willMoveSourceList = diffManifest.addList;
-
-                //保存差异清单
-                var diffManifestFileInfo = new FileInfo(Path.Combine(patcherDirPath, SNK_BUILDER_CONST.DIFF_FILE_NAME));
-                if (diffManifestFileInfo.Exists)
-                    diffManifestFileInfo.Delete();
-                File.WriteAllText(diffManifestFileInfo.FullName, this.JsonParser.ToJson(diffManifest));
+                //拼接补丁包名字
+                var currPatchPath = Path.Combine(appVersionPath, resVersion.ToString());
+                //路径有效性
+                if (Directory.Exists(currPatchPath))
+                    Directory.Delete(currPatchPath,true);
+                Directory.CreateDirectory(currPatchPath);
 
                 //保存最新的资源清单
-                this.SaveLastSourceInfoList(_lastSourceInfoList, dirName);
+                var manifestPath = Path.Combine(appVersionPath, resVersion.ToString(), SNK_BUILDER_CONST.MANIFEST_FILE_NAME);
+                File.WriteAllText(manifestPath, JsonParser.ToJson(lastSourceInfoList));
 
                 //复制资源文件
-                var patchSourceRootDirPath = Path.Combine(patcherDirPath, SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH);
-                PatchHelper.CopySourceTo(patchSourceRootDirPath, willMoveSourceList);
+                var patchAssetsDirPath = Path.Combine(currPatchPath, SNK_BUILDER_CONST.PATCH_ASSETS_DIR_NAME);
+                PatchHelper.CopySourceTo(patchAssetsDirPath, diffManifest.addList);
 
+                //新版本元信息
                 var versionMeta = new VersionMeta
                 {
                     version = resVersion,
                     size = diffManifest.addList.Sum(a => a.size),
                     count = diffManifest.addList.Count
                 };
-                this._versionInfos.histories.Add(versionMeta);
+                versionInfos.histories.Add(versionMeta);
                 
                 //保存版本信息
-                this.SaveVersionInfos(this._versionInfos);
-
+                var versionInfosPath = Path.Combine(appVersionPath, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
+                File.WriteAllText(versionInfosPath, JsonParser.ToJson(versionInfos));
             }
         }
     }

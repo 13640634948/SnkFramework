@@ -14,13 +14,15 @@ namespace SnkFramework.PatchService.Runtime.Core
         /// <summary>
         /// 应用版本
         /// </summary>
-        public int appVersion;
+        public string appVersion;
 
         /// <summary>
         /// 资源版本
         /// </summary>
         //public int resVersion;
 
+        public string verificationCode;
+        
         /// <summary>
         /// 历史版本
         /// </summary>

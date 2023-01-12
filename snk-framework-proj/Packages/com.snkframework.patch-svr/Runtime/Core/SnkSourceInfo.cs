@@ -14,7 +14,7 @@ namespace SnkFramework.PatchService.Runtime.Core
         /// <summary>
         /// 目录名
         /// </summary>
-        public string dir;
+        //public string dir;
 
         /// <summary>
         /// 资源大小

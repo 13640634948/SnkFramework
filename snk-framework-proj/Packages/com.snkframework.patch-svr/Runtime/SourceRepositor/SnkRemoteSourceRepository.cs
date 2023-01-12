@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using SnkFramework.Network.Web;
 using SnkFramework.PatchService.Runtime.Core;
-using UnityEngine;
 
 namespace SnkFramework.PatchService.Runtime
 {
@@ -18,7 +17,7 @@ namespace SnkFramework.PatchService.Runtime
         public override async Task Initialize(SnkPatchSettings settings)
         {
             await base.Initialize(settings);
-            var uri = Path.Combine(ROOTPATH, _settings.channelName, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, settings.appVersion, SNK_BUILDER_CONST.VERSION_INFO_FILE_NAME);
             var (result, jsonString) = await SnkWeb.HttpGet(uri);
             if (result == false)
             {
@@ -31,29 +30,23 @@ namespace SnkFramework.PatchService.Runtime
 
         private async Task<T> InternalGet<T>(int version, string fileName) where T : class
         {
-            var uri = Path.Combine(ROOTPATH, _settings.channelName, PatchHelper.GetVersionDirectoryName(version), fileName);
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, this._settings.appVersion,PatchHelper.GetVersionDirectoryName(version), fileName);
             var (result, jsonString) = await SnkWeb.HttpGet(uri);
             return result == false ? null : SnkPatchService.jsonParser.FromJson<T>(jsonString);
         }
 
         public override async Task<List<SnkSourceInfo>> GetSourceInfoList(int version)
-            => await InternalGet<List<SnkSourceInfo>>(version, SNK_BUILDER_CONST.SOURCE_FILE_NAME);
+            => await InternalGet<List<SnkSourceInfo>>(version, SNK_BUILDER_CONST.MANIFEST_FILE_NAME);
 
         public async Task<SnkDiffManifest> GetDiffManifest(int version)
             => await InternalGet<SnkDiffManifest>(version, SNK_BUILDER_CONST.DIFF_FILE_NAME);
 
-        public async Task TakeFileToLocal(string dirPath, string key, int version)
+        public async Task TakeFileToLocal(string dirPath, string key, int resVersion)
         {
-            var uri = Path.Combine(ROOTPATH, _settings.channelName,
-                PatchHelper.GetVersionDirectoryName(version),
-                SNK_BUILDER_CONST.VERSION_SOURCE_MID_DIR_PATH, key);
-            
-            var localDirName = this._settings.repoRootPath;
-            if (Directory.Exists(localDirName) == false)
-                Directory.CreateDirectory(localDirName);
-            var savePath = Path.Combine(localDirName, key);
-            
-            var result = await SnkWeb.HttpDownload(uri, savePath);
+            var uri = Path.Combine(ROOTPATH, _settings.channelName, _settings.appVersion,
+                resVersion.ToString(), SNK_BUILDER_CONST.PATCH_ASSETS_DIR_NAME, key);
+
+            var result = await SnkWeb.HttpDownload(uri, Path.Combine(dirPath, key));
             if (result == false)
                 throw new Exception("[Download-Error]" + uri);
         }
