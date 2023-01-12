@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -11,49 +12,62 @@ namespace SnkFramework.Network.Web
         {
             var request = WebRequest.CreateHttp(uri);
             request.Method = "GET";
-            using var response = await request.GetResponseAsync() as HttpWebResponse;
-
-            if (response is { StatusCode: HttpStatusCode.OK })
+            try
             {
-                await using var stream = response.GetResponseStream();
-                if (stream != null)
+                using var response = await request.GetResponseAsync() as HttpWebResponse;
+
+                if (response is { StatusCode: HttpStatusCode.OK })
                 {
-                    using var streamReader = new StreamReader(stream, Encoding.UTF8);
-                    var context = await streamReader.ReadToEndAsync();
-                    return (true, context);
+                    await using var stream = response.GetResponseStream();
+                    if (stream != null)
+                    {
+                        using var streamReader = new StreamReader(stream, Encoding.UTF8);
+                        var context = await streamReader.ReadToEndAsync();
+                        return (true, context);
+                    }
                 }
             }
-
+            catch (Exception e)
+            {
+                return (false, null);
+            }
             return (false, null);
         }
 
         public static async Task<bool> HttpDownload(string uri, string savePath)
         {
-            var request = WebRequest.CreateHttp(uri);
-            request.Method = "GET";
-            using var response = await request.GetResponseAsync() as HttpWebResponse;
-            if (response is not { StatusCode: HttpStatusCode.OK }) 
-                return false;
+            try
+            {
+                var request = WebRequest.CreateHttp(uri);
+                request.Method = "GET";
+                using var response = await request.GetResponseAsync() as HttpWebResponse;
+                if (response is not { StatusCode: HttpStatusCode.OK }) 
+                    return false;
 
-            var buffer = new byte[1024 * 1024 * 2];
-            var fileInfo = new FileInfo(savePath);
-            if(fileInfo.Exists)
-                fileInfo.Delete();
-            if(fileInfo.Directory.Exists == false)
-                fileInfo.Directory.Create();
+                var buffer = new byte[1024 * 1024 * 2];
+                var fileInfo = new FileInfo(savePath);
+                if(fileInfo.Exists)
+                    fileInfo.Delete();
+                if(fileInfo.Directory.Exists == false)
+                    fileInfo.Directory.Create();
             
-            await using var fileStream = new FileStream(fileInfo.FullName, FileMode.CreateNew);
-            await using var stream = response.GetResponseStream();
-            if (stream == null)
+                await using var fileStream = new FileStream(fileInfo.FullName, FileMode.CreateNew);
+                await using var stream = response.GetResponseStream();
+                if (stream == null)
+                    return false;
+            
+                var len = await stream.ReadAsync(buffer, 0, buffer.Length);
+                await fileStream.WriteAsync(buffer, 0, len);
+            
+                await fileStream.FlushAsync();
+                fileStream.Close();
+            
+                return true;
+            }
+            catch (Exception e)
+            {
                 return false;
-            
-            var len = await stream.ReadAsync(buffer, 0, buffer.Length);
-            await fileStream.WriteAsync(buffer, 0, len);
-            
-            await fileStream.FlushAsync();
-            fileStream.Close();
-            
-            return true;
+            }
         }
     }
 }
