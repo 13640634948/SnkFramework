@@ -7,4 +7,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\snk.framework.nuget\snk.framework.nuget.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="main\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="main\" />
+  </ItemGroup>
 </Project>

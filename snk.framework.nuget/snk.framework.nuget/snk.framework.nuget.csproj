@@ -4,4 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="main\" />
+    <None Remove="main\patch\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="main\" />
+    <Folder Include="main\patch\" />
+  </ItemGroup>
 </Project>
