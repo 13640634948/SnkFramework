@@ -8,12 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\snk.framework.nuget\snk.framework.nuget.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="main\" />
+    <None Remove="snk.framework.nuget" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="main\internals\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="main\" />
+    <Folder Include="main\internals\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="snk.framework.nuget">
+      <HintPath>..\snk.framework.nuget\bin\Debug\netstandard2.0\snk.framework.nuget.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 </Project>
