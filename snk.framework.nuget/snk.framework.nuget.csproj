@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <CustomCommands>
+      <CustomCommands>
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp ${TargetFile} ${SolutionDir}/../snk-framework-proj/Assets/Packages/${TargetName}</command>
+        </Command>
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="scr\" />
+    <None Remove="scr\features\" />
+    <None Remove="scr\features\httpweb\" />
+    <None Remove="scr\features\patch\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scr\" />
+    <Folder Include="scr\features\" />
+    <Folder Include="scr\features\httpweb\" />
+    <Folder Include="scr\features\patch\" />
+  </ItemGroup>
+</Project>

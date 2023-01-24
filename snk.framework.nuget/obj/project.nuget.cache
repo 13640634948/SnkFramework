@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "IkGZ7xSw/gjD+0HcwuilFKtzHEC1CuN1EFPG97Xp7pYgBVEe4E0u9ceNmA8+80fHPWiMDXQiMB7QyO5n82TqnQ==",
+  "success": true,
+  "projectFilePath": "/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk.framework.nuget/snk.framework.nuget.csproj",
+  "expectedPackageFiles": [
+    "/Users/clainele/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/Users/clainele/.nuget/packages/netstandard.library/2.0.3/netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
