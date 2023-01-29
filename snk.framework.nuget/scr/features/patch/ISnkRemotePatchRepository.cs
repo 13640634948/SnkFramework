@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {

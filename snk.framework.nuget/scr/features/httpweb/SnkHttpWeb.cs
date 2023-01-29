@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace HttpWeb
     {

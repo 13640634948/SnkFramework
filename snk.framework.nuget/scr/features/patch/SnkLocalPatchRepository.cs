@@ -6,7 +6,7 @@ using System.IO;
 using SnkFramework.NuGet.Basic;
 using System.Reflection;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {

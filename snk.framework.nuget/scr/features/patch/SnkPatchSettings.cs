@@ -1,4 +1,4 @@
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {

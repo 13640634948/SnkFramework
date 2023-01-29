@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {

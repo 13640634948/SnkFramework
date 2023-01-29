@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿//#define SNK_LOG
+
+using System.Collections.Generic;
 
 using SnkFramework.NuGet.Basic;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {
@@ -17,14 +19,10 @@ namespace SnkFramework.NuGet
             public static ISnkPatchController CreatePatchExecuor<TLocalRepo, TRemoteRepo>(string channelName, string appVersion, SnkPatchControlSettings settings)
                 where TLocalRepo : class, ISnkLocalPatchRepository, new()
                 where TRemoteRepo : class, ISnkRemotePatchRepository, new()
-            {
-                return new SnkPatchController<TLocalRepo, TRemoteRepo>(channelName, appVersion, settings);
-            }
+                => new SnkPatchController<TLocalRepo, TRemoteRepo>(channelName, appVersion, settings);
 
             public static ISnkPatchController CreatePatchExecuor(string channelName, string appVersion, SnkPatchControlSettings settings)
-            {
-                return new SnkPatchController<SnkLocalPatchRepository, SnkRemotePatchRepository>(channelName, appVersion, settings);
-            }
+                => new SnkPatchController<SnkLocalPatchRepository, SnkRemotePatchRepository>(channelName, appVersion, settings);
 
             public static List<SnkSourceInfo> GenerateSourceInfoList(string resVersion, ISnkFileFinder fileFinder, out Dictionary<string,string> keyPathMapping)
             {
@@ -34,8 +32,9 @@ namespace SnkFramework.NuGet
 
                 var list = new List<SnkSourceInfo>();
                 var dirInfo = new System.IO.DirectoryInfo(fileFinder.SourceDirPath);
+#if SNK_LOG
                 Snk.Get<ISnkLogger>().Print("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
-
+#endif
                 foreach (var fileInfo in fileInfos)
                 {
                     var info = new SnkSourceInfo
@@ -51,7 +50,7 @@ namespace SnkFramework.NuGet
                 return list;
             }
 
-            internal static void CopySourceTo(string toDirectoryFullPath, List<SnkSourceInfo> sourceInfoList, Dictionary<string,string> keyPathMapping)
+            public static void CopySourceTo(string toDirectoryFullPath, List<SnkSourceInfo> sourceInfoList, Dictionary<string,string> keyPathMapping)
             {
                 foreach (var sourceInfo in sourceInfoList)
                 {
@@ -72,21 +71,24 @@ namespace SnkFramework.NuGet
 
             public static (List<SnkSourceInfo>, List<string>) CompareToDiff(List<SnkSourceInfo> from, List<SnkSourceInfo> to)
             {
+#if SNK_LOG
                 string diffLogString = string.Empty;
-
                 foreach (var a in from)
                     diffLogString += "[FROM]key:" + a.key + ", code:" + a.code + "\n";
 
                 foreach (var a in to)
                     diffLogString += "[TO]key:" + a.key + ", code:" + a.code + "\n";
 
+#endif
                 var addList = new List<SnkSourceInfo>();
                 foreach (var a in to)
                 {
                     if (from.Exists(xx => xx.key == a.key && xx.code == a.code))
                         continue;
                     addList.Add(a);
+#if SNK_LOG
                     diffLogString += "[ADD]key:" + a.key + ", code:" + a.code + "\n";
+#endif
                 }
 
                 var delList = new List<string>();
@@ -95,12 +97,15 @@ namespace SnkFramework.NuGet
                     if (to.Exists(xx => xx.key == a.key))
                         continue;
                     delList.Add(a.key);
+#if SNK_LOG
                     diffLogString += "[DEL]key:" + a.key + "\n";
+#endif
                 }
+#if SNK_LOG
                 Snk.Get<ISnkLogger>().Print(diffLogString.Trim());
+#endif
                 return (addList, delList);
             }
-
         }
     }
 }

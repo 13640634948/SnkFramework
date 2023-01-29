@@ -1,12 +1,13 @@
+#define SNK_LOG
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 using SnkFramework.NuGet.Basic;
-using SnkFramework.NuGet.HttpWeb;
+using SnkFramework.NuGet.Features.HttpWeb;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {
@@ -14,21 +15,22 @@ namespace SnkFramework.NuGet
         {
             public int Version { get; protected set; }
 
-            private SnkVersionInfos _versionInfos;
-
             protected ISnkPatchController _patchCtrl;
 
+            private SnkVersionInfos _versionInfos;
+
             private int _urlIndex;
-         
 
             public async Task Initialize(ISnkPatchController patchController)
             {
                 this._patchCtrl = patchController;
                 string basicURL = getCurrURL();
+#if SNK_LOG
                 Snk.Get<ISnkLogger>().Print("basicURL:" + basicURL);
                 Snk.Get<ISnkLogger>().Print("_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
                 Snk.Get<ISnkLogger>().Print("_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
                 Snk.Get<ISnkLogger>().Print("_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
+#endif
                 string url = Path.Combine(basicURL, _patchCtrl.ChannelName, _patchCtrl.AppVersion, _patchCtrl.Settings.versionInfoFileName);
                 var (result, json) = await SnkHttpWeb.HttpGet(url);
                 if (result == false)

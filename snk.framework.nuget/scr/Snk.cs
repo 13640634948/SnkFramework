@@ -7,6 +7,9 @@ namespace SnkFramework.NuGet
     public class Snk
     {
         private static ISnkSetup s_Setup;
+
+        private static readonly Dictionary<string, object> dict = new Dictionary<string, object>();
+
         public static void Launcher<TSetup>() where TSetup : class, ISnkSetup, new()
         {
             s_Setup = new TSetup();
@@ -15,8 +18,6 @@ namespace SnkFramework.NuGet
             Set(s_Setup.CreateCodeGenerator());
             Set(s_Setup.CreateLogger());
         }
-
-        private static readonly Dictionary<string, object> dict = new Dictionary<string, object>();
 
         public static T Get<T>() where T : class
         {

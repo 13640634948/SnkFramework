@@ -4,28 +4,26 @@ using System.Linq;
 
 using SnkFramework.NuGet.Basic;
 
-namespace SnkFramework.NuGet
+namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {
         public class SnkPatchBuilder
         {
-            private ISnkJsonParser _jsonParser { get; } = Snk.Get<ISnkJsonParser>();
-
-            private ISnkCodeGenerator _codeGenerator { get; } = Snk.Get<ISnkCodeGenerator>();
 
             private readonly string _projPath;
             private readonly string _channelName;
             private readonly string _appVersion;
-
             private readonly SnkPatchSettings _settings;
+
+            private ISnkJsonParser _jsonParser { get; } = Snk.Get<ISnkJsonParser>();
+            private ISnkCodeGenerator _codeGenerator { get; } = Snk.Get<ISnkCodeGenerator>();
 
             public SnkPatchBuilder(string projPath, string channelName, string appVersion, SnkPatchSettings settings)
             {
                 this._projPath = projPath;
                 this._channelName = channelName;
                 this._appVersion = appVersion;
-
                 this._settings = settings;
             }
 
