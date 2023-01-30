@@ -51,7 +51,7 @@ namespace SnkFramework.NuGet.Features
                     throw new System.Exception("filderList is null or len = 0");
                 }
 
-                Snk.Get<ISnkLogger>()?.Print(Path.GetFullPath(this._projPath));
+                Snk.Get<ISnkLogger>()?.Print(eLogType.info, Path.GetFullPath(this._projPath));
 
                 var appVersionPath = Path.Combine(this._projPath, this._channelName, _appVersion);
                 if (Directory.Exists(appVersionPath) == false)
