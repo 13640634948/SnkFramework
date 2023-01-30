@@ -18,6 +18,7 @@
             /// <returns></returns>
             string GetMD5ByHashAlgorithm(string filePath);
         }
+
     }
 }
 

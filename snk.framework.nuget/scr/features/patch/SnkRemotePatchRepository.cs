@@ -24,17 +24,17 @@ namespace SnkFramework.NuGet.Features
             {
                 this._patchCtrl = patchController;
                 string basicURL = getCurrURL();
-                Snk.Get<ISnkLogger>().Print(eLogType.info, "basicURL:" + basicURL);
-                Snk.Get<ISnkLogger>().Print(eLogType.info, "_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
-                Snk.Get<ISnkLogger>().Print(eLogType.info, "_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
-                Snk.Get<ISnkLogger>().Print(eLogType.info, "_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
+                Snk.Logger?.Info("basicURL:" + basicURL);
+                Snk.Logger?.Info("_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
+                Snk.Logger?.Info("_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
+                Snk.Logger?.Info("_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
                 string url = Path.Combine(basicURL, _patchCtrl.ChannelName, _patchCtrl.AppVersion, _patchCtrl.Settings.versionInfoFileName);
                 var (result, json) = await SnkHttpWeb.HttpGet(url);
                 if (result == false)
                 {
                     throw new AggregateException("获取远端版本信息失败。URL:" + url);
                 }
-                _versionInfos = Snk.Get<ISnkJsonParser>().FromJson<SnkVersionInfos>(json);
+                _versionInfos = this._patchCtrl.JsonParser.FromJson<SnkVersionInfos>(json);
                 Version = _versionInfos.histories[_versionInfos.histories.Count - 1].version;
             }
 
@@ -60,7 +60,7 @@ namespace SnkFramework.NuGet.Features
                 {
                     throw new AggregateException("获取远端版本信息失败。URL:" + url);
                 }
-                return Snk.Get<ISnkJsonParser>().FromJson<List<SnkSourceInfo>>(json);
+                return this._patchCtrl.JsonParser.FromJson<List<SnkSourceInfo>>(json);
             }
 
             public async Task TakeFileToLocal(string dirPath, string key, int resVersion)

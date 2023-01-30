@@ -11,21 +11,19 @@ namespace SnkFramework.NuGet.Features
     {
         public class SnkPatchBuilder
         {
-
             private readonly string _projPath;
             private readonly string _channelName;
             private readonly string _appVersion;
             private readonly SnkPatchSettings _settings;
+            private readonly ISnkJsonParser _jsonParser;
 
-            private ISnkJsonParser _jsonParser { get; } = Snk.Get<ISnkJsonParser>();
-            private ISnkCodeGenerator _codeGenerator { get; } = Snk.Get<ISnkCodeGenerator>();
-
-            public SnkPatchBuilder(string projPath, string channelName, string appVersion, SnkPatchSettings settings)
+            public SnkPatchBuilder(string projPath, string channelName, string appVersion, SnkPatchSettings settings, ISnkJsonParser jsonParser)
             {
                 this._projPath = projPath;
                 this._channelName = channelName;
                 this._appVersion = appVersion;
                 this._settings = settings;
+                this._jsonParser = jsonParser;
             }
 
             private SnkVersionInfos LoadVersionInfos(string appVersionPath)
@@ -52,7 +50,7 @@ namespace SnkFramework.NuGet.Features
                     throw new SnkException("filderList is null or len = 0");
                 }
 
-                Snk.Get<ISnkLogger>()?.Print(eLogType.info, Path.GetFullPath(this._projPath));
+                Snk.Logger?.Info(Path.GetFullPath(this._projPath));
 
                 var appVersionPath = Path.Combine(this._projPath, this._channelName, _appVersion);
                 if (Directory.Exists(appVersionPath) == false)
@@ -118,7 +116,7 @@ namespace SnkFramework.NuGet.Features
                     version = resVersion,
                     size = addList.Sum(a => a.size),
                     count = addList.Count,
-                    code = _codeGenerator.GetMD5ByMD5CryptoService(manifestPath)
+                    code = Snk.CodeGenerator.GetMD5ByMD5CryptoService(manifestPath)
                 };
                 versionInfos.histories.Add(versionMeta);
                 versionInfos.appVersion = _appVersion;

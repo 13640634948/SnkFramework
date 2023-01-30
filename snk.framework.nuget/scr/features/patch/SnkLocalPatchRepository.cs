@@ -51,7 +51,7 @@ namespace SnkFramework.NuGet.Features
                 if (string.IsNullOrEmpty(json) == true)
                     return null;
 
-                return Snk.Get<ISnkJsonParser>().FromJson<SnkLocalPatchVersionInfos>(json);
+                return this._patchCtrl.JsonParser.FromJson<SnkLocalPatchVersionInfos>(json);
             }
 
             public async Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
@@ -82,7 +82,7 @@ namespace SnkFramework.NuGet.Features
                 if (fileInfo.Directory.Exists == false)
                     fileInfo.Directory.Create();
 
-                var json = Snk.Get<ISnkJsonParser>().ToJson(this._versionInfos);
+                var json = this._patchCtrl.JsonParser.ToJson(this._versionInfos);
                 File.WriteAllText(fileInfo.FullName, json);
             }
 

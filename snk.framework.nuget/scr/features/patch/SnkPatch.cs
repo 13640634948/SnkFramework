@@ -2,6 +2,7 @@
 
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
+using SnkFramework.NuGet.Features.Logging;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -9,19 +10,26 @@ namespace SnkFramework.NuGet.Features
     {
         public class SnkPatch
         {
-            public static SnkPatchBuilder CreatePatchBuilder(string projPath, string channelName, string appVersion, SnkPatchSettings settings = null)
+            public static SnkPatchBuilder CreatePatchBuilder<TJsonParser>(string projPath, string channelName, string appVersion, SnkPatchSettings settings = null)
+                where TJsonParser : class, ISnkJsonParser, new()
             {
-                var builder = new SnkPatchBuilder(projPath, channelName, appVersion, settings ?? new SnkPatchSettings());
+                var jsonParser = new TJsonParser();
+                var builder = new SnkPatchBuilder(projPath, channelName, appVersion, settings ?? new SnkPatchSettings(), jsonParser);
                 return builder;
             }
 
-            public static ISnkPatchController CreatePatchExecuor<TLocalRepo, TRemoteRepo>(string channelName, string appVersion, SnkPatchControlSettings settings)
+            public static ISnkPatchController CreatePatchExecuor<TLocalRepo, TRemoteRepo, TJsonParser>(string channelName, string appVersion, SnkPatchControlSettings settings)
                 where TLocalRepo : class, ISnkLocalPatchRepository, new()
                 where TRemoteRepo : class, ISnkRemotePatchRepository, new()
-                => new SnkPatchController<TLocalRepo, TRemoteRepo>(channelName, appVersion, settings);
+                where TJsonParser : class, ISnkJsonParser, new()
+            {
+                var jsonParser = new TJsonParser();
+                return new SnkPatchController<TLocalRepo, TRemoteRepo>(channelName, appVersion, settings, jsonParser);
+            }
 
-            public static ISnkPatchController CreatePatchExecuor(string channelName, string appVersion, SnkPatchControlSettings settings)
-                => new SnkPatchController<SnkLocalPatchRepository, SnkRemotePatchRepository>(channelName, appVersion, settings);
+            public static ISnkPatchController CreatePatchExecuor<TJsonParser>(string channelName, string appVersion, SnkPatchControlSettings settings)
+                where TJsonParser : class, ISnkJsonParser, new()
+                => CreatePatchExecuor<SnkLocalPatchRepository, SnkRemotePatchRepository, TJsonParser>(channelName, appVersion, settings);
 
             public static List<SnkSourceInfo> GenerateSourceInfoList(string resVersion, ISnkFileFinder fileFinder, out Dictionary<string,string> keyPathMapping)
             {
@@ -31,7 +39,7 @@ namespace SnkFramework.NuGet.Features
 
                 var list = new List<SnkSourceInfo>();
                 var dirInfo = new System.IO.DirectoryInfo(fileFinder.SourceDirPath);
-                Snk.Get<ISnkLogger>().Print(eLogType.info, "[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
+                Snk.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
                 foreach (var fileInfo in fileInfos)
                 {
                     var info = new SnkSourceInfo
@@ -39,7 +47,7 @@ namespace SnkFramework.NuGet.Features
                         key = fileInfo.FullName.Replace(dirInfo.FullName, dirInfo.Name),
                         version = resVersion,
                         size = fileInfo.Length,
-                        code = Snk.Get<ISnkCodeGenerator>().GetMD5ByMD5CryptoService(fileInfo.FullName)
+                        code = Snk.CodeGenerator.GetMD5ByMD5CryptoService(fileInfo.FullName)
                     };
                     list.Add(info);
                     keyPathMapping?.Add(info.key, fileInfo.FullName);
@@ -92,7 +100,7 @@ namespace SnkFramework.NuGet.Features
                     delList.Add(a.key);
                     diffLogString += "[DEL]key:" + a.key + "\n";
                 }
-                Snk.Get<ISnkLogger>().Print(eLogType.info, diffLogString.Trim());
+                Snk.Logger?.Info(diffLogString.Trim());
                 return (addList, delList);
             }
         }

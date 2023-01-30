@@ -24,10 +24,8 @@
     <None Remove="scr\features\" />
     <None Remove="scr\features\httpweb\" />
     <None Remove="scr\features\patch\" />
-    <None Remove="scr\extensions\" />
-    <None Remove="scr\features\logging\" />
     <None Remove="log4net" />
-    <None Remove="scr\features\singleton\" />
+    <None Remove="scr\features\logging\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scr\" />
@@ -35,8 +33,6 @@
     <Folder Include="scr\features\httpweb\" />
     <Folder Include="scr\features\ioc" />
     <Folder Include="scr\features\patch\" />
-    <Folder Include="scr\extensions\" />
     <Folder Include="scr\features\logging\" />
-    <Folder Include="scr\features\singleton\" />
   </ItemGroup>
 </Project>

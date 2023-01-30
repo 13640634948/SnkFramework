@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SnkFramework.NuGet.Basic;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -16,6 +17,7 @@ namespace SnkFramework.NuGet.Features
             private TLocalRepo _localRepo;
             private TRemoteRepo _remoteRepo;
             private SnkPatchControlSettings _settings;
+            private ISnkJsonParser _jsonParser;
 
             public virtual string ChannelName => this._channelName;
             public virtual string AppVersion => this._appVersion;
@@ -24,12 +26,14 @@ namespace SnkFramework.NuGet.Features
             public int LocalResVersion => this._localRepo.Version;
             public int RemoteResVersion => this._remoteRepo.Version;
 
+            public ISnkJsonParser JsonParser => _jsonParser;
 
-            public SnkPatchController(string channelName, string appVersion, SnkPatchControlSettings settings)
+            public SnkPatchController(string channelName, string appVersion, SnkPatchControlSettings settings, ISnkJsonParser jsonParser)
             {
                 this._channelName = channelName;
                 this._appVersion = appVersion;
                 this._settings = settings;
+                this._jsonParser = jsonParser;
 
                 this._localRepo = new TLocalRepo();
                 this._remoteRepo = new TRemoteRepo();
