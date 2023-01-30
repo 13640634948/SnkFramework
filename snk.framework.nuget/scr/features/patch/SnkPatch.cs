@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Exceptions;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -60,7 +61,7 @@ namespace SnkFramework.NuGet.Features
                     }
                     else
                     {
-                        throw new System.Exception("路径映射表中，没有好到key对应的路径. key:" + sourceInfo.key);
+                        throw new SnkException("路径映射表中，没有好到key对应的路径. key:" + sourceInfo.key);
                     }
                 }
             }

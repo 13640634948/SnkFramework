@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using SnkFramework.NuGet.Core;
+using SnkFramework.NuGet.Exceptions;
 
 namespace SnkFramework.NuGet
 {
@@ -24,7 +25,7 @@ namespace SnkFramework.NuGet
             var key = typeof(T).FullName;
             if (dict.TryGetValue(key, out var target) == false)
             {
-                throw new System.Exception(string.Format("found out {0} in Snk.IOC", typeof(T)));
+                throw new SnkException(string.Format("found out {0} in Snk.IOC", typeof(T)));
             }
             return target as T;
         }

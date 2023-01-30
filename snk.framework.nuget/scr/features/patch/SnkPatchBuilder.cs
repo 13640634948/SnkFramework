@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Exceptions;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -48,7 +49,7 @@ namespace SnkFramework.NuGet.Features
             {
                 if (finderList == null || finderList.Count == 0)
                 {
-                    throw new System.Exception("filderList is null or len = 0");
+                    throw new SnkException("filderList is null or len = 0");
                 }
 
                 Snk.Get<ISnkLogger>()?.Print(eLogType.info, Path.GetFullPath(this._projPath));
@@ -89,7 +90,7 @@ namespace SnkFramework.NuGet.Features
                 {
                     var list = SnkPatch.GenerateSourceInfoList(resVersion.ToString(), finder, out keyPathMapping);
                     if (list == null)
-                        throw new System.Exception("没有找到资源文件. path:" + finder.SourceDirPath);
+                        throw new SnkException("没有找到资源文件. path:" + finder.SourceDirPath);
                     currSourceInfoList.AddRange(list);
                 }
 
