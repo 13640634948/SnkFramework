@@ -2,11 +2,12 @@
     "name": "SnkFramework.Runtime",
     "rootNamespace": "SnkFramework.Runtime",
     "references": [
-        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+        "GUID:00f3b9446f5c141f18613b9185cda6f4",
+        "GUID:a3cfd3916da2a4c9b87b25d1c79ee623"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

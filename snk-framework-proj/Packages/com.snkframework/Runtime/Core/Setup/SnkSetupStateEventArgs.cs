@@ -1,14 +1,17 @@
-using System;
+﻿using System;
 
-namespace SnkFramework.Runtime.Core.Setup
+namespace SnkFramework
 {
-    public class SnkSetupStateEventArgs : EventArgs
+    namespace Core
     {
-        public SnkSetupStateEventArgs(SnkSetupState setupState)
+        public class SnkSetupStateEventArgs : EventArgs
         {
-            SetupState = setupState;
-        }
+            public SnkSetupStateEventArgs(eSnkSetupState setupState)
+            {
+                SetupState = setupState;
+            }
 
-        public SnkSetupState SetupState { get; }
+            public eSnkSetupState SetupState { get; }
+        }
     }
 }
