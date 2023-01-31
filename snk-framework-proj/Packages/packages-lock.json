@@ -15,7 +15,7 @@
       "url": "https://package.openupm.com"
     },
     "com.snkframework": {
-      "version": "file:com.snkframework",
+      "version": "file:snk.framework.main",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
