@@ -74,12 +74,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "com.snkframework.network.web": {
-      "version": "file:com.snkframework.network.web",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.snkframework.patch-svr": {
       "version": "file:com.snkframework.patch-svr",
       "depth": 0,
