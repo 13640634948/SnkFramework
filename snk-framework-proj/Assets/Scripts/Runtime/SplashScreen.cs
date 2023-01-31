@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
+    /*
     public class SplashScreen : SnkSplashScreen<SetupLifetimeScope>
     {
         [SerializeField] private bool completed = false;
@@ -15,4 +16,5 @@ namespace DefaultNamespace
             Debug.Log("MvxSetupMonitor-InitializationComplete");
         }
     }
+    */
 }
