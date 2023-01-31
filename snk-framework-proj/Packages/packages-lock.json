@@ -14,78 +14,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.snkframework": {
-      "version": "file:snk.framework.main",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.addr-file": {
-      "version": "file:com.snkframework.addr-file",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.asset-svr": {
-      "version": "file:com.snkframework.asset-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.assetbundle-svr": {
-      "version": "file:com.snkframework.assetbundle-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.doc-generator": {
-      "version": "file:com.snkframework.doc-generator",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.hybrid-clr": {
-      "version": "file:com.snkframework.hybrid-clr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.ioc-provider": {
-      "version": "file:com.snkframework.ioc-provider",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.mvvm-ui": {
-      "version": "file:com.snkframework.mvvm-ui",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.network.connector": {
-      "version": "file:com.snkframework.network.connector",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.network.content-delivery": {
-      "version": "file:com.snkframework.network.content-delivery",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.patch-svr": {
-      "version": "file:com.snkframework.patch-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.settings-mgr": {
-      "version": "file:com.snkframework.settings-mgr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.collab-proxy": {
       "version": "1.15.18",
       "depth": 0,
@@ -240,6 +168,36 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "snk.framework": {
+      "version": "file:snk.framework.main",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.ioc-provider": {
+      "version": "file:snk.framework.ioc-provider",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.mvvm-ui": {
+      "version": "file:snk.framework.mvvm-ui",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.network.content-delivery": {
+      "version": "file:snk.framework.network.content-delivery",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.patch-svr": {
+      "version": "file:snk.framework.patch-svr",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

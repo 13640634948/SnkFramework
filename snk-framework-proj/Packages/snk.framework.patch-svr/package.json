@@ -1,5 +1,5 @@
 {
-  "name": "com.snkframework.patch-svr",
+  "name": "snk.framework.patch-svr",
   "displayName": "Snk PatchService",
   "version": "0.1.0",
   "unity": "2021.3",
