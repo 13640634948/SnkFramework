@@ -39,7 +39,7 @@ namespace SnkFramework.NuGet.Features
 
                 var list = new List<SnkSourceInfo>();
                 var dirInfo = new System.IO.DirectoryInfo(fileFinder.SourceDirPath);
-                Snk.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
+                SnkNuget.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
                 foreach (var fileInfo in fileInfos)
                 {
                     var info = new SnkSourceInfo
@@ -47,7 +47,7 @@ namespace SnkFramework.NuGet.Features
                         key = fileInfo.FullName.Replace(dirInfo.FullName, dirInfo.Name),
                         version = resVersion,
                         size = fileInfo.Length,
-                        code = Snk.CodeGenerator.GetMD5ByMD5CryptoService(fileInfo.FullName)
+                        code = SnkNuget.CodeGenerator.GetMD5ByMD5CryptoService(fileInfo.FullName)
                     };
                     list.Add(info);
                     keyPathMapping?.Add(info.key, fileInfo.FullName);
@@ -100,7 +100,7 @@ namespace SnkFramework.NuGet.Features
                     delList.Add(a.key);
                     diffLogString += "[DEL]key:" + a.key + "\n";
                 }
-                Snk.Logger?.Info(diffLogString.Trim());
+                SnkNuget.Logger?.Info(diffLogString.Trim());
                 return (addList, delList);
             }
         }

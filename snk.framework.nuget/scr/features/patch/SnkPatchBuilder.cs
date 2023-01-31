@@ -50,7 +50,7 @@ namespace SnkFramework.NuGet.Features
                     throw new SnkException("filderList is null or len = 0");
                 }
 
-                Snk.Logger?.Info(Path.GetFullPath(this._projPath));
+                SnkNuget.Logger?.Info(Path.GetFullPath(this._projPath));
 
                 var appVersionPath = Path.Combine(this._projPath, this._channelName, _appVersion);
                 if (Directory.Exists(appVersionPath) == false)
@@ -116,7 +116,7 @@ namespace SnkFramework.NuGet.Features
                     version = resVersion,
                     size = addList.Sum(a => a.size),
                     count = addList.Count,
-                    code = Snk.CodeGenerator.GetMD5ByMD5CryptoService(manifestPath)
+                    code = SnkNuget.CodeGenerator.GetMD5ByMD5CryptoService(manifestPath)
                 };
                 versionInfos.histories.Add(versionMeta);
                 versionInfos.appVersion = _appVersion;

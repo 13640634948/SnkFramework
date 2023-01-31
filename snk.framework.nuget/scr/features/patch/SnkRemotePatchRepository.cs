@@ -24,10 +24,10 @@ namespace SnkFramework.NuGet.Features
             {
                 this._patchCtrl = patchController;
                 string basicURL = getCurrURL();
-                Snk.Logger?.Info("basicURL:" + basicURL);
-                Snk.Logger?.Info("_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
-                Snk.Logger?.Info("_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
-                Snk.Logger?.Info("_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
+                SnkNuget.Logger?.Info("basicURL:" + basicURL);
+                SnkNuget.Logger?.Info("_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
+                SnkNuget.Logger?.Info("_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
+                SnkNuget.Logger?.Info("_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
                 string url = Path.Combine(basicURL, _patchCtrl.ChannelName, _patchCtrl.AppVersion, _patchCtrl.Settings.versionInfoFileName);
                 var (result, json) = await SnkHttpWeb.HttpGet(url);
                 if (result == false)

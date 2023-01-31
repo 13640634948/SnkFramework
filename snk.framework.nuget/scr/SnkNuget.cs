@@ -5,7 +5,7 @@ using SnkFramework.NuGet.Features.Logging;
 
 namespace SnkFramework.NuGet
 {
-    public class Snk
+    public class SnkNuget
     {
         public static ISnkLogger Logger;
         public static ISnkCodeGenerator CodeGenerator = new SnkMD5Generator();
