@@ -1,16 +1,38 @@
 using System;
 using SnkFramework.NuGet;
-using SnkFramework.NuGet.Basic;
-using SnkFramework.NuGet.Patch;
+using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Features.Patch;
 using UnityEngine;
+
+public class SnkLoggerProvider : ISnkLoggerProvider
+{
+    public void Output(eSnkLogType logType, Exception e, string formater, params object[] message)
+    {
+        if(e != null)
+            Debug.LogException(e);
+        else
+        {
+            switch (logType)
+            {
+                case eSnkLogType.error:
+                    Debug.LogErrorFormat(formater, message);
+                    break;
+                case eSnkLogType.warning:
+                    Debug.LogWarningFormat(formater, message);
+                    break;
+                default:
+                    Debug.LogFormat(formater, message);
+                    break;
+            }
+        }
+    }
+}
 
 public class PatchServiceDemo : MonoBehaviour
 {
     public async void Start()
     {
-        Snk.Set<ISnkJsonParser>(new SnkJsonParser());
-        Snk.Set<ISnkCodeGenerator>(new SnkCodeGenerator());
-        Snk.Set<ISnkLogger>(new SnkLogger());
+        SnkNuget.Logger = new SnkLogger("asdf", new SnkLoggerProvider());
 
         var settings = new SnkPatchControlSettings
         {
@@ -23,7 +45,7 @@ public class PatchServiceDemo : MonoBehaviour
 
         try
         {
-            var patchController = SnkPatch.CreatePatchExecuor("windf_iOS", "1.0.0", settings);
+            var patchController = SnkPatch.CreatePatchExecuor<SnkJsonParser>("windf_iOS", "1.0.0", settings);
             await patchController.Initialize();
             Debug.Log("LocalResVersion:" + patchController.LocalResVersion);
             Debug.Log("RemoteResVersion:" + patchController.RemoteResVersion);
