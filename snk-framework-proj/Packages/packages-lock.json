@@ -50,6 +50,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.snkframework.ioc-provider": {
+      "version": "file:com.snkframework.ioc-provider",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.snkframework.mvvm-ui": {
       "version": "file:com.snkframework.mvvm-ui",
       "depth": 0,
