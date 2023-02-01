@@ -2,6 +2,7 @@ using System;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.NuGet.Features.Patch;
+using SnkFramework.Runtime.Basic;
 using UnityEngine;
 
 public class SnkLoggerProvider : ISnkLoggerProvider

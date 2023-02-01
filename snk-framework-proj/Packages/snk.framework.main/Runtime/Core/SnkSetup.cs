@@ -144,7 +144,7 @@ namespace SnkFramework
 
                     if (monitor != null)
                     {
-                        var dispatcher = Snk.IoCProvider.GetSingleton<ISnkUnityMainThreadAsyncDispatcher>();
+                        var dispatcher = Snk.IoCProvider.GetSingleton<ISnkMainThreadDispatcher>();
                         await dispatcher.ExecuteOnMainThreadAsync(async () =>
                         {
                             if (monitor != null)
