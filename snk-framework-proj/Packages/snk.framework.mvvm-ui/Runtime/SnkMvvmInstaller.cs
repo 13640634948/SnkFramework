@@ -6,7 +6,7 @@ using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime
 {
-    public abstract class SnkMvvmInstaller
+    public abstract class SnkMvvmInstaller : ISnkMvvmInstaller
     {
         /// <summary>
         /// 创建视图摄像机
