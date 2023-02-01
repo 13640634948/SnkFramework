@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
-using DefaultNamespace;
 using SnkFramework.IoC;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.NuGet.Exceptions;
 using SnkFramework.NuGet.Features.Logging;
 using UnityEngine;
@@ -182,7 +182,7 @@ namespace SnkFramework.Runtime
 
                     if (monitor != null)
                     {
-                        var dispatcher = Snk.IoCProvider.GetSingleton<ISnkMainThreadDispatcher>();
+                        var dispatcher = Snk.IoCProvider.GetSingleton<ISnkMainThreadAsyncDispatcher>();
                         await dispatcher.ExecuteOnMainThreadAsync(async () =>
                         {
                             if (monitor != null)

@@ -133,7 +133,7 @@ namespace SnkFramework.Runtime
                     this.logger?.Info("Setup: Create App");
                     var app = InitializeMvxApplication(_iocProvider);
                     this.logger.Info("Setup: NavigationService");
-                    //InitializeNavigationService(_iocProvider);
+                    InitializeMvvmService(_iocProvider);
                     this.logger?.Info("Setup: App start");
                     InitializeApp(pluginManager, app);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: ViewModelTypeFinder start");

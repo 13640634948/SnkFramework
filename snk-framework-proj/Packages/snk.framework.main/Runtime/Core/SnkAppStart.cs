@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.NuGet.Basic;
+using UnityEngine;
 
 namespace SnkFramework.Runtime.Core
 {
@@ -67,7 +68,9 @@ namespace SnkFramework.Runtime.Core
         {
             try
             {
-                await NavigationService.OpenWindow<TViewModel>();
+                Debug.Log(NavigationService);
+                //var a = await NavigationService.OpenWindow<TViewModel>();
+                var a = NavigationService.OpenWindow<TViewModel>();
             }
             catch (System.Exception exception)
             {

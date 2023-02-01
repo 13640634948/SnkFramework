@@ -1,4 +1,5 @@
 using SnkFramework.IoC;
+using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Runtime.Core;
 
@@ -16,6 +17,8 @@ namespace SnkFramework.Runtime
             {
                 
             }
+
+
         }
 
         public abstract class UnitySetup<TSnkApplication> : UnitySetup
