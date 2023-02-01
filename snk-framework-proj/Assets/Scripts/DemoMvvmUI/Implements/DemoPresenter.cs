@@ -10,11 +10,6 @@ namespace SnkFramework.Mvvm.Demo
     {
         public class DemoPresenter : SnkViewPresenter
         {
-            public DemoPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader,
-                ISnkLayerContainer layerContainer) : base(viewFinder, viewLoader, layerContainer)
-            {
-            }
-
             public override SnkBasePresentationAttribute CreatePresentationAttribute(Type viewModelType, Type viewType)
             {
                 var attribute = base.CreatePresentationAttribute(viewModelType, viewType);

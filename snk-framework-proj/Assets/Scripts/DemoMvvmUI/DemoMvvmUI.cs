@@ -12,7 +12,7 @@ namespace SnkFramework.Mvvm.Demo
 
         private void Awake()
         {
-            _mvvmService = MvvmUI.CreateService<DemoMvvmInstaller>();
+            //_mvvmService = new DemoMvvmInstaller().Install();
         }
 
         async void Start()
