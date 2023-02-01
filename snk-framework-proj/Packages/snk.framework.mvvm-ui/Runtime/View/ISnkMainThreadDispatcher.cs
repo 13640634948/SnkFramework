@@ -6,8 +6,8 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public interface ISnkMainThreadDispatcher
         {
+            //bool RequestMainThreadAction(Action action, bool maskExceptions = true);
             bool IsOnMainThread { get; }
-            void ExecuteOnMainThread(Action action, bool maskExceptions = true);
         }
     }
 }

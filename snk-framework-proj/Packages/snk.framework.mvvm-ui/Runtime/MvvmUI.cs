@@ -5,6 +5,7 @@ namespace SnkFramework
 {
     public class MvvmUI
     {
+        /*
         public static ISnkMvvmService CreateService<TInstaller>()
             where TInstaller : class, ISnkMvvmInstaller, new()
         {
@@ -16,5 +17,6 @@ namespace SnkFramework
         {
             return installer.Install();
         }
+        */
     }
 }

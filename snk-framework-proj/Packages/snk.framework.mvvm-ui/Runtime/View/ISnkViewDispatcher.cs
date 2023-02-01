@@ -7,7 +7,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace View
     {
-        public interface ISnkViewDispatcher
+        public interface ISnkViewDispatcher : ISnkMainThreadAsyncDispatcher
         {
             Task<bool> ShowViewModel(SnkViewModelRequest request);
 

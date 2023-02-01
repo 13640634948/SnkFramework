@@ -26,6 +26,7 @@ namespace SnkFramework.Mvvm.Runtime
             {
                 PresentationBundle = presentationBundle
             };
+            
             var viewModel = _viewModelLoader.LoadViewModel(request, null);
             request.ViewModelInstance = viewModel;
             

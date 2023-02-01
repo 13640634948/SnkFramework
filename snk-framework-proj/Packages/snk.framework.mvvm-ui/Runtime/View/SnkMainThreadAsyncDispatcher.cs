@@ -45,6 +45,7 @@ namespace SnkFramework.Mvvm.Runtime
                 await Task.Run(async () => await completion.Task);
             }
 
+
             public virtual bool IsOnMainThread => _synchronizationContext == SynchronizationContext.Current;
 
             public virtual void ExecuteOnMainThread(Action action, bool maskExceptions = true)

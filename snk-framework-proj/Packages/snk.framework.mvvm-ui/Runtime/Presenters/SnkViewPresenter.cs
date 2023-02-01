@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters.Hits;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.NuGet.Basic;
 
 namespace SnkFramework.Mvvm.Runtime
 {
@@ -11,23 +13,22 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public abstract partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
-            private ISnkViewFinder _viewFinder;
-            private ISnkViewLoader _viewLoader;
-            private ISnkLayerContainer _layerContainer;
+            private Lazy<ISnkViewFinder> _viewFinder = new (()=> 
+                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewFinder>());
 
-            private readonly Dictionary<Type, Func<SnkPresentationHint, Task<bool>>>
-                _presentationHintHandlers =
+            private Lazy<ISnkViewLoader> _viewLoader = new(() =>
+                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewLoader>());
+            
+            private Lazy<ISnkLayerContainer> _layerContainer = new(() =>
+                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkLayerContainer>());
+            
+            public ISnkViewFinder ViewFinder => this._viewFinder.Value;
+            public ISnkViewLoader ViewLoader => this._viewLoader.Value;
+            public ISnkLayerContainer LayerContainer => this._layerContainer.Value;
+            
+
+            private readonly Dictionary<Type, Func<SnkPresentationHint, Task<bool>>> _presentationHintHandlers =
                     new Dictionary<Type, Func<SnkPresentationHint, Task<bool>>>();
-
-            public SnkViewPresenter(ISnkViewFinder viewFinder, ISnkViewLoader viewLoader,
-                ISnkLayerContainer layerContainer)
-            {
-                this._viewFinder = viewFinder;
-                this._viewLoader = viewLoader;
-                this._layerContainer = layerContainer;
-            }
-
-
             public void AddPresentationHintHandler<THint>(Func<THint, Task<bool>> action)
                 where THint : SnkPresentationHint
             {
