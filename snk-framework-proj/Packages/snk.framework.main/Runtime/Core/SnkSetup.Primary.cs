@@ -1,6 +1,8 @@
 ﻿using System;
 using SnkFramework.IoC;
+using SnkFramework.Mvvm.Runtime;
 using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime
 {
@@ -10,6 +12,8 @@ namespace SnkFramework.Runtime
         {
             protected abstract ISnkLoggerProvider CreateLoggerProvider();
 
+            protected abstract IMvxApplication CreateApp(ISnkIoCProvider iocProvider);
+            
             protected virtual ISnkLoggerFactory CreateLoggerFactory()
                 => new SnkLoggerFactory();
 
@@ -22,15 +26,30 @@ namespace SnkFramework.Runtime
                 //Snk.IoCProvider.RegisterSingleton<ISnkLoggerFactory>(loggerFactory);
 
                 loggerFactory.AddLoggerProvider(loggerProvider);
-                //logger = loggerFactory.CreateLogger<SnkSetup>();
+                logger = loggerFactory.CreateLogger<SnkSetup>();
             }
 
             //protected abstract ISnkCompressor CreateCompressor();
             //protected abstract ISnkJsonParser CreateJsonParser();
             //protected virtual ISnkCodeGenerator CreateCodeGenerator() => new SnkMD5Generator();
 
-            protected virtual void RegisterDefaultDependencies(ISnkIoCProvider ioCProvider)
+            protected abstract ISnkMvvmInstaller CreateMvvmInstaller();
+
+            protected ISnkMvvmService CreateMvvmUIService()
             {
+                var installer = CreateMvvmInstaller();
+                return MvvmUI.CreateService(installer);
+            }
+
+            protected virtual void RegisterDefaultDependencies(ISnkIoCProvider iocProvider)
+            {
+                
+                iocProvider.LazyConstructAndRegisterSingleton<ISnkSettings, SnkSettings>();
+                iocProvider.RegisterSingleton<ISnkPluginManager>(() => new MvxPluginManager(GetPluginConfiguration));
+                iocProvider.RegisterSingleton(CreateApp(iocProvider));
+                iocProvider.RegisterSingleton(CreateMvvmUIService());
+
+                
                 //ioCProvider.RegisterSingleton<ISnkJsonParser>(CreateJsonParser());
                 //ioCProvider.RegisterSingleton<ISnkCompressor>(CreateCompressor());
                 //ioCProvider.RegisterSingleton<ISnkCodeGenerator>(CreateCodeGenerator());

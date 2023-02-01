@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SnkFramework.Runtime.Core.Setup
+namespace SnkFramework.Runtime.Core
 {
     public abstract class SnkSplashScreen : MonoBehaviour, ISnkSetupMonitor
     {

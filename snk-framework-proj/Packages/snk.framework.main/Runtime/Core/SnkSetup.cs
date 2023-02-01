@@ -3,6 +3,7 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using DefaultNamespace;
 using SnkFramework.IoC;
+using SnkFramework.NuGet.Exceptions;
 using SnkFramework.NuGet.Features.Logging;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace SnkFramework.Runtime
     {
         public abstract partial class SnkSetup : ISnkSetup
         {
-            private readonly object _lock = new();
+            private static readonly object _lock = new();
 
             private TaskCompletionSource<bool> _isInitialisedTaskCompletionSource;
             //private SynchronizationContext _unitySynchronizationContext;
@@ -36,6 +37,44 @@ namespace SnkFramework.Runtime
                     _state = value;
                     FireStateChange(value);
                 }
+            }
+            
+            
+            protected static Func<ISnkSetup>? SetupCreator { get; set; }
+
+            public static void RegisterSetupType<TMvxSetup>() where TMvxSetup : SnkSetup, new()
+            {
+                // We are using double-checked locking here to avoid overhead of locking if the
+                // SetupCreator is already created
+                if (SetupCreator is null)
+                {
+                    lock (_lock)
+                    {
+                        if (SetupCreator is null)
+                        {
+
+
+                            // Avoid creating the instance of Setup right now, instead
+                            // take a reference to the type in a way that we can avoid
+                            // using reflection to create the instance.
+                            SetupCreator = () => new TMvxSetup();
+
+                            return;
+                        }
+                    }
+                }
+                //MvxLogHost.Default?.LogInformation("Setup: RegisterSetupType already called");
+            }
+
+            public static ISnkSetup Instance()
+            {
+                var instance = SetupCreator?.Invoke();
+                if (instance == null)
+                {
+                    //instance = MvxSetupExtensions.CreateSetup<MvxSetup>();
+                    throw new SnkException("Could not find a Setup class for application");
+                }
+                return instance;
             }
             
             private void FireStateChange(eSnkSetupState state)
@@ -155,5 +194,7 @@ namespace SnkFramework.Runtime
                 });
             }
         }
+
+        
     }
 }

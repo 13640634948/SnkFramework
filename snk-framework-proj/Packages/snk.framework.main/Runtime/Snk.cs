@@ -1,7 +1,7 @@
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Basic;
 
-namespace DefaultNamespace
+namespace SnkFramework.Runtime
 {
     public class Snk
     {
