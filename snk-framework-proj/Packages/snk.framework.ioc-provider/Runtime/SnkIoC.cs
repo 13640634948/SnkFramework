@@ -1,6 +1,6 @@
 ﻿using SnkFramework.NuGet.Features.Logging;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
     public class SnkIoC
     {

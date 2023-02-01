@@ -2,7 +2,7 @@ using System;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using DefaultNamespace;
-using MvvmCross.IoC;
+using SnkFramework.IoC;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Runtime.Core.Setup;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace SnkFramework
 
             private eSnkSetupState _state;
 
-            private IMvxIoCProvider _iocProvider;
+            private ISnkIoCProvider _iocProvider;
             protected ISnkLogger logger;
             public eSnkSetupState State
             {
@@ -44,13 +44,13 @@ namespace SnkFramework
                 StateChanged?.Invoke(this, new SnkSetupStateEventArgs(state));
             }
             
-            protected virtual void InitializeFirstChance(IMvxIoCProvider iocProvider)
+            protected virtual void InitializeFirstChance(ISnkIoCProvider iocProvider)
             {
                 // always the very first thing to get initialized - after IoC and base platform
                 // base class implementation is empty by default
             }
             
-            protected virtual void InitializeLastChance(IMvxIoCProvider iocProvider)
+            protected virtual void InitializeLastChance(ISnkIoCProvider iocProvider)
             {
                 // always the very last thing to get initialized
                 // base class implementation is empty by default

@@ -7,16 +7,16 @@ using System.Collections.Generic;
 //using MvvmCross.Base;
 using SnkFramework.NuGet.Basic;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
     /// <summary>
     /// Singleton IoC Provider.
     ///
-    /// Delegates to the <see cref="MvxIoCContainer"/> implementation
+    /// Delegates to the <see cref="SnkIoCContainer"/> implementation
     /// </summary>
-    public class MvxIoCProvider : SnkSingleton<IMvxIoCProvider>, IMvxIoCProvider
+    public class SnkIoCProvider : SnkSingleton<ISnkIoCProvider>, ISnkIoCProvider
     {
-        public static IMvxIoCProvider Initialize(IMvxIocOptions options = null)
+        public static ISnkIoCProvider Initialize(ISnkIocOptions options = null)
         {
             if (Instance != null)
             {
@@ -25,17 +25,17 @@ namespace MvvmCross.IoC
 
             // create a new ioc container - it will register itself as the singleton
             // ReSharper disable ObjectCreationAsStatement
-            new MvxIoCProvider(options);
+            new SnkIoCProvider(options);
 
             // ReSharper restore ObjectCreationAsStatement
             return Instance;
         }
 
-        private readonly MvxIoCContainer _provider;
+        private readonly SnkIoCContainer _provider;
 
-        protected MvxIoCProvider(IMvxIocOptions options)
+        protected SnkIoCProvider(ISnkIocOptions options)
         {
-            _provider = new MvxIoCContainer(options);
+            _provider = new SnkIoCContainer(options);
         }
 
         public bool CanResolve<T>()
@@ -194,7 +194,7 @@ namespace MvvmCross.IoC
             _provider.CleanAllResolvers();
         }
 
-        public IMvxIoCProvider CreateChildContainer()
+        public ISnkIoCProvider CreateChildContainer()
         {
             return _provider.CreateChildContainer();
         }

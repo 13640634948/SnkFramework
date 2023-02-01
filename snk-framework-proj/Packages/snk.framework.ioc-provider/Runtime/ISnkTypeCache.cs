@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public interface IMvxTypeCache<TType>
+    public interface ISnkTypeCache<TType>
     {
         Dictionary<string, Type> LowerCaseFullNameCache { get; }
         Dictionary<string, Type> FullNameCache { get; }

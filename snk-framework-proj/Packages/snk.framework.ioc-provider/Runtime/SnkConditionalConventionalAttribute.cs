@@ -4,10 +4,11 @@
 
 using System;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class MvxUnconventionalAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public abstract class SnkConditionalConventionalAttribute : Attribute
     {
+        public abstract bool IsConditionSatisfied { get; }
     }
 }

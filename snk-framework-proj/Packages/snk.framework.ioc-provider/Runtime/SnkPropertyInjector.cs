@@ -13,15 +13,15 @@ using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public class MvxPropertyInjector : IMvxPropertyInjector
+    public class SnkPropertyInjector : ISnkPropertyInjector
     {
-        public virtual void Inject(object target, IMvxPropertyInjectorOptions options = null)
+        public virtual void Inject(object target, ISnkPropertyInjectorOptions options = null)
         {
-            options = options ?? MvxPropertyInjectorOptions.All;
+            options = options ?? SnkPropertyInjectorOptions.All;
 
-            if (options.InjectIntoProperties == MvxPropertyInjection.None)
+            if (options.InjectIntoProperties == SnkPropertyInjection.None)
                 return;
 
             if (target == null)
@@ -35,10 +35,10 @@ namespace MvvmCross.IoC
             }
         }
 
-        protected virtual void InjectProperty(object toReturn, PropertyInfo injectableProperty, IMvxPropertyInjectorOptions options)
+        protected virtual void InjectProperty(object toReturn, PropertyInfo injectableProperty, ISnkPropertyInjectorOptions options)
         {
             object propertyValue = null;
-            if (SnkSingleton<IMvxIoCProvider>.Instance?.TryResolve(injectableProperty.PropertyType, out propertyValue) == true)
+            if (SnkSingleton<ISnkIoCProvider>.Instance?.TryResolve(injectableProperty.PropertyType, out propertyValue) == true)
             {
                 try
                 {
@@ -63,7 +63,7 @@ namespace MvvmCross.IoC
             }
         }
 
-        protected virtual IEnumerable<PropertyInfo> FindInjectableProperties(Type type, IMvxPropertyInjectorOptions options)
+        protected virtual IEnumerable<PropertyInfo> FindInjectableProperties(Type type, ISnkPropertyInjectorOptions options)
         {
             var injectableProperties = type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)
@@ -73,15 +73,15 @@ namespace MvvmCross.IoC
 
             switch (options.InjectIntoProperties)
             {
-                case MvxPropertyInjection.MvxInjectInterfaceProperties:
+                case SnkPropertyInjection.MvxInjectInterfaceProperties:
                     injectableProperties = injectableProperties
-                        .Where(p => p.GetCustomAttributes(typeof(MvxInjectAttribute), false).Any());
+                        .Where(p => p.GetCustomAttributes(typeof(SnkInjectAttribute), false).Any());
                     break;
 
-                case MvxPropertyInjection.AllInterfaceProperties:
+                case SnkPropertyInjection.AllInterfaceProperties:
                     break;
 
-                case MvxPropertyInjection.None:
+                case SnkPropertyInjection.None:
                     //MvxLogHost.Default?.Log(LogLevel.Error, "Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
                     SnkIoC.s_Logger?.Error("Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
                     injectableProperties = new PropertyInfo[0];

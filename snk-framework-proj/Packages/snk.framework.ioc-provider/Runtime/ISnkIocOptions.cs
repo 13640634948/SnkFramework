@@ -4,14 +4,14 @@
 
 using System;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public interface IMvxIocOptions
+    public interface ISnkIocOptions
     {
         bool TryToDetectSingletonCircularReferences { get; }
         bool TryToDetectDynamicCircularReferences { get; }
         bool CheckDisposeIfPropertyInjectionFails { get; }
         Type PropertyInjectorType { get; }
-        IMvxPropertyInjectorOptions PropertyInjectorOptions { get; }
+        ISnkPropertyInjectorOptions PropertyInjectorOptions { get; }
     }
 }

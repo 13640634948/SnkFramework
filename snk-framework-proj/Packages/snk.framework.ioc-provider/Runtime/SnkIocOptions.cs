@@ -4,23 +4,23 @@
 
 using System;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public class MvxIocOptions : IMvxIocOptions
+    public class SnkIocOptions : ISnkIocOptions
     {
-        public MvxIocOptions()
+        public SnkIocOptions()
         {
             TryToDetectSingletonCircularReferences = true;
             TryToDetectDynamicCircularReferences = true;
             CheckDisposeIfPropertyInjectionFails = true;
-            PropertyInjectorType = typeof(MvxPropertyInjector);
-            PropertyInjectorOptions = new MvxPropertyInjectorOptions();
+            PropertyInjectorType = typeof(SnkPropertyInjector);
+            PropertyInjectorOptions = new SnkPropertyInjectorOptions();
         }
 
         public bool TryToDetectSingletonCircularReferences { get; set; }
         public bool TryToDetectDynamicCircularReferences { get; set; }
         public bool CheckDisposeIfPropertyInjectionFails { get; set; }
         public Type PropertyInjectorType { get; set; }
-        public IMvxPropertyInjectorOptions PropertyInjectorOptions { get; set; }
+        public ISnkPropertyInjectorOptions PropertyInjectorOptions { get; set; }
     }
 }

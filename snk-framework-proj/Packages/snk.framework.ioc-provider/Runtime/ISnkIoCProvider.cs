@@ -5,9 +5,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public interface IMvxIoCProvider
+    public interface ISnkIoCProvider
     {
         bool CanResolve<T>()
             where T : class;
@@ -79,6 +79,6 @@ namespace MvvmCross.IoC
 
         void CallbackWhenRegistered(Type type, Action action);
 
-        IMvxIoCProvider CreateChildContainer();
+        ISnkIoCProvider CreateChildContainer();
     }
 }

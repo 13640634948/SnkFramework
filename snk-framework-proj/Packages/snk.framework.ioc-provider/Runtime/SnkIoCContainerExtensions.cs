@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public static class MvxIoCContainerExtensions
+    public static class SnkIoCContainerExtensions
     {
         private static Func<TInterface> CreateResolver<TInterface, TParameter1>(
-            this IMvxIoCProvider ioc,
+            this ISnkIoCProvider ioc,
                 Func<TParameter1, TInterface> typedConstructor)
                 where TInterface : class
                 where TParameter1 : class
@@ -19,7 +19,7 @@ namespace MvvmCross.IoC
         }
 
         private static Func<TInterface> CreateResolver<TInterface, TParameter1, TParameter2>(
-            this IMvxIoCProvider ioc,
+            this ISnkIoCProvider ioc,
             Func<TParameter1, TParameter2, TInterface> typedConstructor)
             where TInterface : class
             where TParameter1 : class
@@ -34,7 +34,7 @@ namespace MvvmCross.IoC
         }
 
         private static Func<TInterface> CreateResolver<TInterface, TParameter1, TParameter2, TParameter3>(
-            this IMvxIoCProvider ioc,
+            this ISnkIoCProvider ioc,
             Func<TParameter1, TParameter2, TParameter3, TInterface> typedConstructor)
             where TInterface : class
             where TParameter1 : class
@@ -51,7 +51,7 @@ namespace MvvmCross.IoC
         }
 
         private static Func<TInterface> CreateResolver<TInterface, TParameter1, TParameter2, TParameter3, TParameter4>(
-            this IMvxIoCProvider ioc,
+            this ISnkIoCProvider ioc,
             Func<TParameter1, TParameter2, TParameter3, TParameter4, TInterface> typedConstructor)
             where TInterface : class
             where TParameter1 : class
@@ -70,7 +70,7 @@ namespace MvvmCross.IoC
         }
 
         private static Func<TInterface> CreateResolver<TInterface, TParameter1, TParameter2, TParameter3, TParameter4, TParameter5>(
-            this IMvxIoCProvider ioc,
+            this ISnkIoCProvider ioc,
             Func<TParameter1, TParameter2, TParameter3, TParameter4, TParameter5, TInterface> typedConstructor)
             where TInterface : class
             where TParameter1 : class
@@ -90,7 +90,7 @@ namespace MvvmCross.IoC
             };
         }
 
-        public static void CallbackWhenRegistered<T>(this IMvxIoCProvider ioc, Action<T> action)
+        public static void CallbackWhenRegistered<T>(this ISnkIoCProvider ioc, Action<T> action)
             where T : class
         {
             Action simpleAction = () =>
@@ -101,7 +101,7 @@ namespace MvvmCross.IoC
             ioc.CallbackWhenRegistered<T>(simpleAction);
         }
 
-        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this IMvxIoCProvider ioc)
+        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this ISnkIoCProvider ioc)
             where TInterface : class
             where TType : class, TInterface
         {
@@ -110,7 +110,7 @@ namespace MvvmCross.IoC
             return instance;
         }
 
-        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this IMvxIoCProvider ioc, IDictionary<string, object> arguments)
+        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this ISnkIoCProvider ioc, IDictionary<string, object> arguments)
             where TInterface : class
             where TType : class, TInterface
         {
@@ -119,7 +119,7 @@ namespace MvvmCross.IoC
             return instance;
         }
 
-        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this IMvxIoCProvider ioc, object arguments)
+        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this ISnkIoCProvider ioc, object arguments)
             where TInterface : class
             where TType : class, TInterface
         {
@@ -128,7 +128,7 @@ namespace MvvmCross.IoC
             return instance;
         }
 
-        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this IMvxIoCProvider ioc, params object[] arguments)
+        public static TType ConstructAndRegisterSingleton<TInterface, TType>(this ISnkIoCProvider ioc, params object[] arguments)
             where TInterface : class
             where TType : class, TInterface
         {
@@ -137,53 +137,53 @@ namespace MvvmCross.IoC
             return instance;
         }
 
-        public static object ConstructAndRegisterSingleton(this IMvxIoCProvider ioc, Type type)
+        public static object ConstructAndRegisterSingleton(this ISnkIoCProvider ioc, Type type)
         {
             var instance = ioc.IoCConstruct(type);
             ioc.RegisterSingleton(type, instance);
             return instance;
         }
 
-        public static object ConstructAndRegisterSingleton(this IMvxIoCProvider ioc, Type type, IDictionary<string, object> arguments)
+        public static object ConstructAndRegisterSingleton(this ISnkIoCProvider ioc, Type type, IDictionary<string, object> arguments)
         {
             var instance = ioc.IoCConstruct(type, arguments);
             ioc.RegisterSingleton(type, instance);
             return instance;
         }
 
-        public static object ConstructAndRegisterSingleton(this IMvxIoCProvider ioc, Type type, object arguments)
+        public static object ConstructAndRegisterSingleton(this ISnkIoCProvider ioc, Type type, object arguments)
         {
             var instance = ioc.IoCConstruct(type, arguments);
             ioc.RegisterSingleton(type, instance);
             return instance;
         }
 
-        public static object ConstructAndRegisterSingleton(this IMvxIoCProvider ioc, Type type, params object[] arguments)
+        public static object ConstructAndRegisterSingleton(this ISnkIoCProvider ioc, Type type, params object[] arguments)
         {
             var instance = ioc.IoCConstruct(type, arguments);
             ioc.RegisterSingleton(type, instance);
             return instance;
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface, TType>(this IMvxIoCProvider ioc)
+        public static void LazyConstructAndRegisterSingleton<TInterface, TType>(this ISnkIoCProvider ioc)
             where TInterface : class
             where TType : class, TInterface
         {
             ioc.RegisterSingleton<TInterface>(() => ioc.IoCConstruct<TType>());
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface>(this IMvxIoCProvider ioc, Func<TInterface> constructor)
+        public static void LazyConstructAndRegisterSingleton<TInterface>(this ISnkIoCProvider ioc, Func<TInterface> constructor)
             where TInterface : class
         {
             ioc.RegisterSingleton<TInterface>(constructor);
         }
 
-        public static void LazyConstructAndRegisterSingleton(this IMvxIoCProvider ioc, Type type, Func<object> constructor)
+        public static void LazyConstructAndRegisterSingleton(this ISnkIoCProvider ioc, Type type, Func<object> constructor)
         {
             ioc.RegisterSingleton(type, constructor);
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1>(this IMvxIoCProvider ioc, Func<TParameter1, TInterface> constructor)
+        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1>(this ISnkIoCProvider ioc, Func<TParameter1, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
         {
@@ -191,7 +191,7 @@ namespace MvvmCross.IoC
             ioc.RegisterSingleton(resolver);
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TInterface> constructor)
+        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -200,7 +200,7 @@ namespace MvvmCross.IoC
             ioc.RegisterSingleton(resolver);
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2, TParameter3>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TInterface> constructor)
+        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2, TParameter3>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -210,7 +210,7 @@ namespace MvvmCross.IoC
             ioc.RegisterSingleton(resolver);
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2, TParameter3, TParameter4>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TInterface> constructor)
+        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2, TParameter3, TParameter4>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -221,7 +221,7 @@ namespace MvvmCross.IoC
             ioc.RegisterSingleton(resolver);
         }
 
-        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2, TParameter3, TParameter4, TParameter5>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TParameter5, TInterface> constructor)
+        public static void LazyConstructAndRegisterSingleton<TInterface, TParameter1, TParameter2, TParameter3, TParameter4, TParameter5>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TParameter5, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -233,18 +233,18 @@ namespace MvvmCross.IoC
             ioc.RegisterSingleton(resolver);
         }
 
-        public static void RegisterType<TType>(this IMvxIoCProvider ioc)
+        public static void RegisterType<TType>(this ISnkIoCProvider ioc)
             where TType : class
         {
             ioc.RegisterType<TType, TType>();
         }
 
-        public static void RegisterType(this IMvxIoCProvider ioc, Type tType)
+        public static void RegisterType(this ISnkIoCProvider ioc, Type tType)
         {
             ioc.RegisterType(tType, tType);
         }
 
-        public static void RegisterType<TInterface, TParameter1>(this IMvxIoCProvider ioc, Func<TParameter1, TInterface> constructor)
+        public static void RegisterType<TInterface, TParameter1>(this ISnkIoCProvider ioc, Func<TParameter1, TInterface> constructor)
            where TInterface : class
            where TParameter1 : class
         {
@@ -252,7 +252,7 @@ namespace MvvmCross.IoC
             ioc.RegisterType(resolver);
         }
 
-        public static void RegisterType<TInterface, TParameter1, TParameter2>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TInterface> constructor)
+        public static void RegisterType<TInterface, TParameter1, TParameter2>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -261,7 +261,7 @@ namespace MvvmCross.IoC
             ioc.RegisterType(resolver);
         }
 
-        public static void RegisterType<TInterface, TParameter1, TParameter2, TParameter3>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TInterface> constructor)
+        public static void RegisterType<TInterface, TParameter1, TParameter2, TParameter3>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -271,7 +271,7 @@ namespace MvvmCross.IoC
             ioc.RegisterType(resolver);
         }
 
-        public static void RegisterType<TInterface, TParameter1, TParameter2, TParameter3, TParameter4>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TInterface> constructor)
+        public static void RegisterType<TInterface, TParameter1, TParameter2, TParameter3, TParameter4>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class
@@ -282,7 +282,7 @@ namespace MvvmCross.IoC
             ioc.RegisterType(resolver);
         }
 
-        public static void RegisterType<TInterface, TParameter1, TParameter2, TParameter3, TParameter4, TParameter5>(this IMvxIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TParameter5, TInterface> constructor)
+        public static void RegisterType<TInterface, TParameter1, TParameter2, TParameter3, TParameter4, TParameter5>(this ISnkIoCProvider ioc, Func<TParameter1, TParameter2, TParameter3, TParameter4, TParameter5, TInterface> constructor)
             where TInterface : class
             where TParameter1 : class
             where TParameter2 : class

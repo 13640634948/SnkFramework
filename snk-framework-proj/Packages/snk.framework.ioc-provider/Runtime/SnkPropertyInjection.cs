@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MS-PL license.
 // See the LICENSE file in the project root for more information.
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public interface IMvxPropertyInjector
+    public enum SnkPropertyInjection
     {
-        void Inject(object target, IMvxPropertyInjectorOptions options = null);
+        None,
+        MvxInjectInterfaceProperties,
+        AllInterfaceProperties
     }
 }

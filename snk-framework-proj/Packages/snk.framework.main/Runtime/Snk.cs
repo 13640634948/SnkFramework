@@ -1,10 +1,10 @@
-using MvvmCross.IoC;
+using SnkFramework.IoC;
 using SnkFramework.NuGet.Basic;
 
 namespace DefaultNamespace
 {
     public class Snk
     {
-        public static IMvxIoCProvider IoCProvider => SnkSingleton<IMvxIoCProvider>.Instance;
+        public static ISnkIoCProvider IoCProvider => SnkSingleton<ISnkIoCProvider>.Instance;
     }
 }

@@ -11,9 +11,9 @@ using System.Reflection;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public class MvxTypeCache<TType> : IMvxTypeCache<TType>
+    public class SnkTypeCache<TType> : ISnkTypeCache<TType>
     {
         public Dictionary<string, Type> LowerCaseFullNameCache { get; } = new Dictionary<string, Type>();
         public Dictionary<string, Type> FullNameCache { get; } = new Dictionary<string, Type>();

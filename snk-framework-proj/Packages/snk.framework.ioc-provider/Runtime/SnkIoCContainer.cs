@@ -11,33 +11,32 @@ using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public class MvxIoCContainer
-        : IMvxIoCProvider
+    public class SnkIoCContainer : ISnkIoCProvider
     {
         private readonly Dictionary<Type, IResolver> _resolvers = new Dictionary<Type, IResolver>();
         private readonly Dictionary<Type, List<Action>> _waiters = new Dictionary<Type, List<Action>>();
         private readonly Dictionary<Type, bool> _circularTypeDetection = new Dictionary<Type, bool>();
         private readonly object _lockObject = new object();
-        private readonly IMvxIocOptions _options;
-        private readonly IMvxPropertyInjector _propertyInjector;
-        private readonly IMvxIoCProvider _parentProvider;
+        private readonly ISnkIocOptions _options;
+        private readonly ISnkPropertyInjector _propertyInjector;
+        private readonly ISnkIoCProvider _parentProvider;
 
         protected object LockObject => _lockObject;
 
-        protected IMvxIocOptions Options => _options;
+        protected ISnkIocOptions Options => _options;
 
-        public MvxIoCContainer(IMvxIocOptions options, IMvxIoCProvider parentProvider = null)
+        public SnkIoCContainer(ISnkIocOptions options, ISnkIoCProvider parentProvider = null)
         {
-            _options = options ?? new MvxIocOptions();
+            _options = options ?? new SnkIocOptions();
             if (_options.PropertyInjectorType != null)
             {
-                _propertyInjector = Activator.CreateInstance(_options.PropertyInjectorType) as IMvxPropertyInjector;
+                _propertyInjector = Activator.CreateInstance(_options.PropertyInjectorType) as ISnkPropertyInjector;
             }
             if (_propertyInjector != null)
             {
-                RegisterSingleton(typeof(IMvxPropertyInjector), _propertyInjector);
+                RegisterSingleton(typeof(ISnkPropertyInjector), _propertyInjector);
             }
             if (parentProvider != null)
             {
@@ -45,7 +44,7 @@ namespace MvvmCross.IoC
             }
         }
 
-        public MvxIoCContainer(IMvxIoCProvider parentProvider)
+        public SnkIoCContainer(ISnkIoCProvider parentProvider)
             : this(null, parentProvider)
         {
             if (parentProvider == null)
@@ -66,9 +65,9 @@ namespace MvvmCross.IoC
         public class ConstructingResolver : IResolver
         {
             private readonly Type _type;
-            private readonly IMvxIoCProvider _parent;
+            private readonly ISnkIoCProvider _parent;
 
-            public ConstructingResolver(Type type, IMvxIoCProvider parent)
+            public ConstructingResolver(Type type, ISnkIoCProvider parent)
             {
                 _type = type;
                 _parent = parent;
@@ -167,11 +166,11 @@ namespace MvvmCross.IoC
         public class ConstructingOpenGenericResolver : IResolver
         {
             private readonly Type _genericTypeDefinition;
-            private readonly IMvxIoCProvider _parent;
+            private readonly ISnkIoCProvider _parent;
 
             private Type[] _genericTypeParameters;
 
-            public ConstructingOpenGenericResolver(Type genericTypeDefinition, IMvxIoCProvider parent)
+            public ConstructingOpenGenericResolver(Type genericTypeDefinition, ISnkIoCProvider parent)
             {
                 _genericTypeDefinition = genericTypeDefinition;
                 _parent = parent;
@@ -488,7 +487,7 @@ namespace MvvmCross.IoC
             Unknown
         }
 
-        public virtual IMvxIoCProvider CreateChildContainer() => new MvxIoCContainer(this);
+        public virtual ISnkIoCProvider CreateChildContainer() => new SnkIoCContainer(this);
 
         private static readonly ResolverType? ResolverTypeNoneSpecified = null;
 

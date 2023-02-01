@@ -6,9 +6,9 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public static class MvxConventionAttributeExtensions
+    public static class SnkConventionAttributeExtensions
     {
         /// <summary>
         /// A type is conventional if and only it is:
@@ -19,7 +19,7 @@ namespace MvvmCross.IoC
         /// <returns></returns>
         public static bool IsConventional(this Type candidateType)
         {
-            var unconventionalAttributes = candidateType.GetCustomAttributes(typeof(MvxUnconventionalAttribute),
+            var unconventionalAttributes = candidateType.GetCustomAttributes(typeof(SnkUnconventionalAttribute),
                                                                              true);
             if (unconventionalAttributes.Length > 0)
                 return false;
@@ -36,7 +36,7 @@ namespace MvvmCross.IoC
         /// <returns></returns>
         public static bool IsConventional(this PropertyInfo propertyInfo)
         {
-            var unconventionalAttributes = propertyInfo.GetCustomAttributes(typeof(MvxUnconventionalAttribute),
+            var unconventionalAttributes = propertyInfo.GetCustomAttributes(typeof(SnkUnconventionalAttribute),
                                                                              true);
             if (unconventionalAttributes.Any())
                 return false;
@@ -47,9 +47,9 @@ namespace MvvmCross.IoC
         public static bool SatisfiesConditionalConventions(this Type candidateType)
         {
             var conditionalAttributes =
-                candidateType.GetCustomAttributes(typeof(MvxConditionalConventionalAttribute), true);
+                candidateType.GetCustomAttributes(typeof(SnkConditionalConventionalAttribute), true);
 
-            foreach (MvxConditionalConventionalAttribute conditional in conditionalAttributes)
+            foreach (SnkConditionalConventionalAttribute conditional in conditionalAttributes)
             {
                 var result = conditional.IsConditionSatisfied;
                 if (!result)
@@ -61,9 +61,9 @@ namespace MvvmCross.IoC
         public static bool SatisfiesConditionalConventions(this PropertyInfo propertyInfo)
         {
             var conditionalAttributes =
-                propertyInfo.GetCustomAttributes(typeof(MvxConditionalConventionalAttribute), true);
+                propertyInfo.GetCustomAttributes(typeof(SnkConditionalConventionalAttribute), true);
 
-            foreach (MvxConditionalConventionalAttribute conditional in conditionalAttributes)
+            foreach (SnkConditionalConventionalAttribute conditional in conditionalAttributes)
             {
                 var result = conditional.IsConditionSatisfied;
                 if (!result)

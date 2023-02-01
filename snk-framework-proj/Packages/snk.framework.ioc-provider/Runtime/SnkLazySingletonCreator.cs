@@ -6,9 +6,9 @@ using System;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public class MvxLazySingletonCreator
+    public class SnkLazySingletonCreator
     {
         private readonly object _lockObject = new object();
         private readonly Type _type;
@@ -24,13 +24,13 @@ namespace MvvmCross.IoC
 
                 lock (_lockObject)
                 {
-                    _instance = _instance ?? SnkSingleton<IMvxIoCProvider>.Instance.IoCConstruct(_type);
+                    _instance = _instance ?? SnkSingleton<ISnkIoCProvider>.Instance.IoCConstruct(_type);
                     return _instance;
                 }
             }
         }
 
-        public MvxLazySingletonCreator(Type type)
+        public SnkLazySingletonCreator(Type type)
         {
             _type = type;
         }

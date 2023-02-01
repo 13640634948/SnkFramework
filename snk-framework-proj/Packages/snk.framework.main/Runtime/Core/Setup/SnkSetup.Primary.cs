@@ -1,5 +1,5 @@
 ﻿using System;
-using MvvmCross.IoC;
+using SnkFramework.IoC;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Runtime.Core.Setup;
 
@@ -14,7 +14,7 @@ namespace SnkFramework
             protected virtual ISnkLoggerFactory CreateLoggerFactory()
                 => new SnkLoggerFactory();
 
-            protected void InitializeLogService(IMvxIoCProvider iocProvider)
+            protected void InitializeLogService(ISnkIoCProvider iocProvider)
             {
                 var loggerProvider = this.CreateLoggerProvider();
                 //Snk.IoCProvider.RegisterSingleton<ISnkLoggerProvider>(loggerProvider);
@@ -30,20 +30,20 @@ namespace SnkFramework
             //protected abstract ISnkJsonParser CreateJsonParser();
             //protected virtual ISnkCodeGenerator CreateCodeGenerator() => new SnkMD5Generator();
 
-            protected virtual void RegisterDefaultDependencies(IMvxIoCProvider ioCProvider)
+            protected virtual void RegisterDefaultDependencies(ISnkIoCProvider ioCProvider)
             {
                 //ioCProvider.RegisterSingleton<ISnkJsonParser>(CreateJsonParser());
                 //ioCProvider.RegisterSingleton<ISnkCompressor>(CreateCompressor());
                 //ioCProvider.RegisterSingleton<ISnkCodeGenerator>(CreateCodeGenerator());
             }
 
-            protected virtual IMvxIocOptions CreateIocOptions()
-                => new MvxIocOptions();
+            protected virtual ISnkIocOptions CreateIocOptions()
+                => new SnkIocOptions();
 
-            protected virtual IMvxIoCProvider CreateIocProvider()
-                => MvxIoCProvider.Initialize(CreateIocOptions());
+            protected virtual ISnkIoCProvider CreateIocProvider()
+                => SnkIoCProvider.Initialize(CreateIocOptions());
 
-            protected virtual IMvxIoCProvider InitializeIoC()
+            protected virtual ISnkIoCProvider InitializeIoC()
             {
                 // initialize the IoC registry, then add it to it self
                 var iocProvider = CreateIocProvider();
@@ -52,13 +52,13 @@ namespace SnkFramework
                 return iocProvider;
             }
 
-            protected virtual ISnkSettings InitializeSettings(IMvxIoCProvider iocProvider)
+            protected virtual ISnkSettings InitializeSettings(ISnkIoCProvider iocProvider)
             {
                 var settings = CreateSettings(iocProvider);
                 return settings;
             }
 
-            protected virtual ISnkSettings CreateSettings(IMvxIoCProvider iocProvider)
+            protected virtual ISnkSettings CreateSettings(ISnkIoCProvider iocProvider)
                 =>iocProvider.Resolve<ISnkSettings>();
 
             protected virtual void InitializeSingletonCache()
@@ -68,7 +68,7 @@ namespace SnkFramework
 #pragma warning restore CA2000 // Dispose objects before losing scope
             }
 
-            protected virtual void InitializeDispatcher(IMvxIoCProvider iocProvider)
+            protected virtual void InitializeDispatcher(ISnkIoCProvider iocProvider)
             {
                 //主线程派发器
             }
@@ -76,7 +76,7 @@ namespace SnkFramework
             /// <summary>
             /// 初始化各个平台
             /// </summary>
-            protected virtual void InitializeBasePlatform(IMvxIoCProvider iocProvider)
+            protected virtual void InitializeBasePlatform(ISnkIoCProvider iocProvider)
             {
             
             }

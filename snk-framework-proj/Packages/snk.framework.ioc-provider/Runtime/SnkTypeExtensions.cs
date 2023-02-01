@@ -13,9 +13,9 @@ using System.Reflection;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 
-namespace MvvmCross.IoC
+namespace SnkFramework.IoC
 {
-    public static class MvxTypeExtensions
+    public static class SnkTypeExtensions
     {
         public static IEnumerable<Type> ExceptionSafeGetTypes(this Assembly assembly)
         {
@@ -189,10 +189,10 @@ namespace MvvmCross.IoC
                 if (pair.ServiceTypes.Count == 0)
                     continue;
 
-                var instance = SnkSingleton<IMvxIoCProvider>.Instance.IoCConstruct(pair.ImplementationType);
+                var instance = SnkSingleton<ISnkIoCProvider>.Instance.IoCConstruct(pair.ImplementationType);
                 foreach (var serviceType in pair.ServiceTypes)
                 {
-                    SnkSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(serviceType, instance);
+                    SnkSingleton<ISnkIoCProvider>.Instance.RegisterSingleton(serviceType, instance);
                 }
             }
         }
@@ -205,11 +205,11 @@ namespace MvvmCross.IoC
                     continue;
 
                 var typeToCreate = pair.ImplementationType;
-                var creator = new MvxLazySingletonCreator(typeToCreate);
+                var creator = new SnkLazySingletonCreator(typeToCreate);
                 var creationFunc = new Func<object>(() => creator.Instance);
                 foreach (var serviceType in pair.ServiceTypes)
                 {
-                    SnkSingleton<IMvxIoCProvider>.Instance.RegisterSingleton(serviceType, creationFunc);
+                    SnkSingleton<ISnkIoCProvider>.Instance.RegisterSingleton(serviceType, creationFunc);
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace MvvmCross.IoC
             {
                 foreach (var serviceType in pair.ServiceTypes)
                 {
-                    SnkSingleton<IMvxIoCProvider>.Instance.RegisterType(serviceType, pair.ImplementationType);
+                    SnkSingleton<ISnkIoCProvider>.Instance.RegisterType(serviceType, pair.ImplementationType);
                 }
             }
         }
