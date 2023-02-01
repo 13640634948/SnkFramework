@@ -3,37 +3,14 @@ using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.NuGet.Features.Patch;
 using SnkFramework.Runtime.Basic;
+using SnkFramework.Runtime.Engine;
 using UnityEngine;
-
-public class SnkLoggerProvider : ISnkLoggerProvider
-{
-    public void Output(eSnkLogType logType, Exception e, string formater, params object[] message)
-    {
-        if(e != null)
-            Debug.LogException(e);
-        else
-        {
-            switch (logType)
-            {
-                case eSnkLogType.error:
-                    Debug.LogErrorFormat(formater, message);
-                    break;
-                case eSnkLogType.warning:
-                    Debug.LogWarningFormat(formater, message);
-                    break;
-                default:
-                    Debug.LogFormat(formater, message);
-                    break;
-            }
-        }
-    }
-}
 
 public class PatchServiceDemo : MonoBehaviour
 {
     public async void Start()
     {
-        SnkNuget.Logger = new SnkLogger("asdf", new SnkLoggerProvider());
+        SnkNuget.Logger = new SnkLogger("asdf", new UnityLoggerProvider());
 
         var settings = new SnkPatchControlSettings
         {
