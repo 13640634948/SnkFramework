@@ -1,6 +1,7 @@
 using System;
 using SnkFramework.Mvvm.Demo.Views;
 using SnkFramework.Mvvm.Runtime.View;
+using UnityEngine;
 
 namespace SnkFramework.Mvvm.Demo
 {

@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using SnkFramework.Runtime.Core.Setup;
 using UnityEngine;
 
 namespace DefaultNamespace
