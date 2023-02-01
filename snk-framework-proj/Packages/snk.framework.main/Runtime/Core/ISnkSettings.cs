@@ -1,4 +1,4 @@
-﻿namespace SnkFramework
+﻿namespace SnkFramework.Runtime
 {
     namespace Core
     {

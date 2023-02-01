@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SnkFramework.Runtime.Core.Setup
+namespace SnkFramework.Runtime.Core
 {
     public interface ISnkMainThreadDispatcher
     {

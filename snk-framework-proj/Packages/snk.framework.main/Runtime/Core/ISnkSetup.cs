@@ -1,8 +1,11 @@
-namespace SnkFramework.Runtime.Core.Setup
+namespace SnkFramework.Runtime
 {
-    public interface ISnkSetup
+    namespace Core
     {
-        void InitializePrimary();
-        void InitializeSecondary();
+        public interface ISnkSetup
+        {
+            void InitializePrimary();
+            void InitializeSecondary();
+        }
     }
 }

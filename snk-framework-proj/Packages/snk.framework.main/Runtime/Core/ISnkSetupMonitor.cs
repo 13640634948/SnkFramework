@@ -1,9 +1,12 @@
 using System.Threading.Tasks;
 
-namespace SnkFramework.Runtime.Core.Setup
+namespace SnkFramework.Runtime
 {
-    public interface ISnkSetupMonitor
+    namespace Core
     {
-        Task InitializationComplete();
+        public interface ISnkSetupMonitor
+        {
+            Task InitializationComplete();
+        }
     }
 }

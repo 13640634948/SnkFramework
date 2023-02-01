@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using DefaultNamespace;
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Features.Logging;
-using SnkFramework.Runtime.Core.Setup;
 using UnityEngine;
 
-namespace SnkFramework
+namespace SnkFramework.Runtime
 {
     namespace Core
     {

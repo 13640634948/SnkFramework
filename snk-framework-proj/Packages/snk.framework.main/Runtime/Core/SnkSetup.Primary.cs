@@ -1,9 +1,8 @@
 ﻿using System;
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Features.Logging;
-using SnkFramework.Runtime.Core.Setup;
 
-namespace SnkFramework
+namespace SnkFramework.Runtime
 {
     namespace Core
     {
