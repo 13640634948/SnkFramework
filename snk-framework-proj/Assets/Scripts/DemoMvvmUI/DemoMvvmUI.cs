@@ -1,4 +1,3 @@
-using SnkFramework.Mvvm.Demo.Implements;
 using SnkFramework.Mvvm.Demo.ViewModels;
 using SnkFramework.Mvvm.Runtime;
 using UnityEngine;
@@ -9,11 +8,6 @@ namespace SnkFramework.Mvvm.Demo
     {
         private ISnkMvvmService _mvvmService;
         private TestViewModel viewModel;
-
-        private void Awake()
-        {
-            //_mvvmService = new DemoMvvmInstaller().Install();
-        }
 
         async void Start()
         {

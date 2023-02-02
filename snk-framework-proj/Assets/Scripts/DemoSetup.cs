@@ -25,7 +25,7 @@ namespace DefaultNamespace
     {
         protected override void RegisterLayer(ISnkLayerContainer container)
         {
-            container.RegiestLayer<DemoUGUINormalLayer>();
+            container.RegiestLayer<DemoUGUINormalLayer>(true);
             container.RegiestLayer<DemoUGUIDialogueLayer>();
             container.RegiestLayer<DemoUGUIGuideLayer>();
             container.RegiestLayer<DemoUGUITopLayer>();
@@ -50,8 +50,6 @@ namespace DefaultNamespace
         protected override ISnkViewLoader CreateViewLoader()
             => new DemoViewLoader();
 
-        protected override ISnkViewPresenter CreateViewPresenter()
-            => new DemoPresenter();
 
         protected override ISnkViewDispatcher CreateViewDispatcher()
             => new DemoViewDispatcher();

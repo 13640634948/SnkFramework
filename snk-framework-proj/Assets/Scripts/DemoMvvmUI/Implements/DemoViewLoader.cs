@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using SnkFramework.Mvvm.Demo.Views;
-using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using UnityEngine;
 
