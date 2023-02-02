@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.Presenters.Hits;
@@ -7,8 +8,10 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace View
     {
-        public interface ISnkViewDispatcher : ISnkMainThreadAsyncDispatcher
+        public interface ISnkViewDispatcher
         {
+            Task ExecuteOnUIThreadAsync(Func<Task> action, bool maskExceptions = true);
+
             Task<bool> ShowViewModel(SnkViewModelRequest request);
 
             Task<bool> ChangePresentation(SnkPresentationHint hint);
