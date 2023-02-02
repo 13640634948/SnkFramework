@@ -1,0 +1,20 @@
+{
+    "name": "BFFramework.Runtime.UserInterface",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c3bf3bdc3b4f3480ab80d55f71603535",
+        "GUID:716af79e75ac0403188c02dc6dd87117",
+        "GUID:00f3b9446f5c141f18613b9185cda6f4",
+        "GUID:21c295c21c64b49a08c9c2744e50c058",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
