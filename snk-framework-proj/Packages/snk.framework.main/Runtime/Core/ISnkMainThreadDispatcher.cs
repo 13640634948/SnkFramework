@@ -1,14 +1,13 @@
 using System;
-using System.Threading.Tasks;
 
-namespace SnkFramework.Runtime.Core
+namespace SnkFramework.Runtime
 {
-    /*
-    public interface ISnkMainThreadDispatcher
+    namespace Core
     {
-        Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true);
-        Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true);
-        bool IsOnMainThread { get; }
+        public interface ISnkMainThreadDispatcher
+        {
+            //bool RequestMainThreadAction(Action action, bool maskExceptions = true);
+            bool IsOnMainThread { get; }
+        }
     }
-    */
 }

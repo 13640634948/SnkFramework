@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.Base;
@@ -68,6 +69,7 @@ namespace SnkFramework.Runtime
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkSettings, SnkSettings>();
                 iocProvider.RegisterSingleton<ISnkPluginManager>(() => new MvxPluginManager(GetPluginConfiguration));
                 iocProvider.RegisterSingleton(CreateApp(iocProvider));
+                iocProvider.RegisterSingleton(CreateViewPresenter());
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkMvvmService, ISnkViewDispatcher, ISnkViewModelLoader>(
                     (dispatcher,viewModelLoader)=> new SnkMvvmService(dispatcher,viewModelLoader));
             }
@@ -107,9 +109,20 @@ namespace SnkFramework.Runtime
 #pragma warning restore CA2000 // Dispose objects before losing scope
             }
 
+            protected virtual ISnkMainThread CreateMainThreadSynchronizationContext()
+                => new SnkMainThread();
+            
+            protected virtual void InitializeMainThreadSynchronizationContext(ISnkIoCProvider iocProvider)
+            {
+                var mainThread = CreateMainThreadSynchronizationContext();
+                iocProvider.RegisterSingleton(mainThread);
+            }
+            
             protected virtual void InitializeDispatcher(ISnkIoCProvider iocProvider)
             {
-                //主线程派发器
+                var dispatcher = new SnkMainThreadAsyncDispatcher();
+                iocProvider.RegisterSingleton<ISnkMainThreadAsyncDispatcher>(dispatcher);
+                iocProvider.RegisterSingleton<ISnkMainThreadDispatcher>(dispatcher);
             }
             
             /// <summary>
@@ -120,17 +133,13 @@ namespace SnkFramework.Runtime
             
             }
 
-            protected virtual ISnkViewDispatcher CreateViewDispatcher(ISnkViewPresenter presenter)
-                => new SnkViewDispatcher(presenter);
+            protected abstract ISnkViewDispatcher CreateViewDispatcher();
 
 
             protected virtual void InitializeViewDispatcher(ISnkIoCProvider iocProvider)
             {
-                var presenter = CreateViewPresenter();
-                var dispatcher = CreateViewDispatcher(presenter);
+                var dispatcher = CreateViewDispatcher();
                 iocProvider.RegisterSingleton(dispatcher);
-                iocProvider.RegisterSingleton<ISnkMainThreadAsyncDispatcher>(dispatcher);
-                iocProvider.RegisterSingleton<ISnkMainThreadDispatcher>(dispatcher);
             }
             
             public void InitializePrimary()
@@ -153,8 +162,10 @@ namespace SnkFramework.Runtime
                     this.InitializeSettings(_iocProvider);
                     this.InitializeBasePlatform(_iocProvider);
                     //InitializeSingletonCache();
-                    this.InitializeViewDispatcher(_iocProvider);
+
+                    InitializeMainThreadSynchronizationContext(_iocProvider);
                     this.InitializeDispatcher(_iocProvider);
+                    this.InitializeViewDispatcher(_iocProvider);
                     
                     this.InitializeLayerContainer(_iocProvider);
                     this.InitializeViewLoader(_iocProvider);
