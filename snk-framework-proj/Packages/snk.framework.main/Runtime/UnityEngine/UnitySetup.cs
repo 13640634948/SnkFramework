@@ -1,5 +1,4 @@
 using SnkFramework.IoC;
-using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Runtime.Core;
 
@@ -12,13 +11,10 @@ namespace SnkFramework.Runtime
             protected override ISnkLoggerProvider CreateLoggerProvider()
                 => new UnityLoggerProvider();
 
-
             public virtual void PlatformInitialize(IUnityApplication unityApplication)
             {
                 
             }
-
-
         }
 
         public abstract class UnitySetup<TSnkApplication> : UnitySetup

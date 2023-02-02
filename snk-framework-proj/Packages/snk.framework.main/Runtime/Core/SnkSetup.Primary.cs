@@ -16,64 +16,51 @@ namespace SnkFramework.Runtime
         public partial class SnkSetup
         {
             protected abstract ISnkLoggerProvider CreateLoggerProvider();
-
             protected abstract IMvxApplication CreateApp(ISnkIoCProvider iocProvider);
-
-            protected virtual ISnkLoggerFactory CreateLoggerFactory()
-                => new SnkLoggerFactory();
-
+            protected abstract ISnkViewCamera CreateViewCamera();
+            protected abstract ISnkViewLoader CreateViewLoader();
+            protected abstract void RegisterLayer(ISnkLayerContainer container);
+            protected abstract ISnkLayerContainer CreateLayerContainer();
+            protected abstract ISnkViewPresenter CreateViewPresenter();
+            
             protected void InitializeLogService(ISnkIoCProvider iocProvider)
             {
                 var loggerProvider = this.CreateLoggerProvider();
-                //Snk.IoCProvider.RegisterSingleton<ISnkLoggerProvider>(loggerProvider);
-
                 var loggerFactory = this.CreateLoggerFactory();
-                //Snk.IoCProvider.RegisterSingleton<ISnkLoggerFactory>(loggerFactory);
-
                 loggerFactory.AddLoggerProvider(loggerProvider);
                 logger = loggerFactory.CreateLogger<SnkSetup>();
+                
+                iocProvider.RegisterSingleton(loggerFactory);
             }
 
-            //protected abstract ISnkCompressor CreateCompressor();
-            //protected abstract ISnkJsonParser CreateJsonParser();
-            //protected virtual ISnkCodeGenerator CreateCodeGenerator() => new SnkMD5Generator();
-
-            //protected abstract ISnkMvvmInstaller CreateMvvmInstaller();
-
-            protected abstract void RegisterLayer(ISnkLayerContainer container);
-            protected abstract ISnkLayerContainer CreateLayerContainer();
+            protected virtual ISnkLoggerFactory CreateLoggerFactory()
+                => new SnkLoggerFactory();
 
             /// <summary>
             /// 初始化层级管理器
             /// </summary>
             /// <param name="viewCamera"></param>
             /// <returns></returns>
-            protected ISnkLayerContainer InitializeLayerContainer(ISnkViewCamera viewCamera)
+            protected void InitializeLayerContainer(ISnkIoCProvider iocProvider)
             {
                 var layerContainer = CreateLayerContainer();
                 RegisterLayer(layerContainer);
+                var viewCamera = CreateViewCamera();
                 layerContainer.Build(viewCamera);
-                return layerContainer;
+                
+                iocProvider.RegisterSingleton(viewCamera);
+                iocProvider.RegisterSingleton(layerContainer);
             }
             
-            protected virtual ISnkMvvmService CreateMvvmService(ISnkIoCProvider iocProvider)
-            {
-                //return CreateMvvmInstaller().Install(iocProvider);
-                return iocProvider.Resolve<ISnkMvvmService>();
-            }
-            protected abstract ISnkViewCamera CreateViewCamera();
-            protected abstract ISnkViewFinder CreateViewFinder(ISnkIoCProvider iocProvider);
-            protected abstract ISnkViewLoader CreateViewLoader(ISnkViewFinder finder);
+            protected virtual ISnkViewModelLoader CreateViewModelLoader() 
+                => new SnkViewModelLoader();
 
-            
-            
-            protected virtual void InitializeMvvmService(ISnkIoCProvider iocProvider)
+            protected virtual void InitializeViewModelLoader(ISnkIoCProvider iocProvider)
             {
-                var dispatch = iocProvider.Resolve<ISnkMainThreadAsyncDispatcher>();
-                var mvvmService = CreateMvvmService(iocProvider);
-
-                //init mvvm routes
-                //return mvvmService;
+                var loader = CreateViewModelLoader();
+                iocProvider.RegisterSingleton<ISnkViewModelCreator>(loader);
+                iocProvider.RegisterSingleton<ISnkViewModelLocator>(loader);
+                iocProvider.RegisterSingleton<ISnkViewModelLoader>(loader);
             }
 
             protected virtual void RegisterDefaultDependencies(ISnkIoCProvider iocProvider)
@@ -81,27 +68,15 @@ namespace SnkFramework.Runtime
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkSettings, SnkSettings>();
                 iocProvider.RegisterSingleton<ISnkPluginManager>(() => new MvxPluginManager(GetPluginConfiguration));
                 iocProvider.RegisterSingleton(CreateApp(iocProvider));
-                
-                
-                var viewCamera = CreateViewCamera();
-                var layerContainer = InitializeLayerContainer(viewCamera);
-                iocProvider.RegisterSingleton(layerContainer);
-
-                var viewFinder = CreateViewFinder(iocProvider);
-                iocProvider.RegisterSingleton(viewFinder);
-                var viewLoader = CreateViewLoader(viewFinder);
-                iocProvider.RegisterSingleton(viewLoader);
-                
-                iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelCreator, SnkViewModelCreator>();
-                iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelLocator, ISnkViewModelCreator>(
-                    (a) => new SnkViewModelLocator(a));
-                iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelLoader, ISnkViewModelLocator>(
-                    (a) => new SnkViewModelLoader(a));
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkMvvmService, ISnkViewDispatcher, ISnkViewModelLoader>(
-                    (a,b)=> new SnkMvvmService(a,b));
-                //ioCProvider.RegisterSingleton<ISnkJsonParser>(CreateJsonParser());
-                //ioCProvider.RegisterSingleton<ISnkCompressor>(CreateCompressor());
-                //ioCProvider.RegisterSingleton<ISnkCodeGenerator>(CreateCodeGenerator());
+                    (dispatcher,viewModelLoader)=> new SnkMvvmService(dispatcher,viewModelLoader));
+            }
+
+            protected virtual void InitializeViewLoader(ISnkIoCProvider iocProvider)
+            {
+                var viewLoader = CreateViewLoader();
+                iocProvider.RegisterSingleton<ISnkViewFinder>(viewLoader);
+                iocProvider.RegisterSingleton(viewLoader);
             }
 
             protected virtual ISnkIocOptions CreateIocOptions()
@@ -120,10 +95,7 @@ namespace SnkFramework.Runtime
             }
 
             protected virtual ISnkSettings InitializeSettings(ISnkIoCProvider iocProvider)
-            {
-                var settings = CreateSettings(iocProvider);
-                return settings;
-            }
+                => CreateSettings(iocProvider);
 
             protected virtual ISnkSettings CreateSettings(ISnkIoCProvider iocProvider)
                 =>iocProvider.Resolve<ISnkSettings>();
@@ -149,30 +121,13 @@ namespace SnkFramework.Runtime
             }
 
             protected virtual ISnkViewDispatcher CreateViewDispatcher(ISnkViewPresenter presenter)
-            {
-                var dispatcher = new SnkViewDispatcher(presenter);
-                return dispatcher;
-            }
+                => new SnkViewDispatcher(presenter);
 
-            protected abstract ISnkViewPresenter CreateViewPresenter();
-
-            protected ISnkViewPresenter _presenter;
-
-            protected ISnkViewPresenter Presenter
-            {
-                get
-                {
-                    if(_presenter == null)
-                        _presenter = CreateViewPresenter();
-                    return _presenter;
-                }
-            }
 
             protected virtual void InitializeViewDispatcher(ISnkIoCProvider iocProvider)
             {
-                //ValidateArguments(iocProvider);
-
-                var dispatcher = CreateViewDispatcher(Presenter);
+                var presenter = CreateViewPresenter();
+                var dispatcher = CreateViewDispatcher(presenter);
                 iocProvider.RegisterSingleton(dispatcher);
                 iocProvider.RegisterSingleton<ISnkMainThreadAsyncDispatcher>(dispatcher);
                 iocProvider.RegisterSingleton<ISnkMainThreadDispatcher>(dispatcher);
@@ -200,6 +155,11 @@ namespace SnkFramework.Runtime
                     //InitializeSingletonCache();
                     this.InitializeViewDispatcher(_iocProvider);
                     this.InitializeDispatcher(_iocProvider);
+                    
+                    this.InitializeLayerContainer(_iocProvider);
+                    this.InitializeViewLoader(_iocProvider);
+                    this.InitializeViewModelLoader(_iocProvider);
+                    
                     State = eSnkSetupState.InitializedPrimary;
                 }
                 catch (Exception e)

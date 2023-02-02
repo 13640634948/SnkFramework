@@ -11,12 +11,8 @@ namespace SnkFramework.Runtime
     {
         public partial class SnkSetup
         {
-            
             protected virtual ISnkPluginManager CreatePluginManager(ISnkIoCProvider iocProvider)
-            {
-                //ValidateArguments(iocProvider);
-                return iocProvider.Resolve<ISnkPluginManager>();
-            }
+                => iocProvider.Resolve<ISnkPluginManager>();
             
             private static bool AssemblyReferencesMvvmCross(Assembly assembly, string mvvmCrossAssemblyName)
             {
@@ -31,12 +27,8 @@ namespace SnkFramework.Runtime
                     return false;
                 }
             }
-            
-            
-            protected virtual IMvxPluginConfiguration? GetPluginConfiguration(Type plugin)
-            {
-                return null;
-            }
+
+            protected virtual IMvxPluginConfiguration? GetPluginConfiguration(Type plugin) => null;
             
             public virtual IEnumerable<Assembly> GetPluginAssemblies()
             {
@@ -69,31 +61,22 @@ namespace SnkFramework.Runtime
                         pluginManager.EnsurePluginLoaded(type);
                     }
                 }
-
                 bool TypeContainsPluginAttribute(Type type) =>
                     type.GetCustomAttributes(pluginAttribute, false).Length > 0;
             }
+            
             protected virtual ISnkPluginManager InitializePluginFramework(ISnkIoCProvider iocProvider)
             {
-                //ValidateArguments(iocProvider);
-
                 var pluginManager = CreatePluginManager(iocProvider);
                 LoadPlugins(pluginManager);
                 return pluginManager;
             }
+            
             protected virtual IMvxApplication CreateMvxApplication(ISnkIoCProvider iocProvider)
-            {
-                //ValidateArguments(iocProvider);
-                return iocProvider.Resolve<IMvxApplication>();
-            }
+                => iocProvider.Resolve<IMvxApplication>();
             protected virtual IMvxApplication InitializeMvxApplication(ISnkIoCProvider iocProvider)
-            {
-                //ValidateArguments(iocProvider);
-
-                var app = CreateMvxApplication(iocProvider);
-                //iocProvider.RegisterSingleton<IMvxViewModelLocatorCollection>(app);
-                return app;
-            }
+                => CreateMvxApplication(iocProvider);
+            
             protected virtual void InitializeApp(ISnkPluginManager pluginManager, IMvxApplication app)
             {
                 if (app == null)
@@ -132,8 +115,8 @@ namespace SnkFramework.Runtime
                     var pluginManager = InitializePluginFramework(_iocProvider);
                     this.logger?.Info("Setup: Create App");
                     var app = InitializeMvxApplication(_iocProvider);
-                    this.logger.Info("Setup: NavigationService");
-                    InitializeMvvmService(_iocProvider);
+                    //this.logger.Info("Setup: NavigationService");
+                    //InitializeMvvmService(_iocProvider);
                     this.logger?.Info("Setup: App start");
                     InitializeApp(pluginManager, app);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: ViewModelTypeFinder start");
