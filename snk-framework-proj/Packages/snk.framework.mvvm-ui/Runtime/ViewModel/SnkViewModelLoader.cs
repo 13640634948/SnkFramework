@@ -6,42 +6,34 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace ViewModel
     {
-        public class SnkViewModelLoader : ISnkViewModelLoader
+        public class SnkViewModelLoader : SnkViewModelLocator, ISnkViewModelLoader
         {
-            protected ISnkViewModelLocator _viewModelLocator;
-
-            public SnkViewModelLoader(ISnkViewModelLocator viewModelLocator)
-            {
-                _viewModelLocator = viewModelLocator;
-            }
-
             public ISnkViewModel LoadViewModel(SnkViewModelRequest request, ISnkBundle savedState,
                 ISnkNavigateEventArgs navigationArgs = null)
             {
                 try
                 {
-                    return _viewModelLocator.Load(request.ViewModelType!, request.ParameterBundle, savedState, navigationArgs);
+                    return this.Load(request.ViewModelType!, request.ParameterBundle, savedState, navigationArgs);
                 }
                 catch (Exception exception)
                 {
                     throw new Exception(
-                        $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
+                        $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {GetType().Name} - check InnerException for more information");
                 }
             }
-
 
             public ISnkViewModel ReloadViewModel(ISnkViewModel viewModel, SnkViewModelRequest request,
                 ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null)
             {
                 try
                 {
-                    viewModel = _viewModelLocator.Reload(viewModel, request.ParameterBundle, savedState,
+                    viewModel = this.Reload(viewModel, request.ParameterBundle, savedState,
                         navigationArgs);
                 }
                 catch (Exception exception)
                 {
                     throw new Exception(
-                        $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {_viewModelLocator.GetType().Name} - check InnerException for more information");
+                        $"Failed to construct and initialize ViewModel for type {request.ViewModelType} from locator {GetType().Name} - check InnerException for more information");
                 }
 
                 return viewModel;

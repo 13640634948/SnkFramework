@@ -8,13 +8,12 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public class SnkViewModelLocator : ISnkViewModelLocator
         {
-            private ISnkViewModelCreator _viewModelCreator;
+            public ISnkViewModel CreateViewModel(Type viewModelType)
+                => Activator.CreateInstance(viewModelType) as ISnkViewModel;
 
-            public SnkViewModelLocator(ISnkViewModelCreator viewModelCreator)
-            {
-                _viewModelCreator = viewModelCreator;
-            }
-
+            public TViewModel CreateViewModel<TViewModel>() where TViewModel : class, ISnkViewModel, new()
+                => new TViewModel();
+            
             public ISnkViewModel Load(Type viewModelType, ISnkBundle parameterValues, ISnkBundle savedState,
                 ISnkNavigateEventArgs navigationArgs = null)
             {
@@ -24,7 +23,7 @@ namespace SnkFramework.Mvvm.Runtime
                 ISnkViewModel viewModel;
                 try
                 {
-                    viewModel = this._viewModelCreator?.CreateViewModel(viewModelType);
+                    viewModel = this.CreateViewModel(viewModelType);
                 }
                 catch (Exception exception)
                 {

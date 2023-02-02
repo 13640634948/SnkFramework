@@ -5,7 +5,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace ViewModel
     {
-        public interface ISnkViewModelLocator
+        public interface ISnkViewModelLocator : ISnkViewModelCreator
         {
             ISnkViewModel Load(Type viewModelType, ISnkBundle parameterValues, ISnkBundle savedState, ISnkNavigateEventArgs navigationArgs = null);
 
