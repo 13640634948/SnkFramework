@@ -1,14 +1,26 @@
-using SnkFramework.IoC;
+using System;
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Demo.Implements;
 using SnkFramework.Mvvm.Demo.Implements.Layers;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters;
+using SnkFramework.Mvvm.Runtime.View;
+using SnkFramework.Runtime;
+using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Engine;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
+    public class DemoViewDispatcher : SnkViewDispatcher
+    {
+        private ISnkMainThreadAsyncDispatcher _mainThreadDispatcher=> Snk.IoCProvider.Resolve<ISnkMainThreadAsyncDispatcher>();
+        
+        public override Task ExecuteOnUIThreadAsync(Func<Task> action, bool maskExceptions = true)
+            => _mainThreadDispatcher?.ExecuteOnMainThreadAsync(action, maskExceptions);
+    }
+
     public class DemoSetup : UnitySetup<DemoApp>
     {
         protected override void RegisterLayer(ISnkLayerContainer container)
@@ -40,5 +52,8 @@ namespace DefaultNamespace
 
         protected override ISnkViewPresenter CreateViewPresenter()
             => new DemoPresenter();
+
+        protected override ISnkViewDispatcher CreateViewDispatcher()
+            => new DemoViewDispatcher();
     }
 }
