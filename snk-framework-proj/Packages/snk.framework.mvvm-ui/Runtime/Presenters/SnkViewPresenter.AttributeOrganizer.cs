@@ -28,6 +28,10 @@ namespace SnkFramework.Mvvm.Runtime
                 var attribute = new SnkPresentationWindowAttribute();
                 attribute.ViewModelType = viewModelType;
                 attribute.ViewType = viewType;
+                if (attribute is SnkPresentationWindowAttribute windowAttribute)
+                {
+                    windowAttribute.LayerType = this.LayerContainer.DefaultLayerType;
+                }
                 return attribute;
             }
 

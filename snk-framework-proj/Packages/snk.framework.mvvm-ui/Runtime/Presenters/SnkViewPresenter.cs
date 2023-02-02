@@ -11,7 +11,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Presenters
     {
-        public abstract partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
+        public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
             private Lazy<ISnkViewFinder> _viewFinder = new (()=> 
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewFinder>());
