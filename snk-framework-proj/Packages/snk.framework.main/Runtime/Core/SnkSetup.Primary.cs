@@ -22,8 +22,9 @@ namespace SnkFramework.Runtime
             protected abstract ISnkViewLoader CreateViewLoader();
             protected abstract void RegisterLayer(ISnkLayerContainer container);
             protected abstract ISnkLayerContainer CreateLayerContainer();
-            protected abstract ISnkViewPresenter CreateViewPresenter();
-            
+
+            protected virtual ISnkViewPresenter CreateViewPresenter()
+                => new SnkViewPresenter();
             protected void InitializeLogService(ISnkIoCProvider iocProvider)
             {
                 var loggerProvider = this.CreateLoggerProvider();
