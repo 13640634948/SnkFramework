@@ -1,6 +1,5 @@
 using System;
 using SnkFramework.Mvvm.Demo.Implements.Layers;
-using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.Presenters.Attributes;
 
