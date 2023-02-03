@@ -39,7 +39,6 @@ namespace BFFramework.Runtime.Core
         protected override ISnkViewLoader CreateViewLoader()
             => new BFViewLoader();
 
-
         protected override ISnkViewDispatcher CreateViewDispatcher()
             => new BFViewDispatcher();
     }

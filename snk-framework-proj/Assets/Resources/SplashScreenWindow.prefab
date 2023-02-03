@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 6496404493790808361}
   - component: {fileID: 3257362737014755560}
   m_Layer: 5
-  m_Name: SplashScreenView
+  m_Name: SplashScreenWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

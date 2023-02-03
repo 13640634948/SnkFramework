@@ -1,19 +1,19 @@
 using System;
 using BFFramework.Runtime.Core;
-using BackFire.GameContent.UserInterfaces.ViewModels;
-using BackFire.GameContent.UserInterfaces.Views;
 using BFFramework.Runtime.UserInterface;
+using GAME.Contents.UserInterfaces.ViewModels;
+using GAME.Contents.UserInterfaces.Views;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Runtime.Engine;
 using UnityEngine;
 
-namespace BackFire.GameContents.Core
+namespace GAME.Contents.Core
 {
     public class ViewLoader : BFViewLoader
     {
         public override Type GetViewType(Type viewModelType)
         {
-            return typeof(SplashScreenView);
+            return typeof(SplashScreenWindow);
         }
     }
 

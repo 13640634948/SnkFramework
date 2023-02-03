@@ -1,10 +1,10 @@
 using BFFramework.Runtime.UserInterface;
 
-namespace BackFire.GameContent.UserInterfaces
+namespace GAME.Contents.UserInterfaces
 {
     namespace Views
     {
-        public class SplashScreenView : BFView
+        public class SplashScreenWindow : BFWindow
         {
         }
     }

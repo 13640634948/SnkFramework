@@ -1,7 +1,7 @@
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
-namespace BackFire.GameContent.UserInterfaces
+namespace GAME.Contents.UserInterfaces
 {
     namespace ViewModels
     {
