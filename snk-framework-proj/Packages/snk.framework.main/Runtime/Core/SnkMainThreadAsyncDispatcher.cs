@@ -18,7 +18,7 @@ namespace SnkFramework.Runtime
         public class SnkMainThread : ISnkMainThread
         {
             public int ThreadId { get; protected set; }
-            public bool IsMainThread { get; }
+            public bool IsMainThread => Context == SynchronizationContext.Current;
             public SynchronizationContext Context { get; }
         
             public SnkMainThread()
