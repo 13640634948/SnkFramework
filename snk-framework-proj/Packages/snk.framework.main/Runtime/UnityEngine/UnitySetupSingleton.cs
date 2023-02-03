@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Threading.Tasks;
 using SnkFramework.Runtime.Core;
 
@@ -5,12 +6,12 @@ namespace SnkFramework.Runtime.Engine
 {
     public class UnitySetupSingleton : SnkSetupSingleton
     {
-        public static UnitySetupSingleton EnsureSingletonAvailable<TMvxSetup>(IUnityApplication unityApplication)
+        public static UnitySetupSingleton EnsureSingletonAvailable<TMvxSetup>(params Assembly[] assemblies)
             where TMvxSetup : SnkSetup, new()
         {
-            SnkSetup.RegisterSetupType<TMvxSetup>();
-            var instance = EnsureSingletonAvailable<UnitySetupSingleton>();
-            instance.PlatformSetup<UnitySetup>()?.PlatformInitialize(unityApplication);
+            SnkSetup.RegisterSetupType<TMvxSetup>(assemblies);
+            var instance = SnkSetupSingleton.EnsureSingletonAvailable<UnitySetupSingleton>();
+            instance.PlatformSetup<UnitySetup>()?.PlatformInitialize();
             return instance;
         }
 

@@ -5,7 +5,7 @@ using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime.Core
 {
-    public abstract class MvxApplication : IMvxApplication
+    public abstract class SnkApplication : ISnkApplication
     {
         public virtual void LoadPlugins(ISnkPluginManager pluginManager)
         {

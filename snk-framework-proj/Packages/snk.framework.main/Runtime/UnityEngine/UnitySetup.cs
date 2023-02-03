@@ -11,16 +11,16 @@ namespace SnkFramework.Runtime
             protected override ISnkLoggerProvider CreateLoggerProvider()
                 => new UnityLoggerProvider();
 
-            public virtual void PlatformInitialize(IUnityApplication unityApplication)
+            public virtual void PlatformInitialize()
             {
                 
             }
         }
 
         public abstract class UnitySetup<TSnkApplication> : UnitySetup
-            where TSnkApplication : MvxApplication
+            where TSnkApplication : SnkApplication
         {
-            protected override IMvxApplication CreateApp(ISnkIoCProvider iocProvider) =>
+            protected override ISnkApplication CreateApp(ISnkIoCProvider iocProvider) =>
                 iocProvider.IoCConstruct<TSnkApplication>();
         }
     }

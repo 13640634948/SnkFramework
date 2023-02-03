@@ -72,12 +72,12 @@ namespace SnkFramework.Runtime
                 return pluginManager;
             }
             
-            protected virtual IMvxApplication CreateMvxApplication(ISnkIoCProvider iocProvider)
-                => iocProvider.Resolve<IMvxApplication>();
-            protected virtual IMvxApplication InitializeMvxApplication(ISnkIoCProvider iocProvider)
+            protected virtual ISnkApplication CreateMvxApplication(ISnkIoCProvider iocProvider)
+                => iocProvider.Resolve<ISnkApplication>();
+            protected virtual ISnkApplication InitializeMvxApplication(ISnkIoCProvider iocProvider)
                 => CreateMvxApplication(iocProvider);
             
-            protected virtual void InitializeApp(ISnkPluginManager pluginManager, IMvxApplication app)
+            protected virtual void InitializeApp(ISnkPluginManager pluginManager, ISnkApplication app)
             {
                 if (app == null)
                     throw new ArgumentNullException(nameof(app));

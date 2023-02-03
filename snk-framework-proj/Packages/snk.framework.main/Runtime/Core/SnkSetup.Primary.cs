@@ -17,7 +17,7 @@ namespace SnkFramework.Runtime
         public partial class SnkSetup
         {
             protected abstract ISnkLoggerProvider CreateLoggerProvider();
-            protected abstract IMvxApplication CreateApp(ISnkIoCProvider iocProvider);
+            protected abstract ISnkApplication CreateApp(ISnkIoCProvider iocProvider);
             protected abstract ISnkViewCamera CreateViewCamera();
             protected abstract ISnkViewLoader CreateViewLoader();
             protected abstract void RegisterLayer(ISnkLayerContainer container);

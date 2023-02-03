@@ -10,11 +10,11 @@ namespace SnkFramework.Runtime.Core
     public abstract class SnkAppStart : ISnkAppStart
     {
         protected readonly ISnkMvvmService NavigationService;
-        protected readonly IMvxApplication Application;
+        protected readonly ISnkApplication Application;
 
         private int startHasCommenced;
 
-        protected SnkAppStart(IMvxApplication application, ISnkMvvmService navigationService)
+        protected SnkAppStart(ISnkApplication application, ISnkMvvmService navigationService)
         {
             Application = application;
             NavigationService = navigationService;
@@ -60,7 +60,7 @@ namespace SnkFramework.Runtime.Core
     public class SnkAppStart<TViewModel> : SnkAppStart
         where TViewModel : class, ISnkViewModel
     {
-        public SnkAppStart(IMvxApplication application, ISnkMvvmService navigationService) : base(application, navigationService)
+        public SnkAppStart(ISnkApplication application, ISnkMvvmService navigationService) : base(application, navigationService)
         {
         }
 

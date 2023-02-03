@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Exceptions;
 using SnkFramework.NuGet.Features.Logging;
+using UnityEngine;
 
 namespace SnkFramework.Runtime
 {
@@ -35,7 +38,9 @@ namespace SnkFramework.Runtime
 
             protected static Func<ISnkSetup>? SetupCreator { get; set; }
 
-            public static void RegisterSetupType<TMvxSetup>() where TMvxSetup : SnkSetup, new()
+            protected static List<Assembly> AppDomainAssemblyList = new List<Assembly>();
+
+            public static void RegisterSetupType<TMvxSetup>(params Assembly[] assemblies) where TMvxSetup : SnkSetup, new()
             {
                 if (SetupCreator is null)
                 {
@@ -43,12 +48,27 @@ namespace SnkFramework.Runtime
                     {
                         if (SetupCreator is null)
                         {
+                            AppDomainAssemblyList.AddRange(assemblies);
+                            foreach (var assembly in assemblies)
+                            {
+                                Debug.Log(assembly.FullName);
+                            }
+                            if (AppDomainAssemblyList.Count == 0)
+                            {
+                                // fall back to all assemblies. Assembly.GetEntryAssembly() always returns
+                                // null on Xamarin platforms do not use it!
+                                AppDomainAssemblyList.AddRange(AppDomain.CurrentDomain.GetAssemblies());
+                            }
+                            
                             SetupCreator = () => new TMvxSetup();
                         }
                     }
                 }
                 //MvxLogHost.Default?.LogInformation("Setup: RegisterSetupType already called");
             }
+
+            protected List<Assembly> GetAssembly(string prefix)
+                => AppDomainAssemblyList.FindAll(a => a.FullName.StartsWith(prefix));
 
             public static ISnkSetup Instance()
             {
