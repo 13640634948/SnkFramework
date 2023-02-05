@@ -39,7 +39,7 @@ namespace SnkFramework.Runtime
 
             protected static List<Assembly> AppDomainAssemblyList = new List<Assembly>();
 
-            public static void RegisterSetupType<TMvxSetup>(params Assembly[] assemblies) where TMvxSetup : SnkSetup, new()
+            public static void RegisterSetupType<TSnkSetup>(params Assembly[] assemblies) where TSnkSetup : SnkSetup, new()
             {
                 if (SetupCreator is null)
                 {
@@ -55,7 +55,7 @@ namespace SnkFramework.Runtime
                                 AppDomainAssemblyList.AddRange(AppDomain.CurrentDomain.GetAssemblies());
                             }
                             
-                            SetupCreator = () => new TMvxSetup();
+                            SetupCreator = () => new TSnkSetup();
                         }
                     }
                 }
@@ -70,7 +70,7 @@ namespace SnkFramework.Runtime
                 var instance = SetupCreator?.Invoke();
                 if (instance == null)
                 {
-                    //instance = MvxSetupExtensions.CreateSetup<MvxSetup>();
+                    //instance = SnkSetupExtensions.CreateSetup<SnkSetup>();
                     throw new SnkException("Could not find a Setup class for application");
                 }
                 return instance;

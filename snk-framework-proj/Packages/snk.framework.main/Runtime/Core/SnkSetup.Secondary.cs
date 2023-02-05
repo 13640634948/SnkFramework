@@ -30,11 +30,11 @@ namespace SnkFramework.Runtime
                 }
             }
 
-            protected virtual IMvxPluginConfiguration? GetPluginConfiguration(Type plugin) => null;
+            protected virtual ISnkPluginConfiguration? GetPluginConfiguration(Type plugin) => null;
             
             public virtual IEnumerable<Assembly> GetPluginAssemblies()
             {
-                var mvvmCrossAssemblyName = typeof(MvxPluginAttribute).Assembly.GetName().Name;
+                var mvvmCrossAssemblyName = typeof(SnkPluginAttribute).Assembly.GetName().Name;
 
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -48,7 +48,7 @@ namespace SnkFramework.Runtime
                 if (pluginManager == null)
                     throw new ArgumentNullException(nameof(pluginManager));
 
-                var pluginAttribute = typeof(MvxPluginAttribute);
+                var pluginAttribute = typeof(SnkPluginAttribute);
                 var pluginAssemblies = GetPluginAssemblies();
 
                 // Search Assemblies for Plugins
@@ -137,7 +137,7 @@ namespace SnkFramework.Runtime
 
             protected virtual void InitializeMvvmService(ISnkIoCProvider iocProvider)
             {
-                
+                this.InitializeViewModelLoader(_iocProvider);
             }
 
             protected virtual IDictionary<Type, Type> InitializeLookupDictionary(ISnkIoCProvider iocProvider)
@@ -151,6 +151,18 @@ namespace SnkFramework.Runtime
             {
                 var container = iocProvider.Resolve<ISnkViewsContainer>();
                 container.AddAll(viewModelViewLookup);
+            }
+
+            protected virtual IEnumerable<Assembly> GetBootstrapOwningAssemblies()
+                => AppDomainAssemblyList.Distinct();
+            
+            protected virtual void PerformBootstrapActions()
+            {
+                var bootstrapRunner = new SnkBootstrapRunner();
+                foreach (var assembly in GetBootstrapOwningAssemblies())
+                {
+                    bootstrapRunner.Run(assembly);
+                }
             }
             
             public void InitializeSecondary()
@@ -172,7 +184,7 @@ namespace SnkFramework.Runtime
                     State = eSnkSetupState.InitializingSecondary;
                     
                     //SetupLog?.Log(LogLevel.Trace, "Setup: Bootstrap actions");
-                    //PerformBootstrapActions();
+                    PerformBootstrapActions();
                     //SetupLog?.Log(LogLevel.Trace, "Setup: StringToTypeParser start");
                     //InitializeStringToTypeParser(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: FillableStringToTypeParser start");

@@ -25,7 +25,7 @@ namespace SnkFramework.IoC
             }
             catch (ReflectionTypeLoadException e)
             {
-                // MvxLog.Instance can be null, when reflecting for Setup.cs
+                // SnkLog.Instance can be null, when reflecting for Setup.cs
                 // Check for null
 
 

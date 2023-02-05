@@ -23,7 +23,7 @@ namespace SnkFramework.IoC
             {
                 _snkInjectProperties = _snkInjectProperties ?? new SnkPropertyInjectorOptions()
                 {
-                    InjectIntoProperties = SnkPropertyInjection.MvxInjectInterfaceProperties,
+                    InjectIntoProperties = SnkPropertyInjection.SnkInjectInterfaceProperties,
                     ThrowIfPropertyInjectionFails = false
                 };
                 return _snkInjectProperties;

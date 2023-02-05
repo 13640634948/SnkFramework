@@ -3,7 +3,7 @@ using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime.Core
 {
-    public interface ISnkApplication// : IMvxViewModelLocatorCollection
+    public interface ISnkApplication
     {
         void LoadPlugins(ISnkPluginManager pluginManager);
 
@@ -17,14 +17,5 @@ namespace SnkFramework.Runtime.Core
     public interface ISnkApplication<THint> : ISnkApplication
     {
         Task<THint> Startup(THint hint);
-    }
-
-
-    public abstract class SnkApplication<TParameter> : SnkApplication, ISnkApplication<TParameter>
-    {
-        public virtual Task<TParameter> Startup(TParameter hint)
-        {
-            return Task.FromResult(hint);
-        }
     }
 }

@@ -6,7 +6,7 @@ namespace SnkFramework.Plugins
 {
     public interface ISnkPluginManager
     {
-        Func<Type, IMvxPluginConfiguration?> ConfigurationSource { get; }
+        Func<Type, ISnkPluginConfiguration?> ConfigurationSource { get; }
 
         IEnumerable<Type> LoadedPlugins { get; }
 

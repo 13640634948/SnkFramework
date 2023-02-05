@@ -28,7 +28,7 @@ namespace SnkFramework.Runtime.Core
             var applicationHint = await ApplicationStartup(hint);
             if (applicationHint != null)
             {
-                SnkLogHost.Default?.Info("Hint ignored in default MvxAppStart");
+                SnkLogHost.Default?.Info("Hint ignored in default SnkAppStart");
             }
 
             await NavigateToFirstViewModel(applicationHint);

@@ -6,10 +6,10 @@ namespace SnkFramework.Runtime.Engine
 {
     public class UnitySetupSingleton : SnkSetupSingleton
     {
-        public static UnitySetupSingleton EnsureSingletonAvailable<TMvxSetup>(params Assembly[] assemblies)
-            where TMvxSetup : SnkSetup, new()
+        public static UnitySetupSingleton EnsureSingletonAvailable<TSnkSetup>(params Assembly[] assemblies)
+            where TSnkSetup : SnkSetup, new()
         {
-            SnkSetup.RegisterSetupType<TMvxSetup>(assemblies);
+            SnkSetup.RegisterSetupType<TSnkSetup>(assemblies);
             var instance = SnkSetupSingleton.EnsureSingletonAvailable<UnitySetupSingleton>();
             instance.PlatformSetup<UnitySetup>()?.PlatformInitialize();
             return instance;

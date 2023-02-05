@@ -1,6 +1,6 @@
 namespace SnkFramework.Plugins
 {
-    public interface IMvxPluginConfiguration
+    public interface ISnkPluginConfiguration
     {
     }
 }

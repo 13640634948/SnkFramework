@@ -57,15 +57,15 @@ namespace SnkFramework.Runtime
             protected virtual void InitializeViewModelLoader(ISnkIoCProvider iocProvider)
             {
                 var loader = CreateViewModelLoader();
-                iocProvider.RegisterSingleton<ISnkViewModelCreator>(loader);
-                iocProvider.RegisterSingleton<ISnkViewModelLocator>(loader);
+                //iocProvider.RegisterSingleton<ISnkViewModelCreator>(loader);
+                //iocProvider.RegisterSingleton<ISnkViewModelLocator>(loader);
                 iocProvider.RegisterSingleton<ISnkViewModelLoader>(loader);
             }
 
             protected virtual void RegisterDefaultDependencies(ISnkIoCProvider iocProvider)
             {
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkSettings, SnkSettings>();
-                iocProvider.RegisterSingleton<ISnkPluginManager>(() => new MvxPluginManager(GetPluginConfiguration));
+                iocProvider.RegisterSingleton<ISnkPluginManager>(() => new SnkPluginManager(GetPluginConfiguration));
                 iocProvider.RegisterSingleton(CreateApp(iocProvider));
                 iocProvider.RegisterSingleton(CreateViewPresenter());
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkMvvmService, ISnkViewDispatcher, ISnkViewModelLoader>(
@@ -168,7 +168,6 @@ namespace SnkFramework.Runtime
                     this.InitializeViewDispatcher(_iocProvider);
                     
                     this.InitializeLayerContainer(_iocProvider);
-                    this.InitializeViewModelLoader(_iocProvider);
 
                     State = eSnkSetupState.InitializedPrimary;
                 }

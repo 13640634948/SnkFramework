@@ -7,7 +7,7 @@ namespace SnkFramework.IoC
     public enum SnkPropertyInjection
     {
         None,
-        MvxInjectInterfaceProperties,
+        SnkInjectInterfaceProperties,
         AllInterfaceProperties
     }
 }

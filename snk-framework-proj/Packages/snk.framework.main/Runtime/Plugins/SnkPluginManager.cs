@@ -5,16 +5,16 @@ using SnkFramework.Runtime;
 
 namespace SnkFramework.Plugins
 {
-    public class MvxPluginManager : ISnkPluginManager
+    public class SnkPluginManager : ISnkPluginManager
     {
        private readonly object _lockObject = new object();
         private readonly HashSet<Type> _loadedPlugins = new HashSet<Type>();
 
-        public Func<Type, IMvxPluginConfiguration?> ConfigurationSource { get; }
+        public Func<Type, ISnkPluginConfiguration?> ConfigurationSource { get; }
 
         public IEnumerable<Type> LoadedPlugins => _loadedPlugins;
 
-        public MvxPluginManager(Func<Type, IMvxPluginConfiguration?> configurationSource)
+        public SnkPluginManager(Func<Type, ISnkPluginConfiguration?> configurationSource)
         {
             ConfigurationSource = configurationSource;
         }
@@ -30,14 +30,17 @@ namespace SnkFramework.Plugins
                 return;
 
             var plugin = Activator.CreateInstance(type) as ISnkPlugin;
-            if (plugin == null)
-                throw new SnkException($"Type {type} is not an IMvxPlugin");
-
-            if (plugin is IMvxConfigurablePlugin configurablePlugin)
+            switch (plugin)
             {
-                var configuration = ConfigurationFor(type);
-                if (configuration != null)
-                    configurablePlugin.Configure(configuration);
+                case null:
+                    throw new SnkException($"Type {type} is not an ISnkPlugin");
+                case ISnkConfigurablePlugin configurablePlugin:
+                {
+                    var configuration = ConfigurationFor(type);
+                    if (configuration != null)
+                        configurablePlugin.Configure(configuration);
+                    break;
+                }
             }
 
             plugin.Load();
@@ -48,7 +51,7 @@ namespace SnkFramework.Plugins
             }
         }
 
-        protected IMvxPluginConfiguration? ConfigurationFor(Type toLoad) =>
+        protected ISnkPluginConfiguration? ConfigurationFor(Type toLoad) =>
             ConfigurationSource.Invoke(toLoad);
 
         public bool IsPluginLoaded<T>() where T : ISnkPlugin

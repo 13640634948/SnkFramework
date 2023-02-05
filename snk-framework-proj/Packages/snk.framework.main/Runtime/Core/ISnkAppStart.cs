@@ -12,14 +12,4 @@ namespace SnkFramework.Runtime.Core
 
         void ResetStart();
     }
-
-    public class SnkSplashScreenAttribute : System.Attribute
-    {
-        
-    }
-    
-    public class SnkAppStartAttribute : System.Attribute
-    {
-        
-    }
 }

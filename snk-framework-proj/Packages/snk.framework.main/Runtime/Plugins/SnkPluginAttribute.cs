@@ -2,7 +2,7 @@ using System;
 
 namespace SnkFramework.Plugins
 {
-    public sealed class MvxPluginAttribute : Attribute
+    public sealed class SnkPluginAttribute : Attribute
     {
     }
 }

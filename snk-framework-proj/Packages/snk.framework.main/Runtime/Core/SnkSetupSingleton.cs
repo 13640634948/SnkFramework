@@ -21,7 +21,7 @@ namespace SnkFramework.Runtime.Core
         /// A useful overload to allow for platform specific
         /// setup logic to be invoked.
         /// </summary>
-        /// <typeparam name="TMvxSetup">The platform specific setup type</typeparam>
+        /// <typeparam name="TSnkSetup">The platform specific setup type</typeparam>
         /// <returns>A platform specific instance of Setup</returns>
         public virtual TSnkSetup PlatformSetup<TSnkSetup>()
             where TSnkSetup : ISnkSetup
@@ -41,7 +41,7 @@ namespace SnkFramework.Runtime.Core
         /// Returns a singleton object that is used to manage the creation and
         /// execution of setup
         /// </summary>
-        /// <typeparam name="TMvxSetupSingleton">The platform specific setup singleton type</typeparam>
+        /// <typeparam name="TSnkSetupSingleton">The platform specific setup singleton type</typeparam>
         /// <returns>A platform specific setup singleton</returns>
         protected static TSnkSetupSingleton EnsureSingletonAvailable<TSnkSetupSingleton>()
            where TSnkSetupSingleton : SnkSetupSingleton, new()
@@ -116,7 +116,7 @@ namespace SnkFramework.Runtime.Core
             {
                 if (setupMonitor != _currentMonitor)
                 {
-                    throw new SnkException("The specified IMvxSetupMonitor is not the one registered in MvxSetupSingleton");
+                    throw new SnkException("The specified ISnkSetupMonitor is not the one registered in SnkSetupSingleton");
                 }
                 _currentMonitor = null;
             }

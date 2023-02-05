@@ -10,7 +10,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Presenters
     {
-        public static class MvxPresentationAttributeExtensions
+        public static class SnkPresentationAttributeExtensions
         {
             public static bool HasBasePresentationAttribute(this Type candidateType)
             {

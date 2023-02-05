@@ -69,7 +69,7 @@ namespace SnkFramework.IoC
 
             switch (options.InjectIntoProperties)
             {
-                case SnkPropertyInjection.MvxInjectInterfaceProperties:
+                case SnkPropertyInjection.SnkInjectInterfaceProperties:
                     injectableProperties = injectableProperties
                         .Where(p => p.GetCustomAttributes(typeof(SnkInjectAttribute), false).Any());
                     break;
@@ -78,8 +78,8 @@ namespace SnkFramework.IoC
                     break;
 
                 case SnkPropertyInjection.None:
-                    //SnkLogHost.Default?.e(LogLevel.Error, "Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
-                    SnkIoC.s_Logger?.Error("Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
+                    //SnkLogHost.Default?.e(LogLevel.Error, "Internal error - should not call FindInjectableProperties with SnkPropertyInjection.None");
+                    SnkIoC.s_Logger?.Error("Internal error - should not call FindInjectableProperties with SnkPropertyInjection.None");
                     injectableProperties = new PropertyInfo[0];
                     break;
 

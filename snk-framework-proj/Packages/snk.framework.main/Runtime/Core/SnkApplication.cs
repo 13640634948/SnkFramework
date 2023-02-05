@@ -5,6 +5,14 @@ using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime.Core
 {
+    public abstract class SnkApplication<TParameter> : SnkApplication, ISnkApplication<TParameter>
+    {
+        public virtual Task<TParameter> Startup(TParameter hint)
+        {
+            return Task.FromResult(hint);
+        }
+    }
+
     public abstract class SnkApplication : ISnkApplication
     {
         public virtual void LoadPlugins(ISnkPluginManager pluginManager)
@@ -13,7 +21,6 @@ namespace SnkFramework.Runtime.Core
 
         public virtual void Initialize()
         {
-            
         }
 
         public virtual Task Startup()
@@ -25,11 +32,11 @@ namespace SnkFramework.Runtime.Core
         public virtual void Reset()
         {
         }
-        
-        protected void RegisterCustomAppStart<TMvxAppStart>()
-            where TMvxAppStart : class, ISnkAppStart
+
+        protected void RegisterCustomAppStart<TSnkAppStart>()
+            where TSnkAppStart : class, ISnkAppStart
         {
-            Snk.IoCProvider?.ConstructAndRegisterSingleton<ISnkAppStart, TMvxAppStart>();
+            Snk.IoCProvider?.ConstructAndRegisterSingleton<ISnkAppStart, TSnkAppStart>();
         }
 
         protected void RegisterAppStart<TViewModel>()
@@ -42,13 +49,5 @@ namespace SnkFramework.Runtime.Core
         {
             Snk.IoCProvider?.RegisterSingleton(appStart);
         }
-
-        /*
-        protected virtual void RegisterAppStart<TViewModel, TParameter>()
-            where TViewModel : ISnkViewModel<TParameter> where TParameter : class
-        {
-            Snk.IoCProvider?.ConstructAndRegisterSingleton<ISnkAppStart, SnkAppStart<TViewModel, TParameter>>();
-        }
-        */
     }
 }
