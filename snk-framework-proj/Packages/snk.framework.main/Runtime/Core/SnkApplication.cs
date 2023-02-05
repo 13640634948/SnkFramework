@@ -13,6 +13,7 @@ namespace SnkFramework.Runtime.Core
 
         public virtual void Initialize()
         {
+            
         }
 
         public virtual Task Startup()

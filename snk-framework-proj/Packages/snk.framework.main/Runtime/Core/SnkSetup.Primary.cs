@@ -19,12 +19,12 @@ namespace SnkFramework.Runtime
             protected abstract ISnkLoggerProvider CreateLoggerProvider();
             protected abstract ISnkApplication CreateApp(ISnkIoCProvider iocProvider);
             protected abstract ISnkViewCamera CreateViewCamera();
-            protected abstract ISnkViewLoader CreateViewLoader();
+            protected abstract SnkViewLoader CreateViewLoader();
             protected abstract void RegisterLayer(ISnkLayerContainer container);
             protected abstract ISnkLayerContainer CreateLayerContainer();
 
-            protected virtual ISnkViewPresenter CreateViewPresenter()
-                => new SnkViewPresenter();
+            protected virtual ISnkViewPresenter CreateViewPresenter() => new SnkViewPresenter();
+            
             protected void InitializeLogService(ISnkIoCProvider iocProvider)
             {
                 var loggerProvider = this.CreateLoggerProvider();
@@ -73,13 +73,19 @@ namespace SnkFramework.Runtime
                 iocProvider.RegisterSingleton(CreateViewPresenter());
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkMvvmService, ISnkViewDispatcher, ISnkViewModelLoader>(
                     (dispatcher,viewModelLoader)=> new SnkMvvmService(dispatcher,viewModelLoader));
+                iocProvider.RegisterSingleton(() => new SnkViewModelByNameLookup());
+                iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelByNameLookup, SnkViewModelByNameLookup>(lookup=>lookup);
+                iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelByNameRegistry, SnkViewModelByNameLookup>(lookup=>lookup);
+                iocProvider.LazyConstructAndRegisterSingleton<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
+                iocProvider.LazyConstructAndRegisterSingleton<IMvxTypeToTypeLookupBuilder, MvxViewModelViewLookupBuilder>();
             }
 
             protected virtual void InitializeViewLoader(ISnkIoCProvider iocProvider)
             {
                 var viewLoader = CreateViewLoader();
+                iocProvider.RegisterSingleton<ISnkViewLoader>(viewLoader);
                 iocProvider.RegisterSingleton<ISnkViewFinder>(viewLoader);
-                iocProvider.RegisterSingleton(viewLoader);
+                iocProvider.RegisterSingleton<IMvxViewsContainer>(viewLoader);
             }
 
             protected virtual ISnkIocOptions CreateIocOptions()
@@ -157,6 +163,7 @@ namespace SnkFramework.Runtime
                     this._iocProvider = InitializeIoC();
 
                     this.InitializeLogService(this._iocProvider);
+                    logger?.Info("Setup: Register Default Dependencies");
                     this.RegisterDefaultDependencies(this._iocProvider);
                     logger?.Info("Setup: Primary start");
                     this.InitializeFirstChance(_iocProvider);

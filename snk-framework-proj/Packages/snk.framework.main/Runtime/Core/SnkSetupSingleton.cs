@@ -26,12 +26,12 @@ namespace SnkFramework.Runtime.Core
         /// </summary>
         /// <typeparam name="TMvxSetup">The platform specific setup type</typeparam>
         /// <returns>A platform specific instance of Setup</returns>
-        public virtual TMvxSetup PlatformSetup<TMvxSetup>()
-            where TMvxSetup : ISnkSetup
+        public virtual TSnkSetup PlatformSetup<TSnkSetup>()
+            where TSnkSetup : ISnkSetup
         {
             try
             {
-                return (TMvxSetup)Setup;
+                return (TSnkSetup)Setup;
             }
             catch (Exception ex)
             {
@@ -46,24 +46,24 @@ namespace SnkFramework.Runtime.Core
         /// </summary>
         /// <typeparam name="TMvxSetupSingleton">The platform specific setup singleton type</typeparam>
         /// <returns>A platform specific setup singleton</returns>
-        protected static TMvxSetupSingleton EnsureSingletonAvailable<TMvxSetupSingleton>()
-           where TMvxSetupSingleton : SnkSetupSingleton, new()
+        protected static TSnkSetupSingleton EnsureSingletonAvailable<TSnkSetupSingleton>()
+           where TSnkSetupSingleton : SnkSetupSingleton, new()
         {
             // Double null - check before creating the setup singleton object
             if (Instance != null)
-                return Instance as TMvxSetupSingleton;
+                return Instance as TSnkSetupSingleton;
             lock (LockObject)
             {
                 if (Instance != null)
-                    return Instance as TMvxSetupSingleton;
+                    return Instance as TSnkSetupSingleton;
 
                 // Go ahead and create the setup singleton, and then
                 // create the setup instance. 
                 // Note that the Instance property is set within the 
                 // singleton constructor
-                var instance = new TMvxSetupSingleton();
+                var instance = new TSnkSetupSingleton();
                 instance.CreateSetup();
-                return Instance as TMvxSetupSingleton;
+                return Instance as TSnkSetupSingleton;
             }
         }
 

@@ -68,8 +68,6 @@ namespace SnkFramework.Runtime.Core
         {
             try
             {
-                Debug.Log(NavigationService);
-                //var a = await NavigationService.OpenWindow<TViewModel>();
                 var a = NavigationService.OpenWindow<TViewModel>();
             }
             catch (System.Exception exception)

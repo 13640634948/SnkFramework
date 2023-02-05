@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SnkFramework.IoC;
+using SnkFramework.Mvvm.Runtime.Presenters;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime
@@ -72,10 +74,11 @@ namespace SnkFramework.Runtime
                 return pluginManager;
             }
             
-            protected virtual ISnkApplication CreateMvxApplication(ISnkIoCProvider iocProvider)
+            protected virtual ISnkApplication CreateSnkApplication(ISnkIoCProvider iocProvider)
                 => iocProvider.Resolve<ISnkApplication>();
-            protected virtual ISnkApplication InitializeMvxApplication(ISnkIoCProvider iocProvider)
-                => CreateMvxApplication(iocProvider);
+            
+            protected virtual ISnkApplication InitializeSnkApplication(ISnkIoCProvider iocProvider)
+                => CreateSnkApplication(iocProvider);
             
             protected virtual void InitializeApp(ISnkPluginManager pluginManager, ISnkApplication app)
             {
@@ -85,6 +88,67 @@ namespace SnkFramework.Runtime
                 app.LoadPlugins(pluginManager);
                 this.logger.Info("Setup: Application Initialize - On background thread");
                 app.Initialize();
+            }
+
+            protected virtual void InitializeAppStart()
+            {
+                // 这里初始化AppStart
+                // AppStart可以作为平台鉴权的路由
+                foreach (var type in GetUserInterfaceAssembly().GetTypes())
+                {
+                    if (type.IsDefined(typeof(SnkAppStartAttribute), false))
+                    {
+                        var instance = Snk.IoCProvider.IoCConstruct(type);
+                        Snk.IoCProvider.RegisterSingleton(instance as ISnkAppStart);
+                    }
+                }
+            }
+
+            
+            protected virtual string UserInterfaceAssemblyName { get; } = "";
+            
+            private Assembly _userInterfaceAssembly;
+            protected virtual Assembly GetUserInterfaceAssembly()
+            {
+                if (UserInterfaceAssemblyName == null)
+                    return null;
+                if (_userInterfaceAssembly == null)
+                    _userInterfaceAssembly = GetAssembly(UserInterfaceAssemblyName)[0];
+                return _userInterfaceAssembly;
+            }
+
+            protected abstract IMvxNameMapping CreateViewToViewModelNaming();
+            
+            protected virtual ISnkViewModelByNameLookup CreateViewModelByNameLookup(ISnkIoCProvider iocProvider)
+                => iocProvider.Resolve<ISnkViewModelByNameLookup>();
+            protected virtual ISnkViewModelByNameRegistry CreateViewModelByNameRegistry(ISnkIoCProvider iocProvider)
+                => iocProvider.Resolve<ISnkViewModelByNameRegistry>();
+
+            protected virtual void InitializeViewModelTypeFinder(ISnkIoCProvider iocProvider)
+            {
+                CreateViewModelByNameLookup(iocProvider);
+                var viewModelByNameRegistry = CreateViewModelByNameRegistry(iocProvider);
+                viewModelByNameRegistry.AddAll(GetUserInterfaceAssembly());
+
+                var nameMappingStrategy = CreateViewToViewModelNaming();
+                iocProvider.RegisterSingleton(nameMappingStrategy);
+                //return nameMappingStrategy;
+            }
+            
+            protected virtual IDictionary<Type, Type> InitializeLookupDictionary(ISnkIoCProvider iocProvider)
+            {
+                //ValidateArguments(iocProvider);
+                var viewAssemblies = GetUserInterfaceAssembly();//GetViewAssemblies();
+                var builder = iocProvider.Resolve<IMvxTypeToTypeLookupBuilder>();
+                return builder.Build(new []{viewAssemblies});
+            }
+            protected virtual void InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, ISnkIoCProvider iocProvider)
+            {
+                //ValidateArguments(iocProvider);
+
+                var container = iocProvider.Resolve<IMvxViewsContainer>();
+                container.AddAll(viewModelViewLookup);
+                //return container;
             }
             
             public void InitializeSecondary()
@@ -114,19 +178,20 @@ namespace SnkFramework.Runtime
                     //SetupLog?.Log(LogLevel.Trace, "Setup: PluginManagerFramework start");
                     var pluginManager = InitializePluginFramework(_iocProvider);
                     this.logger?.Info("Setup: Create App");
-                    var app = InitializeMvxApplication(_iocProvider);
+                    var app = InitializeSnkApplication(_iocProvider);
                     //this.logger.Info("Setup: NavigationService");
                     //InitializeMvvmService(_iocProvider);
                     this.logger?.Info("Setup: App start");
                     InitializeApp(pluginManager, app);
+                    InitializeAppStart();
                     //SetupLog?.Log(LogLevel.Trace, "Setup: ViewModelTypeFinder start");
-                    //InitializeViewModelTypeFinder(_iocProvider);
+                    InitializeViewModelTypeFinder(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: ViewsContainer start");
                     //InitializeViewsContainer(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: Lookup Dictionary start");
-                    //var lookup = InitializeLookupDictionary(_iocProvider);
+                    var lookup = InitializeLookupDictionary(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: Views start");
-                    //InitializeViewLookup(lookup, _iocProvider);
+                    InitializeViewLookup(lookup, _iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: CommandCollectionBuilder start");
                     //InitializeCommandCollectionBuilder(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: NavigationSerializer start");
