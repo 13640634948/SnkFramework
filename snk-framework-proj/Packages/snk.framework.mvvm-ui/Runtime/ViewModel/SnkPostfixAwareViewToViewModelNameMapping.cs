@@ -1,11 +1,11 @@
 namespace SnkFramework.Mvvm.Runtime.ViewModel
 {
-    public class MvxPostfixAwareViewToViewModelNameMapping
-        : MvxViewToViewModelNameMapping
+    public class SnkPostfixAwareViewToViewModelNameMapping
+        : SnkViewToViewModelNameMapping
     {
         private readonly string[] _postfixes;
 
-        public MvxPostfixAwareViewToViewModelNameMapping(params string[] postfixes)
+        public SnkPostfixAwareViewToViewModelNameMapping(params string[] postfixes)
         {
             _postfixes = postfixes;
         }

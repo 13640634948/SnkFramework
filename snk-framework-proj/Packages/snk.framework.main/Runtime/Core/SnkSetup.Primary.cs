@@ -76,8 +76,8 @@ namespace SnkFramework.Runtime
                 iocProvider.RegisterSingleton(() => new SnkViewModelByNameLookup());
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelByNameLookup, SnkViewModelByNameLookup>(lookup=>lookup);
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelByNameRegistry, SnkViewModelByNameLookup>(lookup=>lookup);
-                iocProvider.LazyConstructAndRegisterSingleton<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
-                iocProvider.LazyConstructAndRegisterSingleton<IMvxTypeToTypeLookupBuilder, MvxViewModelViewLookupBuilder>();
+                iocProvider.LazyConstructAndRegisterSingleton<ISnkViewModelTypeFinder, SnkViewModelViewTypeFinder>();
+                iocProvider.LazyConstructAndRegisterSingleton<ISnkTypeToTypeLookupBuilder, SnkViewModelViewLookupBuilder>();
             }
 
             protected virtual void InitializeViewLoader(ISnkIoCProvider iocProvider)

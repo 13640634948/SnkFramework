@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace SnkFramework.Mvvm.Runtime.ViewModel
 {
-    public interface IMvxTypeToTypeLookupBuilder
+    public interface ISnkTypeToTypeLookupBuilder
     {
         IDictionary<Type, Type> Build(IEnumerable<Assembly> sourceAssemblies);
     }

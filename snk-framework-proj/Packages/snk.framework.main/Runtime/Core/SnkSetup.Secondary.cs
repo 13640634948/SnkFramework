@@ -117,7 +117,7 @@ namespace SnkFramework.Runtime
                 return _userInterfaceAssembly;
             }
 
-            protected abstract IMvxNameMapping CreateViewToViewModelNaming();
+            protected abstract ISnkNameMapping CreateViewToViewModelNaming();
             
             protected virtual ISnkViewModelByNameLookup CreateViewModelByNameLookup(ISnkIoCProvider iocProvider)
                 => iocProvider.Resolve<ISnkViewModelByNameLookup>();
@@ -139,7 +139,7 @@ namespace SnkFramework.Runtime
             {
                 //ValidateArguments(iocProvider);
                 var viewAssemblies = GetUserInterfaceAssembly();//GetViewAssemblies();
-                var builder = iocProvider.Resolve<IMvxTypeToTypeLookupBuilder>();
+                var builder = iocProvider.Resolve<ISnkTypeToTypeLookupBuilder>();
                 return builder.Build(new []{viewAssemblies});
             }
             protected virtual void InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, ISnkIoCProvider iocProvider)

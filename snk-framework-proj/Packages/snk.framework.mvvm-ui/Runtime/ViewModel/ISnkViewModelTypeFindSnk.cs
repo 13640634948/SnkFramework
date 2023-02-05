@@ -2,9 +2,8 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace ViewModel
     {
-        public interface IMvxNameMapping
+        public interface ISnkViewModelTypeFinder : ISnkTypeFinder
         {
-            string Map(string inputName);
         }
     }
 }

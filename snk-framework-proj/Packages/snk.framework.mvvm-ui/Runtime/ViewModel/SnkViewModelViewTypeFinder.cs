@@ -9,13 +9,13 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace ViewModel
     {
-        public class MvxViewModelViewTypeFinder : IMvxViewModelTypeFinder
+        public class SnkViewModelViewTypeFinder : ISnkViewModelTypeFinder
         {
             private readonly ISnkViewModelByNameLookup _viewModelByNameLookup;
-            private readonly IMvxNameMapping _viewToViewModelNameMapping;
+            private readonly ISnkNameMapping _viewToViewModelNameMapping;
 
-            public MvxViewModelViewTypeFinder(ISnkViewModelByNameLookup viewModelByNameLookup,
-                IMvxNameMapping viewToViewModelNameMapping)
+            public SnkViewModelViewTypeFinder(ISnkViewModelByNameLookup viewModelByNameLookup,
+                ISnkNameMapping viewToViewModelNameMapping)
             {
                 _viewModelByNameLookup = viewModelByNameLookup;
                 _viewToViewModelNameMapping = viewToViewModelNameMapping;
@@ -48,8 +48,8 @@ namespace SnkFramework.Mvvm.Runtime
             protected virtual Type? LookupAttributedViewModelType(Type candidateType)
             {
                 var attribute = candidateType
-                    .GetCustomAttributes(typeof(MvxViewForAttribute), false)
-                    .FirstOrDefault() as MvxViewForAttribute;
+                    .GetCustomAttributes(typeof(SnkViewForAttribute), false)
+                    .FirstOrDefault() as SnkViewForAttribute;
 
                 return attribute?.ViewModel;
             }

@@ -9,11 +9,11 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace ViewModel
     {
-        public class MvxViewModelViewLookupBuilder : IMvxTypeToTypeLookupBuilder
+        public class SnkViewModelViewLookupBuilder : ISnkTypeToTypeLookupBuilder
         {
             public virtual IDictionary<Type, Type> Build(IEnumerable<Assembly> sourceAssemblies)
             {
-                var associatedTypeFinder = SnkSingleton<ISnkIoCProvider>.Instance.Resolve<IMvxViewModelTypeFinder>();
+                var associatedTypeFinder = SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewModelTypeFinder>();
 
                 var views = from assembly in sourceAssemblies
                     from candidateViewType in assembly.ExceptionSafeGetTypes()

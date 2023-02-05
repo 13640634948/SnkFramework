@@ -45,7 +45,7 @@ namespace BFFramework.Runtime.Core
         protected override ISnkViewDispatcher CreateViewDispatcher()
             => new BFViewDispatcher();
 
-        protected override IMvxNameMapping CreateViewToViewModelNaming()
-            => new MvxPostfixAwareViewToViewModelNameMapping("View", "Window");
+        protected override ISnkNameMapping CreateViewToViewModelNaming()
+            => new SnkPostfixAwareViewToViewModelNameMapping("View", "Window");
     }
 }

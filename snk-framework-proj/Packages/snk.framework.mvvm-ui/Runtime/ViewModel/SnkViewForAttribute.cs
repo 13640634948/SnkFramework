@@ -5,11 +5,11 @@ namespace SnkFramework.Mvvm.Runtime
     namespace ViewModel
     {
         [AttributeUsage(AttributeTargets.Class)]
-        public class MvxViewForAttribute : Attribute
+        public class SnkViewForAttribute : Attribute
         {
             public Type ViewModel { get; set; }
 
-            public MvxViewForAttribute(Type viewModel)
+            public SnkViewForAttribute(Type viewModel)
             {
                 ViewModel = viewModel;
             }
