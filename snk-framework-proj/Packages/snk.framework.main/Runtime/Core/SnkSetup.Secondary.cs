@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SnkFramework.IoC;
-using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
+using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime

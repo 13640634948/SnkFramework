@@ -4,7 +4,7 @@ using BFFramework.Runtime.UserInterface.Layers;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.View;
-using SnkFramework.Runtime.Core;
+using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.Runtime.Engine;
 using UnityEngine;
 
