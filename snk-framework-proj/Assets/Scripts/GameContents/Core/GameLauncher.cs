@@ -20,7 +20,7 @@ namespace GAME.Contents.Core
         public static void bootup()
         {
             var assemblies = GetGameAssembly();
-            var instance = UnitySetupSingleton.EnsureSingletonAvailable<GameSetup>(assemblies.ToArray());
+            var instance = SnkUnitySetupSingleton.EnsureSingletonAvailable<GameSetup>(assemblies.ToArray());
             instance.EnsureInitialized();
             instance.AsyncRunAppStart();
         }

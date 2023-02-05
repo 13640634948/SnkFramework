@@ -6,10 +6,10 @@ namespace SnkFramework.Runtime
 {
     namespace Engine
     {
-        public abstract class UnitySetup : SnkSetup, IUnitySetup
+        public abstract class SnkUnitySetup : SnkSetup, ISnkUnitySetup
         {
             protected override ISnkLoggerProvider CreateLoggerProvider()
-                => new UnityLoggerProvider();
+                => new SnkUnityLoggerProvider();
 
             public virtual void PlatformInitialize()
             {
@@ -17,7 +17,7 @@ namespace SnkFramework.Runtime
             }
         }
 
-        public abstract class UnitySetup<TSnkApplication> : UnitySetup
+        public abstract class SnkUnitySetup<TSnkApplication> : SnkUnitySetup
             where TSnkApplication : SnkApplication
         {
             protected override ISnkApplication CreateApp(ISnkIoCProvider iocProvider) =>

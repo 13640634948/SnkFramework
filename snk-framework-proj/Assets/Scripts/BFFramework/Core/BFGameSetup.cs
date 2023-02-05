@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BFFramework.Runtime.Core
 {
-    public abstract class BFGameSetup<TSnkApplication> : UnitySetup<TSnkApplication>
+    public abstract class BFGameSetup<TSnkApplication> : SnkUnitySetup<TSnkApplication>
         where TSnkApplication : BFClientApp
     {
         protected override string UserInterfaceAssemblyName => "Game.Contexts.UserInterfaces";

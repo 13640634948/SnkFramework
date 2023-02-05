@@ -6,7 +6,7 @@ namespace SnkFramework.Runtime
 {
     namespace Engine
     {
-        public class UnityLoggerProvider : ISnkLoggerProvider
+        public class SnkUnityLoggerProvider : ISnkLoggerProvider
         {
             public void Output(eSnkLogType logType, Exception e, string formater, params object[] message)
             {

@@ -1,6 +1,6 @@
 namespace SnkFramework.Runtime.Engine
 {
-    public interface IUnitySetup
+    public interface ISnkUnitySetup
     {
         void PlatformInitialize();
     }

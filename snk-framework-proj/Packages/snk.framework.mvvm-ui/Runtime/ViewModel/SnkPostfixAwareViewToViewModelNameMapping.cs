@@ -1,27 +1,30 @@
-namespace SnkFramework.Mvvm.Runtime.ViewModel
+namespace SnkFramework.Mvvm.Runtime
 {
-    public class SnkPostfixAwareViewToViewModelNameMapping
-        : SnkViewToViewModelNameMapping
+    namespace ViewModel
     {
-        private readonly string[] _postfixes;
-
-        public SnkPostfixAwareViewToViewModelNameMapping(params string[] postfixes)
+        public class SnkPostfixAwareViewToViewModelNameMapping
+            : SnkViewToViewModelNameMapping
         {
-            _postfixes = postfixes;
-        }
+            private readonly string[] _postfixes;
 
-        public override string Map(string inputName)
-        {
-            foreach (var postfix in _postfixes)
+            public SnkPostfixAwareViewToViewModelNameMapping(params string[] postfixes)
             {
-                if (inputName.EndsWith(postfix) && inputName.Length > postfix.Length)
-                {
-                    inputName = inputName.Substring(0, inputName.Length - postfix.Length);
-                    break;
-                }
+                _postfixes = postfixes;
             }
 
-            return base.Map(inputName);
+            public override string Map(string inputName)
+            {
+                foreach (var postfix in _postfixes)
+                {
+                    if (inputName.EndsWith(postfix) && inputName.Length > postfix.Length)
+                    {
+                        inputName = inputName.Substring(0, inputName.Length - postfix.Length);
+                        break;
+                    }
+                }
+
+                return base.Map(inputName);
+            }
         }
     }
 }

@@ -4,14 +4,14 @@ using SnkFramework.Runtime.Core;
 
 namespace SnkFramework.Runtime.Engine
 {
-    public class UnitySetupSingleton : SnkSetupSingleton
+    public class SnkUnitySetupSingleton : SnkSetupSingleton
     {
-        public static UnitySetupSingleton EnsureSingletonAvailable<TSnkSetup>(params Assembly[] assemblies)
+        public static SnkUnitySetupSingleton EnsureSingletonAvailable<TSnkSetup>(params Assembly[] assemblies)
             where TSnkSetup : SnkSetup, new()
         {
             SnkSetup.RegisterSetupType<TSnkSetup>(assemblies);
-            var instance = SnkSetupSingleton.EnsureSingletonAvailable<UnitySetupSingleton>();
-            instance.PlatformSetup<UnitySetup>()?.PlatformInitialize();
+            var instance = SnkSetupSingleton.EnsureSingletonAvailable<SnkUnitySetupSingleton>();
+            instance.PlatformSetup<SnkUnitySetup>()?.PlatformInitialize();
             return instance;
         }
 

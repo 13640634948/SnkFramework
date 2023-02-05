@@ -8,9 +8,12 @@ namespace BFFramework.Runtime.UserInterface
 {
     public class BFViewDispatcher : SnkViewDispatcher
     {
-        private ISnkMainThreadAsyncDispatcher _mainThreadDispatcher=> Snk.IoCProvider.Resolve<ISnkMainThreadAsyncDispatcher>();
+        private Lazy<ISnkMainThreadAsyncDispatcher> _mainThreadDispatcher = new Lazy<ISnkMainThreadAsyncDispatcher>(
+            ()=> Snk.IoCProvider.Resolve<ISnkMainThreadAsyncDispatcher>());
+
+        private ISnkMainThreadAsyncDispatcher mainThreadDispatcher => _mainThreadDispatcher.Value;
         
         public override Task ExecuteOnUIThreadAsync(Func<Task> action, bool maskExceptions = true)
-            => _mainThreadDispatcher?.ExecuteOnMainThreadAsync(action, maskExceptions);
+            => mainThreadDispatcher?.ExecuteOnMainThreadAsync(action, maskExceptions);
     }
 }
