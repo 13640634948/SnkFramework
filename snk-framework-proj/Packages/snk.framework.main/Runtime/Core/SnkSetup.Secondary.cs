@@ -134,7 +134,12 @@ namespace SnkFramework.Runtime
                 iocProvider.RegisterSingleton(nameMappingStrategy);
                 //return nameMappingStrategy;
             }
-            
+
+            protected virtual void InitializeMvvmService(ISnkIoCProvider iocProvider)
+            {
+                
+            }
+
             protected virtual IDictionary<Type, Type> InitializeLookupDictionary(ISnkIoCProvider iocProvider)
             {
                 //ValidateArguments(iocProvider);
@@ -172,22 +177,22 @@ namespace SnkFramework.Runtime
                     //InitializeStringToTypeParser(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: FillableStringToTypeParser start");
                     //InitializeFillableStringToTypeParser(_iocProvider);
-                    //SetupLog?.Log(LogLevel.Trace, "Setup: PluginManagerFramework start");
+                    this.logger?.Info("Setup: PluginManagerFramework start");
                     var pluginManager = InitializePluginFramework(_iocProvider);
                     this.logger?.Info("Setup: Create App");
                     var app = InitializeSnkApplication(_iocProvider);
-                    //this.logger.Info("Setup: NavigationService");
-                    //InitializeMvvmService(_iocProvider);
+                    this.logger?.Info("Setup: MvvmService");
+                    InitializeMvvmService(_iocProvider);
                     this.logger?.Info("Setup: App start");
                     InitializeApp(pluginManager, app);
                     InitializeAppStart();
-                    //SetupLog?.Log(LogLevel.Trace, "Setup: ViewModelTypeFinder start");
+                    this.logger?.Info("Setup: ViewModelTypeFinder start");
                     InitializeViewModelTypeFinder(_iocProvider);
-                    //SetupLog?.Log(LogLevel.Trace, "Setup: ViewsContainer start");
+                    this.logger?.Info("Setup: ViewsContainer start");
                     this.InitializeViewContainer(_iocProvider);
-                    //SetupLog?.Log(LogLevel.Trace, "Setup: Lookup Dictionary start");
+                    this.logger?.Info("Setup: Lookup Dictionary start");
                     var lookup = InitializeLookupDictionary(_iocProvider);
-                    //SetupLog?.Log(LogLevel.Trace, "Setup: Views start");
+                    this.logger?.Info("Setup: View Lookup");
                     InitializeViewLookup(lookup, _iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: CommandCollectionBuilder start");
                     //InitializeCommandCollectionBuilder(_iocProvider);

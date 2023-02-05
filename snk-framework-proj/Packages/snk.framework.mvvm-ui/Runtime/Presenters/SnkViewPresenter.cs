@@ -67,7 +67,7 @@ namespace SnkFramework.Mvvm.Runtime
                     Debug.LogError("ChangePresentation-hint:" + hint);
                     return await Close(presentationHint.ViewModelToClose).ConfigureAwait(true);
                 }
-                //MvxLogHost.Default?.Log(LogLevel.Warning, "Hint ignored {name}", hint.GetType().Name);
+                //SnkLogHost.Default?.Log(LogLevel.Warning, "Hint ignored {name}", hint.GetType().Name);
                 return false;
                 */
 

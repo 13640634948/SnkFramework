@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.NuGet.Basic;
-using UnityEngine;
 
 namespace SnkFramework.Runtime.Core
 {
@@ -29,7 +28,7 @@ namespace SnkFramework.Runtime.Core
             var applicationHint = await ApplicationStartup(hint);
             if (applicationHint != null)
             {
-                //MvxLogHost.Default?.Log(LogLevel.Trace, "Hint ignored in default MvxAppStart");
+                SnkLogHost.Default?.Info("Hint ignored in default MvxAppStart");
             }
 
             await NavigateToFirstViewModel(applicationHint);

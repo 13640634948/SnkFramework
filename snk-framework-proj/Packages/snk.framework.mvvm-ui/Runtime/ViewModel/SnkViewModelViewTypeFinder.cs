@@ -41,7 +41,7 @@ namespace SnkFramework.Mvvm.Runtime
                 if (typeByName != null)
                     return typeByName;
 
-                //MvxLogHost.Default?.Log(LogLevel.Warning, "No view model association found for candidate view {name}", candidateType.Name);
+                //SnkLogHost.Default?.Log(LogLevel.Warning, "No view model association found for candidate view {name}", candidateType.Name);
                 return null;
             }
 

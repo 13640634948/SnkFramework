@@ -59,7 +59,7 @@ namespace SnkFramework.Runtime
                         }
                     }
                 }
-                //MvxLogHost.Default?.LogInformation("Setup: RegisterSetupType already called");
+                //SnkLogHost.Default?.Info("Setup: RegisterSetupType already called");
             }
 
             protected List<Assembly> GetAssembly(string prefix)

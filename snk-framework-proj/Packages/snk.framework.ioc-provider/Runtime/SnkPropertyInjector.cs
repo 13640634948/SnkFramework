@@ -6,10 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-//using Microsoft.Extensions.Logging;
-//using MvvmCross.Exceptions;
-//using MvvmCross.Logging;
-using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
 
@@ -82,7 +78,7 @@ namespace SnkFramework.IoC
                     break;
 
                 case SnkPropertyInjection.None:
-                    //MvxLogHost.Default?.Log(LogLevel.Error, "Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
+                    //SnkLogHost.Default?.e(LogLevel.Error, "Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
                     SnkIoC.s_Logger?.Error("Internal error - should not call FindInjectableProperties with MvxPropertyInjection.None");
                     injectableProperties = new PropertyInfo[0];
                     break;

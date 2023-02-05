@@ -1,11 +1,8 @@
 using System;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
-using DefaultNamespace;
-using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
-using UnityEngine;
 
 namespace SnkFramework.Runtime.Core
 {
@@ -35,7 +32,7 @@ namespace SnkFramework.Runtime.Core
             }
             catch (Exception ex)
             {
-                //MvxLogHost.Default?.Log(LogLevel.Error, ex, "Unable to cast setup to {0}", typeof(TMvxSetup));
+                SnkLogHost.Default?.Exception( ex, "Unable to cast setup to {0}", typeof(TSnkSetup));
                 throw;
             }
         }
@@ -84,7 +81,7 @@ namespace SnkFramework.Runtime.Core
                         return;
                     }
 
-                    //MvxLogHost.Default?.Log(LogLevel.Trace, "EnsureInitialized has already been called so now waiting for completion");
+                    SnkLogHost.Default?.Warning("EnsureInitialized has already been called so now waiting for completion");
                 }
             }
             IsInitialisedTaskCompletionSource.Task.GetAwaiter().GetResult();

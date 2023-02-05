@@ -1,22 +1,9 @@
-using COSXML.Model.Object;
-using SnkFramework.Mvvm.Runtime;
+using SnkFramework.NuGet.Features.Logging;
 
 namespace SnkFramework
 {
     public class MvvmUI
     {
-        /*
-        public static ISnkMvvmService CreateService<TInstaller>()
-            where TInstaller : class, ISnkMvvmInstaller, new()
-        {
-            TInstaller installer = new TInstaller();
-            return installer.Install();
-        }
-
-        public static ISnkMvvmService CreateService(ISnkMvvmInstaller installer)
-        {
-            return installer.Install();
-        }
-        */
+        //public ISnkLogger Logger;
     }
 }

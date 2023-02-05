@@ -1,25 +1,8 @@
-namespace DefaultNamespace
+using SnkFramework.NuGet.Features.Logging;
+
+namespace SnkFramework.Runtime
 {
-    
-    /*
-    //public static ISnkJsonParser JsonParser;
-    //public static ISnkCodeGenerator CodeGenerator;
-
-    private static ISnkSetup s_Setup;
-
-    //public static IMvxIoCProvider IoCProvider => SnkSingleton<IMvxIoCProvider>.Instance;
-
-    public static void Launcher<TSetup>() where TSetup : class, ISnkSetup, new()
-    {
-        s_Setup = new TSetup();
-        s_Setup.InitializePrimary();
-        s_Setup.InitializeSecondary();
-    }
-    */
-    
-    /*
-     
-    internal class SnkLogHost
+    public class SnkLogHost
     {
         private static ISnkLogger _defaultLogger;
 
@@ -42,5 +25,4 @@ namespace DefaultNamespace
 
         public static ISnkLogger GetLog<T>() => GetLog(typeof(T).FullName);
     }
-    */
 }

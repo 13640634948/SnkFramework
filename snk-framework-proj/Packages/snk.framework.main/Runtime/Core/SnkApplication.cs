@@ -18,7 +18,7 @@ namespace SnkFramework.Runtime.Core
 
         public virtual Task Startup()
         {
-            //MvxLogHost.Default?.Log(LogLevel.Trace, "AppStart: Application Startup - On UI thread");
+            SnkLogHost.Default?.Info("AppStart: Application Startup - On UI thread");
             return Task.CompletedTask;
         }
 

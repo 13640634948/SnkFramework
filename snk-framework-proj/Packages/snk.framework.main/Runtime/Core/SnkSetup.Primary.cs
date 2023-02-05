@@ -117,13 +117,7 @@ namespace SnkFramework.Runtime
 
             protected virtual ISnkMainThread CreateMainThreadSynchronizationContext()
                 => new SnkMainThread();
-            
-            protected virtual void InitializeMainThreadSynchronizationContext(ISnkIoCProvider iocProvider)
-            {
-                var mainThread = CreateMainThreadSynchronizationContext();
-                iocProvider.RegisterSingleton(mainThread);
-            }
-            
+
             protected virtual void InitializeDispatcher(ISnkIoCProvider iocProvider)
             {
                 var dispatcher = new SnkMainThreadAsyncDispatcher();
@@ -136,7 +130,8 @@ namespace SnkFramework.Runtime
             /// </summary>
             protected virtual void InitializeBasePlatform(ISnkIoCProvider iocProvider)
             {
-            
+                var mainThread = CreateMainThreadSynchronizationContext();
+                iocProvider.RegisterSingleton(mainThread);
             }
 
             protected abstract ISnkViewDispatcher CreateViewDispatcher();
@@ -168,9 +163,7 @@ namespace SnkFramework.Runtime
                     this.InitializeFirstChance(_iocProvider);
                     this.InitializeSettings(_iocProvider);
                     this.InitializeBasePlatform(_iocProvider);
-                    //InitializeSingletonCache();
 
-                    InitializeMainThreadSynchronizationContext(_iocProvider);
                     this.InitializeDispatcher(_iocProvider);
                     this.InitializeViewDispatcher(_iocProvider);
                     
