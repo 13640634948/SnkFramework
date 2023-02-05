@@ -6,7 +6,7 @@ namespace SnkFramework.Mvvm.Runtime
 {
     namespace Presenters
     {
-        public interface ISnkViewLoader : ISnkViewFinder
+        public interface ISnkViewCreator
         {
             Task<SnkWindow> CreateView(SnkViewModelRequest request);
 

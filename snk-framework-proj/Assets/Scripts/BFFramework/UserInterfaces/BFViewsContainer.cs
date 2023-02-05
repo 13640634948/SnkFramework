@@ -6,7 +6,7 @@ using SnkFramework.Mvvm.Runtime.View;
 
 namespace BFFramework.Runtime.UserInterface
 {
-    public class BFViewLoader : SnkViewLoader
+    public class BFViewsContainer : SnkViewsContainer
     {
         public override async Task<SnkWindow> CreateView(Type viewType)
         {

@@ -1,4 +1,3 @@
-using System.Reflection;
 using BFFramework.Runtime.UserInterface;
 using BFFramework.Runtime.UserInterface.Layers;
 using SnkFramework.Mvvm.Runtime.Base;
@@ -32,15 +31,15 @@ namespace BFFramework.Runtime.Core
             return layerContainerGameObject.AddComponent<SnkLayerContainer>();
         }
 
+        protected override ISnkViewsContainer CreateViewContainer()
+            => new BFViewsContainer();
+        
         protected override ISnkViewCamera CreateViewCamera()
         {
             var viewCameraGameObject = new GameObject(nameof(SnkViewCamera));
             GameObject.DontDestroyOnLoad(viewCameraGameObject);
             return viewCameraGameObject.AddComponent<SnkViewCamera>();
         }
-
-        protected override SnkViewLoader CreateViewLoader()
-            => new BFViewLoader();
 
         protected override ISnkViewDispatcher CreateViewDispatcher()
             => new BFViewDispatcher();

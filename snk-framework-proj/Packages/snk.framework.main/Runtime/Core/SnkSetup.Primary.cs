@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.Base;
@@ -19,10 +18,8 @@ namespace SnkFramework.Runtime
             protected abstract ISnkLoggerProvider CreateLoggerProvider();
             protected abstract ISnkApplication CreateApp(ISnkIoCProvider iocProvider);
             protected abstract ISnkViewCamera CreateViewCamera();
-            protected abstract SnkViewLoader CreateViewLoader();
             protected abstract void RegisterLayer(ISnkLayerContainer container);
             protected abstract ISnkLayerContainer CreateLayerContainer();
-
             protected virtual ISnkViewPresenter CreateViewPresenter() => new SnkViewPresenter();
             
             protected void InitializeLogService(ISnkIoCProvider iocProvider)
@@ -80,12 +77,14 @@ namespace SnkFramework.Runtime
                 iocProvider.LazyConstructAndRegisterSingleton<ISnkTypeToTypeLookupBuilder, SnkViewModelViewLookupBuilder>();
             }
 
-            protected virtual void InitializeViewLoader(ISnkIoCProvider iocProvider)
+            protected abstract ISnkViewsContainer CreateViewContainer();
+            
+            protected virtual void InitializeViewContainer(ISnkIoCProvider iocProvider)
             {
-                var viewLoader = CreateViewLoader();
-                iocProvider.RegisterSingleton<ISnkViewLoader>(viewLoader);
-                iocProvider.RegisterSingleton<ISnkViewFinder>(viewLoader);
-                iocProvider.RegisterSingleton<IMvxViewsContainer>(viewLoader);
+                var viewsContainer = CreateViewContainer();
+                iocProvider.RegisterSingleton<ISnkViewCreator>(viewsContainer);
+                iocProvider.RegisterSingleton<ISnkViewFinder>(viewsContainer);
+                iocProvider.RegisterSingleton<ISnkViewsContainer>(viewsContainer);
             }
 
             protected virtual ISnkIocOptions CreateIocOptions()
@@ -176,9 +175,8 @@ namespace SnkFramework.Runtime
                     this.InitializeViewDispatcher(_iocProvider);
                     
                     this.InitializeLayerContainer(_iocProvider);
-                    this.InitializeViewLoader(_iocProvider);
                     this.InitializeViewModelLoader(_iocProvider);
-                    
+
                     State = eSnkSetupState.InitializedPrimary;
                 }
                 catch (Exception e)

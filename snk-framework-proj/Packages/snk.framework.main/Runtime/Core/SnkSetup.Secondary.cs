@@ -144,11 +144,8 @@ namespace SnkFramework.Runtime
             }
             protected virtual void InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, ISnkIoCProvider iocProvider)
             {
-                //ValidateArguments(iocProvider);
-
-                var container = iocProvider.Resolve<IMvxViewsContainer>();
+                var container = iocProvider.Resolve<ISnkViewsContainer>();
                 container.AddAll(viewModelViewLookup);
-                //return container;
             }
             
             public void InitializeSecondary()
@@ -187,7 +184,7 @@ namespace SnkFramework.Runtime
                     //SetupLog?.Log(LogLevel.Trace, "Setup: ViewModelTypeFinder start");
                     InitializeViewModelTypeFinder(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: ViewsContainer start");
-                    //InitializeViewsContainer(_iocProvider);
+                    this.InitializeViewContainer(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: Lookup Dictionary start");
                     var lookup = InitializeLookupDictionary(_iocProvider);
                     //SetupLog?.Log(LogLevel.Trace, "Setup: Views start");

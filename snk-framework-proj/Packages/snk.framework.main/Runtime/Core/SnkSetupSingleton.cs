@@ -73,7 +73,6 @@ namespace SnkFramework.Runtime.Core
             {
                 if (IsInitialisedTaskCompletionSource == null)
                 {
-                    Debug.Log("EnsureInitialized-StartSetupInitialization");
                     StartSetupInitialization();
                 }
                 else

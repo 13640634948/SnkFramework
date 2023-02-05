@@ -2,10 +2,10 @@
     "name": "BFFramework.Runtime.Core",
     "rootNamespace": "",
     "references": [
-        "GUID:541ce60afd7df4bdb8b26d8e57407157",
         "GUID:c3bf3bdc3b4f3480ab80d55f71603535",
         "GUID:716af79e75ac0403188c02dc6dd87117",
-        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:541ce60afd7df4bdb8b26d8e57407157"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

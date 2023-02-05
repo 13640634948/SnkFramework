@@ -16,14 +16,14 @@ namespace SnkFramework.Mvvm.Runtime
             private Lazy<ISnkViewFinder> _viewFinder = new (()=> 
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewFinder>());
 
-            private Lazy<ISnkViewLoader> _viewLoader = new(() =>
-                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewLoader>());
+            private Lazy<ISnkViewCreator> _viewLoader = new(() =>
+                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewCreator>());
             
             private Lazy<ISnkLayerContainer> _layerContainer = new(() =>
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkLayerContainer>());
             
             public ISnkViewFinder ViewFinder => this._viewFinder.Value;
-            public ISnkViewLoader ViewLoader => this._viewLoader.Value;
+            public ISnkViewCreator ViewCreator => this._viewLoader.Value;
             public ISnkLayerContainer LayerContainer => this._layerContainer.Value;
             
 

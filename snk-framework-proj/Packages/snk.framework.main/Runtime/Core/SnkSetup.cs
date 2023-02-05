@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Exceptions;
 using SnkFramework.NuGet.Features.Logging;
-using UnityEngine;
 
 namespace SnkFramework.Runtime
 {
@@ -49,10 +48,6 @@ namespace SnkFramework.Runtime
                         if (SetupCreator is null)
                         {
                             AppDomainAssemblyList.AddRange(assemblies);
-                            foreach (var assembly in assemblies)
-                            {
-                                Debug.Log(assembly.FullName);
-                            }
                             if (AppDomainAssemblyList.Count == 0)
                             {
                                 // fall back to all assemblies. Assembly.GetEntryAssembly() always returns
