@@ -1,9 +1,10 @@
+using System.Reflection;
 using BFFramework.Runtime.UserInterface;
 using BFFramework.Runtime.UserInterface.Layers;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
-using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
+using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Engine;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ namespace BFFramework.Runtime.Core
     public abstract class BFGameSetup<TSnkApplication> : UnitySetup<TSnkApplication>
         where TSnkApplication : BFClientApp
     {
+        protected override string UserInterfaceAssemblyName => "Game.Contexts.UserInterfaces";
+
         protected override void RegisterLayer(ISnkLayerContainer container)
         {
             container.RegiestLayer<BFUGUINormalLayer>(true);
@@ -36,10 +39,13 @@ namespace BFFramework.Runtime.Core
             return viewCameraGameObject.AddComponent<SnkViewCamera>();
         }
 
-        protected override ISnkViewLoader CreateViewLoader()
+        protected override SnkViewLoader CreateViewLoader()
             => new BFViewLoader();
 
         protected override ISnkViewDispatcher CreateViewDispatcher()
             => new BFViewDispatcher();
+
+        protected override IMvxNameMapping CreateViewToViewModelNaming()
+            => new MvxPostfixAwareViewToViewModelNameMapping("View", "Window");
     }
 }

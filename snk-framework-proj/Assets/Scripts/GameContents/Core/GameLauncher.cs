@@ -25,7 +25,6 @@ namespace GAME.Contents.Core
             instance.AsyncRunAppStart();
         }
 
-
         private static IEnumerable<Assembly> GetGameAssembly()
         {
             return from assembly in AppDomain.CurrentDomain.GetAssemblies()

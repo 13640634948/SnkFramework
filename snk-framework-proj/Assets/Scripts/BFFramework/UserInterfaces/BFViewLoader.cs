@@ -17,10 +17,5 @@ namespace BFFramework.Runtime.UserInterface
             inst.name = viewType.Name;
             return inst.AddComponent(viewType) as SnkWindow;
         }
-
-        public override Type GetViewType(Type viewModelType)
-        {
-            return default;
-        }
     }
 }

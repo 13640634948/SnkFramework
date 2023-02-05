@@ -1,11 +1,13 @@
+using BFFramework.Runtime.UserInterface;
 using SnkFramework.Mvvm.Runtime.Base;
-using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.Runtime.Core;
 
 namespace GAME.Contents.UserInterfaces
 {
     namespace ViewModels
     {
-        public class SplashScreenViewModel : SnkViewModel
+        [SnkSplashScreen]
+        public class SplashScreenViewModel : BFViewModel
         {
             public override void Prepare(ISnkBundle parameterBundle)
             {
