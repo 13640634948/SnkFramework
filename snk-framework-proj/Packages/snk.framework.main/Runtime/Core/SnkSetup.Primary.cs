@@ -55,12 +55,7 @@ namespace SnkFramework.Runtime
                 => new SnkViewModelLoader();
 
             protected virtual void InitializeViewModelLoader(ISnkIoCProvider iocProvider)
-            {
-                var loader = CreateViewModelLoader();
-                //iocProvider.RegisterSingleton<ISnkViewModelCreator>(loader);
-                //iocProvider.RegisterSingleton<ISnkViewModelLocator>(loader);
-                iocProvider.RegisterSingleton<ISnkViewModelLoader>(loader);
-            }
+                => iocProvider.RegisterSingleton(CreateViewModelLoader());
 
             protected virtual void RegisterDefaultDependencies(ISnkIoCProvider iocProvider)
             {
@@ -80,12 +75,7 @@ namespace SnkFramework.Runtime
             protected abstract ISnkViewsContainer CreateViewContainer();
             
             protected virtual void InitializeViewContainer(ISnkIoCProvider iocProvider)
-            {
-                var viewsContainer = CreateViewContainer();
-                iocProvider.RegisterSingleton<ISnkViewCreator>(viewsContainer);
-                iocProvider.RegisterSingleton<ISnkViewFinder>(viewsContainer);
-                iocProvider.RegisterSingleton<ISnkViewsContainer>(viewsContainer);
-            }
+                => iocProvider.RegisterSingleton(CreateViewContainer());    
 
             protected virtual ISnkIocOptions CreateIocOptions()
                 => new SnkIocOptions();

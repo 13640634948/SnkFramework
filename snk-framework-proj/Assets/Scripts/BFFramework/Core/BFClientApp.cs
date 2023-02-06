@@ -10,6 +10,11 @@ namespace BFFramework.Runtime.Core
         public override void Initialize()
         {
             base.Initialize();
+            InitializeService();
+        }
+
+        protected virtual void InitializeService()
+        {
             this.RegisterService<IBFAssetBundleService, BFAssetBundleService>();
             this.RegisterService<IBFAssetService, BFAssetService>();
             this.RegisterService<IBFPatchService, BFPatchService>();

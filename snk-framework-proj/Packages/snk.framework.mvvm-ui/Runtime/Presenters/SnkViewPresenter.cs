@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters.Hits;
+using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.NuGet.Basic;
 
@@ -13,17 +14,17 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
-            private Lazy<ISnkViewFinder> _viewFinder = new (()=> 
-                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewFinder>());
+            private Lazy<ISnkViewsContainer> _viewsContainer = new (()=> 
+                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewsContainer>());
 
-            private Lazy<ISnkViewCreator> _viewLoader = new(() =>
-                SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewCreator>());
+            //private Lazy<ISnkViewCreator> _viewLoader = new(() =>
+            //    SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewCreator>());
             
             private Lazy<ISnkLayerContainer> _layerContainer = new(() =>
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkLayerContainer>());
             
-            public ISnkViewFinder ViewFinder => this._viewFinder.Value;
-            public ISnkViewCreator ViewCreator => this._viewLoader.Value;
+            public ISnkViewsContainer viewsContainer => this._viewsContainer.Value;
+            //public ISnkViewCreator ViewCreator => this._viewLoader.Value;
             public ISnkLayerContainer LayerContainer => this._layerContainer.Value;
             
 

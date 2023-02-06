@@ -101,7 +101,7 @@ namespace SnkFramework.Mvvm.Runtime
                 //    throw new InvalidOperationException($"Cannot get view types from null {nameof(ViewsContainer)}");
 
                 //var viewType = ViewsContainer.GetViewType(request.ViewModelType);
-                Type viewType = this.ViewFinder.GetViewType(request.ViewModelType);
+                Type viewType = this.viewsContainer.GetViewType(request.ViewModelType);
                 if (viewType == null)
                     throw new InvalidOperationException(
                         $"Could not get View Type for ViewModel Type {request.ViewModelType}");

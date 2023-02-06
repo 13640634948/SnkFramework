@@ -90,6 +90,7 @@ namespace SnkFramework.Runtime
                 app.Initialize();
             }
 
+            /*
             protected virtual void InitializeAppStart()
             {
                 // 这里初始化AppStart
@@ -103,7 +104,7 @@ namespace SnkFramework.Runtime
                     }
                 }
             }
-
+*/
             
             protected virtual string UserInterfaceAssemblyName { get; } = "";
             
@@ -197,7 +198,6 @@ namespace SnkFramework.Runtime
                     InitializeMvvmService(_iocProvider);
                     this.logger?.Info("Setup: App start");
                     InitializeApp(pluginManager, app);
-                    InitializeAppStart();
                     this.logger?.Info("Setup: ViewModelTypeFinder start");
                     InitializeViewModelTypeFinder(_iocProvider);
                     this.logger?.Info("Setup: ViewsContainer start");
