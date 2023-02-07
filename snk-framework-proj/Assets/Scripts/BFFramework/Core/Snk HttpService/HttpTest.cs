@@ -61,8 +61,10 @@ namespace SnkSamples.Snk_HttpService
         {
             var uri = "http://10.20.204.3:8888/admin/resmgr/inner-down-file/JumpLink/JumpLink.json";
             var result = await SnkHttpWeb.Get(uri, 2000);
+            Debug.LogError(result.errorMessage);
             var content = UTF8Encoding.UTF8.GetString(result.data);
             Debug.LogError(content);
+         
         }
 
         public void Update()

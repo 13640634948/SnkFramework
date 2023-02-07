@@ -125,7 +125,7 @@ namespace SnkFramework.NuGet.Features
                         return _result.SetError("本地文件长度大于等于下载长度，请检查") as SnkHttpDownloadResult;
                     }
 
-                    var avg = 512;
+                    var avg = 1024;
                     var size = 0;
                     var buffer = new byte[avg];
                     size = rspStream.Read(buffer, 0, avg);

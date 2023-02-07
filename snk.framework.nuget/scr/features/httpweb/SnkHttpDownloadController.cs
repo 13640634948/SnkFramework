@@ -28,8 +28,7 @@ namespace SnkFramework.NuGet.Features
                 {
                     _taskFactory = new TaskFactory();
                 }
-                //error by:ClaineLe
-                return await Task.Run(task.DownloadFile);
+                return await _taskFactory.StartNew(() => task.DownloadFile().Result);
             }
         }
     }
