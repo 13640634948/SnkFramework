@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SnkFramework.NuGet.Features.HttpWeb
 {
     /// <summary>
-    /// web请求.
+    /// web请求..
     /// </summary>
     public class SnkHttpWeb
     {
