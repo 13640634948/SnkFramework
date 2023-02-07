@@ -10,6 +10,11 @@ namespace SnkFramework.NuGet.Features
     {
         public class SnkHttpWeb
         {
+            /// <summary>
+            /// HttpGet
+            /// </summary>
+            /// <param name="uri"></param>
+            /// <returns></returns>
             public static async Task<(bool, string)> HttpGet(string uri)
             {
                 var request = WebRequest.CreateHttp(uri);
