@@ -1,3 +1,4 @@
 {
-	"name": "BFFramework.Runtime.Services"
+	"name": "BFFramework.Runtime.Services",
+	"references":[ "GUID:716af79e75ac0403188c02dc6dd87117" ]
 }
