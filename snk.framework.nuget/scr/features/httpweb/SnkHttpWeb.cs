@@ -20,12 +20,8 @@ namespace SnkFramework.NuGet.Features.HttpWeb
         /// <returns></returns>
         public static async Task<SnkHttpHeadResult> Head(string uri, int timeout = 0)
         {
-            /// <summary>
-            /// HttpGet
-            /// </summary>
-            /// <param name="uri"></param>
-            /// <returns></returns>
-            public static async Task<(bool, string)> HttpGet(string uri)
+            SnkHttpHeadResult result = new SnkHttpHeadResult();
+            try
             {
                 HttpWebRequest req = WebRequest.CreateHttp(uri);
                 if (timeout > 0)
