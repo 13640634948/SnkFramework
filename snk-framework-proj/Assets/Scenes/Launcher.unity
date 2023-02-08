@@ -152,6 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5a48683d364465a6397ee58151e19f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RootNamespaces:
+  - SnkFramework.Runtime
+  - BFFramework.Runtime
+  - Game.Contexts.
 --- !u!4 &1071142136
 Transform:
   m_ObjectHideFlags: 0
