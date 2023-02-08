@@ -8,6 +8,7 @@ using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Plugins;
+using UnityEngine;
 
 namespace SnkFramework.Runtime
 {
@@ -35,16 +36,25 @@ namespace SnkFramework.Runtime
             protected virtual ISnkLoggerFactory CreateLoggerFactory()
                 => new SnkLoggerFactory();
 
+
+            protected virtual ISnkViewCamera InitializeViewCamera()
+            {
+                var viewCamera = CreateViewCamera();
+                viewCamera.ViewCamera.clearFlags = CameraClearFlags.SolidColor;
+                viewCamera.ViewCamera.cullingMask = (1 << LayerMask.NameToLayer("UI"));
+                return viewCamera;
+            }
+
             /// <summary>
             /// 初始化层级管理器
             /// </summary>
             /// <param name="viewCamera"></param>
             /// <returns></returns>
-            protected void InitializeLayerContainer(ISnkIoCProvider iocProvider)
+            protected virtual void InitializeLayerContainer(ISnkIoCProvider iocProvider)
             {
                 var layerContainer = CreateLayerContainer();
                 RegisterLayer(layerContainer);
-                var viewCamera = CreateViewCamera();
+                var viewCamera = InitializeViewCamera();
                 layerContainer.Build(viewCamera);
                 
                 iocProvider.RegisterSingleton(viewCamera);
