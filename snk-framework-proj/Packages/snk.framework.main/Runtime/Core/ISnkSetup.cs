@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace SnkFramework.Runtime
 {
     namespace Core
@@ -5,7 +7,7 @@ namespace SnkFramework.Runtime
         public interface ISnkSetup
         {
             void InitializePrimary();
-            void InitializeSecondary();
+            Task InitializeSecondary();
         }
     }
 }

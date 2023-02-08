@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
@@ -166,7 +167,7 @@ namespace SnkFramework.Runtime
                 }
             }
             
-            public void InitializeSecondary()
+            public async Task InitializeSecondary()
             {
                 if (State != eSnkSetupState.InitializedPrimary)
                 {

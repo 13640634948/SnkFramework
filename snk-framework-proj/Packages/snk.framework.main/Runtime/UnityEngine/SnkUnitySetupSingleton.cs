@@ -6,7 +6,7 @@ namespace SnkFramework.Runtime.Engine
 {
     public class SnkUnitySetupSingleton : SnkSetupSingleton
     {
-        public static SnkUnitySetupSingleton EnsureSingletonAvailable<TSnkSetup>(params Assembly[] assemblies)
+        public static async Task<SnkUnitySetupSingleton> EnsureSingletonAvailable<TSnkSetup>(params Assembly[] assemblies)
             where TSnkSetup : SnkSetup, new()
         {
             SnkSetup.RegisterSetupType<TSnkSetup>(assemblies);

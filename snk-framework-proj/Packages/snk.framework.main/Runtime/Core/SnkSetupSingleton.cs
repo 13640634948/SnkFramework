@@ -9,10 +9,11 @@ namespace SnkFramework.Runtime.Core
     public abstract class SnkSetupSingleton
         : SnkSingleton<SnkSetupSingleton>
     {
-              private static readonly object LockObject = new object();
-        private static TaskCompletionSource<bool> IsInitialisedTaskCompletionSource;
+        private static readonly object s_locker = new object();
+
+        //private static TaskCompletionSource<bool> IsInitialisedTaskCompletionSource;
         private ISnkSetup _setup;
-        private ISnkSetupMonitor _currentMonitor;
+        private ISnkSetupMonitor _currMonitor;
 
         protected virtual ISnkSetup Setup => _setup;
 
@@ -32,7 +33,7 @@ namespace SnkFramework.Runtime.Core
             }
             catch (Exception ex)
             {
-                SnkLogHost.Default?.Exception( ex, "Unable to cast setup to {0}", typeof(TSnkSetup));
+                SnkLogHost.Default?.Exception(ex, "Unable to cast setup to {0}", typeof(TSnkSetup));
                 throw;
             }
         }
@@ -44,12 +45,12 @@ namespace SnkFramework.Runtime.Core
         /// <typeparam name="TSnkSetupSingleton">The platform specific setup singleton type</typeparam>
         /// <returns>A platform specific setup singleton</returns>
         protected static TSnkSetupSingleton EnsureSingletonAvailable<TSnkSetupSingleton>()
-           where TSnkSetupSingleton : SnkSetupSingleton, new()
+            where TSnkSetupSingleton : SnkSetupSingleton, new()
         {
             // Double null - check before creating the setup singleton object
             if (Instance != null)
                 return Instance as TSnkSetupSingleton;
-            lock (LockObject)
+            lock (s_locker)
             {
                 if (Instance != null)
                     return Instance as TSnkSetupSingleton;
@@ -64,61 +65,18 @@ namespace SnkFramework.Runtime.Core
             }
         }
 
-        public virtual void EnsureInitialized()
-        {
-            lock (LockObject)
-            {
-                if (IsInitialisedTaskCompletionSource == null)
-                {
-                    StartSetupInitialization();
-                }
-                else
-                {
-                    if (IsInitialisedTaskCompletionSource.Task.IsCompleted)
-                    {
-                        if (IsInitialisedTaskCompletionSource.Task.IsFaulted)
-                            throw IsInitialisedTaskCompletionSource.Task.Exception;
-                        return;
-                    }
-
-                    SnkLogHost.Default?.Warning("EnsureInitialized has already been called so now waiting for completion");
-                }
-            }
-            IsInitialisedTaskCompletionSource.Task.GetAwaiter().GetResult();
-        }
-
-        public virtual void InitializeAndMonitor(ISnkSetupMonitor setupMonitor)
-        {
-            lock (LockObject)
-            {
-                _currentMonitor = setupMonitor;
-
-                // if the tcs is not null, it means the initialization is running
-                if (IsInitialisedTaskCompletionSource != null)
-                {
-                    // If the task is already completed at this point, let the monitor know it has finished. 
-                    // but don't do it otherwise because it's done elsewhere
-                    if (IsInitialisedTaskCompletionSource.Task.IsCompleted)
-                    {
-                        _currentMonitor?.InitializationComplete();
-                    }
-
-                    return;
-                }
-
-                StartSetupInitialization();
-            }
-        }
 
         public virtual void CancelMonitor(ISnkSetupMonitor setupMonitor)
         {
-            lock (LockObject)
+            lock (s_locker)
             {
-                if (setupMonitor != _currentMonitor)
+                if (setupMonitor != _currMonitor)
                 {
-                    throw new SnkException("The specified ISnkSetupMonitor is not the one registered in SnkSetupSingleton");
+                    throw new SnkException(
+                        "The specified ISnkSetupMonitor is not the one registered in SnkSetupSingleton");
                 }
-                _currentMonitor = null;
+
+                _currMonitor = null;
             }
         }
 
@@ -138,41 +96,43 @@ namespace SnkFramework.Runtime.Core
         {
             if (isDisposing)
             {
-                lock (LockObject)
+                lock (s_locker)
                 {
-                    _currentMonitor = null;
+                    _currMonitor = null;
                 }
             }
+
             base.Dispose(isDisposing);
         }
 
-        private void StartSetupInitialization()
+        public async Task EnsureInitialized(ISnkSetupMonitor monitor)
         {
-            IsInitialisedTaskCompletionSource = new TaskCompletionSource<bool>();
+            _currMonitor = monitor;
+            await StartSetupInitialization();
+        }
+
+        private async Task StartSetupInitialization()
+        {
             _setup.InitializePrimary();
-            Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 ExceptionDispatchInfo setupException = null;
                 try
                 {
-                    _setup.InitializeSecondary();
+                    await _setup.InitializeSecondary();
                 }
                 catch (Exception ex)
                 {
                     setupException = ExceptionDispatchInfo.Capture(ex);
                 }
+
+                if (setupException != null)
+                    throw setupException.SourceException;
+                
                 ISnkSetupMonitor monitor;
-                lock (LockObject)
+                lock (s_locker)
                 {
-                    if (setupException == null)
-                    {
-                        IsInitialisedTaskCompletionSource.SetResult(true);
-                    }
-                    else
-                    {
-                        IsInitialisedTaskCompletionSource.SetException(setupException.SourceException);
-                    }
-                    monitor = _currentMonitor;
+                    monitor = _currMonitor;
                 }
 
                 if (monitor != null)

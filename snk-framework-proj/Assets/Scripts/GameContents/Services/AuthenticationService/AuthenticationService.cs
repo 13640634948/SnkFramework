@@ -1,3 +1,5 @@
+using System.Threading;
+
 namespace GAME.Contents.Services
 {
     /// <summary>
@@ -5,6 +7,9 @@ namespace GAME.Contents.Services
     /// </summary>
     public class AuthenticationService : GameServiceBase, IAuthenticationService
     {
-        
+        public AuthenticationService()
+        {
+            Thread.Sleep(2000);
+        }
     }
 }
