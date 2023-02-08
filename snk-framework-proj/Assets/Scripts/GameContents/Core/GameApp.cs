@@ -1,6 +1,5 @@
 using BFFramework.Runtime.Core;
 using GAME.Contents.Services;
-using GAME.Contents.UserInterfaces.ViewModels;
 
 namespace GAME.Contents.Core
 {
@@ -10,7 +9,8 @@ namespace GAME.Contents.Core
         {
             base.Initialize();
             
-            RegisterAppStart<SplashScreenViewModel>();
+            //RegisterAppStart<SplashScreenViewModel>();
+            RegisterCustomAppStart<GameAppStart>();
         }
 
         protected override void InitializeService()
