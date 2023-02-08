@@ -23,6 +23,7 @@ namespace BFFramework.Runtime.Core
         protected void RegisterService<TService, TSvrInstance>()
             where TSvrInstance : class, IBFService
         {
+            SnkLogHost.Default?.Info("reg_service:" + typeof(TService) + "启动，实例:" + typeof(TSvrInstance));
             var service = Snk.IoCProvider.IoCConstruct<TSvrInstance>();
             Snk.IoCProvider.RegisterSingleton(typeof(TService), service);
         }
