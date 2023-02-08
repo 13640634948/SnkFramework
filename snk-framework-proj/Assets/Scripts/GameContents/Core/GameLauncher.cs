@@ -3,59 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using BFFramework.Runtime.Services;
 using Cysharp.Threading.Tasks;
 using GAME.Contents.UserInterfaces;
 using SnkFramework.Runtime;
 using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Engine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GAME.Contents.Core
 {
-    public class GameLauncher : MonoBehaviour, ISnkSetupMonitor
+    public class GameLauncher : MonoBehaviour
     {
-        private SplashScreen _splashScreen;
-        
-        private static string[] namespaces =
-        {
-            "SnkFramework.Runtime",
-            "BFFramework.Runtime",
-            "Game.Contexts.",
-        };
+        public string[] RootNamespaces;
 
-        private static IEnumerable<Assembly> GetGameAssembly()
+        public SplashScreen SplashScreenAsset;
+
+        private IEnumerable<Assembly> GetGameAssembly()
         {
             return from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                from ns in namespaces
+                from ns in RootNamespaces
                 where assembly.FullName.StartsWith(ns)
                 select assembly;
         }
 
-        private async Task<SplashScreen> LoadSplashScreen()
-        {
-            var asset = await Resources.LoadAsync<GameObject>("SplashScreen/SplashScreen") as GameObject;
-            return Instantiate(asset).GetComponent<SplashScreen>();
-        }
-
         public async void Start()
         {
-            this._splashScreen = await LoadSplashScreen();
-            this._splashScreen.Play();
+            var splashScreen = Instantiate(SplashScreenAsset).GetComponent<SplashScreen>();
+            splashScreen.FadeOutDuration = 1.0f;
+            splashScreen.Play();
             
-            await UniTask.WaitUntil(() => this._splashScreen.mPrepareCompleted);
+            await UniTask.WaitUntil(() => splashScreen.mPrepareCompleted);
             var assemblies = GetGameAssembly().ToArray();
             var instance = await SnkUnitySetupSingleton.EnsureSingletonAvailable<GameSetup>(assemblies);
-            await UniTask.WaitUntil(() => this._splashScreen.mPrepareCompleted);
-            await instance.EnsureInitialized(this);
-        }
+            await UniTask.WaitUntil(() => splashScreen.mPrepareCompleted);
+            await instance.EnsureInitialized(null);
 
-        public async Task InitializationComplete()
-        {
+            //初始化远端服务
+            await Snk.IoCProvider.Resolve<IBFPatchService>().Initialize();
+            
+            //显示第一个界面
             await Snk.IoCProvider.Resolve<ISnkAppStart>()?.StartAsync();
-            /** 这行代码可以考虑在编辑器中屏蔽，就可以跳过闪屏界面 */
-            await UniTask.WaitUntil(() => this._splashScreen.mFinish);
-            _splashScreen.Dispose(1.5f);
-            Destroy(this.gameObject);
+            
+            await EditorSceneManager.LoadSceneAsync("LoginScene", LoadSceneMode.Additive);
+            
+            await UniTask.WaitUntil(() => splashScreen.mFinish);//屏蔽这行，提前结束闪屏
+
+            await EditorSceneManager.UnloadSceneAsync("Launcher");
         }
     }
 }

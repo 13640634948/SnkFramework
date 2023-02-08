@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -16,12 +17,15 @@ namespace GAME.Contents.UserInterfaces
         protected bool _prepareCompleted = false;
         public virtual bool mPrepareCompleted => _prepareCompleted && this.mVideoPlayer.frame >= DISCARD_START_FRAME_NUM;
 
-        private bool destroying = false;
+        private bool _lerping = false;
         
         private float _fadeOutTime = 0;
         private float currFadeOutTime = 0;
         private float progress = 0;
         private Color lerpColor = Color.white;
+
+        [HideInInspector]
+        public float FadeOutDuration = 1.0f;
         
         private void Awake()
         {
@@ -40,18 +44,17 @@ namespace GAME.Contents.UserInterfaces
             mRawImage.texture = mVideoPlayer.targetTexture;
             mRawImage.color = Color.white;
         }
-
         
         private void Update()
         {
-            if (destroying == false)
+            if (_lerping == false)
                 return;
             
             if (progress >= 1.0f)
             {
-                destroying = false;
+                _lerping = false;
                 mVideoPlayer.targetTexture.Release();
-                Destroy(this.gameObject);                
+                this.mFinish = true;
             }
 
             if (currFadeOutTime < _fadeOutTime)
@@ -104,7 +107,7 @@ namespace GAME.Contents.UserInterfaces
         /// </summary>
         protected virtual void onLoopPointReached(VideoPlayer source)
         {
-            this.mFinish = true;
+            this.fadeOut(FadeOutDuration);
         }
 
         /// <summary>
@@ -130,12 +133,12 @@ namespace GAME.Contents.UserInterfaces
         {
         }
 
-        public void Dispose(float fadeOutTime)
+        private void fadeOut(float time)
         {
-            if(destroying == true)
+            if(_lerping == true)
                 return;
-            this._fadeOutTime = fadeOutTime;
-            this.destroying = true;
+            this._fadeOutTime = time;
+            this._lerping = true;
         }
     }
 }
