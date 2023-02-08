@@ -17,6 +17,7 @@ namespace BFFramework.Runtime.Core
         {
             this.RegisterService<IBFAssetBundleService, BFAssetBundleService>();
             this.RegisterService<IBFAssetService, BFAssetService>();
+            this.RegisterService<IBFSceneService, BFSceneService>();
             this.RegisterService<IBFPatchService, BFPatchService>();
         }
 
