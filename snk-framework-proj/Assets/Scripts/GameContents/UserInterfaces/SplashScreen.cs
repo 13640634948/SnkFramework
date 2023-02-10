@@ -116,7 +116,6 @@ namespace GAME.Contents.UserInterfaces
         /// </summary>
         protected virtual void onPrepareCompleted(VideoPlayer source)
         {
-            Debug.Log("onPrepareCompleted");
             this._prepareCompleted = true;
         }
 

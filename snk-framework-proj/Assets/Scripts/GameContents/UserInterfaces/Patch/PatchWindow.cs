@@ -32,7 +32,7 @@ namespace GAME.Contents.UserInterfaces
             
             public override void Prepare(ISnkBundle parameterBundle)
             {
-                Debug.Log("PatchViewModel-Prepare");
+                //Debug.Log("PatchViewModel-Prepare");
             }
         }
     }
