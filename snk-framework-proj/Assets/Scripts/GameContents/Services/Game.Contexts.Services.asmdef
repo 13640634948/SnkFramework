@@ -1,4 +1,16 @@
 {
-	"name": "Game.Contexts.Services",
-	"references":[ "GUID:0de4459644de246cf80ca877fe493645" ]
+    "name": "Game.Contexts.Services",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0de4459644de246cf80ca877fe493645"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

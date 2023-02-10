@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BFFramework.Runtime.Managers;
 using BFFramework.Runtime.Services;
 using Cysharp.Threading.Tasks;
+using GAME.Contents.Modules;
 using GAME.Contents.UserInterfaces;
 using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Engine;
@@ -28,7 +30,7 @@ namespace GAME.Contents
             }
 
             public async void Start()
-            {
+            { 
                 var splashScreen = Instantiate(SplashScreenAsset).GetComponent<SplashScreen>();
                 splashScreen.FadeOutDuration = 1.0f;
                 splashScreen.Play();
@@ -48,5 +50,4 @@ namespace GAME.Contents
             }
         }
     }
-  
 }
