@@ -6,8 +6,8 @@ using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.Runtime;
 using SnkFramework.Runtime.Engine;
-
 using UnityEngine;
 
 namespace BFFramework.Runtime.Core
@@ -25,8 +25,16 @@ namespace BFFramework.Runtime.Core
 
         protected virtual void InitializeManagers(ISnkIoCProvider iocProvider)
         {
-            iocProvider.ConstructAndRegisterSingleton<IBFModuleManager, BFModuleManager>();
-            iocProvider.ConstructAndRegisterSingleton<ICameraManager, CameraManager>();
+            RegisterManager<IBFModuleManager, BFModuleManager>(iocProvider);
+            RegisterManager<ICameraManager, CameraManager>(iocProvider);
+        }
+
+        protected void RegisterManager<TManager, TMgrInstance>(ISnkIoCProvider iocProvider)
+            where TMgrInstance : class, IBFManager
+        {
+            SnkLogHost.Default?.Info("Setup: Register " + typeof(TMgrInstance));
+            var service = iocProvider.IoCConstruct<TMgrInstance>();
+            iocProvider.RegisterSingleton(typeof(TManager), service);
         }
 
         protected override void RegisterLayer(ISnkLayerContainer container)
@@ -48,7 +56,7 @@ namespace BFFramework.Runtime.Core
 
         protected override ISnkViewsContainer CreateViewContainer()
             => new BFViewsContainer();
-        
+
         protected override ISnkViewCamera CreateViewCamera()
         {
             var viewCameraGameObject = new GameObject(nameof(SnkViewCamera));

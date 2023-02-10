@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using SnkFramework.NuGet.Basic;
 using SnkFramework.Runtime.Basic.FiniteStateMachine;
 
 namespace BFFramework.Runtime.Managers

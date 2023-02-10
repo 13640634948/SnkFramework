@@ -35,13 +35,9 @@ namespace BFFramework.Runtime.Services
         {
             try
             {
-                SnkLogHost.Default.Info("BFPatchService-Initialize-0");
                 await this._patchCtrl.Initialize();
-                SnkLogHost.Default.Info("BFPatchService-Initialize-1");
                 var (addList, delList) = await this._patchCtrl.PreviewDiff();
-                SnkLogHost.Default.Info("BFPatchService-Initialize-2");
                 await this._patchCtrl.Apply(addList, delList);
-                SnkLogHost.Default.Info("BFPatchService-Initialize-3");
             }
             catch (Exception e)
             {

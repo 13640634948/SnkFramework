@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using GAME.Contents;
 using SnkFramework.Mvvm.Runtime.View;
-using SnkFramework.Runtime;
 using SnkFramework.Runtime.Core;
 
 namespace BFFramework.Runtime.UserInterface
