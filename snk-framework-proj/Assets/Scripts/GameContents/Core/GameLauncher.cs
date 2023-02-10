@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BFFramework.Runtime.Services;
 using Cysharp.Threading.Tasks;
 using GAME.Contents.UserInterfaces;
 using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Engine;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace GAME.Contents
 {
@@ -40,13 +39,12 @@ namespace GAME.Contents
                 await UniTask.WaitUntil(() => splashScreen.mPrepareCompleted);
                 await instance.EnsureInitialized(null);
 
-                //显示第一个界面
+                //闪屏中显示第一个界面&加载登陆场景&初始化热更
                 await Game.ResolveService<ISnkAppStart>()?.StartAsync();
             
                 await UniTask.WaitUntil(() => splashScreen.mFinish);//屏蔽这行，提前结束闪屏
 
-                var currScene = SceneManager.GetActiveScene();
-                await EditorSceneManager.UnloadSceneAsync(currScene);
+                await Game.ResolveService<IBFSceneService>().UnloadCurrScene();
             }
         }
     }

@@ -1,15 +1,14 @@
 using System.Threading.Tasks;
 using BFFramework.Runtime.Core;
+using BFFramework.Runtime.Services;
 using Cysharp.Threading.Tasks;
 using GAME.Contents.Services;
 using GAME.Contents.UserInterfaces.ViewModels;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
 
 namespace GAME.Contents.Core
 {
     public class GameApp : BFClientApp
-    {
+    { 
         public override void Initialize()
         {
             base.Initialize();
@@ -18,16 +17,16 @@ namespace GAME.Contents.Core
             //RegisterCustomAppStart<GameAppStart>();
         }
 
-        protected override void InitializeService()
+        protected override void RegisterServices()
         {
-            base.InitializeService();
+            base.RegisterServices();
             this.RegisterService<IAuthenticationService, AuthenticationService>();
         }
 
         public override async Task Startup()
         {
-            await EditorSceneManager.LoadSceneAsync("LoginScene", LoadSceneMode.Additive);
-            //return base.Startup();
+            Game.Resolve<IBFPatchService>().Initialize();
+            await Game.ResolveService<IBFSceneService>().LoadSceneAsync("LoginScene", true);
         }
     }
 }
