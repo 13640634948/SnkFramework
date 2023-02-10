@@ -18,9 +18,9 @@ namespace SnkFramework.Runtime
         {
             protected abstract ISnkLoggerProvider CreateLoggerProvider();
             protected abstract ISnkApplication CreateApp(ISnkIoCProvider iocProvider);
-            protected abstract ISnkViewCamera CreateViewCamera();
+            //protected abstract ISnkViewCamera CreateViewCamera();
             protected abstract void RegisterLayer(ISnkLayerContainer container);
-            protected abstract ISnkLayerContainer CreateLayerContainer();
+            //protected abstract ISnkLayerContainer CreateLayerContainer();
             protected virtual ISnkViewPresenter CreateViewPresenter() => new SnkViewPresenter();
             
             protected void InitializeLogService(ISnkIoCProvider iocProvider)
@@ -35,31 +35,13 @@ namespace SnkFramework.Runtime
 
             protected virtual ISnkLoggerFactory CreateLoggerFactory()
                 => new SnkLoggerFactory();
-
-
-            protected virtual ISnkViewCamera InitializeViewCamera()
-            {
-                var viewCamera = CreateViewCamera();
-                viewCamera.ViewCamera.clearFlags = CameraClearFlags.SolidColor;
-                viewCamera.ViewCamera.cullingMask = (1 << LayerMask.NameToLayer("UI"));
-                return viewCamera;
-            }
-
+            
             /// <summary>
             /// 初始化层级管理器
             /// </summary>
             /// <param name="viewCamera"></param>
             /// <returns></returns>
-            protected virtual void InitializeLayerContainer(ISnkIoCProvider iocProvider)
-            {
-                var layerContainer = CreateLayerContainer();
-                RegisterLayer(layerContainer);
-                var viewCamera = InitializeViewCamera();
-                layerContainer.Build(viewCamera);
-                
-                iocProvider.RegisterSingleton(viewCamera);
-                iocProvider.RegisterSingleton(layerContainer);
-            }
+            protected abstract void InitializeLayerContainer(ISnkIoCProvider iocProvider);
             
             protected virtual ISnkViewModelLoader CreateViewModelLoader() 
                 => new SnkViewModelLoader();
