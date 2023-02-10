@@ -53,7 +53,7 @@ namespace GAME.Contents
                 //闪屏中显示第一个界面&加载登陆场景&初始化热更
                 await Game.ResolveService<ISnkAppStart>()?.StartAsync();
             
-                if(splashSkip == false)
+                if(splashSkip)
                     splashScreen.FadeOut();
                 
                 await UniTask.WaitUntil(() => splashScreen.mFinish);
