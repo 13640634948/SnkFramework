@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BFFramework.Runtime.Managers;
-using BFFramework.Runtime.Services;
-using Cysharp.Threading.Tasks;
-using GAME.Contents.Modules;
-using GAME.Contents.UserInterfaces;
+
 using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Engine;
+using BFFramework.Runtime.Services;
+using GAME.Contents.UserInterfaces;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
+using UnityEngine.Serialization;
+
 
 namespace GAME.Contents
 {
@@ -17,22 +18,30 @@ namespace GAME.Contents
     {
         public class GameLauncher : MonoBehaviour
         {
-            public string[] RootNamespaces;
+            [Header("跳过闪屏")]
+            public bool splashSkip = true;
+            
+            [Header("闪屏淡出耗时")]
+            public float splashFadeOutDuration = 0.5f;
+            
+            [Header("闪屏视图对象资源")]
+            public SplashScreen splashScreenAsset;
 
-            public SplashScreen SplashScreenAsset;
+            [Header("核心命名空间(程序集)")]
+            public string[] rootNamespaces;
 
             private IEnumerable<Assembly> GetGameAssembly()
             {
                 return from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                    from ns in RootNamespaces
+                    from ns in rootNamespaces
                     where assembly.FullName.StartsWith(ns)
                     select assembly;
             }
 
             public async void Start()
             { 
-                var splashScreen = Instantiate(SplashScreenAsset).GetComponent<SplashScreen>();
-                splashScreen.FadeOutDuration = 1.0f;
+                var splashScreen = Instantiate(splashScreenAsset).GetComponent<SplashScreen>();
+                splashScreen.SetFadeOutDuration(splashFadeOutDuration);
                 splashScreen.Play();
             
                 await UniTask.WaitUntil(() => splashScreen.mPrepareCompleted);
@@ -44,9 +53,12 @@ namespace GAME.Contents
                 //闪屏中显示第一个界面&加载登陆场景&初始化热更
                 await Game.ResolveService<ISnkAppStart>()?.StartAsync();
             
-                await UniTask.WaitUntil(() => splashScreen.mFinish);//屏蔽这行，提前结束闪屏
-
+                if(splashSkip == false)
+                    splashScreen.FadeOut();
+                
+                await UniTask.WaitUntil(() => splashScreen.mFinish);
                 await Game.ResolveService<IBFSceneService>().UnloadCurrScene();
+
             }
         }
     }

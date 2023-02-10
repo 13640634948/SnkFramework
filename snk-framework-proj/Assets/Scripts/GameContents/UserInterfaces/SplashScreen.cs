@@ -19,14 +19,16 @@ namespace GAME.Contents.UserInterfaces
 
         private bool _lerping = false;
         
-        private float _fadeOutTime = 0;
+        private float _fadeOutDuration = 0;
         private float currFadeOutTime = 0;
         private float progress = 0;
         private Color lerpColor = Color.white;
 
-        [HideInInspector]
-        public float FadeOutDuration = 1.0f;
-        
+        public void SetFadeOutDuration(float fadeOutDuration)
+        {
+            _fadeOutDuration = fadeOutDuration;
+        }
+
         private void Awake()
         {
             mVideoPlayer.errorReceived += onErrorReceived;
@@ -57,10 +59,10 @@ namespace GAME.Contents.UserInterfaces
                 this.mFinish = true;
             }
 
-            if (currFadeOutTime < _fadeOutTime)
+            if (currFadeOutTime < _fadeOutDuration)
                 currFadeOutTime += Time.unscaledDeltaTime;
 
-            progress = currFadeOutTime / _fadeOutTime;
+            progress = currFadeOutTime / _fadeOutDuration;
             if (progress > 1.0f)
             {
                 progress = 1.0f;
@@ -107,7 +109,7 @@ namespace GAME.Contents.UserInterfaces
         /// </summary>
         protected virtual void onLoopPointReached(VideoPlayer source)
         {
-            this.fadeOut(FadeOutDuration);
+            this.FadeOut();
         }
 
         /// <summary>
@@ -133,11 +135,10 @@ namespace GAME.Contents.UserInterfaces
         {
         }
 
-        private void fadeOut(float time)
+        public void FadeOut()
         {
             if(_lerping == true)
                 return;
-            this._fadeOutTime = time;
             this._lerping = true;
         }
     }
