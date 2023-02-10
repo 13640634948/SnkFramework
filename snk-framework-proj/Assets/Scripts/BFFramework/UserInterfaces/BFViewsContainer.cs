@@ -15,7 +15,7 @@ namespace BFFramework.Runtime.UserInterface
             if (inst == null)
                 return null;
             inst.name = viewType.Name;
-            return inst.AddComponent(viewType) as SnkWindow;
+            return (inst.GetComponent<SnkWindow>() ?? inst.AddComponent(viewType)) as SnkWindow;
         }
     }
 }
