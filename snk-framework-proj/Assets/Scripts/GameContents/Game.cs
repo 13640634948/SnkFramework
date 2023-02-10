@@ -1,4 +1,3 @@
-using BFFramework.Runtime.Services;
 using SnkFramework.Runtime;
 
 namespace GAME.Contents

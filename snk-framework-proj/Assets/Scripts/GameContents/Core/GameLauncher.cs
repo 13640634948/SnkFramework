@@ -9,8 +9,6 @@ using BFFramework.Runtime.Services;
 using GAME.Contents.UserInterfaces;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using UnityEngine.Serialization;
-
 
 namespace GAME.Contents
 {
