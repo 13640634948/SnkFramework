@@ -1,6 +1,7 @@
-using System;
 using BFFramework.Runtime.UserInterface;
 using GAME.Contents.UserInterfaces.ViewModels;
+using Loxodon.Framework.Binding;
+using Loxodon.Framework.Binding.Builder;
 using Loxodon.Framework.Binding.Contexts;
 using SnkFramework.Mvvm.Runtime.Base;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace GAME.Contents.UserInterfaces
 {
     namespace ViewModels
     {
-        public class PatchViewModel : BFViewModel, IBindingContextOwner
+        public class PatchViewModel : BFViewModel
         {
             private float progress;
             private string tip;
@@ -35,8 +36,6 @@ namespace GAME.Contents.UserInterfaces
             {
                 Debug.Log("PatchViewModel-Prepare");
             }
-
-            public IBindingContext DataContext { get; set; }// = new BindingContext()
         }
     }
 
@@ -44,25 +43,25 @@ namespace GAME.Contents.UserInterfaces
     {
         public class PatchWindow : BFWindow
         {
-            public string xxoo;
+            public string xxoo = "";
             
             public Slider downloadSlider;
             public Text progressText;
             public Text tipText;
 
+            private PatchViewModel _viewModel;
             protected override void onCreate(ISnkBundle bundle = null)
             {
-                /*
                 base.onCreate(bundle);
-                var vm = new PatchViewModel();
-                var bindingSet = this.CreateBindingSet(vm);
+                _viewModel = new PatchViewModel();
+                var bindingSet = this.CreateBindingSet(_viewModel);
                 bindingSet.Bind(this.tipText).For(v => v.text).To(vm => vm.Tip);
-                */
+                bindingSet.Build();
             }
 
             private void Update()
             {
-                (this.ViewModel as PatchViewModel).Tip = xxoo;
+                _viewModel.Tip = xxoo;
             }
         }
     }

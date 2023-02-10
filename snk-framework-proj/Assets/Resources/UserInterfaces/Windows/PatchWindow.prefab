@@ -589,7 +589,7 @@ RectTransform:
   - {fileID: 8867853168439115648}
   - {fileID: 6680379097627775222}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -614,6 +614,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -658,6 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0254ecc886e14011bca5c5ffd5daedf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  xxoo: 
   downloadSlider: {fileID: 3072278841394410493}
   progressText: {fileID: 580171191209076925}
   tipText: {fileID: 6535555285571899022}
