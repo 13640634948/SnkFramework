@@ -1,6 +1,7 @@
+using BFFramework.Runtime.Managers;
 using BFFramework.Runtime.UserInterface;
 using BFFramework.Runtime.UserInterface.Layers;
-
+using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.View;
@@ -15,6 +16,18 @@ namespace BFFramework.Runtime.Core
         where TSnkApplication : BFClientApp
     {
         protected override string UserInterfaceAssemblyName => "Game.Contexts.UserInterfaces";
+
+        protected override void RegisterDefaultDependencies(ISnkIoCProvider iocProvider)
+        {
+            base.RegisterDefaultDependencies(iocProvider);
+            InitializeManagers(iocProvider);
+        }
+
+        protected virtual void InitializeManagers(ISnkIoCProvider iocProvider)
+        {
+            iocProvider.ConstructAndRegisterSingleton<IBFModuleManager, BFModuleManager>();
+            iocProvider.ConstructAndRegisterSingleton<ICameraManager, CameraManager>();
+        }
 
         protected override void RegisterLayer(ISnkLayerContainer container)
         {

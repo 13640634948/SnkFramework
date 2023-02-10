@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using SnkFramework.NuGet.Basic;
 using SnkFramework.Runtime.Basic.FiniteStateMachine;
 
 namespace BFFramework.Runtime.Managers
 {
-    public class BFModuleManager : ISnkFiniteStateMachineOwner
+    public class BFModuleManager : BFManager<BFModuleManager>, IBFModuleManager, ISnkFiniteStateMachineOwner
     {
         private readonly SnkFiniteStateMachine<BFModuleManager> _fsmModule;
 
