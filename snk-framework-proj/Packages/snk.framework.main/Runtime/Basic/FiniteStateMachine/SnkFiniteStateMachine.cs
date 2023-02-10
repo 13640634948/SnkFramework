@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SnkFramework.NuGet.Exceptions;
@@ -9,22 +8,29 @@ namespace SnkFramework.Runtime.Basic
     {
         public class SnkFiniteStateMachine<TFSMOwner> where TFSMOwner : class, ISnkFiniteStateMachineOwner
         {
-            private static object _locker = new object();
+            private struct StateCachePair
+            {
+                public string stateName;
+                public ISnkState<TFSMOwner> instance;
+                public object userData;
+            }
+            
+            private static readonly object _locker = new object();
 
             private readonly TFSMOwner _owner;
             private readonly Dictionary<string, ISnkState<TFSMOwner>> _stateDict;
-            private readonly Queue<Tuple<string, ISnkState<TFSMOwner>, object>> _stateQue;
+            private readonly Queue<StateCachePair> _stateQue;
 
             private ISnkState<TFSMOwner> _currState;
             private string _currStateName;
             private TaskCompletionSource<bool> _taskCompletionSource;
-            private Tuple<string, ISnkState<TFSMOwner>, object> _tmpStateTuple;
+            private StateCachePair _tmpStateCachePair;
 
             public SnkFiniteStateMachine(TFSMOwner owner)
             {
                 this._owner = owner;
                 this._stateDict = new Dictionary<string, ISnkState<TFSMOwner>>();
-                this._stateQue = new Queue<Tuple<string, ISnkState<TFSMOwner>, object>>();
+                this._stateQue = new Queue<StateCachePair>();
             }
 
             public void RegisterState<TState>(object userData = null, string stateName = null)
@@ -35,7 +41,7 @@ namespace SnkFramework.Runtime.Basic
                 this._stateDict.Add(stateName ?? typeof(TState).Name, state);
             }
 
-            private bool validateTaskCompletionSource()
+            private bool ValidateTaskCompletionSource()
             {
                 if (_taskCompletionSource != null && _taskCompletionSource.Task.IsCompleted == false)
                     return true;
@@ -48,10 +54,15 @@ namespace SnkFramework.Runtime.Basic
                 if (this._stateDict.TryGetValue(stateName, out var nextState) == false)
                     throw new SnkException("没有找到状态：" + stateName);
 
-                var tuple = new Tuple<string, ISnkState<TFSMOwner>, object>(stateName, nextState, userData);
                 lock (_locker)
                 {
-                    _stateQue.Enqueue(tuple);
+                    _stateQue.Enqueue(new StateCachePair()
+                    {
+                        stateName = stateName,
+                        instance = nextState,
+                        userData = userData
+                    });
+                    
                     if (enqueueQueue == false)
                     {
                         while (_stateQue.Count > 1)
@@ -61,19 +72,19 @@ namespace SnkFramework.Runtime.Basic
                     }
                 }
 
-                if (validateTaskCompletionSource() == false)
-                    switchNextState();
+                if (ValidateTaskCompletionSource() == false)
+                    SwitchNextState();
 
                 await _taskCompletionSource.Task.ConfigureAwait(false);
             }
 
-            private async Task switchNextState()
+            private async Task SwitchNextState()
             {
                 while (true)
                 {
                     lock (_locker)
                     {
-                        if (this._stateQue.TryDequeue(out _tmpStateTuple) == false)
+                        if (this._stateQue.TryDequeue(out _tmpStateCachePair) == false)
                         {
                             _taskCompletionSource.SetResult(true);
                             break;
@@ -81,10 +92,10 @@ namespace SnkFramework.Runtime.Basic
                     }
 
                     if (this._currState != null)
-                        await this._currState.OnExit(_owner, _tmpStateTuple.Item1);
-                    await _tmpStateTuple.Item2.OnEnter(_owner, _tmpStateTuple.Item3, _currStateName);
-                    this._currState = _tmpStateTuple.Item2;
-                    this._currStateName = _tmpStateTuple.Item1;
+                        await this._currState.OnExit(_owner, _tmpStateCachePair.stateName);
+                    await _tmpStateCachePair.instance.OnEnter(_owner, _tmpStateCachePair.userData, _currStateName);
+                    this._currState = _tmpStateCachePair.instance;
+                    this._currStateName = _tmpStateCachePair.stateName;
                 }
             }
         }
