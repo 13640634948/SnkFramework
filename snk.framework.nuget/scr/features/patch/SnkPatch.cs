@@ -39,7 +39,7 @@ namespace SnkFramework.NuGet.Features
 
                 var list = new List<SnkSourceInfo>();
                 var dirInfo = new System.IO.DirectoryInfo(fileFinder.SourceDirPath);
-                SnkNuget.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
+                //SnkNuget.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
                 foreach (var fileInfo in fileInfos)
                 {
                     var info = new SnkSourceInfo
