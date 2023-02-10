@@ -1,57 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 
 namespace SnkFramework.NuGet.Features
 {
     namespace HttpWeb
     {
         /// <summary>
-        /// Http结果
+        /// http结果
         /// </summary>
         public class SnkHttpResult
         {
             /// <summary>
-            /// Http状态码
+            /// 是否错误
             /// </summary>
-            public HttpStatusCode code;
-
-            /// <summary>
-            /// 是否完成
-            /// </summary>
-            public bool isDone;
-
-            /// <summary>
-            /// 是否出错
-            /// </summary>
-            public bool isError;
+            public bool isError => code != SNK_HTTP_ERROR_CODE.succeed;
 
             /// <summary>
             /// 错误信息
             /// </summary>
-            public string errorMessage;
+            public string errorMessage = string.Empty;
 
             /// <summary>
-            /// 设置错误
+            /// 是否完成
             /// </summary>
-            /// <param name="result"></param>
-            /// <param name="errMsg"></param>
-            /// <returns></returns>
-            public SnkHttpResult SetError(string errMsg)
-            {
-                this.errorMessage = errMsg;
-                this.isError = true;
-                this.isDone = true;
-                return this;
-            }
-        }
+            public bool isDone = false;
 
-        /// <summary>
-        /// Get结果
-        /// </summary>
-        public class SnkHttpGetResult : SnkHttpResult
-        {
-            public byte[] data;
+            /// <summary>
+            /// 异常信息
+            /// </summary>
+            public SNK_HTTP_ERROR_CODE code;
+
+            /// <summary>
+            /// http状态吗
+            /// </summary>
+            public HttpStatusCode httpStatusCode;
         }
 
         /// <summary>
@@ -59,7 +43,28 @@ namespace SnkFramework.NuGet.Features
         /// </summary>
         public class SnkHttpHeadResult : SnkHttpResult
         {
-            public long length;
+            /// <summary>
+            /// 返回的长度
+            /// </summary>
+            public long length = -1;
+        }
+
+        /// <summary>
+        /// Get结果
+        /// </summary>
+        public class SnkHttpGetResult : SnkHttpResult
+        {
+            
+            /// <summary>
+            /// Head字典
+            /// </summary>
+            public Dictionary<string, string> headDict;
+
+            /// <summary>
+            /// 返回的数据
+            /// </summary>
+            public byte[] data;
+
         }
 
         /// <summary>
@@ -67,8 +72,31 @@ namespace SnkFramework.NuGet.Features
         /// </summary>
         public class SnkHttpPostResult : SnkHttpResult
         {
-            public Dictionary<string, string> rspHeaderDict;
+            /// <summary>
+            /// Head字典
+            /// </summary>
+            public Dictionary<string, string> headDict;
+
+            /// <summary>
+            /// 返回内容
+            /// </summary>
             public byte[] data;
+        }
+
+        /// <summary>
+        /// 下载结果
+        /// </summary>
+        public class SnkHttpDownloadResult : SnkHttpResult
+        {
+            /// <summary>
+            /// 已下载的大小
+            /// </summary>
+            public long downloadedFileSize;
+
+            /// <summary>
+            /// 是否是取消下载
+            /// </summary>
+            public bool isCancelDownload;
         }
     }
 }

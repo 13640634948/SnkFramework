@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Text;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -24,23 +25,23 @@ namespace SnkSamples.Snk_HttpService
 
         private float progress;
 
+        public void Start()
+        {
+            SnkNuget.Logger = new SnkLogger("test", new SnkUnityLoggerProvider());
+        }
+
         public void StartDownload()
         {
-            SnkNuget.Logger = new SnkLogger("HttpTest", new SnkUnityLoggerProvider());
-            var savePath = Application.dataPath + "/../aa.apk";
+ 
+            var savePath = Application.dataPath + "/../test.apk";
             var downloadUri =
-                "http://10.20.204.3:8888/admin/resmgr/inner-down-file/%E5%AE%89%E8%A3%85%E5%8C%85/%E7%89%88%E7%BD%B2%E5%8C%85/WindFantasy_VersionName-banshu_BaseVersion-14_BuildVersion-14_VersionCode-156_Svn-13758_Time-20210511180636_release_outer.apk";
-            var downloadParam = new DownloadParam();
-            downloadParam.uri = downloadUri;
-            downloadParam.savePath = savePath;
-            downloadParam.downloadFormBreakpoint = true;
-            downloadParam.progressCallback = (downloadedSize, totalSize) =>
-            {
-                progress = (float) downloadedSize / totalSize;
-            };
-            task = new SnkDownloadTask(downloadParam);
+                "http://10.20.204.3:8888/admin/resmgr/inner-down-file/apk/inner/windf_channel1023_inner_yw_bVersion0_bNumber124_bTypeDebug_20221023_172338.apk";
+        
+             task = SnkHttpDownloadImplementer.CreateDownloadTask(downloadUri, savePath);
+             task.SetDownloadFormBreakpoint(true);
             Debug.LogError("开始下载");
             SnkHttpDownloadImplementer.Implement(task);
+
         }
 
         public void StopDownload()
@@ -51,25 +52,41 @@ namespace SnkSamples.Snk_HttpService
 
         public async void TestHead()
         {
-            var uri =
-                "http://10.20.204.3:8888/admin/resmgr/inner-down-file/%E5%AE%89%E8%A3%85%E5%8C%85/%E7%89%88%E7%BD%B2%E5%8C%85/WindFantasy_VersionName-banshu_BaseVersion-14_BuildVersion-14_VersionCode-156_Svn-13758_Time-20210511180636_release_outer.apk";
-            var result = await SnkHttpWeb.Head(uri, 5000);
+            //var uri = "http://10.20.204.3:8888/admin/resmgr/inner-down-file/JumpLink/JumpLink.json";
+            var uri = "https://hero-halo-windf.oss-cn-shenzhen.aliyuncs.com/JumpLink/JumpLink.json";
+            var result = await SnkHttpWeb.Head(uri);
+            if (result.isError)
+            {
+                Debug.LogError(result.errorMessage);
+                return;
+            }
             Debug.LogError(result.length);
         }
 
         public async void TestGet()
         {
             var uri = "http://10.20.204.3:8888/admin/resmgr/inner-down-file/JumpLink/JumpLink.json";
-            var result = await SnkHttpWeb.Get(uri, 2000);
-            Debug.LogError(result.errorMessage);
+            var result = await SnkHttpWeb.Get(uri);
+            if (result.isError)
+            {
+                Debug.LogError(result.errorMessage);
+            }
+            
+            Debug.LogError("result  "+result.isDone);
             var content = UTF8Encoding.UTF8.GetString(result.data);
             Debug.LogError(content);
-         
+            HttpResponseMessage d;
         }
 
         public void Update()
         {
-            slider.value = progress;
+            if (task != null)
+            {
+                progress = (float)task.GetDownloadedSize() / task.GetTotalSize();
+                slider.value = progress;
+            }
+
+           
         }
     }
 }
