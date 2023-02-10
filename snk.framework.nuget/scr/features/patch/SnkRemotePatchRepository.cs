@@ -25,15 +25,15 @@ namespace SnkFramework.NuGet.Features
             {
                 this._patchCtrl = patchController;
                 string basicURL = getCurrURL();
-                SnkNuget.Logger?.Info("basicURL:" + basicURL);
-                SnkNuget.Logger?.Info("_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
-                SnkNuget.Logger?.Info("_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
-                SnkNuget.Logger?.Info("_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
+                //SnkNuget.Logger?.Info("basicURL:" + basicURL);
+                //SnkNuget.Logger?.Info("_patchCtrl.ChannelName:" + _patchCtrl.ChannelName);
+                //SnkNuget.Logger?.Info("_patchCtrl.AppVersion:" + _patchCtrl.AppVersion);
+                //SnkNuget.Logger?.Info("_patchCtrl.Settings.versionInfoFileName:" + _patchCtrl.Settings.versionInfoFileName);
                 string url = Path.Combine(basicURL, _patchCtrl.ChannelName, _patchCtrl.AppVersion, _patchCtrl.Settings.versionInfoFileName);
                 var result= await SnkHttpWeb.Get(url);
                 if (result.isError)
                 {
-                    throw new AggregateException("获取远端版本信息失败。URL:" + url);
+                    throw new AggregateException("获取远端版本信息失败。URL:" + url + "\nerrText:" + result.errorMessage);
                 }
                 var content = UTF8Encoding.UTF8.GetString(result.data);
                 _versionInfos = this._patchCtrl.JsonParser.FromJson<SnkVersionInfos>(content);
@@ -60,7 +60,7 @@ namespace SnkFramework.NuGet.Features
                 var result = await SnkHttpWeb.Get(url);
                 if (result.isError == true)
                 {
-                    throw new AggregateException("获取远端版本信息失败。URL:" + url);
+                    throw new AggregateException("获取远端版本信息失败。URL:" + url + "\nerrText:" + result.errorMessage);
                 }
                 var content = UTF8Encoding.UTF8.GetString(result.data);
                 return this._patchCtrl.JsonParser.FromJson<List<SnkSourceInfo>>(content);
