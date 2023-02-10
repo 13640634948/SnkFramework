@@ -80,7 +80,7 @@ namespace SnkFramework.NuGet.Features
                
                 var result = await SnkHttpDownloadImplementer.Implement(task);
                 if (result.isError)
-                    throw new Exception("[Download-Error]" + url);
+                    throw new Exception("[Download-Error]" + url + "\nerrText:" + result.errorMessage);
             }
 
         }
