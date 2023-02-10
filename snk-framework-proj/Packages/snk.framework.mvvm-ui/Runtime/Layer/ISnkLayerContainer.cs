@@ -1,4 +1,4 @@
-using SnkFramework.Mvvm.Runtime.Base;
+using UnityEngine;
 
 namespace SnkFramework.Mvvm.Runtime
 {
@@ -14,7 +14,7 @@ namespace SnkFramework.Mvvm.Runtime
             public void RegiestLayer<TLayer>(bool defaultLayer = false) where TLayer : SnkUILayer;
             public TLayer GetLayer<TLayer>() where TLayer : SnkUILayer;
             public ISnkLayer GetLayer(System.Type layerType);
-            public void Build(ISnkViewCamera viewCamera);
+            public void Build(Camera orthographicCamera);
         }
     }
 }

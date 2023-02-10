@@ -47,14 +47,14 @@ namespace SnkFramework.Mvvm.Runtime
                 return layer;
             }
 
-            public void Build(ISnkViewCamera viewCamera)
+            public void Build(Camera orthographicCamera)
             {
                 foreach (var type in _layerTypeList)
                 {
-                    GameObject layerGameObject = new GameObject();
-                    SnkUILayer layer = layerGameObject.AddComponent(type) as SnkUILayer;
+                    var layerGameObject = new GameObject();
+                    var layer = layerGameObject.AddComponent(type) as SnkUILayer;
                     layer.Canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                    layer.Canvas.worldCamera = viewCamera.ViewCamera;
+                    layer.Canvas.worldCamera = orthographicCamera;
                     _layerDict.Add(type, layer);
                     layerGameObject.name = layer.LayerName;
                     layerGameObject.transform.SetParent(transform);
