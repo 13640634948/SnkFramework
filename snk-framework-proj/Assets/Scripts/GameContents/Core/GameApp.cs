@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using BFFramework.Runtime.Core;
 using BFFramework.Runtime.Services;
-using Cysharp.Threading.Tasks;
 using GAME.Contents.Services;
 using GAME.Contents.UserInterfaces.ViewModels;
+using UnityEngine;
 
 namespace GAME.Contents.Core
 {
@@ -13,8 +13,7 @@ namespace GAME.Contents.Core
         {
             base.Initialize();
             
-            RegisterAppStart<SplashScreenViewModel>();
-            //RegisterCustomAppStart<GameAppStart>();
+            RegisterAppStart<PatchViewModel>();
         }
 
         protected override void RegisterServices()

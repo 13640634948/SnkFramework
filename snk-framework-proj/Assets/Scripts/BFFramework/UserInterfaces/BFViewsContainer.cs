@@ -10,7 +10,7 @@ namespace BFFramework.Runtime.UserInterface
     {
         public override async Task<SnkWindow> CreateView(Type viewType)
         {
-            var asset = await Resources.LoadAsync<GameObject>(viewType.Name);
+            var asset = await Resources.LoadAsync<GameObject>("UserInterfaces/Windows/" + viewType.Name);
             var inst = UnityEngine.Object.Instantiate(asset) as GameObject;
             if (inst == null)
                 return null;

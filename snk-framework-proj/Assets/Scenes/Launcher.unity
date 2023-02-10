@@ -67,9 +67,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -104,7 +101,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 2
+    serializedVersion: 3
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +114,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    accuratePlacement: 0
+    buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -152,11 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5a48683d364465a6397ee58151e19f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RootNamespaces:
+  splashSkip: 1
+  splashFadeOutDuration: 0.5
+  splashScreenAsset: {fileID: 7868396872889064643, guid: 302dc0ba11a064538b71c37aa98ea5e8, type: 3}
+  rootNamespaces:
   - SnkFramework.Runtime
   - BFFramework.Runtime
   - Game.Contexts.
-  SplashScreenAsset: {fileID: 7868396872889064643, guid: 302dc0ba11a064538b71c37aa98ea5e8, type: 3}
 --- !u!4 &1071142136
 Transform:
   m_ObjectHideFlags: 0
