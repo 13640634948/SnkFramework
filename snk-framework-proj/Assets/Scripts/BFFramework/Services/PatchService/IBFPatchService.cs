@@ -4,6 +4,14 @@ namespace BFFramework.Runtime.Services
 {
     public interface IBFPatchService
     {
-        Task Initialize();
+          float Progress { get;}
+          bool IsDone { get; }
+          
+          Task Initialize();
+
+          Task<bool> IsNeedPatch();
+              
+          Task Apply();
+
     }
 }

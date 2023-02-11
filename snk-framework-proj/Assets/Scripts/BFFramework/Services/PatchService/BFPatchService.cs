@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.Patch;
 using SnkFramework.Runtime;
 using SnkFramework.Runtime.Basic;
-using UnityEngine;
 
 namespace BFFramework.Runtime.Services
 {
@@ -19,6 +19,14 @@ namespace BFFramework.Runtime.Services
         private string _localPatchRepoPath = "BFPatchService";
         
         public ISnkPatchController _patchCtrl;
+        private bool _isDone = false;
+        public bool IsDone => this._isDone;
+
+        public float Progress => this._patchCtrl.DownloadProgress;
+        
+        private List<SnkSourceInfo> _addList;
+        private List<string> _delList;
+        
         public BFPatchService()
         {
             SnkNuget.Logger = SnkLogHost.Default;
@@ -36,13 +44,23 @@ namespace BFFramework.Runtime.Services
             try
             {
                 await this._patchCtrl.Initialize();
-                var (addList, delList) = await this._patchCtrl.PreviewDiff();
-                await this._patchCtrl.Apply(addList, delList);
             }
             catch (Exception e)
             {
                 SnkLogHost.Default.Exception(e, "BFPatchService.Initialize");
             }
+        }
+
+        public async Task<bool> IsNeedPatch()
+        {
+            (_addList, _delList) = await this._patchCtrl.PreviewDiff();
+            return _addList.Count > 0 || _delList.Count > 0;
+        }
+
+        public async Task Apply()
+        {
+            await this._patchCtrl.Apply(_addList, _delList);
+            this._isDone = true;
         }
     }
 }
