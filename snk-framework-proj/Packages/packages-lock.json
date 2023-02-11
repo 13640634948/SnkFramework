@@ -287,12 +287,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "snk.framework.patch-svr": {
-      "version": "file:snk.framework.patch-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
