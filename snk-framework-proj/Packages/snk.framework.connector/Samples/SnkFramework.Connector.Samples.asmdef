@@ -1,0 +1,16 @@
+{
+    "name": "SnkFramework.Connector.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4d53ad58b8aa045f78309d9d6249cac4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -2,10 +2,14 @@ using System.Threading.Tasks;
 
 namespace SnkFramework.Connector
 {
-    public class SnkConnector<TSocketPipeline> : ISnkConnector
-        where TSocketPipeline : class, ISnkSocketPipeline, new()
+    public class SnkConnector : ISnkConnector
     {
-        public ISnkSocketPipeline SocketPipeline { get; protected set; }
+        private ISnkSocketPipeline _socketPipeline;
+
+        public SnkConnector(ISnkSocketPipeline socketPipeline)
+        {
+            this._socketPipeline = socketPipeline;
+        }
 
         public async Task Connect()
         {

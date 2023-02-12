@@ -38,7 +38,7 @@ namespace SnkFramework.Connector
 
         private async Task sendMessage(ISnkMessage messageRequest)
         {
-            var bytes = await this._encoder.Encoder(messageRequest);
+            var bytes = await this._encoder.Encode(messageRequest);
             await this._writer.Writer(bytes);
         }
 
@@ -52,7 +52,7 @@ namespace SnkFramework.Connector
             while (true)
             {
                 var bytes = await this._reader.Reader();
-                var message = await this._decoder.Decoder(bytes);
+                var message = await this._decoder.Decode(bytes);
 
 
                 this.onReceiveMessage(message);

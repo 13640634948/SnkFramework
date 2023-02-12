@@ -5,6 +5,6 @@ namespace SnkFramework.Connector
 {
     public interface ISnkMessageEncoder
     {
-        Task<IEnumerable<byte>> Encoder(ISnkMessage message);
+        Task<IEnumerable<byte>> Encode(ISnkMessage message);
     }
 }

@@ -4,6 +4,6 @@ namespace SnkFramework.Connector
 {
     public interface ISnkMessageDecoder
     {
-        Task<ISnkMessage> Decoder(byte[] bytes);
+        Task<ISnkMessage> Decode(byte[] bytes);
     }
 }
