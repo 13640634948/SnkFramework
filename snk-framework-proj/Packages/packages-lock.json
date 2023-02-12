@@ -269,6 +269,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "snk.framework.connector": {
+      "version": "file:snk.framework.connector",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "snk.framework.ioc-provider": {
       "version": "file:snk.framework.ioc-provider",
       "depth": 0,
