@@ -264,7 +264,7 @@
       "url": "https://packages.unity.com"
     },
     "snk.framework": {
-      "version": "file:snk.framework.main",
+      "version": "file:snk.framework",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
