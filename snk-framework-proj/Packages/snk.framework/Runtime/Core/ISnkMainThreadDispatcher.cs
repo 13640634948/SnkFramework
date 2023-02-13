@@ -6,7 +6,7 @@ namespace SnkFramework.Runtime
     {
         public interface ISnkMainThreadDispatcher
         {
-            //bool RequestMainThreadAction(Action action, bool maskExceptions = true);
+            bool RequestMainThreadAction(Action action, bool maskExceptions = true);
             bool IsOnMainThread { get; }
         }
     }

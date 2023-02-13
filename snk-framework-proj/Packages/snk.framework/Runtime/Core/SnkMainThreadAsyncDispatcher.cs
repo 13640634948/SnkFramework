@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Basic;
@@ -8,25 +7,6 @@ namespace SnkFramework.Runtime
 {
     namespace Core
     {
-        public interface ISnkMainThread
-        {
-            public int ThreadId { get; }
-            public bool IsMainThread { get; }
-            public SynchronizationContext Context { get; }
-        }  
-        
-        public class SnkMainThread : ISnkMainThread
-        {
-            public int ThreadId { get; protected set; }
-            public bool IsMainThread => Context == SynchronizationContext.Current;
-            public SynchronizationContext Context { get; }
-        
-            public SnkMainThread()
-            {
-                Context = SynchronizationContext.Current;
-            }
-        }
-        
         public class SnkMainThreadAsyncDispatcher : ISnkMainThreadAsyncDispatcher
         {
             private Lazy<ISnkMainThread> mainThread = new (()=> 
@@ -71,6 +51,21 @@ namespace SnkFramework.Runtime
                 await Task.Run(async () => await completion.Task);
             }
 
+            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
+            {
+                
+                if (IsOnMainThread)
+                    ExceptionMaskedAction(action, maskExceptions);
+                else
+                {
+                    MainThread.Context.Post(ignored =>
+                    {
+                        ExceptionMaskedAction(action, maskExceptions);
+                    }, null);
+                }
+                return true;
+            }
+
             public virtual bool IsOnMainThread => MainThread.IsMainThread;
 
             public virtual void ExecuteOnMainThread(Action action, bool maskExceptions = true)
@@ -81,7 +76,7 @@ namespace SnkFramework.Runtime
                     MainThread.Context.Post(ignored => ExceptionMaskedAction(action, maskExceptions), null);
             }
 
-            public  void ExceptionMaskedAction(Action action, bool maskExceptions)
+            public   void ExceptionMaskedAction(Action action, bool maskExceptions)
             {
                 if (action == null)
                     throw new ArgumentNullException(nameof(action));
