@@ -9,7 +9,7 @@ namespace SnkFramework.NuGet.Features
 {
     namespace HttpWeb
     {
-       
+
 
         /// <summary>
         /// 下载任务
@@ -111,7 +111,8 @@ namespace SnkFramework.NuGet.Features
                 FileStream fileStream = null;
                 try
                 {
-                    do {
+                    do
+                    {
                         var fileInfo = new FileInfo(_savePath);
                         if (!fileInfo.Directory.Exists)
                         {
@@ -155,7 +156,7 @@ namespace SnkFramework.NuGet.Features
                             }
                             if (fileStream.Length >= _totalSize)
                             {
-                                _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}",fileStream.Length,_totalSize, _uri);
+                                _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}", fileStream.Length, _totalSize, _uri);
                                 _result.code = SNK_HTTP_ERROR_CODE.file_error;
                                 break;
                             }

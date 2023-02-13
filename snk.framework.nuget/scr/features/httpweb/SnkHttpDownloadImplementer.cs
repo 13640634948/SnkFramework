@@ -34,6 +34,12 @@ namespace SnkFramework.NuGet.Features
                 return await _taskFactory.StartNew(() => task.AsyncDownloadFile().Result);
             }
 
+            /// <summary>
+            /// 创建下载任务
+            /// </summary>
+            /// <param name="uri"></param>
+            /// <param name="savePath"></param>
+            /// <returns></returns>
             public static SnkDownloadTask CreateDownloadTask(string uri,string savePath)
             {
                 var downloadTask = new SnkDownloadTask(uri,savePath, _httpClient);
