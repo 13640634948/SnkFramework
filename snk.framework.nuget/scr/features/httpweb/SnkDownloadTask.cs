@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,21 +9,7 @@ namespace SnkFramework.NuGet.Features
 {
     namespace HttpWeb
     {
-        /// <summary>
-        /// 下载结果
-        /// </summary>
-        public class SnkHttpDownloadResult : SnkHttpResult
-        {
-            /// <summary>
-            /// 已下载的大小
-            /// </summary>
-            public long downloadedFileSize;
 
-            /// <summary>
-            /// 是否取消下载
-            /// </summary>
-            public bool isCancelDownload;
-        }
 
         /// <summary>
         /// 下载任务
@@ -30,9 +17,19 @@ namespace SnkFramework.NuGet.Features
         public class SnkDownloadTask
         {
             /// <summary>
-            /// 下载参数
+            /// 下载地址
             /// </summary>
-            private DownloadParam _param;
+            private string _uri;
+
+            /// <summary>
+            /// 保存地址
+            /// </summary>
+            private string _savePath;
+
+            /// <summary>
+            /// 断线续传
+            /// </summary>
+            private bool _downloadFormBreakpoint = false;
 
             /// <summary>
             /// 取消下载令牌
@@ -45,118 +42,167 @@ namespace SnkFramework.NuGet.Features
             private SnkHttpDownloadResult _result;
 
             /// <summary>
+            /// HttpClient
+            /// </summary>
+            private HttpClient _httpClient;
+
+            /// <summary>
+            /// 总大小
+            /// </summary>
+            private long _totalSize = -1;
+
+            /// <summary>
+            /// 已下载文件的大小
+            /// </summary>
+            private long _downloadedSize = -1;
+
+            /// <summary>
+            /// 是否下载中
+            /// </summary>
+            private bool _isDownloading = false;
+
+            /// <summary>
+            /// 是否下载中
+            /// </summary>
+            /// <returns></returns>
+            public bool IsDownloading() => _isDownloading;
+
+            /// <summary>
+            /// 获取文件总大小
+            /// </summary>
+            /// <returns></returns>
+            public long GetTotalSize() => _totalSize;
+
+            /// <summary>
+            /// 获取已下载大小
+            /// </summary>
+            /// <returns></returns>
+            public long GetDownloadedSize() => _downloadedSize;
+
+            /// <summary>
             /// 构造方法
             /// </summary>
             /// <param name="param"></param>
-            public SnkDownloadTask(DownloadParam param)
+            public SnkDownloadTask(string uri, string savePath, HttpClient httpClient)
             {
                 _result = new SnkHttpDownloadResult();
                 _cts = new CancellationTokenSource();
-                this._param = param;
+                this._uri = uri;
+                this._savePath = savePath;
+                this._httpClient = httpClient;
             }
 
             /// <summary>
-            /// 下载
+            /// 设置断点续传
+            /// </summary>
+            /// <param name="flag"></param>
+            public void SetDownloadFormBreakpoint(bool flag)
+            {
+                this._downloadFormBreakpoint = flag;
+            }
+
+            /// <summary>
+            /// 异步下载
             /// </summary>
             /// <returns></returns>
-            public async Task<SnkHttpDownloadResult> DownloadFile()
+            public async Task<SnkHttpDownloadResult> AsyncDownloadFile()
             {
                 var curPosition = 0L;
                 FileStream fileStream = null;
                 try
                 {
-                    var req = WebRequest.CreateHttp(_param.uri);
-                    var fileInfo = new FileInfo(_param.savePath);
-
-                    if (_param.downloadFormBreakpoint)
+                    do
                     {
-                        if (fileInfo.Exists)
+                        var fileInfo = new FileInfo(_savePath);
+                        if (!fileInfo.Directory.Exists)
                         {
-                            fileStream = File.Open(_param.savePath, FileMode.Open, FileAccess.ReadWrite);
-                            curPosition = fileStream.Length;
-                            fileStream.Seek(curPosition, SeekOrigin.Current);
+                            fileInfo.Directory.Create();
+                        }
+                        if (_downloadFormBreakpoint)
+                        {
+                            if (fileInfo.Exists)
+                            {
+                                fileStream = File.Open(_savePath, FileMode.Open, FileAccess.ReadWrite);
+                                curPosition = fileStream.Length;
+                                fileStream.Seek(curPosition, SeekOrigin.Current);
+                            }
+                            else
+                            {
+                                fileStream = new FileStream(_savePath, FileMode.Create, FileAccess.ReadWrite);
+                            }
                         }
                         else
                         {
-                            fileStream = new FileStream(_param.savePath, FileMode.Create, FileAccess.ReadWrite);
+                            if (fileInfo.Exists)
+                            {
+                                fileInfo.Delete();
+                            }
+                            fileStream = new FileStream(_savePath, FileMode.Create, FileAccess.ReadWrite);
                         }
-                    }
-                    else
-                    {
-                        if (fileInfo.Exists)
+                        var request = new HttpRequestMessage();
+                        request.RequestUri = new Uri(_uri);
+                        request.Method = HttpMethod.Get;
+                        request.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(curPosition, null);
+                        using (var rsp = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
                         {
-                            fileInfo.Delete();
+                            _result.httpStatusCode = rsp.StatusCode;
+                            rsp.EnsureSuccessStatusCode();
+                            _totalSize = (long)rsp.Content.Headers.ContentRange.Length;//文件总大小
+                            if (_totalSize == 0)
+                            {
+                                _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}", fileStream.Length, _totalSize, _uri);
+                                _result.code = SNK_HTTP_ERROR_CODE.target_file_size_is_zero;
+                                break;
+                            }
+                            if (fileStream.Length >= _totalSize)
+                            {
+                                _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}", fileStream.Length, _totalSize, _uri);
+                                _result.code = SNK_HTTP_ERROR_CODE.file_error;
+                                break;
+                            }
+                            using (var rspStream = await rsp.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                            {
+                                if (rspStream == null)
+                                {
+                                    _result.errorMessage = string.Format("下载出现异常,无法获取rsp流\n下载地址:{0}", _uri);
+                                    _result.code = SNK_HTTP_ERROR_CODE.download_error;
+                                    break;
+                                }
+                                var avg = 40960;
+                                var size = 0;
+                                var buffer = new byte[avg];
+                                size = rspStream.Read(buffer, 0, avg);
+                                _isDownloading = true;
+                                while (size > 0)
+                                {
+                                    if (_cts.IsCancellationRequested)
+                                    {
+                                        _result.isCancelDownload = true;
+                                        break;
+                                    }
+                                    fileStream.Write(buffer, 0, size);
+                                    size = rspStream.Read(buffer, 0, avg);
+                                    fileStream.Flush(true);
+                                    _downloadedSize = fileStream.Length;
+                                }
+                            }
                         }
-                        fileStream = new FileStream(_param.savePath, FileMode.Create, FileAccess.ReadWrite);
                     }
-
-                    if (curPosition > 0)
-                        req.AddRange(curPosition);
-                    req.Method = WebRequestMethods.Http.Get;
-                    var rsp = await req.GetResponseAsync() as HttpWebResponse;
-                    if (_cts.IsCancellationRequested)
-                    {
-                        _result.isCancelDownload = true;
-                    }
-                    if (rsp == null)
-                    {
-                        return _result.SetError("返回rsp为空") as SnkHttpDownloadResult;
-                    }
-                    _result.code = rsp.StatusCode;
-                    if (rsp.StatusCode != HttpStatusCode.OK && rsp.StatusCode != HttpStatusCode.PartialContent)
-                    {
-                        return _result.SetError($"Http状态码异常,错误码为:{rsp.StatusCode}") as SnkHttpDownloadResult;
-                    }
-
-                    var rspStream = rsp.GetResponseStream();
-                    if (rspStream == null)
-                    {
-                        return _result.SetError("返回rspStream为空") as SnkHttpDownloadResult;
-                    }
-
-                    var lengthContent = rsp.Headers.Get("Content-Length");
-                    var parseLengthResult = long.TryParse(lengthContent, out var length);
-                    if (!parseLengthResult)
-                    {
-                        return _result.SetError("无法解析Content-Length") as SnkHttpDownloadResult;
-                    }
-                    if (fileStream.Length >= length)
-                    {
-                        return _result.SetError("本地文件长度大于等于下载长度，请检查") as SnkHttpDownloadResult;
-                    }
-
-                    var avg = 1024;
-                    var size = 0;
-                    var buffer = new byte[avg];
-                    size = rspStream.Read(buffer, 0, avg);
-                    while (size > 0)
-                    {
-                        if (_cts.IsCancellationRequested)
-                        {
-                            _result.isCancelDownload = true;
-                            break;
-                        }
-                        fileStream?.Write(buffer, 0, size);
-                        size = rspStream.Read(buffer, 0, avg);
-                        _param.progressCallback?.Invoke(fileStream.Length, length);
-                    }
-                    _result.downloadedFileSize = fileStream.Length;
+                    while (false);
                 }
                 catch (Exception e)
                 {
-                    var errorMsg = string.Format("下载出现异常\n下载地址:{0}\n错误信息:{1}\n堆栈:{2}", _param.uri, e.Message, e.StackTrace);
-                    SnkNuget.Logger?.Error(errorMsg);
-                    _result.SetError(errorMsg);
+                    var errorMsg = string.Format("下载出现异常\n下载地址:{0}\n错误信息:{1}\n堆栈:{2}", _uri, e.Message, e.StackTrace);
+                    _result.errorMessage = errorMsg;
+                    _result.code = SNK_HTTP_ERROR_CODE.download_error;
                 }
                 finally
                 {
                     fileStream?.Dispose();
                     _result.isDone = true;
                 }
-
                 return _result;
             }
-
 
             /// <summary>
             /// 取消下载
@@ -165,7 +211,6 @@ namespace SnkFramework.NuGet.Features
             {
                 _cts?.Cancel();
             }
-
         }
     }
 }

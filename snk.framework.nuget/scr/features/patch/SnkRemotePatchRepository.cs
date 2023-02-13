@@ -76,9 +76,9 @@ namespace SnkFramework.NuGet.Features
                 downloadParam.downloadFormBreakpoint = false;
                 downloadParam.uri = url;
                 downloadParam.savePath = Path.Combine(dirPath, key);
-                SnkDownloadTask task = new SnkDownloadTask(downloadParam);
-               
-                var result = await SnkHttpDownloadImplementer.Implement(task);
+                SnkDownloadTask task = SnkHttpDownloadImplementer.CreateDownloadTask(url, Path.Combine(dirPath, key));
+                task.SetDownloadFormBreakpoint(true);
+                 var result = await SnkHttpDownloadImplementer.Implement(task);
                 if (result.isError)
                     throw new Exception("[Download-Error]" + url + "\nerrText:" + result.errorMessage);
             }

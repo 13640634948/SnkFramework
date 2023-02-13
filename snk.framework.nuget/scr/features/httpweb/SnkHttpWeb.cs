@@ -1,172 +1,229 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SnkFramework.NuGet.Features.HttpWeb
+namespace SnkFramework.NuGet.Features
 {
-    /// <summary>
-    /// web请求..
-    /// </summary>
-    public class SnkHttpWeb
+    namespace HttpWeb
     {
         /// <summary>
-        /// head方式请求
+        /// 错误码
         /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        public static async Task<SnkHttpHeadResult> Head(string uri, int timeout = 0)
+        public enum SNK_HTTP_ERROR_CODE
         {
-            SnkHttpHeadResult result = new SnkHttpHeadResult();
-            try
-            {
-                HttpWebRequest req = WebRequest.CreateHttp(uri);
-                if (timeout > 0)
-                    req.Timeout = timeout;
-                req.Method = WebRequestMethods.Http.Head;
-                WebResponse webResponse = await req.GetResponseAsync();
-                HttpWebResponse rsp = webResponse as HttpWebResponse;
-                webResponse = (WebResponse)null;
-                if (rsp == null)
-                    return result.SetError("无法获取到rsp") as SnkHttpHeadResult;
-                result.code = rsp.StatusCode;
-                if (rsp.StatusCode != HttpStatusCode.OK)
-                    return result.SetError("收到200以外的错误码") as SnkHttpHeadResult;
-                result.code = rsp.StatusCode;
-                string lengthContent = rsp.Headers.Get("Content-Length");
-                long length;
-                bool parseLengthResult = long.TryParse(lengthContent, out length);
-                if (!parseLengthResult)
-                    return result.SetError("无法解析Content-Length") as SnkHttpHeadResult;
-                result.length = length;
-            }
-            catch (Exception ex)
-            {
-                result.SetError("Get出现异常\n异常信息:" + ex.Message + "\n异常堆栈: " + ex.StackTrace);
-            }
-            return result;
+            /// <summary>
+            /// 成功
+            /// </summary>
+            succeed = 0,
+
+            /// <summary>
+            /// 错误
+            /// </summary>
+            error = 1,
+
+            /// <summary>
+            /// 无法找到文件长度
+            /// </summary>
+            can_not_find_length = 2,
+
+            /// <summary>
+            /// 下载异常
+            /// </summary>
+            download_error = 3,
+
+            /// <summary>
+            /// 文件错误
+            /// </summary>
+            file_error = 4,
+
+            /// <summary>
+            /// 目标文件大小为0
+            /// </summary>
+            target_file_size_is_zero,
         }
 
         /// <summary>
-        /// Get方式请求
+        /// web请求
         /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        public static async Task<SnkHttpGetResult> Get(string uri, int timeout = 0)
+        public class SnkHttpWeb
         {
-            SnkHttpGetResult result = new SnkHttpGetResult();
-            try
+            /// <summary>
+            /// 任务工厂（私有）
+            /// </summary>
+            private static TaskFactory _taskFactory;
+
+            /// <summary>
+            /// 任务工厂
+            /// </summary>
+            protected static TaskFactory taskFactory
             {
-                HttpWebRequest req = WebRequest.CreateHttp(uri);
-                if (timeout > 0)
-                    req.Timeout = timeout;
-                req.Method = WebRequestMethods.Http.Get;
-                WebResponse webResponse = await req.GetResponseAsync();
-                HttpWebResponse rsp = webResponse as HttpWebResponse;
-                webResponse = (WebResponse)null;
-                if (rsp == null)
-                    return result.SetError("无法获取到rsp") as SnkHttpGetResult;
-                result.code = rsp.StatusCode;
-                if (rsp.StatusCode != HttpStatusCode.OK)
-                    return result.SetError("收到200以外的错误码") as SnkHttpGetResult;
-                
-                using (Stream rspStream = rsp.GetResponseStream())
+                get
                 {
-                    var length = rsp.ContentLength;
-                    using (BufferedStream bs = new BufferedStream(rspStream))
+                    if (_taskFactory == null)
                     {
-                        result.data = new byte[length];
-                        await bs.ReadAsync(result.data, 0, result.data.Length);
+                        _taskFactory = new TaskFactory();
                     }
+                    return _taskFactory;
                 }
             }
-            catch (Exception ex)
-            {
-                result.SetError("Get出现异常\n异常信息:" + ex.Message + "\n异常堆栈: " + ex.StackTrace);
-            }
-            return result;
-        }
 
-        /// <summary>
-        /// Post方式请求
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="headDict"></param>
-        /// <param name="content"></param>
-        /// <param name="timeout"></param>
-        /// <param name=""></param>
-        /// <returns></returns>
-        public static async Task<SnkHttpPostResult> Post(string uri, Dictionary<string, string> headDict, byte[] content, int timeout = 0)
-        {
-            SnkHttpPostResult result = new SnkHttpPostResult();
-            try
+            /// <summary>
+            /// Head方法
+            /// </summary>
+            /// <param name="uri"></param>
+            /// <param name="timeout"></param>
+            /// <returns></returns>
+            public static async Task<SnkHttpHeadResult> Head(string uri, TimeSpan timeout = default)
             {
-                HttpWebRequest req = WebRequest.CreateHttp(uri);
-                if (timeout > 0)
-                    req.Timeout = timeout;
-                req.Method = WebRequestMethods.Http.Post;
-                if (headDict != null && headDict.Count > 0)
+                return await taskFactory.StartNew(() =>
                 {
-                    foreach (var kv in headDict)
-                        req.Headers.Add(kv.Key, kv.Value);
-                }
-                if (content != null && content.Length > 0)
-                {
-                    req.ContentLength = content.Length;
-                    using (var reqStream = req.GetRequestStream())
+                    var result = new SnkHttpHeadResult();
+                    try
                     {
-                        reqStream.Write(content, 0, content.Length);
-                    }
-                }
-
-                WebResponse webResponse = await req.GetResponseAsync();
-                HttpWebResponse rsp = webResponse as HttpWebResponse;
-                webResponse = (WebResponse)null;
-                if (rsp == null)
-                {
-                    return result.SetError("无法获取到rsp") as SnkHttpPostResult;
-                }
-                result.code = rsp.StatusCode;
-                if (rsp.StatusCode != HttpStatusCode.OK)
-                {
-                    return result.SetError("收到200以外的错误码") as SnkHttpPostResult;
-                }
-                using (Stream rspStream = rsp.GetResponseStream())
-                {
-                    if (rspStream == null)
-                    {
-                        return result.SetError("无法获取到响应流") as SnkHttpPostResult;
-                    }
-                    var allHeadKeys = rsp.Headers.AllKeys;
-                    if (allHeadKeys.Length > 0)
-                    {
-                        result.rspHeaderDict = new Dictionary<string, string>();
-                        for (var i = 0; i < allHeadKeys.Length; i++)
+                        var httpClient = new HttpClient();
+                        if (timeout != default)
                         {
-                            var key = allHeadKeys[i];
-                            var value = rsp.Headers[key];
-                            result.rspHeaderDict.Add(key, value);
+                            httpClient.Timeout = timeout;
+                        }
+                        using (var hrm = new HttpRequestMessage(HttpMethod.Head, uri))
+                        {
+                            using (var rsp = httpClient.SendAsync(hrm).Result)
+                            {
+                                result.httpStatusCode = rsp.StatusCode;
+                                rsp.EnsureSuccessStatusCode();
+                                if (rsp.Content != null && rsp.Content.Headers != null)
+                                {
+                                    result.length = (long)rsp.Content.Headers.ContentLength;
+                                }
+                                else
+                                {
+                                    result.code = SNK_HTTP_ERROR_CODE.can_not_find_length;
+                                    result.errorMessage = $"服务器没有返回content-length,无法获取文件长度\n访问地址:{uri}";
+                                }
+                            }
                         }
                     }
-                    var length = rsp.ContentLength;
-                    using (BufferedStream bs = new BufferedStream(rspStream))
+                    catch (Exception e)
                     {
-                        result.data = new byte[length];
-                        await bs.ReadAsync(result.data, 0, (int)rspStream.Length);
+                        result.code = SNK_HTTP_ERROR_CODE.error;
+                        result.errorMessage = $"请求{uri}出现异常\n异常信息:{e.Message}\n异常堆栈:{e.StackTrace}";
                     }
-                }
-                req = (HttpWebRequest)null;
-                rsp = (HttpWebResponse)null;
+                    finally
+                    {
+                        result.isDone = true;
+                    }
+                    return result;
+                });
             }
-            catch (Exception ex)
+
+            /// <summary>
+            /// Get方法
+            /// </summary>
+            /// <param name="uri"></param>
+            /// <param name="timeout"></param>
+            /// <returns></returns>
+            public static async Task<SnkHttpGetResult> Get(string uri, TimeSpan timeout = default)
             {
-                result.SetError("Get出现异常\n异常信息:" + ex.Message + "\n异常堆栈: " + ex.StackTrace);
+                return await taskFactory.StartNew(() =>
+                {
+                    var result = new SnkHttpGetResult();
+                    try
+                    {
+                        var httpClient = new HttpClient();
+                        if (timeout != default)
+                        {
+                            httpClient.Timeout = timeout;
+                        }
+                        using (var hrm = new HttpRequestMessage(HttpMethod.Get, uri))
+                        {
+                            using (var rsp = httpClient.SendAsync(hrm).Result)
+                            {
+                                result.httpStatusCode = rsp.StatusCode;
+                                rsp.EnsureSuccessStatusCode();
+                                rsp.Headers.GetEnumerator();
+                                result.data = rsp.Content.ReadAsByteArrayAsync().Result;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        result.code = SNK_HTTP_ERROR_CODE.error;
+                        result.errorMessage = $"请求{uri}出现异常\n异常信息:{e.Message}\n异常堆栈:{e.StackTrace}";
+                    }
+                    finally
+                    {
+                        result.isDone = true;
+                    }
+                    return result;
+                });
             }
-            return result;
+
+            /// <summary>
+            /// Post方法
+            /// </summary>
+            /// <param name="uri"></param>
+            /// <param name="headDict"></param>
+            /// <param name="content"></param>
+            /// <param name="timeout"></param>
+            /// <returns></returns>
+            public static async Task<SnkHttpPostResult> Post(string uri, Dictionary<string, string> headDict, byte[] content, TimeSpan timeout = default)
+            {
+                return await taskFactory.StartNew(() =>
+                {
+                    var result = new SnkHttpPostResult();
+                    try
+                    {
+                        var httpClient = new HttpClient();
+                        if (timeout != default)
+                        {
+                            httpClient.Timeout = timeout;
+                        }
+                        using (var hrm = new HttpRequestMessage(HttpMethod.Post, uri))
+                        {
+                            if (headDict != null && headDict.Count > 0)
+                            {
+                                httpClient.DefaultRequestHeaders.Clear();
+                                foreach (var kv in headDict)
+                                {
+                                    hrm.Headers.Add(kv.Key, kv.Value);
+                                }
+                            }
+                            if (content != null && content.Length > 0)
+                            {
+                                hrm.Content = new ByteArrayContent(content);
+                            }
+                            using (var rsp = httpClient.SendAsync(hrm).Result)
+                            {
+                                result.httpStatusCode = rsp.StatusCode;
+                                rsp.EnsureSuccessStatusCode();
+                                if (rsp.Headers != null)
+                                {
+                                    foreach (var kv in rsp.Headers)
+                                    {
+                                        if (result.headDict != null)
+                                        {
+                                            result.headDict = new Dictionary<string, string>();
+                                        }
+                                        result.headDict.Add(kv.Key, kv.Value.ToString());
+                                    }
+                                }
+                                result.data = rsp.Content.ReadAsByteArrayAsync().Result;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        result.code = SNK_HTTP_ERROR_CODE.error;
+                        result.errorMessage = $"请求{uri}出现异常\n异常信息:{e.Message}\n异常堆栈:{e.StackTrace}";
+                    }
+                    finally
+                    {
+                        result.isDone = true;
+                    }
+                    return result;
+                });
+            }
         }
     }
 }
