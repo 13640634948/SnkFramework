@@ -16,7 +16,7 @@ namespace SnkFramework.NuGet.Features
             /// <summary>
             /// 任务工厂
             /// </summary>
-            private static TaskFactory s_taskFactory;
+            private static TaskFactory s_taskFactory = null;
             private static TaskFactory s_TaskFactory => s_taskFactory ?? new TaskFactory();
 
             private static HttpClient _httpClient = new HttpClient();
