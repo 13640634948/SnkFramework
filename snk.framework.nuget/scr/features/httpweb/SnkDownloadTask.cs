@@ -103,7 +103,7 @@ namespace SnkFramework.NuGet.Features
             /// 异步下载
             /// </summary>
             /// <returns></returns>
-            public async Task<SnkHttpDownloadResult> AsyncDownloadFile()
+            public async Task<SnkHttpDownloadResult> AsyncDownloadFile(int buffSize = 1024 * 4 * 10)
             {
                 var curPosition = 0L;
                 FileStream fileStream = null;
@@ -166,20 +166,19 @@ namespace SnkFramework.NuGet.Features
                                     _result.code = SNK_HTTP_ERROR_CODE.download_error;
                                     break;
                                 }
-                                var avg = 40960;
-                                var size = 0;
-                                var buffer = new byte[avg];
-                                size = rspStream.Read(buffer, 0, avg);
+
                                 _isDownloading = true;
-                                while (size > 0)
+
+                                var len = 0;
+                                var buffer = new byte[buffSize];
+                                while ((len = rspStream.Read(buffer, 0, buffSize)) > 0)
                                 {
                                     if (_cts.IsCancellationRequested)
                                     {
                                         _result.isCancelDownload = true;
                                         break;
                                     }
-                                    fileStream.Write(buffer, 0, size);
-                                    size = rspStream.Read(buffer, 0, avg);
+                                    fileStream.Write(buffer, 0, len);
                                     fileStream.Flush(true);
                                     _downloadedSize = fileStream.Length;
                                 }
