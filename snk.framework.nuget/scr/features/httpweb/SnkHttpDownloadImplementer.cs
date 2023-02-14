@@ -10,7 +10,6 @@ namespace SnkFramework.NuGet.Features
     {
         /// <summary>
         /// 下载执行器
-        /// todo:1.总下载速度 2.总进度
         /// </summary>
         public class SnkHttpDownloadImplementer
         {
