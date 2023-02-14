@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,22 +11,70 @@ namespace SnkFramework.NuGet.Features
         /// <summary>
         /// 下载任务
         /// </summary>
-        public class SnkDownloadTask
+        internal class SnkDownloadTask : ISnkDownloadTask
         {
+            /// <summary>
+            /// 下载地址（私有）
+            /// </summary>
+            public string _url;
+
             /// <summary>
             /// 下载地址
             /// </summary>
-            private string _uri;
+            public string URL => _url;
 
             /// <summary>
-            /// 保存地址
+            /// 保存地址（私有）
             /// </summary>
             private string _savePath;
 
             /// <summary>
-            /// 断线续传
+            /// 保存地址
             /// </summary>
-            private bool _downloadFormBreakpoint = false;
+            public string SavePath => _savePath;
+
+            /// <summary>
+            /// 是否下载中（私有）
+            /// </summary>
+            private bool _isDownloading;
+
+            /// <summary>
+            /// 是否下载中
+            /// </summary>
+            /// <returns></returns>
+            public bool IsDownloading => _isDownloading;
+
+            /// <summary>
+            /// 文件总大小（私有）
+            /// </summary>
+            private long _totalSize = -1;
+
+            /// <summary>
+            /// 文件总大小
+            /// </summary>
+            /// <returns></returns>
+            public long TotalSize => _totalSize;
+
+            /// <summary>
+            /// 已下载大小（私有）
+            /// </summary>
+            private long _downloadedSize = -1;
+
+            /// <summary>
+            /// 已下载大小
+            /// </summary>
+            /// <returns></returns>
+            public long DownloadedSize => _downloadedSize;
+
+            /// <summary>
+            /// 是否断点续传（私有）
+            /// </summary>
+            private bool _downloadFromBreakpoint;
+
+            /// <summary>
+            /// 是否断点续传
+            /// </summary>
+            public bool DownloadFromBreakpoint => _downloadFromBreakpoint;
 
             /// <summary>
             /// 取消下载令牌
@@ -45,47 +92,16 @@ namespace SnkFramework.NuGet.Features
             private HttpClient _httpClient;
 
             /// <summary>
-            /// 总大小
-            /// </summary>
-            private long _totalSize = -1;
-
-            /// <summary>
-            /// 已下载文件的大小
-            /// </summary>
-            private long _downloadedSize = -1;
-
-            /// <summary>
-            /// 是否下载中
-            /// </summary>
-            private bool _isDownloading = false;
-
-            /// <summary>
-            /// 是否下载中
-            /// </summary>
-            /// <returns></returns>
-            public bool getIsDownloading => _isDownloading;
-
-            /// <summary>
-            /// 获取文件总大小
-            /// </summary>
-            /// <returns></returns>
-            public long getTotalSize => _totalSize;
-
-            /// <summary>
-            /// 获取已下载大小
-            /// </summary>
-            /// <returns></returns>
-            public long getDownloadedSize => _downloadedSize;
-
-            /// <summary>
             /// 构造方法
             /// </summary>
-            /// <param name="param"></param>
-            public SnkDownloadTask(string uri, string savePath, HttpClient httpClient)
+            /// <param name="url"></param>
+            /// <param name="savePath"></param>
+            /// <param name="httpClient"></param>
+            public SnkDownloadTask(string url, string savePath, HttpClient httpClient)
             {
                 _result = new SnkHttpDownloadResult();
                 _cts = new CancellationTokenSource();
-                this._uri = uri;
+                this._url = url;
                 this._savePath = savePath;
                 this._httpClient = httpClient;
             }
@@ -96,7 +112,7 @@ namespace SnkFramework.NuGet.Features
             /// <param name="flag"></param>
             public void SetDownloadFormBreakpoint(bool flag)
             {
-                this._downloadFormBreakpoint = flag;
+                this._downloadFromBreakpoint = flag;
             }
 
             /// <summary>
@@ -108,22 +124,19 @@ namespace SnkFramework.NuGet.Features
                 try
                 {
                     using (var request = new HttpRequestMessage())
-                    { 
-                        request.RequestUri = new Uri(_uri);
+                    {
+                        request.RequestUri = new Uri(_url);
                         request.Method = HttpMethod.Get;
-
-                        var fileInfo = new FileInfo(_savePath);
-                        if (!fileInfo.Directory.Exists)
+                        var fileInfo = new FileInfo(SavePath);
+                        if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
                             fileInfo.Directory.Create();
-
                         FileStream fileStream = null;
                         if (fileInfo.Exists)
                         {
-                            if (_downloadFormBreakpoint)
+                            if (_downloadFromBreakpoint)
                             {
-                                fileStream = File.Open(_savePath, FileMode.Open, FileAccess.ReadWrite);
+                                fileStream = File.Open(SavePath, FileMode.Open, FileAccess.ReadWrite);
                                 fileStream.Seek(0, SeekOrigin.End);
-                                request.Headers.Range = new System.Net.Http.Headers.RangeHeaderValue(fileStream.Position, null);
                             }
                             else
                             {
@@ -131,32 +144,38 @@ namespace SnkFramework.NuGet.Features
                             }
                         }
 
-                        using (fileStream = fileStream ?? new FileStream(_savePath, FileMode.Create, FileAccess.ReadWrite))
-                        {
-                            using (var rsp = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                        using (fileStream =
+                                   fileStream ?? new FileStream(SavePath, FileMode.Create, FileAccess.ReadWrite))
+                        {  
+                            request.Headers.Range =
+                                new System.Net.Http.Headers.RangeHeaderValue(fileStream.Position, null);
+                            using (var rsp = await _httpClient
+                                       .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
+                                       .ConfigureAwait(false))
                             {
                                 _result.httpStatusCode = rsp.StatusCode;
                                 rsp.EnsureSuccessStatusCode();
-                                _totalSize = rsp.Content.Headers.ContentLength ?? 0;
+                                _totalSize = rsp.Content.Headers.ContentRange.Length ?? 0;
                                 if (fileStream.Length >= _totalSize)
                                 {
-                                    _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}", fileStream.Length, _totalSize, _uri);
+                                    _result.errorMessage =
+                                        $"本地文件长度大于等于总文件长度，请检查\n本地文件长度:{fileStream.Length}\n远端文件长度:{_totalSize}\n下载地址:{_url}";
                                     _result.code = SNK_HTTP_ERROR_CODE.file_error;
                                     _result.isDone = true;
                                     return _result;
                                 }
+
                                 using (var rspStream = await rsp.Content.ReadAsStreamAsync().ConfigureAwait(false))
                                 {
                                     if (rspStream == null)
                                     {
-                                        _result.errorMessage = string.Format("下载出现异常,无法获取rsp流\n下载地址:{0}", _uri);
+                                        _result.errorMessage = $"下载出现异常,无法获取rsp流\n下载地址:{_url}";
                                         _result.code = SNK_HTTP_ERROR_CODE.download_error;
                                         _result.isDone = true;
                                         return _result;
                                     }
 
                                     _isDownloading = true;
-
                                     var len = 0;
                                     var buffer = new byte[buffSize];
                                     while ((len = rspStream.Read(buffer, 0, buffSize)) > 0)
@@ -166,6 +185,7 @@ namespace SnkFramework.NuGet.Features
                                             _result.isCancelDownload = true;
                                             break;
                                         }
+
                                         fileStream.Write(buffer, 0, len);
                                         fileStream.Flush(true);
                                         _downloadedSize = fileStream.Length;
@@ -177,10 +197,11 @@ namespace SnkFramework.NuGet.Features
                 }
                 catch (Exception e)
                 {
-                    _result.errorMessage = string.Format("下载出现异常\n下载地址:{0}\n错误信息:{1}\n堆栈:{2}", _uri, e.Message, e.StackTrace); ;
+                    _result.errorMessage = $"下载出现异常\n下载地址:{_url}\n错误信息:{e.Message}\n堆栈:{e.StackTrace}";
                     _result.code = SNK_HTTP_ERROR_CODE.download_error;
                     _result.isDone = true;
                 }
+
                 return _result;
             }
 

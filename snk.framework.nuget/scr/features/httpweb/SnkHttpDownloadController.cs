@@ -1,31 +1,35 @@
-using System.Diagnostics;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
-using SnkFramework.NuGet.Features.HttpWeb;
 
 namespace SnkFramework.NuGet.Features
 {
     namespace HttpWeb
     {
         /// <summary>
-        /// 下载执行器
+        /// 下载控制器
         /// </summary>
-        public class SnkHttpDownloadImplementer
+        public class SnkHttpDownloadController
         {
+            /// <summary>
+            /// 任务工厂（私有）
+            /// </summary>
+            private static TaskFactory s_taskFactory = null;
+
             /// <summary>
             /// 任务工厂
             /// </summary>
-            private static TaskFactory s_taskFactory = null;
             private static TaskFactory s_TaskFactory => s_taskFactory ?? new TaskFactory();
 
+            /// <summary>
+            /// http客户端
+            /// </summary>
             private static HttpClient _httpClient = new HttpClient();
-
+  
             /// <summary>
             /// 使下载任务生效
             /// </summary>
             /// <param name="task"></param>
-            public static async Task<SnkHttpDownloadResult> Implement(SnkDownloadTask task)
+            public static async Task<SnkHttpDownloadResult> Implement(ISnkDownloadTask task)
             {
                 return await s_TaskFactory.StartNew(() => task.DownloadFileAsync().Result);
             }
@@ -36,7 +40,7 @@ namespace SnkFramework.NuGet.Features
             /// <param name="uri"></param>
             /// <param name="savePath"></param>
             /// <returns></returns>
-            public static SnkDownloadTask CreateDownloadTask(string uri,string savePath)
+            public static ISnkDownloadTask CreateDownloadTask(string uri,string savePath)
             {
                 var downloadTask = new SnkDownloadTask(uri,savePath, _httpClient);
                 return downloadTask;
