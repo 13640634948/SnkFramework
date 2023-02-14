@@ -54,7 +54,7 @@ namespace SnkFramework.NuGet.Features
                 return this._patchCtrl.JsonParser.FromJson<SnkLocalPatchVersionInfos>(json);
             }
 
-            public async Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
+            public Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
             {
                 var list = new List<SnkSourceInfo>();
 
@@ -68,7 +68,7 @@ namespace SnkFramework.NuGet.Features
                     list.AddRange(SnkPatch.GenerateSourceInfoList(version.ToString(), finder, out var _));
                 }
 
-                return list;
+                return Task.FromResult<List<SnkSourceInfo>>(list);
             }
 
             public void UpdateLocalResVersion(int resVersion)
