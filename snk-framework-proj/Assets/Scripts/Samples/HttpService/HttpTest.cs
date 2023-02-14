@@ -36,12 +36,11 @@ namespace SnkSamples.Snk_HttpService
             var savePath = Application.dataPath + "/../test.apk";
             var downloadUri =
                 "http://10.20.204.3:8888/admin/resmgr/inner-down-file/apk/inner/windf_channel1023_inner_yw_bVersion0_bNumber124_bTypeDebug_20221023_172338.apk";
-        
-             task = SnkHttpDownloadImplementer.CreateDownloadTask(downloadUri, savePath);
-             task.SetDownloadFormBreakpoint(true);
+
+            task = SnkHttpDownloadImplementer.CreateDownloadTask(downloadUri, savePath);
+            task.SetDownloadFormBreakpoint(true);
             Debug.LogError("开始下载");
             SnkHttpDownloadImplementer.Implement(task);
-
         }
 
         public void StopDownload()
@@ -60,6 +59,7 @@ namespace SnkSamples.Snk_HttpService
                 Debug.LogError(result.errorMessage);
                 return;
             }
+
             Debug.LogError(result.length);
         }
 
@@ -71,8 +71,8 @@ namespace SnkSamples.Snk_HttpService
             {
                 Debug.LogError(result.errorMessage);
             }
-            
-            Debug.LogError("result  "+result.isDone);
+
+            Debug.LogError("result  " + result.isDone);
             var content = UTF8Encoding.UTF8.GetString(result.data);
             Debug.LogError(content);
             HttpResponseMessage d;
@@ -87,7 +87,6 @@ namespace SnkSamples.Snk_HttpService
             }
         }
 
-           
         public void OnDestroy()
         {
             task?.CancelDownload();
