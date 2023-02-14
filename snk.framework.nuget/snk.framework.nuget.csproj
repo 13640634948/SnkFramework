@@ -14,7 +14,7 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>cp ${TargetFile} ${SolutionDir}/../snk-framework-proj/Packages/snk.framework.main/Plugins/${TargetName}</command>
+          <command>cp ${TargetFile} ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/${TargetName}</command>
         </Command>
       </CustomCommands>
     </CustomCommands>
