@@ -112,13 +112,14 @@ namespace SnkFramework.NuGet.Features
                     {
                         var curPosition = 0L;
                         var fileInfo = new FileInfo(_savePath);
+
                         if (!fileInfo.Directory.Exists)
-                        {
                             fileInfo.Directory.Create();
-                        }
-                        if (_downloadFormBreakpoint)
+
+                        if (fileInfo.Exists)
                         {
-                            if (fileInfo.Exists)
+
+                            if (_downloadFormBreakpoint)
                             {
                                 fileStream = File.Open(_savePath, FileMode.Open, FileAccess.ReadWrite);
                                 fileStream.Seek(0, SeekOrigin.End);
@@ -126,17 +127,12 @@ namespace SnkFramework.NuGet.Features
                             }
                             else
                             {
-                                fileStream = new FileStream(_savePath, FileMode.Create, FileAccess.ReadWrite);
-                            }
-                        }
-                        else
-                        {
-                            if (fileInfo.Exists)
-                            {
                                 fileInfo.Delete();
                             }
-                            fileStream = new FileStream(_savePath, FileMode.Create, FileAccess.ReadWrite);
                         }
+
+                        fileStream = fileStream ?? new FileStream(_savePath, FileMode.Create, FileAccess.ReadWrite);
+
                         var request = new HttpRequestMessage();
                         request.RequestUri = new Uri(_uri);
                         request.Method = HttpMethod.Get;
