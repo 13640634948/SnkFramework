@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -54,7 +52,6 @@ namespace SnkFramework.NuGet.Features
         /// </summary>
         public class SnkHttpGetResult : SnkHttpResult
         {
-            
             /// <summary>
             /// Head字典
             /// </summary>
@@ -64,7 +61,6 @@ namespace SnkFramework.NuGet.Features
             /// 返回的数据
             /// </summary>
             public byte[] data;
-
         }
 
         /// <summary>
