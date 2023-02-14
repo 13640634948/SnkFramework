@@ -35,7 +35,7 @@
             /// <summary>
             /// 目标文件大小为0
             /// </summary>
-            target_file_size_is_zero = 5,
+            //target_file_size_is_zero = 5,
         }
     }
 }

@@ -146,12 +146,6 @@ namespace SnkFramework.NuGet.Features
                             _result.httpStatusCode = rsp.StatusCode;
                             rsp.EnsureSuccessStatusCode();
                             _totalSize = rsp.Content.Headers.ContentLength ?? 0;
-                            if (_totalSize == 0)
-                            {
-                                _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}", fileStream.Length, _totalSize, _uri);
-                                _result.code = SNK_HTTP_ERROR_CODE.target_file_size_is_zero;
-                                break;
-                            }
                             if (fileStream.Length >= _totalSize)
                             {
                                 _result.errorMessage = string.Format("本地文件长度大于等于总文件长度，请检查\n本地文件长度:{0}\n远端文件长度:{1}\n下载地址:{2}", fileStream.Length, _totalSize, _uri);
