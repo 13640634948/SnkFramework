@@ -7,7 +7,7 @@ namespace SnkFramework.NuGet.Features
         /// <summary>
         /// 下载参数
         /// </summary>
-        public class DownloadParam
+        public class SnkDownloadParams
         {
             /// <summary>
             /// 下载地址
