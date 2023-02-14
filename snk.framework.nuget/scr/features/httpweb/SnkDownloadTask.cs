@@ -105,12 +105,12 @@ namespace SnkFramework.NuGet.Features
             /// <returns></returns>
             public async Task<SnkHttpDownloadResult> AsyncDownloadFile(int buffSize = 1024 * 4 * 10)
             {
-                var curPosition = 0L;
                 FileStream fileStream = null;
                 try
                 {
                     do
                     {
+                        var curPosition = 0L;
                         var fileInfo = new FileInfo(_savePath);
                         if (!fileInfo.Directory.Exists)
                         {
@@ -121,8 +121,8 @@ namespace SnkFramework.NuGet.Features
                             if (fileInfo.Exists)
                             {
                                 fileStream = File.Open(_savePath, FileMode.Open, FileAccess.ReadWrite);
-                                curPosition = fileStream.Length;
-                                fileStream.Seek(curPosition, SeekOrigin.Current);
+                                fileStream.Seek(0, SeekOrigin.End);
+                                curPosition = fileStream.Position;
                             }
                             else
                             {
