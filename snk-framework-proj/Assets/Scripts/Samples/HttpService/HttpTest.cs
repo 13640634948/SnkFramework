@@ -85,8 +85,12 @@ namespace SnkSamples.Snk_HttpService
                 progress = (float)task.GetDownloadedSize() / task.GetTotalSize();
                 slider.value = progress;
             }
+        }
 
            
+        public void OnDestroy()
+        {
+            task?.CancelDownload();
         }
     }
 }
