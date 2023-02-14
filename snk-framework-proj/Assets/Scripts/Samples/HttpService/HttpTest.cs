@@ -82,7 +82,7 @@ namespace SnkSamples.Snk_HttpService
         {
             if (task != null)
             {
-                progress = (float)task.GetDownloadedSize() / task.GetTotalSize();
+                progress = (float)task.getDownloadedSize / task.getTotalSize;
                 slider.value = progress;
             }
         }

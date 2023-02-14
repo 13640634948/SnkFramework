@@ -63,19 +63,19 @@ namespace SnkFramework.NuGet.Features
             /// 是否下载中
             /// </summary>
             /// <returns></returns>
-            public bool IsDownloading() => _isDownloading;
+            public bool getIsDownloading => _isDownloading;
 
             /// <summary>
             /// 获取文件总大小
             /// </summary>
             /// <returns></returns>
-            public long GetTotalSize() => _totalSize;
+            public long getTotalSize => _totalSize;
 
             /// <summary>
             /// 获取已下载大小
             /// </summary>
             /// <returns></returns>
-            public long GetDownloadedSize() => _downloadedSize;
+            public long getDownloadedSize => _downloadedSize;
 
             /// <summary>
             /// 构造方法
@@ -103,7 +103,7 @@ namespace SnkFramework.NuGet.Features
             /// 异步下载
             /// </summary>
             /// <returns></returns>
-            public async Task<SnkHttpDownloadResult> AsyncDownloadFile(int buffSize = 1024 * 4 * 10)
+            public async Task<SnkHttpDownloadResult> DownloadFileAsync(int buffSize = 1024 * 4 * 10)
             {
                 try
                 {

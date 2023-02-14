@@ -16,7 +16,8 @@ namespace SnkFramework.NuGet.Features
             /// <summary>
             /// 任务工厂
             /// </summary>
-            private static TaskFactory _taskFactory;
+            private static TaskFactory s_taskFactory;
+            private static TaskFactory s_TaskFactory => s_taskFactory ?? new TaskFactory();
 
             private static HttpClient _httpClient = new HttpClient();
 
@@ -26,11 +27,7 @@ namespace SnkFramework.NuGet.Features
             /// <param name="task"></param>
             public static async Task<SnkHttpDownloadResult> Implement(SnkDownloadTask task)
             {
-                if (_taskFactory == null)
-                {
-                    _taskFactory = new TaskFactory();
-                }
-                return await _taskFactory.StartNew(() => task.AsyncDownloadFile().Result);
+                return await s_TaskFactory.StartNew(() => task.DownloadFileAsync().Result);
             }
 
             /// <summary>
