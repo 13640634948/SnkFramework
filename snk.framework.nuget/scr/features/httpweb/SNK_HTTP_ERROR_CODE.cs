@@ -31,11 +31,6 @@
             /// 文件错误
             /// </summary>
             file_error = 4,
-
-            /// <summary>
-            /// 目标文件大小为0
-            /// </summary>
-            //target_file_size_is_zero = 5,
         }
     }
 }
