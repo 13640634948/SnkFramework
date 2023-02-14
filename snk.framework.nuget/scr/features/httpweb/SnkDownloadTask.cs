@@ -9,8 +9,6 @@ namespace SnkFramework.NuGet.Features
 {
     namespace HttpWeb
     {
-
-
         /// <summary>
         /// 下载任务
         /// </summary>
