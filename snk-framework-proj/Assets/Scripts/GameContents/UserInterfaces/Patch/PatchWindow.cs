@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using GAME.Contents.UserInterfaces.ViewModels;
 using Loxodon.Framework.Binding;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,7 +42,7 @@ namespace GAME.Contents.UserInterfaces
             public ProgressBar ProgressBar => this._progressBar;
 
             private IBFPatchService _patchService;
-            protected IBFPatchService patchService => this._patchService ??= Game.ResolveService<IBFPatchService>();
+            protected IBFPatchService patchService => this._patchService ??= Snk.IoCProvider.Resolve<IBFPatchService>();
             
             public async Task ExePatch()
             {

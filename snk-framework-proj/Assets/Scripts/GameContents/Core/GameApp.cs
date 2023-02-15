@@ -3,6 +3,7 @@ using BFFramework.Runtime.Core;
 using BFFramework.Runtime.Services;
 using GAME.Contents.Services;
 using GAME.Contents.UserInterfaces.ViewModels;
+using SnkFramework.Runtime;
 using UnityEngine;
 
 namespace GAME.Contents.Core
@@ -24,8 +25,8 @@ namespace GAME.Contents.Core
 
         public override async Task Startup()
         {
-            Game.Resolve<IBFPatchService>().Initialize();
-            await Game.ResolveService<IBFSceneService>().LoadSceneAsync("LoginScene", true);
+            Snk.IoCProvider.Resolve<IBFPatchService>().Initialize();
+            await Snk.IoCProvider.Resolve<IBFSceneService>().LoadSceneAsync("LoginScene", true);
         }
     }
 }
