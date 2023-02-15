@@ -1,7 +1,7 @@
 using SnkFramework.Runtime;
 using SnkFramework.Runtime.Core;
-
 using BFFramework.Runtime.Services;
+using SnkFramework.IoC;
 
 namespace BFFramework.Runtime.Core
 {
@@ -15,10 +15,13 @@ namespace BFFramework.Runtime.Core
 
         protected virtual void RegisterServices()
         {
-            this.RegisterService<IBFAssetBundleService, BFAssetBundleService>();
-            this.RegisterService<IBFAssetService, BFAssetService>();
-            this.RegisterService<IBFSceneService, BFSceneService>();
             this.RegisterService<IBFPatchService, BFPatchService>();
+            Snk.IoCProvider.LazyConstructAndRegisterSingleton<IBFAssetBundleService, IBFPatchService>(
+                patchSvr => new BFAssetBundleService(patchSvr));
+            Snk.IoCProvider.LazyConstructAndRegisterSingleton<IBFAssetService, IBFAssetBundleService>(
+                assetBundleSvr => new BFAssetService(assetBundleSvr));
+            Snk.IoCProvider.LazyConstructAndRegisterSingleton<IBFSceneService, IBFAssetBundleService>(
+                assetBundleSvr => new BFSceneService(assetBundleSvr));
         }
 
         protected void RegisterService<TService, TSvrInstance>()

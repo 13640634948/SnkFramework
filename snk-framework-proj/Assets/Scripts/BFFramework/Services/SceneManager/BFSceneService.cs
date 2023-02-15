@@ -5,6 +5,12 @@ namespace BFFramework.Runtime.Services
 {
     public class BFSceneService : BFServiceBase, IBFSceneService
     {
+        private IBFAssetBundleService _assetBundleService;
+        public BFSceneService(IBFAssetBundleService assetBundleService)
+        {
+            this._assetBundleService = assetBundleService;
+        }
+        
         public AsyncOperation LoadSceneAsync(string sceneName, bool additive)
         {
             var mode = additive ? LoadSceneMode.Additive : LoadSceneMode.Single;
