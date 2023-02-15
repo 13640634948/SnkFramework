@@ -7,6 +7,7 @@ using SnkFramework.FluentBinding.Base;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.NuGet.Exceptions;
 using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime
@@ -78,9 +79,33 @@ namespace SnkFramework.Runtime
             
             protected virtual ISnkApplication CreateSnkApplication(ISnkIoCProvider iocProvider)
                 => iocProvider.Resolve<ISnkApplication>();
-            
+
+            protected virtual ISnkAppStart CreateAppStart(ISnkIoCProvider iocProvider)
+            {
+                var types = this.GetUserInterfaceAssembly().GetTypes();
+                System.Type appStartType = null;
+                foreach (var type in types)
+                {
+                    if (type.GetCustomAttribute<SnkAppStartImplementAttribute>() != null)
+                    {
+                        appStartType = type;
+                    }
+                }
+                    
+                if (appStartType == null)
+                    throw new NullReferenceException(nameof(appStartType));
+
+                if (iocProvider.IoCConstruct(appStartType) is not ISnkAppStart instance)
+                    throw new NullReferenceException(nameof(instance));
+                return instance;
+            }
+
             protected virtual ISnkApplication InitializeSnkApplication(ISnkIoCProvider iocProvider)
-                => CreateSnkApplication(iocProvider);
+            {
+                var appStartInstance = CreateAppStart(iocProvider);
+                iocProvider.RegisterSingleton(appStartInstance);
+                return CreateSnkApplication(iocProvider);
+            }
             
             protected virtual void InitializeApp(ISnkPluginManager pluginManager, ISnkApplication app)
             {
@@ -91,22 +116,6 @@ namespace SnkFramework.Runtime
                 this.logger.Info("Setup: Application Initialize - On background thread");
                 app.Initialize();
             }
-
-            /*
-            protected virtual void InitializeAppStart()
-            {
-                // 这里初始化AppStart
-                // AppStart可以作为平台鉴权的路由
-                foreach (var type in GetUserInterfaceAssembly().GetTypes())
-                {
-                    if (type.IsDefined(typeof(SnkAppStartAttribute), false))
-                    {
-                        var instance = Snk.IoCProvider.IoCConstruct(type);
-                        Snk.IoCProvider.RegisterSingleton(instance as ISnkAppStart);
-                    }
-                }
-            }
-*/
             
             protected virtual string UserInterfaceAssemblyName { get; } = "";
             
