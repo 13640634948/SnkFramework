@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime;
@@ -8,15 +9,20 @@ namespace SnkFramework.Runtime.Core
 {
     public abstract class SnkAppStart : ISnkAppStart
     {
-        protected readonly ISnkMvvmService NavigationService;
-        protected readonly ISnkApplication Application;
+        protected Lazy<ISnkMvvmService> _mvvmService = new (() 
+            => Snk.IoCProvider.Resolve<ISnkMvvmService>());
+
+        protected Lazy<ISnkApplication> _application = new(()
+            => Snk.IoCProvider.Resolve<ISnkApplication>());
+
+
+        protected ISnkMvvmService mvvmService => this._mvvmService.Value;
+        protected ISnkApplication application => this._application.Value;
 
         private int startHasCommenced;
 
-        protected SnkAppStart(ISnkApplication application, ISnkMvvmService navigationService)
+        protected SnkAppStart()
         {
-            Application = application;
-            NavigationService = navigationService;
         }
 
         public async Task StartAsync(object? hint = null)
@@ -38,7 +44,7 @@ namespace SnkFramework.Runtime.Core
 
         protected virtual async Task<object?> ApplicationStartup(object? hint = null)
         {
-            await Application.Startup();
+            await this.application.Startup();
             return hint;
         }
 
@@ -52,22 +58,18 @@ namespace SnkFramework.Runtime.Core
 
         protected virtual void Reset()
         {
-            Application.Reset();
+            application.Reset();
         }
     }
 
     public class SnkAppStart<TViewModel> : SnkAppStart
         where TViewModel : class, ISnkViewModel
     {
-        public SnkAppStart(ISnkApplication application, ISnkMvvmService navigationService) : base(application, navigationService)
-        {
-        }
-
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             try
             {
-                var a = NavigationService.OpenWindow<TViewModel>();
+                await this.mvvmService.OpenWindow<TViewModel>();
             }
             catch (System.Exception exception)
             {
