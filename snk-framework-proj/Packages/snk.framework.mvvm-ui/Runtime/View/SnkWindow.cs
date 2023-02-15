@@ -207,14 +207,22 @@ namespace SnkFramework.Mvvm.Runtime
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator onShowTransitioning(SnkTransitionOperation operation) => default;
+            protected virtual IEnumerator onShowTransitioning(SnkTransitionOperation operation)
+            {
+                operation.IsDone = true;
+                yield break;
+            }
 
             /// <summary>
             /// 隐藏动画实现
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator onHideTransitioning(SnkTransitionOperation operation) => default;
+            protected virtual IEnumerator onHideTransitioning(SnkTransitionOperation operation)
+            {
+                operation.IsDone = true;
+                yield break;
+            }
             
             /// <summary>
             /// 销毁动画实现
