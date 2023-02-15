@@ -1,6 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Publish snk.framework.nuget to unity" type="DotNetFolderPublish" factoryName="Publish to folder">
-    <riderPublish configuration="Debug" platform="Any CPU" runtime="Portable" target_folder="../snk-framework-proj/Packages/snk.framework/Plugins" target_framework="netstandard2.0" uuid_high="3649913415275006277" uuid_low="-4719500094473013150" />
-    <method v="2" />
-  </configuration>
-</component>
