@@ -14,18 +14,14 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
-            private Lazy<ISnkViewsContainer> _viewsContainer = new (()=> 
+            private readonly Lazy<ISnkViewsContainer> _viewsContainer = new (()=> 
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewsContainer>());
 
-            //private Lazy<ISnkViewCreator> _viewLoader = new(() =>
-            //    SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewCreator>());
-            
-            private Lazy<ISnkLayerContainer> _layerContainer = new(() =>
+            private readonly Lazy<ISnkLayerContainer> _layerContainer = new(() =>
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkLayerContainer>());
-            
-            public ISnkViewsContainer viewsContainer => this._viewsContainer.Value;
-            //public ISnkViewCreator ViewCreator => this._viewLoader.Value;
-            public ISnkLayerContainer LayerContainer => this._layerContainer.Value;
+
+            private ISnkViewsContainer _getViewsContainer => this._viewsContainer.Value;
+            private ISnkLayerContainer _getLayerContainer => this._layerContainer.Value;
             
 
             private readonly Dictionary<Type, Func<SnkPresentationHint, Task<bool>>> _presentationHintHandlers =
