@@ -150,6 +150,7 @@ namespace SnkFramework.Runtime
             protected virtual void InitializeMvvmService(ISnkIoCProvider iocProvider)
             {
                 SnkBindingSetup.Initialize();
+                MvvmUI.Logger = SnkLogHost.Default;
                 this.InitializeViewModelLoader(_iocProvider);
             }
 

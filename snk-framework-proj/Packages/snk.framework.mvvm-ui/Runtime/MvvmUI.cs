@@ -4,6 +4,6 @@ namespace SnkFramework
 {
     public class MvvmUI
     {
-        //public ISnkLogger Logger;
+        public static ISnkLogger Logger;
     }
 }
