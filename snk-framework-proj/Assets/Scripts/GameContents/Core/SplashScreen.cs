@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
 
-namespace GAME.Contents.UserInterfaces
+namespace GAME.Contents.Core
 {
     public class SplashScreen : MonoBehaviour
     {
