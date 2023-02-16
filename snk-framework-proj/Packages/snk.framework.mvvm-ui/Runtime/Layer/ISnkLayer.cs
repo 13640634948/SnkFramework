@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.View;
 
@@ -12,9 +13,9 @@ namespace SnkFramework.Mvvm.Runtime
             public SnkWindow GetChild(int index);
             public bool RemoveChild(SnkWindow window);
             
-            public SnkTransitionOperation Open(ISnkWindow window);
+            public Task Open(ISnkWindow window);
 
-            public SnkTransitionOperation Close(ISnkWindow window);
+            public Task Close(ISnkWindow window);
         }
     }
 }
