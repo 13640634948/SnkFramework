@@ -13,6 +13,44 @@ namespace SnkFramework.NuGet.Features
         /// </summary>
         internal class SnkDownloadTask : ISnkDownloadTask
         {
+            public class DownloadProgress
+            {
+                private long _downloadedBytes;
+                private long _totalBytes;
+
+                public int percentage { get; protected set; }
+
+                public long downloadedBytes
+                {
+                    get => _downloadedBytes;
+                    set
+                    {
+                        _downloadedBytes = value;
+                        this.refresh();
+                    }
+                }
+
+                public long totalBytes
+                {
+                    get => _totalBytes;
+                    set
+                    {
+                        _totalBytes = value;
+                        this.refresh();
+                    }
+                }
+
+                private void refresh()
+                {
+                    if (_downloadedBytes <= 0 || _totalBytes <= 0)
+                    {
+                        percentage = 0;
+                        return;
+                    }
+                    percentage = (int)((_downloadedBytes * 100) / _totalBytes);
+                }
+            }
+
             /// <summary>
             /// 下载地址（私有）
             /// </summary>
