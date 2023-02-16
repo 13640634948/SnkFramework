@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Extensions;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.View;
@@ -63,14 +64,13 @@ namespace SnkFramework.Mvvm.Runtime
             public bool RemoveChild(SnkWindow window)
                 => WindowList.Remove(window);
 
-            public virtual SnkTransitionOperation Open(ISnkWindow window)
+            public virtual Task Open(ISnkWindow window)
             {
                 bool animated = true;
-                var operation = window.Show(animated);
-                return operation;
+                return window.Show(animated);
             }
 
-            public virtual SnkTransitionOperation Close(ISnkWindow window)
+            public virtual Task Close(ISnkWindow window)
             {
                 bool animated = true;
                 return window.Hide(animated);

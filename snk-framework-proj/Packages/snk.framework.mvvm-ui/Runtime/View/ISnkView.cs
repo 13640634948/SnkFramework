@@ -1,5 +1,5 @@
 using System;
-using SnkFramework.Mvvm.Runtime.Base;
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 
 namespace SnkFramework.Mvvm.Runtime
@@ -30,9 +30,9 @@ namespace SnkFramework.Mvvm.Runtime
             
             //public void Create(ISnkBundle bundle);
 
-            public SnkTransitionOperation Activate(bool animated);
+            public Task Activate(bool animated);
 
-            public SnkTransitionOperation Passivate(bool animated);
+            public Task Passivate(bool animated);
         }
     }
 }

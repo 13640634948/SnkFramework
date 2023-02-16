@@ -3,4 +3,4 @@ Loxodon.Framework框架中剥离出来的插件，作用于MVVM模式中的v-vm�
 
 
 Loxodon.Framework@Clark:
-https://github.com/vovgou/loxodon-framework.git
+https://github.com/vovgou/loxodon-framework.git@2.5.6

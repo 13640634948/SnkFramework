@@ -1,7 +1,8 @@
 using System;
-using System.Collections;
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.NuGet.Asynchronous;
 using UnityEngine;
 
 namespace SnkFramework.Mvvm.Runtime.View
@@ -101,24 +102,18 @@ namespace SnkFramework.Mvvm.Runtime.View
             }
         }
 
-        public virtual SnkTransitionOperation Activate(bool animated)
+        public virtual Task Activate(bool animated)
         {
-            SnkTransitionOperation operation = new SnkTransitionOperation();
-            var routine = onActivateTransitioning(operation);
-            if (routine != null && animated)
-            {
-                StartCoroutine(routine);
-            }
-            return operation;
+            if(animated)
+                onActivateTransitioning();
+            return Task.CompletedTask;
         }
 
-        public virtual SnkTransitionOperation Passivate(bool animated)
+        public virtual Task Passivate(bool animated)
         {
-            SnkTransitionOperation operation = new SnkTransitionOperation();
-            var routine = onPassivateTransitioning(operation);
-            if (routine != null && animated)
-                StartCoroutine(routine);
-            return operation;
+            if(animated)
+                onPassivateTransitioning();
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -126,13 +121,19 @@ namespace SnkFramework.Mvvm.Runtime.View
         /// </summary>
         /// <param name="operation"></param>
         /// <returns></returns>
-        protected virtual IEnumerator onActivateTransitioning(SnkTransitionOperation operation) => default;
+        protected virtual Task onActivateTransitioning()
+        {
+            return Task.CompletedTask;
+        }
 
         /// <summary>
         /// 钝化动画实现
         /// </summary>
         /// <param name="operation"></param>
         /// <returns></returns>
-        protected virtual IEnumerator onPassivateTransitioning(SnkTransitionOperation operation) => default;
+        protected virtual Task onPassivateTransitioning()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

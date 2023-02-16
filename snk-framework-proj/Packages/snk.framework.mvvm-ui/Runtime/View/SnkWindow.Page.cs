@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Layer;
 
 namespace SnkFramework.Mvvm.Runtime
@@ -30,7 +31,7 @@ namespace SnkFramework.Mvvm.Runtime
                 return default;
             }
 
-            public SnkTransitionOperation AddPageAsync<TViewModel>() => default;
+            public Task AddPageAsync<TViewModel>() => default;
         }
     }
 }

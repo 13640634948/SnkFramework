@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using UnityEngine;
@@ -48,7 +49,7 @@ namespace SnkFramework.Mvvm.Runtime
 
             private bool _dismissed;
 
-            private SnkTransitionOperation _dismissTransitionOperation;
+            //private SnkTransitionOperation _dismissTransitionOperation;
 
             private WIN_STATE state = WIN_STATE.none;
 
@@ -128,78 +129,48 @@ namespace SnkFramework.Mvvm.Runtime
                 }
             }
 
-            public virtual SnkTransitionOperation Show(bool animated)
+            public virtual async Task Show(bool animated)
             {
                 onShown();
                 this.Visibility = true;
                 this.WindowState = WIN_STATE.visible;
-                SnkTransitionOperation operation = new SnkTransitionOperation();
-                var routine = onShowTransitioning(operation);
-                if (routine != null && animated)
+                if (animated)
                 {
                     this.WindowState = WIN_STATE.show_anim_begin;
-                    operation.onCompleted += () => this.WindowState = WIN_STATE.show_anim_end;
-                    StartCoroutine(routine);
+                    await onShowTransitioning();    
+                    this.WindowState = WIN_STATE.show_anim_end;
                 }
-                return operation;
             }
 
-            public virtual SnkTransitionOperation Hide(bool animated)
+            public virtual async Task Hide(bool animated)
             {
-                SnkTransitionOperation operation = new SnkTransitionOperation();
-                var routine = onHideTransitioning(operation);
-                if (routine != null && animated)
+                if (animated)
                 {
                     this.WindowState = WIN_STATE.hide_anim_begin;
-                    operation.onCompleted += () =>
-                    {
-                        this.WindowState = WIN_STATE.hide_anim_end;
-                        this.Visibility = false;
-                        this.WindowState = WIN_STATE.invisible;
-                        this.onHiden();
-                    };
-                    StartCoroutine(routine);
+                    await onHideTransitioning();
+                    this.WindowState = WIN_STATE.hide_anim_end;
                 }
-                else
-                {
-                    this.Visibility = false;
-                    this.WindowState = WIN_STATE.invisible;
-                    this.onHiden();
-                }
-                return operation;
+                this.Visibility = false;
+                this.WindowState = WIN_STATE.invisible;
+                this.onHiden();
             }
 
-            public virtual SnkTransitionOperation Dismiss(bool animated)
+            public virtual async Task Dismiss(bool animated)
             {
-                if (_dismissTransitionOperation != null)
-                    return _dismissTransitionOperation;
-                
                 if(this._dismissed == true)
                     throw new InvalidOperationException(string.Format("The window[{0}] has been destroyed.", this.gameObject.name));
                 
                 this._dismissed = true;
-                _dismissTransitionOperation = new SnkTransitionOperation();
-                var routine = onDismissTransitioning(_dismissTransitionOperation);
-                if (routine != null && animated)
+
+                if (animated)
                 {
                     this.WindowState = WIN_STATE.destroy_begin;
-                    _dismissTransitionOperation.onCompleted += () =>
-                    {
-                        this.WindowState = WIN_STATE.destroy_end;
-                        this.onDismiss();
-                        this.Layer.RemoveChild(this);
-                        this._dismissTransitionOperation = null;
-                    };
-                    StartCoroutine(routine);
+                    await onDismissTransitioning();       
+                    this.WindowState = WIN_STATE.destroy_end;
                 }
-                else
-                {
-                    this.Layer.RemoveChild(this);
-                    this._dismissTransitionOperation = null;
-                    this.onDismiss();
-                }
-                return _dismissTransitionOperation;
-                
+                this.Layer.RemoveChild(this);
+                //this._dismissTransitionOperation = null;
+                this.onDismiss();
             }
 
             /// <summary>
@@ -207,10 +178,9 @@ namespace SnkFramework.Mvvm.Runtime
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator onShowTransitioning(SnkTransitionOperation operation)
+            protected virtual Task onShowTransitioning()
             {
-                operation.IsDone = true;
-                yield break;
+                return Task.CompletedTask;
             }
 
             /// <summary>
@@ -218,74 +188,58 @@ namespace SnkFramework.Mvvm.Runtime
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator onHideTransitioning(SnkTransitionOperation operation)
+            protected virtual Task onHideTransitioning()
             {
-                operation.IsDone = true;
-                yield break;
+                return Task.CompletedTask;
             }
-            
+
             /// <summary>
             /// 销毁动画实现
             /// </summary>
             /// <param name="operation"></param>
             /// <returns></returns>
-            protected virtual IEnumerator onDismissTransitioning(SnkTransitionOperation operation) 
-                => onHideTransitioning(operation);
+            protected virtual Task onDismissTransitioning()
+            {
+                return onHideTransitioning();
+            }
 
-            public override SnkTransitionOperation Activate(bool animated)
+            public override async Task Activate(bool animated)
             {
                 if (this.Visibility == false)
                     throw new InvalidOperationException("The window is not visible.");
 
                 if (this.Activated == true)
-                    return null;
-                
-                SnkTransitionOperation operation = new SnkTransitionOperation();
-                var routine = onActivateTransitioning(operation);
-                if (routine != null && animated)
+                    return;
+
+                if (animated)
                 {
                     this.WindowState = WIN_STATE.activation_anim_begin;
-                    operation.onCompleted += () =>
-                    {
-                        this.WindowState = WIN_STATE.activation_anim_end;
-                        this.Activated = true;
-                        this.WindowState = WIN_STATE.activation;
-                    };
-                    StartCoroutine(routine);
+                    await onActivateTransitioning();
+                    this.WindowState = WIN_STATE.activation_anim_end;
                 }
-                else
-                {
-                    this.Activated = true;
-                    this.WindowState = WIN_STATE.activation;
-                }
-                return operation;
+                this.WindowState = WIN_STATE.activation_anim_end;
+                this.Activated = true;
+                this.WindowState = WIN_STATE.activation;
             }
 
-            public override SnkTransitionOperation Passivate(bool animated)
+            public override async Task Passivate(bool animated)
             {
                 if (this.Visibility == false)
                     throw new InvalidOperationException("The window is not visible.");
 
                 if (this.Activated == false)
-                    return null;
+                    return;
 
                 this.Activated = false;
                 this.WindowState = WIN_STATE.passivation;
 
-                SnkTransitionOperation operation = new SnkTransitionOperation();
-                var routine = onPassivateTransitioning(operation);
-                if (routine != null && animated)
+                if (animated)
                 {
                     this.WindowState = WIN_STATE.passivation_anim_begin;
-                    operation.onCompleted += () =>
-                    {
-                        this.WindowState = WIN_STATE.passivation_anim_end;
-                    };
-                    StartCoroutine(routine);
+                    await onPassivateTransitioning();
+                    this.WindowState = WIN_STATE.passivation_anim_end;
                 }
-                return operation;
             }
-            
         }
     }
 }
