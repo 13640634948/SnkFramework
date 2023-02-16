@@ -26,7 +26,7 @@ namespace SnkFramework.Runtime.Core
                 var toRun = Activator.CreateInstance(type);
                 if (toRun is not ISnkBootstrapAction bootstrapAction)
                 {
-                    SnkLogHost.Default?.Info("Could not run startup task {TypeName} - it's not a startup task", type.Name);
+                    SnkLogHost.Default?.InfoFormat("Could not run startup task {TypeName} - it's not a startup task", type.Name);
                     return;
                 }
 

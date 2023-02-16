@@ -12,11 +12,10 @@ namespace SnkFramework.Mvvm.Runtime
         {
             protected virtual async Task<bool> OpenWindow(ISnkPresentationAttribute attribute, SnkViewModelRequest request)
             {
-                SnkWindow window = await this.viewsContainer.CreateView(request);
-                var windowAttribute = attribute as SnkPresentationWindowAttribute;
-                if (windowAttribute == null)
+                var window = await this._getViewsContainer.CreateView(request);
+                if (attribute is not SnkPresentationWindowAttribute windowAttribute)
                     throw new ArgumentNullException(nameof(windowAttribute) + " is null");
-                var layer = LayerContainer.GetLayer(windowAttribute.LayerType);
+                var layer = _getLayerContainer.GetLayer(windowAttribute.LayerType);
                 window.Create(layer, null);
                 await layer.Open(window);
                 return true;
@@ -24,13 +23,12 @@ namespace SnkFramework.Mvvm.Runtime
 
             protected virtual async Task<bool> CloseWindow(ISnkViewModel viewModel, ISnkPresentationAttribute attribute)
             {
-                var windowAttribute = attribute as SnkPresentationWindowAttribute;
-                if (windowAttribute == null)
+                if (attribute is not SnkPresentationWindowAttribute windowAttribute)
                     throw new ArgumentNullException(nameof(windowAttribute) + " is null");
-                var layer = LayerContainer.GetLayer(windowAttribute.LayerType);
-                SnkWindow window = layer.GetChild(0);
+                var layer = _getLayerContainer.GetLayer(windowAttribute.LayerType);
+                var window = layer.GetChild(0);
                 await layer.Close(window);
-                this.viewsContainer.UnloadView(window);
+                this._getViewsContainer.UnloadView(window);
                 return true;
             }
         }

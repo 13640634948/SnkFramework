@@ -21,5 +21,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="log4net" />
+    <None Remove="scr\asynchronous\" />
+    <None Remove="scr\asynchronous\interfaces\" />
+    <None Remove="scr\asynchronous\internal\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scr\asynchronous\" />
+    <Folder Include="scr\asynchronous\interfaces\" />
+    <Folder Include="scr\asynchronous\internal\" />
   </ItemGroup>
 </Project>

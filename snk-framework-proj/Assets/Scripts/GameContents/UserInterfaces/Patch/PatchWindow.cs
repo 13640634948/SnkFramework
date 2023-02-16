@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using GAME.Contents.UserInterfaces.ViewModels;
 using Loxodon.Framework.Binding;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,18 +20,18 @@ namespace GAME.Contents.UserInterfaces
             private bool enable;
 
             public bool Enable {
-                get{ return this.enable; }
-                set{ this.Set<bool> (ref this.enable, value); }
+                get => this.enable;
+                set => this.Set<bool> (ref this.enable, value);
             }
 
             public float Progress {
-                get{ return this.progress; }
-                set{ this.Set<float> (ref this.progress, value); }
+                get => this.progress;
+                set => this.Set<float> (ref this.progress, value);
             }
 
             public string Tip {
-                get{ return this.tip; }
-                set{ this.Set<string> (ref this.tip, value); }
+                get => this.tip;
+                set => this.Set<string> (ref this.tip, value);
             }
         }
         
@@ -41,7 +42,7 @@ namespace GAME.Contents.UserInterfaces
             public ProgressBar ProgressBar => this._progressBar;
 
             private IBFPatchService _patchService;
-            protected IBFPatchService patchService => this._patchService ??= Game.ResolveService<IBFPatchService>();
+            protected IBFPatchService patchService => this._patchService ??= Snk.IoCProvider.Resolve<IBFPatchService>();
             
             public async Task ExePatch()
             {

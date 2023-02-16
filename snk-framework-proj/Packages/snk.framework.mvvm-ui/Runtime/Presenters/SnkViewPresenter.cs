@@ -14,18 +14,14 @@ namespace SnkFramework.Mvvm.Runtime
     {
         public partial class SnkViewPresenter : SnkViewAttributeOrganizer, ISnkViewPresenter
         {
-            private Lazy<ISnkViewsContainer> _viewsContainer = new (()=> 
+            private readonly Lazy<ISnkViewsContainer> _viewsContainer = new (()=> 
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewsContainer>());
 
-            //private Lazy<ISnkViewCreator> _viewLoader = new(() =>
-            //    SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkViewCreator>());
-            
-            private Lazy<ISnkLayerContainer> _layerContainer = new(() =>
+            private readonly Lazy<ISnkLayerContainer> _layerContainer = new(() =>
                 SnkSingleton<ISnkIoCProvider>.Instance.Resolve<ISnkLayerContainer>());
-            
-            public ISnkViewsContainer viewsContainer => this._viewsContainer.Value;
-            //public ISnkViewCreator ViewCreator => this._viewLoader.Value;
-            public ISnkLayerContainer LayerContainer => this._layerContainer.Value;
+
+            private ISnkViewsContainer _getViewsContainer => this._viewsContainer.Value;
+            private ISnkLayerContainer _getLayerContainer => this._layerContainer.Value;
             
 
             private readonly Dictionary<Type, Func<SnkPresentationHint, Task<bool>>> _presentationHintHandlers =
@@ -39,22 +35,21 @@ namespace SnkFramework.Mvvm.Runtime
                 _presentationHintHandlers[typeof(THint)] = hint => action((THint)hint);
             }
 
-            protected Task<bool> HandlePresentationChange(SnkPresentationHint hint)
+            protected async Task<bool> HandlePresentationChange(SnkPresentationHint hint)
             {
                 if (hint == null)
                     throw new ArgumentNullException(nameof(hint));
 
-                if (_presentationHintHandlers.TryGetValue(hint.GetType(),
-                        out Func<SnkPresentationHint, Task<bool>> handler))
+                if (_presentationHintHandlers.TryGetValue(hint.GetType(), out var handler))
                 {
-                    return handler(hint);
+                    return await handler(hint);
                 }
 
-                return default;
+                return false;
             }
 
 
-            public Task<bool> ChangePresentation(SnkPresentationHint hint)
+            public async Task<bool> ChangePresentation(SnkPresentationHint hint)
             {
                 /*
                 if (await HandlePresentationChange(hint))
@@ -71,27 +66,26 @@ namespace SnkFramework.Mvvm.Runtime
                 //SnkLogHost.Default?.Log(LogLevel.Warning, "Hint ignored {name}", hint.GetType().Name);
                 return false;
                 */
-
-                return default;
+                return false;
             }
 
 
-            public virtual Task<bool> Open(SnkViewModelRequest request)
+            public virtual async Task<bool> Open(SnkViewModelRequest request)
             {
                 var attributeAction = GetPresentationAttributeAction(request, out var attribute);
                 if (attributeAction.OpenAction != null && attribute.ViewType != null)
-                    return attributeAction.OpenAction.Invoke(attribute, request);
-                return Task.FromResult(true);
+                    return await attributeAction.OpenAction.Invoke(attribute, request);
+                return false;
             }
 
-            public virtual Task<bool> Close(ISnkViewModel viewModel)
+            public virtual async Task<bool> Close(ISnkViewModel viewModel)
             {
                 var request = new SnkViewModelInstanceRequest(viewModel);
                 request.ViewModelInstance = viewModel;
                 var attributeAction = GetPresentationAttributeAction(request, out var attribute);
                 if (attributeAction.CloseAction != null)
-                    return attributeAction.CloseAction.Invoke(viewModel, attribute);
-                return default;
+                    return await attributeAction.CloseAction.Invoke(viewModel, attribute);
+                return false;
             }
         }
     }

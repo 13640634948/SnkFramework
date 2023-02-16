@@ -540,7 +540,7 @@ namespace SnkFramework.IoC
                     // the item already exists in the lookup table
                     // - this is "game over" for the IoC lookup
                     // - see https://github.com/MvvmCross/MvvmCross/issues/553
-                    SnkIoC.s_Logger?.Error("IoC circular reference detected - cannot currently resolve {typeName}", type.Name);
+                    SnkIoC.s_Logger?.ErrorFormat("IoC circular reference detected - cannot currently resolve {typeName}", type.Name);
                     resolved = type.CreateDefault();
                     return false;
                 }

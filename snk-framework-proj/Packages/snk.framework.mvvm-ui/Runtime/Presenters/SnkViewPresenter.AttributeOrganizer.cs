@@ -30,7 +30,7 @@ namespace SnkFramework.Mvvm.Runtime
                 attribute.ViewType = viewType;
                 if (attribute is SnkPresentationWindowAttribute windowAttribute)
                 {
-                    windowAttribute.LayerType = this.LayerContainer.DefaultLayerType;
+                    windowAttribute.LayerType = this._getLayerContainer.DefaultLayerType;
                 }
                 return attribute;
             }
@@ -101,7 +101,7 @@ namespace SnkFramework.Mvvm.Runtime
                 //    throw new InvalidOperationException($"Cannot get view types from null {nameof(ViewsContainer)}");
 
                 //var viewType = ViewsContainer.GetViewType(request.ViewModelType);
-                Type viewType = this.viewsContainer.GetViewType(request.ViewModelType);
+                Type viewType = this._getViewsContainer.GetViewType(request.ViewModelType);
                 if (viewType == null)
                     throw new InvalidOperationException(
                         $"Could not get View Type for ViewModel Type {request.ViewModelType}");

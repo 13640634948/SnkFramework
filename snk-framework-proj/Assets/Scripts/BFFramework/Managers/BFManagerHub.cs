@@ -9,6 +9,8 @@ namespace BFFramework.Runtime.Managers
         {
             registerManager<IBFModuleManager, BFModuleManager>(iocProvider);
             registerManager<IBFCameraManager, BFCameraManager>(iocProvider);
+            registerManager<IBFAsyncManager, BFAsyncManager>(iocProvider);
+            registerManager<IBFDownloadManager, BFDownloadManager>(iocProvider);
         }
         
         private static void registerManager<TManager, TMgrInstance>(ISnkIoCProvider iocProvider)
