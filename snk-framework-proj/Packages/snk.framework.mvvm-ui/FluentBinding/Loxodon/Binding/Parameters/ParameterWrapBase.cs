@@ -22,26 +22,29 @@
  * SOFTWARE.
  */
 
-using Loxodon.Framework.Binding.Proxy;
 using System;
 
 namespace Loxodon.Framework.Binding.Parameters
 {
-    public class ParameterWrapScriptInvoker : ParameterWrapBase, IInvoker
+    public class ParameterWrapBase
     {
-        private readonly IScriptInvoker invoker;
-
-        public ParameterWrapScriptInvoker(IScriptInvoker invoker, ICommandParameter commandParameter) : base(commandParameter)
+        protected readonly ICommandParameter commandParameter;
+        public ParameterWrapBase(ICommandParameter commandParameter)
         {
-            if (invoker == null)
-                throw new ArgumentNullException("invoker");
+            if (commandParameter == null)
+                throw new ArgumentNullException("commandParameter");
 
-            this.invoker = invoker;
+            this.commandParameter = commandParameter;
         }
 
-        public object Invoke(params object[] args)
+        protected virtual object GetParameterValue()
         {
-            return this.invoker.Invoke(GetParameterValue());
+            return commandParameter.GetValue();
+        }
+
+        protected virtual Type GetParameterValueType()
+        {
+            return commandParameter.GetValueType();
         }
     }
 }
