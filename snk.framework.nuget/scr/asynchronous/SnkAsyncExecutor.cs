@@ -4,7 +4,7 @@ namespace SnkFramework.NuGet
 {
     namespace Asynchronous
     {
-        public abstract class SnkAsyncExecutor
+        public sealed class SnkAsyncExecutor
         {
             protected static ISnkAsyncExecutor s_instance;
 
