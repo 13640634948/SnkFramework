@@ -126,13 +126,21 @@ namespace SnkFramework.Mvvm.Runtime.View
         /// </summary>
         /// <param name="operation"></param>
         /// <returns></returns>
-        protected virtual IEnumerator onActivateTransitioning(SnkTransitionOperation operation) => default;
+        protected virtual IEnumerator onActivateTransitioning(SnkTransitionOperation operation)
+        {
+            operation.IsDone = true;
+            yield break;
+        }
 
         /// <summary>
         /// 钝化动画实现
         /// </summary>
         /// <param name="operation"></param>
         /// <returns></returns>
-        protected virtual IEnumerator onPassivateTransitioning(SnkTransitionOperation operation) => default;
+        protected virtual IEnumerator onPassivateTransitioning(SnkTransitionOperation operation)
+        {
+            operation.IsDone = true;
+            yield break;
+        }
     }
 }
