@@ -6,7 +6,7 @@ namespace SnkFramework.NuGet
     {
         public sealed class SnkAsyncExecutor
         {
-            protected static ISnkAsyncExecutor s_instance;
+            private static ISnkAsyncExecutor s_instance;
 
             public bool IsMainThread => s_instance.IsMainThread;
 
