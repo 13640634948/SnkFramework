@@ -29,7 +29,7 @@ namespace SnkFramework.IoC
                 // Check for null
 
 
-                SnkIoC.s_Logger?.Warning("ReflectionTypeLoadException masked during loading of {0} - error {1}",
+                SnkIoC.s_Logger?.WarnFormat("ReflectionTypeLoadException masked during loading of {0} - error {1}",
                                       assembly.FullName, e.ToLongString());
 
                 if (e.LoaderExceptions != null)

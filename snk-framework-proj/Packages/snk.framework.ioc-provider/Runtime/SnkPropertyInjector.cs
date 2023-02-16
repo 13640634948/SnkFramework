@@ -53,7 +53,7 @@ namespace SnkFramework.IoC
                 }
                 else
                 {
-                    SnkIoC.s_Logger?.Warning( "IoC property injection skipped for {propertyName} on {typeName}",
+                    SnkIoC.s_Logger?.WarnFormat( "IoC property injection skipped for {propertyName} on {typeName}",
                         injectableProperty.Name, toReturn.GetType().Name);
                 }
             }
