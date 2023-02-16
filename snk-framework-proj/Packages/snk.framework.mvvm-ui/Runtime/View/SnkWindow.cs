@@ -241,7 +241,7 @@ namespace SnkFramework.Mvvm.Runtime
                     return null;
                 
                 SnkTransitionOperation operation = new SnkTransitionOperation();
-                var routine = onActivateTransitioning(operation);
+                var routine = OnActivateTransitioning(operation);
                 if (routine != null && animated)
                 {
                     this.WindowState = WIN_STATE.activation_anim_begin;

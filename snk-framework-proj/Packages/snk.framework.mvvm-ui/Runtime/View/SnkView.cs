@@ -9,15 +9,15 @@ namespace SnkFramework.Mvvm.Runtime.View
     public abstract class SnkView : SnkUIBehaviour, ISnkView
     {
         public virtual ISnkViewModel ViewModel { get; set; }
-        protected readonly object _lock = new object();
-        private bool activated;
+        protected readonly object _lock = new ();
+        private bool _activated;
 
-        private EventHandler activatedChanged;
-        private EventHandler visibilityChanged;
+        private EventHandler _activatedChanged;
+        private EventHandler _visibilityChanged;
 
         public virtual bool Visibility
         {
-            get => !this.IsDestroyed() && this.gameObject != null ? this.gameObject.activeSelf : false;
+            get => !this.IsDestroyed() && this.gameObject != null && this.gameObject.activeSelf;
             set
             {
                 if (this.IsDestroyed() || this.gameObject == null)
@@ -32,49 +32,25 @@ namespace SnkFramework.Mvvm.Runtime.View
 
         public event EventHandler ActivatedChanged
         {
-            add
-            {
-                lock (_lock)
-                {
-                    this.activatedChanged += value;
-                }
-            }
-            remove
-            {
-                lock (_lock)
-                {
-                    this.activatedChanged -= value;
-                }
-            }
+            add { lock (_lock) this._activatedChanged += value; }
+            remove { lock (_lock) this._activatedChanged -= value; }
         }
 
         public event EventHandler VisibilityChanged
-        {
-            add
-            {
-                lock (_lock)
-                {
-                    this.visibilityChanged += value;
-                }
-            }
-            remove
-            {
-                lock (_lock)
-                {
-                    this.visibilityChanged -= value;
-                }
-            }
+        { 
+            add { lock (_lock) this._visibilityChanged += value; }
+            remove { lock (_lock) this._visibilityChanged -= value; }
         }
 
         public virtual bool Activated
         {
-            get => this.activated;
+            get => this._activated;
             protected set
             {
-                if (this.activated == value)
+                if (this._activated == value)
                     return;
 
-                this.activated = value;
+                this._activated = value;
                 this.OnActivatedChanged();
                 this.RaiseActivatedChanged();
             }
@@ -104,8 +80,8 @@ namespace SnkFramework.Mvvm.Runtime.View
         {
             try
             {
-                if (this.visibilityChanged != null)
-                    this.visibilityChanged(this, EventArgs.Empty);
+                if (this._visibilityChanged != null)
+                    this._visibilityChanged(this, EventArgs.Empty);
             }
             catch (Exception e)
             {
@@ -117,7 +93,7 @@ namespace SnkFramework.Mvvm.Runtime.View
         {
             try
             {
-                this.activatedChanged?.Invoke(this, EventArgs.Empty);
+                this._activatedChanged?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception e)
             {
