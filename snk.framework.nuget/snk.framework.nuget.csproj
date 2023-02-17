@@ -24,10 +24,12 @@
     <None Remove="scr\asynchronous\" />
     <None Remove="scr\asynchronous\interfaces\" />
     <None Remove="scr\asynchronous\internal\" />
+    <None Remove="scr\utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scr\asynchronous\" />
     <Folder Include="scr\asynchronous\interfaces\" />
     <Folder Include="scr\asynchronous\internal\" />
+    <Folder Include="scr\utilities\" />
   </ItemGroup>
 </Project>
