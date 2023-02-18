@@ -23,62 +23,39 @@
  */
 
 using System;
-using System.Collections;
-using SnkFramework.NuGet.Basic;
 
-#if NETFX_CORE
-using System.Reflection;
-#endif
-
-namespace SnkFramework.NuGet.Preference
+namespace SnkFramework.NuGet.Basic
 {
-    public abstract class SnkJsonTypeEncoder : ISnkTypeEncoder
+    namespace TypeEncoder
     {
-        protected abstract ISnkJsonParser jsonParser { get; }
-        private int priority = -1000;
-
-        public int Priority
+        public class SnkVersionTypeEncoder : ISnkTypeEncoder
         {
-            get { return this.priority; }
-            set { this.priority = value; }
-        }
+            private int priority = 999;
 
-        public bool IsSupport(Type type)
-        {
-            if (typeof(IList).IsAssignableFrom(type) || typeof(IDictionary).IsAssignableFrom(type))
+            public int Priority
+            {
+                get { return this.priority; }
+                set { this.priority = value; }
+            }
+
+            public bool IsSupport(Type type)
+            {
+                if (type.Equals(typeof(Version)))
+                    return true;
                 return false;
-
-#if NETFX_CORE
-            if (type.GetTypeInfo().IsPrimitive)
-#else
-            if (type.IsPrimitive)
-#endif
-                return false;
-
-            return true;
-        }
-
-        public string Encode(object value)
-        {
-            try
-            {
-                return jsonParser.ToJson(value);
             }
-            catch (Exception e)
-            {
-                throw new NotSupportedException("", e);
-            }
-        }
 
-        public object Decode(Type type, string value)
-        {
-            try
+            public object Decode(Type type, string value)
             {
-                return jsonParser.FromJson(value, type);
+                if (string.IsNullOrEmpty(value))
+                    return null;
+
+                return new Version(value);
             }
-            catch (Exception e)
+
+            public string Encode(object value)
             {
-                throw new NotSupportedException("", e);
+                return ((Version)value).ToString();
             }
         }
     }

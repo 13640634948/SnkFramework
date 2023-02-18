@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using SnkFramework.NuGet.Basic.TypeEncoder;
 
 namespace SnkFramework.NuGet.Preference
 {

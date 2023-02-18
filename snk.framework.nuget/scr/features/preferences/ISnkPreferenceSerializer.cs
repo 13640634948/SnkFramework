@@ -23,6 +23,7 @@
  */
 
 using System;
+using SnkFramework.NuGet.Basic.TypeEncoder;
 
 namespace SnkFramework.NuGet.Preference
 {

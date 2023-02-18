@@ -24,36 +24,22 @@
 
 using System;
 
-namespace SnkFramework.NuGet.Preference
+namespace SnkFramework.NuGet.Basic
 {
-    public class SnkEnumTypeEncoder : ISnkTypeEncoder
+    namespace TypeEncoder
     {
-        private int priority = 998;
-
-        public int Priority
+        public interface ISnkTypeEncoder
         {
-            get { return this.priority; }
-            set { this.priority = value; }
-        }
+            /// <summary>
+            /// Positive or negative, the default value is 0.the type encoder with the higher priority will be executed first.
+            /// </summary>
+            int Priority { get; set; }
 
-        public bool IsSupport(Type type)
-        {
-            if (type.IsEnum)
-                return true;
-            return false;
-        }
+            bool IsSupport(Type type);
 
-        public object Decode(Type type, string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return null;
+            string Encode(object value);
 
-            return Enum.Parse(type, value);
-        }
-
-        public string Encode(object value)
-        {
-            return Enum.GetName(value.GetType(), value);
+            object Decode(Type type, string value);
         }
     }
 }
