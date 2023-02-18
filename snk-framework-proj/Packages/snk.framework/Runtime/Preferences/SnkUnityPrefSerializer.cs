@@ -1,4 +1,7 @@
-namespace SnkFramework.NuGet.Preference
+using SnkFramework.NuGet.Preference;
+using SnkFramework.Runtime.Basic.TypeEncoder;
+
+namespace SnkFramework.Runtime.Preference
 {
     public class SnkUnityPrefSerializer : SnkDefaultSerializer
     {

@@ -25,42 +25,46 @@
  */
 
 using System;
+using SnkFramework.NuGet.Basic.TypeEncoder;
 using UnityEngine;
 
-namespace SnkFramework.NuGet.Preference
+namespace SnkFramework.Runtime.Basic
 {
-    public class SnkColorTypeEncoder : ISnkTypeEncoder
+    namespace TypeEncoder
     {
-        private int priority = 997;
-
-        public int Priority
+        public class SnkColorTypeEncoder : ISnkTypeEncoder
         {
-            get { return this.priority; }
-            set { this.priority = value; }
-        }
+            private int priority = 997;
 
-        public bool IsSupport(Type type)
-        {
-            if (type.Equals(typeof(Color)))
-                return true;
-            return false;
-        }
+            public int Priority
+            {
+                get { return this.priority; }
+                set { this.priority = value; }
+            }
 
-        public object Decode(Type type, string value)
-        {
-            if (string.IsNullOrEmpty(value))
-                return null;
+            public bool IsSupport(Type type)
+            {
+                if (type.Equals(typeof(Color)))
+                    return true;
+                return false;
+            }
 
-            Color color;
-            if (ColorUtility.TryParseHtmlString(value, out color))
-                return color;
+            public object Decode(Type type, string value)
+            {
+                if (string.IsNullOrEmpty(value))
+                    return null;
 
-            throw new FormatException(string.Format("The '{0}' is illegal Color.", value));
-        }
+                Color color;
+                if (ColorUtility.TryParseHtmlString(value, out color))
+                    return color;
 
-        public string Encode(object value)
-        {
-            return string.Format("#{0}", ColorUtility.ToHtmlStringRGBA((Color)value));
+                throw new FormatException(string.Format("The '{0}' is illegal Color.", value));
+            }
+
+            public string Encode(object value)
+            {
+                return string.Format("#{0}", ColorUtility.ToHtmlStringRGBA((Color)value));
+            }
         }
     }
 }
