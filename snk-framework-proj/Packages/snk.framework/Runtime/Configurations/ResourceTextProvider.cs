@@ -6,7 +6,7 @@ namespace SnkFramework.Runtime.Configurations
     {
         public string Load()
         {
-            throw new System.NotImplementedException();
+            return "";
         }
     }
 }
