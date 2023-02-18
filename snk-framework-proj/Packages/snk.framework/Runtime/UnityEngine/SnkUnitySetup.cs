@@ -1,6 +1,8 @@
 using SnkFramework.IoC;
+using SnkFramework.NuGet.Features.Configuration;
 using SnkFramework.NuGet.Preference;
 using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.Runtime.Configurations;
 using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Preference;
 
@@ -26,27 +28,26 @@ namespace SnkFramework.Runtime
                 SnkPreference.Register(preferenceFactory);
             }
 
+            protected virtual void AddCustomConfigurations(SnkCompositeConfiguration configuration)
+            {
+                
+            }
+
             protected virtual void InitializeConfiguration(ISnkIoCProvider iocProvider)
             {
-                /*
                 // 创建一个组合配置
-                CompositeConfiguration configuration = new CompositeConfiguration(); 
-                // 加载默认配置文件
-                string defaultText = FileUtil.ReadAllText(Application.streamingAssetsPath + "/application.properties.txt"); 
-                configuration.AddConfiguration(new PropertiesConfiguration(defaultText)); 
-#if UNITY_EDITOR 
-                string text = FileUtil.ReadAllText(Application.streamingAssetsPath + "/application.editor.properties.txt"); 
-#elif UNITY_ANDROID 
-                string text = FileUtil.ReadAllText(Application.streamingAssetsPath + "/application.android.properties.txt"); 
-#elif UNIYT_IOS 
-                string text = FileUtil.ReadAllText(Application.streamingAssetsPath + "/application.ios.properties.txt"); 
+                var configuration = new SnkCompositeConfiguration();
+                
+                // 加载平台配置文件
+                configuration.AddConfiguration(new SnkPlatformConfiguration()); 
+                
+                // 加载渠道配置文件
+                configuration.AddConfiguration(new SnkChannelConfiguration());
 
-    #endif 
-                // 加载当前平台的配置文件
-                configuration.AddConfiguration(new PropertiesConfiguration(text)); 
-                // 注册配置文件到容器中
-                container.Register<IConfiguration>(configuration);
-                */
+                // 加载自定义配置文件
+                AddCustomConfigurations(configuration);
+                
+                iocProvider.RegisterSingleton<ISnkConfiguration>(configuration);
             }
 
             protected override void RegisterDefaultDependencies(ISnkIoCProvider iocProvider)
