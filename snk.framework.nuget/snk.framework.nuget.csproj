@@ -25,13 +25,11 @@
     <None Remove="scr\asynchronous\interfaces\" />
     <None Remove="scr\asynchronous\internal\" />
     <None Remove="scr\utilities\" />
-    <None Remove="scr\basic\TypeEncoder\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scr\asynchronous\" />
     <Folder Include="scr\asynchronous\interfaces\" />
     <Folder Include="scr\asynchronous\internal\" />
     <Folder Include="scr\utilities\" />
-    <Folder Include="scr\basic\TypeEncoder\" />
   </ItemGroup>
 </Project>

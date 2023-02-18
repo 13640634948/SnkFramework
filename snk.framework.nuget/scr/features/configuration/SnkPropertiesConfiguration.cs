@@ -10,9 +10,11 @@ namespace SnkFramework.NuGet.Features
         public class SnkPropertiesConfiguration : SnkConfigurationBase
         {
             private readonly Dictionary<string, object> dict = new Dictionary<string, object>();
-            public SnkPropertiesConfiguration(string text)
+            public SnkPropertiesConfiguration(ISnkTextProvider textProvider)
             {
-                this.Load(text);
+                if (textProvider == null)
+                    throw new System.ArgumentNullException("textProvider is null");
+                this.Load(textProvider.Load());
             }
 
             protected void Load(string text)
