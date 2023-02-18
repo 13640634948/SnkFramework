@@ -1,4 +1,5 @@
-﻿using SnkFramework.NuGet.Features.Logging;
+﻿using SnkFramework.NuGet.Basic.TypeConverter;
+using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.NuGet.Utilities;
 
 using System;

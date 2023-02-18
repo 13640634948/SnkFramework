@@ -1,8 +1,8 @@
 using System;
 
-namespace SnkFramework.NuGet.Features
+namespace SnkFramework.NuGet.Basic
 {
-    namespace Configuration
+    namespace TypeConverter
     {
         public class SnkUniversalTypeConverter : ISnkTypeConverter
         {
