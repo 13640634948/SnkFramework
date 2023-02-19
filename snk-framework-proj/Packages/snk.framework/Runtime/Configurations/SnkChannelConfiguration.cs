@@ -1,10 +1,11 @@
+using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Features.Configuration;
 
 namespace SnkFramework.Runtime.Configurations
 {
     public class SnkChannelConfiguration : SnkPropertiesConfiguration
     {
-        public SnkChannelConfiguration() : base(new ResourceTextProvider())
+        public SnkChannelConfiguration(string assetPath) : base(new ResourceTextProvider(assetPath))
         {
             
         }

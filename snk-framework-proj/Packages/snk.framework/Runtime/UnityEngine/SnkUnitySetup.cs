@@ -39,10 +39,10 @@ namespace SnkFramework.Runtime
                 var configuration = new SnkCompositeConfiguration();
                 
                 // 加载平台配置文件
-                configuration.AddConfiguration(new SnkPlatformConfiguration()); 
+                configuration.AddConfiguration(new SnkPlatformConfiguration("platform")); 
                 
                 // 加载渠道配置文件
-                configuration.AddConfiguration(new SnkChannelConfiguration());
+                configuration.AddConfiguration(new SnkChannelConfiguration("channel"));
 
                 // 加载自定义配置文件
                 AddCustomConfigurations(configuration);
