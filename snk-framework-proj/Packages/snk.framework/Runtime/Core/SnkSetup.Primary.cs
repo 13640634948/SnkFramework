@@ -6,6 +6,7 @@ using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Plugins;
 using UnityEngine;
@@ -31,6 +32,8 @@ namespace SnkFramework.Runtime
                 logger = loggerFactory.CreateLogger<SnkSetup>();
                 
                 iocProvider.RegisterSingleton(loggerFactory);
+                SnkNuget.Logger = SnkLogHost.Default;
+
             }
 
             protected virtual ISnkLoggerFactory CreateLoggerFactory()

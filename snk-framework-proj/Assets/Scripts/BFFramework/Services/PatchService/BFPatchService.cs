@@ -29,8 +29,6 @@ namespace BFFramework.Runtime.Services
         
         public BFPatchService()
         {
-            SnkNuget.Logger = SnkLogHost.Default;
-            
             var settings = new SnkPatchControlSettings
             {
                 remoteURLs = this._urls,
