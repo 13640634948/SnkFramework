@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using SnkFramework.NuGet.Basic;
 
 namespace SnkFramework.NuGet.Features
 {
