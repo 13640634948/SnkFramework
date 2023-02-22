@@ -14,7 +14,15 @@
       <CustomCommands>
         <Command>
           <type>AfterBuild</type>
-          <command>cp ${TargetFile} ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/${TargetName}</command>
+          <command>cp ${SolutionDir}/bin/${ProjectConfigName}/netstandard2.0/snk.framework.nuget.dll ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/snk.framework.nuget.dll</command>
+        </Command>
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp ${SolutionDir}/bin/${ProjectConfigName}/netstandard2.0/snk.framework.nuget.pdb ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/snk.framework.nuget.pdb</command>
+        </Command>
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp ${SolutionDir}/bin/${ProjectConfigName}/netstandard2.0/snk.framework.nuget.deps.json ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/snk.framework.nuget.deps.json</command>
         </Command>
       </CustomCommands>
     </CustomCommands>
