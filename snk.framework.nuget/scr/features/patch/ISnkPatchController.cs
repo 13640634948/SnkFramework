@@ -13,7 +13,7 @@ namespace SnkFramework.NuGet.Features
             int LocalResVersion { get; }
             int RemoteResVersion { get; }
             SnkPatchControlSettings Settings { get; }
-
+            float ApplyProgress { get; }
             ISnkJsonParser JsonParser { get; }
 
             Task Initialize();

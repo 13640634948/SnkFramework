@@ -28,6 +28,8 @@ namespace SnkFramework.NuGet.Features
 
             public ISnkJsonParser JsonParser => _jsonParser;
 
+            public float ApplyProgress => 0;
+
             public SnkPatchController(string channelName, string appVersion, SnkPatchControlSettings settings, ISnkJsonParser jsonParser)
             {
                 this._channelName = channelName;
