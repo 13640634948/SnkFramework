@@ -70,12 +70,6 @@ namespace SnkFramework.NuGet.Features
             {
                 string basicURL = getCurrURL();
                 string url = Path.Combine(basicURL, _patchCtrl.ChannelName, _patchCtrl.AppVersion, resVersion.ToString(), _patchCtrl.Settings.assetsDirName, key);
-
-
-                var downloadParam = new SnkDownloadParams();
-                downloadParam.downloadFormBreakpoint = false;
-                downloadParam.uri = url;
-                downloadParam.savePath = Path.Combine(dirPath, key);
                 var task = SnkHttpDownloadController.CreateDownloadTask(url, Path.Combine(dirPath, key));
                 task.SetDownloadFormBreakpoint(true);
                  var result = await SnkHttpDownloadController.Implement(task);
