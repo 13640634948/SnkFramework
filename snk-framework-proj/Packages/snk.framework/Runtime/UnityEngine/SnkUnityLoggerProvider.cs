@@ -17,13 +17,20 @@ namespace SnkFramework.Runtime
                     switch (logType)
                     {
                         case eSnkLogType.error:
-                            Debug.LogErrorFormat(formater, message);
+                            if(message == null || message.Length == 0)
+                                Debug.LogError(formater);
+                            else
+                                Debug.LogErrorFormat(formater, message);   
                             break;
                         case eSnkLogType.warning:
                             Debug.LogWarningFormat(formater, message);
                             break;
                         default:
-                            Debug.LogFormat(formater, message);
+
+                            if (message == null || message.Length == 0)
+                                Debug.Log(formater);
+                            else
+                                Debug.LogFormat(formater, message);
                             break;
                     }
                 }
