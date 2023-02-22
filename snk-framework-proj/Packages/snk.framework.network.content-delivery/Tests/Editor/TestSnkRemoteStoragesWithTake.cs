@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SnkFramework.Network.ContentDelivery.Editor;
-using SnkFramework.Network.ContentDelivery.Runtime;
 using UnityEngine;
 using UnityEngine.TestTools;
 

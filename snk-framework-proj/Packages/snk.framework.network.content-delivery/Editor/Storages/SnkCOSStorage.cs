@@ -7,6 +7,8 @@ using COSXML.Auth;
 using COSXML.CosException;
 using COSXML.Model.Bucket;
 using COSXML.Model.Object;
+using UnityEditor;
+using UnityEngine;
 
 namespace SnkFramework.Network.ContentDelivery
 {
@@ -31,7 +33,7 @@ namespace SnkFramework.Network.ContentDelivery
                 _cos = new CosXmlServer(config, credentialProvider);
             }
 
-            protected override (string, long)[] doLoadObjects(string prefixKey = null)
+            protected override IEnumerable<(string, long)> doLoadObjects(string prefixKey = null)
             {
                 (string, long)[] resultArray = null;
                 try
@@ -40,7 +42,6 @@ namespace SnkFramework.Network.ContentDelivery
                     if (string.IsNullOrEmpty(prefixKey) == false)
                         request.SetPrefix(prefixKey);
                     var result = this._cos.GetBucket(request);
-
                     resultArray = result.listBucket.contentsList.Select(a => (a.key, a.size)).ToArray();
                 }
                 catch (CosClientException clientException)
@@ -58,26 +59,51 @@ namespace SnkFramework.Network.ContentDelivery
 
                 return resultArray;
             }
+            
+            protected override IEnumerable<byte> doTakeObject(string key)
+            {
+                try
+                {
+                    var request = new GetObjectBytesRequest(mBucketName, key);
+                    //设置进度回调
+                    request.SetCosProgressCallback(delegate (long completed, long total)
+                    {
+                        this.onProgressCallbackHandle?.Invoke(key, completed, total, 1, 1);
+                    });
+                    //执行请求
+                    var result = _cos.GetObject(request);
+                    return result.content;
+                }
+                catch (COSXML.CosException.CosClientException clientEx)
+                {
+                    //请求失败
+                    Console.WriteLine("CosClientException: " + clientEx);
+                }
+                catch (COSXML.CosException.CosServerException serverEx)
+                {
+                    //请求失败
+                    Console.WriteLine("CosServerException: " + serverEx.GetInfo());
+                }
+
+                return null;
+            }
+            
 
             protected override string[] doTakeObjects(List<string> keyList, string localDirPath)
             {
                 try
                 {
-                    int totalCount = keyList.Count;
-                    float completedCount = 0;
-                    foreach (var key in keyList)
+                    for (var i = 0; i < keyList.Count; i++)
                     {
-                        var count = completedCount;
-
+                        var key = keyList[i];
                         var localFileName = Path.GetFileName(key);
                         var localDir = Path.Combine(localDirPath, Path.GetDirectoryName(key) ?? string.Empty);
                         var request = new GetObjectRequest(this.mBucketName, key, localDir, localFileName);
                         request.SetCosProgressCallback((completed, total) =>
                         {
-                            this.updateProgress((count + completed * 100.0f / total) / totalCount);
+                            this.onProgressCallbackHandle?.Invoke(key, completed, total,i, keyList.Count);
                         });
                         _cos.GetObject(request);
-                        ++completedCount;
                     }
                 }
                 catch (CosClientException clientException)
@@ -100,18 +126,15 @@ namespace SnkFramework.Network.ContentDelivery
             {
                 try
                 {
-                    int totalCount = keyList.Count;
-                    float completedCount = 0;
-                    foreach (var key in keyList)
+                    for (var i = 0; i < keyList.Count; i++)
                     {
-                        PutObjectRequest request = new PutObjectRequest(this.mBucketName, key, key);
-                        var count = completedCount;
+                        var key = keyList[i];
+                        var request = new PutObjectRequest(this.mBucketName, key, key);
                         request.SetCosProgressCallback(delegate(long completed, long total)
                         {
-                            this.updateProgress((count + completed * 100.0f / total) / totalCount);
+                            this.onProgressCallbackHandle.Invoke(key, completed, total,i, keyList.Count);
                         });
                         this._cos.PutObject(request);
-                        ++completedCount;
                     }
                 }
                 catch (CosClientException clientException)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using OBS;
 using OBS.Model;
@@ -20,7 +21,7 @@ namespace SnkFramework.Network.ContentDelivery
                 _obs = new ObsClient(mAccessKeyId, mAccessKeySecret, mEndPoint);
             }
 
-            protected override (string, long)[] doLoadObjects(string prefixKey = null)
+            protected override IEnumerable<(string, long)> doLoadObjects(string prefixKey = null)
             {
                 var keyList = new List<(string, long)>();
                 try
@@ -52,25 +53,67 @@ namespace SnkFramework.Network.ContentDelivery
                 return keyList.ToArray();
             }
 
+            protected override IEnumerable<byte> doTakeObject(string key)
+            {
+                try
+                {
+                    var request = new GetObjectRequest
+                    {
+                        BucketName = this.mBucketName,
+                        ObjectKey = key
+                    };
+                    request.DownloadProgress += (_, status) =>
+                        this.onProgressCallbackHandle?.Invoke(key, status.TransferredBytes, status.TotalBytes, 1, 1);
+                    var response = _obs.GetObject(request);
+
+                    var buffer = new byte[8192];
+                    using (var memStream = new MemoryStream())
+                    {
+                        var total = 0;
+                        var count=0;
+                        while ((count = response.OutputStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            memStream.Write(buffer, 0, count);
+                            total += count;
+                        }
+
+                        buffer = new byte[total];
+                        var resultLen = memStream.Read(buffer, 0, buffer.Length);
+                        if (resultLen != response.ContentLength)
+                            throw new ObsException(
+                                $"The total bytes read {resultLen} from response stream is not equal to the Content-Length {response.ContentLength}", ErrorType.Receiver,
+                                null);
+                        return buffer;
+                    }
+                }
+                catch (ObsException obsException)
+                {
+                    this.setException(obsException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+
+                return null;
+            }
+
             protected override string[] doTakeObjects(List<string> keyList, string localDirPath)
             {
                 try
                 {
-                    int totalCount = keyList.Count;
-                    float completedCount = 0;
-                    foreach (var key in keyList)
+                    for (var i = 0; i < keyList.Count; i++)
                     {
-                        var count = completedCount;
                         var request = new GetObjectRequest
                         {
                             BucketName = this.mBucketName,
-                            ObjectKey = key
+                            ObjectKey = keyList[i]
                         };
                         request.DownloadProgress += (_, status) =>
-                            this.updateProgress((count + status.TransferPercentage) / totalCount);
+                            this.onProgressCallbackHandle?.Invoke(keyList[i], status.TransferredBytes, status.TotalBytes, i, keyList.Count);
+
                         var response = _obs.GetObject(request);
                         response.WriteResponseStreamToFile(System.IO.Path.Combine(localDirPath, request.ObjectKey));
-                        ++completedCount;
                     }
                 }
                 catch (ObsException obsException)
@@ -89,21 +132,17 @@ namespace SnkFramework.Network.ContentDelivery
             {
                 try
                 {
-                    int totalCount = keyList.Count;
-                    float completedCount = 0;
-                    foreach (var key in keyList)
+                    for (var i = 0; i < keyList.Count; i++)
                     {
-                        var count = completedCount;
                         var request = new PutObjectRequest
                         {
                             BucketName = this.mBucketName,
-                            ObjectKey = key,
-                            FilePath = key,
+                            ObjectKey = keyList[i],
+                            FilePath = keyList[i],
                         };
                         request.UploadProgress += (_, status) =>
-                            this.updateProgress((count + status.TransferPercentage) / totalCount);
+                            this.onProgressCallbackHandle?.Invoke(keyList[i], status.TransferredBytes, status.TotalBytes, i, keyList.Count);
                         _obs.PutObject(request);
-                        ++completedCount;
                     }
                 }
                 catch (ObsException obsException)

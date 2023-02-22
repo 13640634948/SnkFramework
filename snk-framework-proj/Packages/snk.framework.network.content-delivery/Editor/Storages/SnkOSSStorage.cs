@@ -23,7 +23,7 @@ namespace SnkFramework.Network.ContentDelivery
                 _oss = new OssClient(this.mEndPoint, this.mAccessKeyId, this.mAccessKeySecret);
             }
 
-            protected override (string, long)[] doLoadObjects(string prefixKey = null)
+            protected override IEnumerable<(string, long)> doLoadObjects(string prefixKey = null)
             {
                 var keyList = new List<(string, long)>();
                 try
@@ -54,29 +54,71 @@ namespace SnkFramework.Network.ContentDelivery
                 return keyList.ToArray();
             }
 
+            protected override IEnumerable<byte> doTakeObject(string key)
+            {
+                try
+                {
+                    var request = new GetObjectRequest(this.mBucketName, key);
+                    request.StreamTransferProgress += (_, args) =>
+                    {
+                        this.onProgressCallbackHandle?.Invoke(key, args.TransferredBytes, args.TotalBytes, 1, 1);
+                    };
+
+                    var ossObject = _oss.GetObject(request);
+                    var buffer = new byte[mBuffSize];
+                    using (var requestStream = ossObject.Content)
+                    {
+                        var total = 0;
+                        using (var memStream = new MemoryStream())
+                        {
+                            var len = 0;
+                            while ((len = requestStream.Read(buffer, 0, buffer.Length)) != 0)
+                            {
+                                memStream.Write(buffer, 0, len);
+                                total += len;
+                            }
+                            buffer = new byte[total];
+                            var resultLen = memStream.Read(buffer, 0, buffer.Length);
+                            if (resultLen != ossObject.ContentLength)
+                            {    throw new OssException(
+                                    $"The total bytes read {resultLen} from response stream is not equal to the Content-Length {ossObject.ContentLength}, ErrType:Receiver",
+                                    null);
+                            }
+                            return buffer;
+                        }
+                    }
+                }
+                catch (OssException ossException)
+                {
+                    this.setException(ossException);
+                }
+                catch (Exception exception)
+                {
+                    this.setException(exception);
+                }
+                return null;
+            }
+
             protected override string[] doTakeObjects(List<string> keyList, string localDirPath)
             {
                 try
                 {
-                    int totalCount = keyList.Count;
-                    float completedCount = 0;
-
-                    foreach (var key in keyList)
+                    for (var i = 0; i < keyList.Count; i++)
                     {
-                        var count = completedCount;
-
+                        var key = keyList[i];
                         var request = new GetObjectRequest(this.mBucketName, key);
                         request.StreamTransferProgress += (_, args) =>
-                        {
-                            this.updateProgress((count + args.TransferredBytes * 100 / (float)args.TotalBytes) /
-                                                totalCount);
+                        {                            
+                            this.onProgressCallbackHandle?.Invoke(key, args.TransferredBytes,
+                                args.TotalBytes, i, keyList.Count);
+
                         };
 
                         var ossObject = _oss.GetObject(request);
                         using (var requestStream = ossObject.Content)
                         {
                             var buf = new byte[mBuffSize];
-                            string localFilePath = Path.Combine(localDirPath, key);
+                            var localFilePath = Path.Combine(localDirPath, key);
                             EnsurePathExists(localFilePath);
                             using (var fs = File.Open(localFilePath, FileMode.OpenOrCreate))
                             {
@@ -86,8 +128,6 @@ namespace SnkFramework.Network.ContentDelivery
                                 fs.Close();
                             }
                         }
-
-                        ++completedCount;
                     }
                 }
                 catch (OssException ossException)
@@ -106,23 +146,18 @@ namespace SnkFramework.Network.ContentDelivery
             {
                 try
                 {
-                    int totalCount = keyList.Count;
-                    float completedCount = 0;
-                    foreach (var key in keyList)
+                    for (var i = 0; i < keyList.Count; i++)
                     {
-                        var count = completedCount;
+                        var key = keyList[i];
                         using (var fs = File.Open(key, FileMode.Open))
                         {
                             var putObjectRequest = new PutObjectRequest(this.mBucketName, key, fs);
                             putObjectRequest.StreamTransferProgress += (_, args) =>
                             {
-                                this.updateProgress((count + args.TransferredBytes * 100 / (float)args.TotalBytes) /
-                                                    totalCount);
+                                this.onProgressCallbackHandle?.Invoke(key, args.TransferredBytes, args.TotalBytes, i, keyList.Count);
                             };
                             this._oss.PutObject(putObjectRequest);
                         }
-
-                        ++completedCount;
                     }
                 }
                 catch (OssException ossException)

@@ -10,6 +10,7 @@ namespace SnkFramework.Network.ContentDelivery
         public abstract class SnkContentDeliveryStorage<T> : ISnkContentDeliveryStorage
             where T : SnkStorageSettings, new()
         {
+
             protected readonly T settings = SnkStorageSettings.Load<T>();
             protected virtual string mBucketName => settings.mBucketName;
             protected virtual string mEndPoint => settings.mEndPoint;
@@ -17,21 +18,28 @@ namespace SnkFramework.Network.ContentDelivery
             protected virtual string mAccessKeySecret => settings.mAccessKeySecret;
             protected virtual bool mIsQuietDelete => settings.mIsQuietDelete;
 
-            
+            protected OnProgressCallback onProgressCallbackHandle;
+
             public virtual string StorageName => this.GetType().Name;
             public STORAGE_STATE mStorageState { get; protected set; }
             public Exception mException { get; protected set; }
-            public float mProgress { get; protected set; }
+            //public float mProgress { get; protected set; }
 
             protected void setException(Exception exception)
             {
                 this.mException = exception;
             }
 
+            public void SetProgressCallbackHandle(OnProgressCallback progressCallback)
+            {
+                this.onProgressCallbackHandle = progressCallback;
+            }
+/*
             protected void updateProgress(float progress)
             {
                 this.mProgress = progress;
             }
+            */
 
             protected void EnsurePathExists(string fullPath)
             {
@@ -42,29 +50,31 @@ namespace SnkFramework.Network.ContentDelivery
                     fileInfo.Directory.Create();
             }
 
-            protected virtual (string, long)[] doLoadObjects(string prefixKey = null)
-                => throw new System.NotImplementedException();
+            protected abstract IEnumerable<(string, long)> doLoadObjects(string prefixKey = null);
 
-            protected virtual string[] doTakeObjects(List<string> keyList, string localDirPath)
-                => throw new System.NotImplementedException();
+            protected abstract IEnumerable<byte> doTakeObject(string key);
+            protected abstract string[] doTakeObjects(List<string> keyList, string localDirPath);
 
-            protected virtual string[] doPutObjects(List<string> keyList)
-                => throw new System.NotImplementedException();
+            protected abstract string[] doPutObjects(List<string> keyList);
 
-            protected virtual string[] doDeleteObjects(List<string> keyList)
-                => throw new System.NotImplementedException();
+            protected abstract string[] doDeleteObjects(List<string> keyList);
 
-
-            public (string, long)[] LoadObjects(string prefixKey = null)
+            public IEnumerable<(string, long)> LoadObjects(string prefixKey = null)
             {
                 if (this.mStorageState != STORAGE_STATE.none)
                     return default;
                 mStorageState = STORAGE_STATE.loading;
-                this.mProgress = 0;
-
                 var result = doLoadObjects(prefixKey);
+                mStorageState = STORAGE_STATE.none;
+                return result;
+            }
 
-                this.mProgress = 1.0f;
+            public IEnumerable<byte> TaskObject(string key)
+            {
+                if (this.mStorageState != STORAGE_STATE.none)
+                    return default;
+                mStorageState = STORAGE_STATE.takeing;
+                var result = doTakeObject(key);
                 mStorageState = STORAGE_STATE.none;
                 return result;
             }
@@ -74,25 +84,17 @@ namespace SnkFramework.Network.ContentDelivery
                 if (this.mStorageState != STORAGE_STATE.none)
                     return default;
                 mStorageState = STORAGE_STATE.takeing;
-                this.mProgress = 0;
-
                 var result = doTakeObjects(keyList, localDirPath);
-
-                this.mProgress = 1.0f;
                 mStorageState = STORAGE_STATE.none;
                 return result;
             }
-            
+
             public string[] PutObjects(List<string> keyList)
             {
                 if (this.mStorageState != STORAGE_STATE.none)
                     return default;
                 mStorageState = STORAGE_STATE.putting;
-                this.mProgress = 0;
-
                 var result = doPutObjects(keyList);
-
-                this.mProgress = 1.0f;
                 mStorageState = STORAGE_STATE.none;
                 return result;
             }
@@ -102,11 +104,7 @@ namespace SnkFramework.Network.ContentDelivery
                 if (this.mStorageState != STORAGE_STATE.none)
                     return default;
                 mStorageState = STORAGE_STATE.deleting;
-                this.mProgress = 0;
-
                 var result = doDeleteObjects(keyList);
-
-                this.mProgress = 1.0f;
                 mStorageState = STORAGE_STATE.none;
                 return result;
             }
