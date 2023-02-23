@@ -1,10 +1,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SnkFramework.NuGet.Asynchronous;
 
 namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {
+        public struct DownloadProgress
+        {
+            public float progress;
+        }
+
         public interface ISnkRemotePatchRepository : ISnkPatchRepository
         {
             /// <summary>
@@ -20,7 +26,11 @@ namespace SnkFramework.NuGet.Features
             /// <param name="key">远端文件key</param>
             /// <param name="resVersion">对应资源版本号</param>
             /// <returns>任务</returns>
-            Task TakeFileToLocal(string dirPath, string key, int resVersion);  
-        } 
+            //void TakeFileToLocal(string dirPath, string key, int resVersion);
+
+            void EnqueueDownloadQueue(string dirPath, string key, int resVersion);
+
+            void StartupDownload(ISnkProgressPromise<DownloadProgress> progressPromise);
+        }
     }
 }

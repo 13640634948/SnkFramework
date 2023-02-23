@@ -35,11 +35,14 @@ namespace SnkFramework.NuGet.Features
             {
                 keyPathMapping = new Dictionary<string, string>();
                 if (fileFinder.TrySurvey(out var fileInfos) == false)
+                {
+                    SnkNuget.Logger?.WarnFormat("搜索目录文件失败。路径：{0}", fileFinder.SourceDirPath);
                     return null;
+                }
 
                 var list = new List<SnkSourceInfo>();
                 var dirInfo = new System.IO.DirectoryInfo(fileFinder.SourceDirPath);
-                //SnkNuget.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name);
+                //SnkNuget.Logger?.Info("[" + fileFinder.SourceDirPath + "]" + dirInfo.Name + ", fileInfos:" + fileInfos.Length);
                 foreach (var fileInfo in fileInfos)
                 {
                     var info = new SnkSourceInfo
@@ -76,7 +79,7 @@ namespace SnkFramework.NuGet.Features
 
             public static (List<SnkSourceInfo>, List<string>) CompareToDiff(List<SnkSourceInfo> from, List<SnkSourceInfo> to)
             {
-                string diffLogString = string.Empty;
+                string diffLogString = $"CompareToDiff:from:{from.Count}, to:{to.Count}";
                 foreach (var a in from)
                     diffLogString += "[FROM]key:" + a.key + ", code:" + a.code + "\n";
 
@@ -103,6 +106,28 @@ namespace SnkFramework.NuGet.Features
                 SnkNuget.Logger?.Info(diffLogString.Trim());
                 return (addList, delList);
             }
+
+            /*
+            public static List<SnkSourceInfo> SnkSourceInfoListValueOf(string content)
+            {
+                var list = new List<SnkSourceInfo>();
+
+                var args = content.Trim().Split('\n');
+                for (int i = 0; i < args.Length; i++)
+                    list.Add(SnkSourceInfo.ValueOf(args[i]));
+                return list;
+            }
+
+            public static string SnkSourceInfoListToString(List<SnkSourceInfo> list)
+            {
+                string content = "";
+                for (int i = 0; i < list.Count; i++)
+                {
+                    content += list[i].ToString() + "\n";
+                }
+                return content.Trim();
+            }
+            */
         }
     }
 }

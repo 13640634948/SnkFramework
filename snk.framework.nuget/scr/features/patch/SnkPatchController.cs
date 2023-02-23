@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SnkFramework.NuGet.Asynchronous;
 using SnkFramework.NuGet.Basic;
 
 namespace SnkFramework.NuGet.Features
@@ -28,7 +29,8 @@ namespace SnkFramework.NuGet.Features
 
             public ISnkJsonParser JsonParser => _jsonParser;
 
-            public float ApplyProgress => 0;
+            public float ApplyProgress => progressPromise.Progress.progress;
+            ISnkProgressPromise<DownloadProgress> progressPromise;
 
             public SnkPatchController(string channelName, string appVersion, SnkPatchControlSettings settings, ISnkJsonParser jsonParser)
             {
@@ -54,11 +56,17 @@ namespace SnkFramework.NuGet.Features
                     System.IO.File.Delete(System.IO.Path.Combine(this._localRepo.LocalPath, key));
                 }
 
-                foreach (var sourceInfo in addList)
+                for(var i = 0;i<addList.Count;i++)
                 {
-                    await _remoteRepo.TakeFileToLocal(_localRepo.LocalPath, sourceInfo.key, int.Parse(sourceInfo.version));
+                    var sourceInfo = addList[i];
+                    _remoteRepo.EnqueueDownloadQueue(_localRepo.LocalPath, sourceInfo.key, int.Parse(sourceInfo.version));
                 }
-                _localRepo.UpdateLocalResVersion(_remoteRepo.Version);
+
+                if (progressPromise == null)
+                    progressPromise = new SnkProgressResult<DownloadProgress>();
+
+                _remoteRepo.StartupDownload(progressPromise);
+                //_localRepo.UpdateLocalResVersion(_remoteRepo.Version);
             }
 
             public async Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion = -1)
