@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.Patch;
 using SnkFramework.Runtime;
 using SnkFramework.Runtime.Basic;
@@ -10,13 +9,13 @@ namespace BFFramework.Runtime.Services
 {
     public class BFPatchService : BFServiceBase, IBFPatchService
     {
-        private string _channelName = "windf_iOS";
+        private string _channelName = "back_fire";
         private string _appVersion = "1.0.0";
         private string[] _urls =
         {
-            "https://windfantasy-1255691311.cos.ap-beijing.myqcloud.com/PersistentRepo"
+            "https://windfantasy-1255691311.cos.ap-beijing.myqcloud.com/PatchRepo"
         };
-        private string _localPatchRepoPath = "BFPatchService";
+        private string _localPatchRepoPath = "PersistentData";
         
         public ISnkPatchController _patchCtrl;
         private bool _isDone = false;

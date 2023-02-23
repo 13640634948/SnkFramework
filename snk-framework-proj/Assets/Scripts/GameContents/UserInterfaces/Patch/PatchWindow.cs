@@ -19,22 +19,25 @@ namespace GAME.Contents.UserInterfaces
             private string tip;
             private bool enable;
 
-            public bool Enable {
+            public bool Enable
+            {
                 get => this.enable;
-                set => this.Set<bool> (ref this.enable, value);
+                set => this.Set<bool>(ref this.enable, value);
             }
 
-            public float Progress {
+            public float Progress
+            {
                 get => this.progress;
-                set => this.Set<float> (ref this.progress, value);
+                set => this.Set<float>(ref this.progress, value);
             }
 
-            public string Tip {
+            public string Tip
+            {
                 get => this.tip;
-                set => this.Set<string> (ref this.tip, value);
+                set => this.Set<string>(ref this.tip, value);
             }
         }
-        
+
         public class PatchViewModel : BFViewModel
         {
             private ProgressBar _progressBar = new ProgressBar();
@@ -43,21 +46,30 @@ namespace GAME.Contents.UserInterfaces
 
             private IBFPatchService _patchService;
             protected IBFPatchService patchService => this._patchService ??= Snk.IoCProvider.Resolve<IBFPatchService>();
-            
+
             public async Task ExePatch()
             {
-                if(await patchService.IsNeedPatch() == false)
-                    return;
-
-                patchService.Apply();
-                
                 try
                 {
-                    while (this.patchService.IsDone == false)
+                    var needPatch = await patchService.IsNeedPatch();
+                    SnkLogHost.Default?.Info("PatchService.IsNeedPatch:" + needPatch);
+                    if (needPatch == false)
+                    {
+                        Debug.Log("ExePatch => return");
+                        return;
+                    }
+
+
+                    patchService.Apply();
+
+                    while (patchService.Progress < 1.0f)
                     {
                         this.ProgressBar.Progress = patchService.Progress;
+                        Debug.Log("patchService.Progress:" + patchService.Progress + " - " + patchService.IsDone);
                         await new WaitForSecondsRealtime(0.02f);
                     }
+                    Debug.Log("patchService.Progress-last:" + patchService.Progress + " - " + patchService.IsDone);
+
                 }
                 finally
                 {
@@ -67,7 +79,6 @@ namespace GAME.Contents.UserInterfaces
                     //this.command.Execute(null);
                 }
             }
-
         }
     }
 
@@ -84,7 +95,7 @@ namespace GAME.Contents.UserInterfaces
                 base.onCreate(bundle);
                 var viewModel = new PatchViewModel();
                 var bindingSet = this.CreateBindingSet(viewModel);
-                
+
                 bindingSet.Bind(this.tipText).For(v => v.text).To(vm => vm.ProgressBar.Progress).OneWay();
                 bindingSet.Build();
 
