@@ -31,7 +31,7 @@ namespace BFFramework.Editor
                     new SnkFileFinder("Repository")
                     {
                         //filters = new[]{""},
-                        ignores = new[]{".DS_Store"},
+                        ignores = new[]{".DS_Store", ".snk_manifest"},
                     }
                 });
                 SnkAssetSyncMenu.SyncToRemote(projPath);
