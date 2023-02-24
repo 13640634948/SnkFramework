@@ -83,6 +83,7 @@ namespace SnkFramework.NuGet.Features
                     _progressPromise = new SnkProgressResult<double>();
 
                 await _remoteRepo.StartupDownload(_progressPromise);
+                SnkNuget.Logger?.Info($"UpdateLocalResVersion:{_remoteRepo.Version}");
                 _localRepo.UpdateLocalResVersion(_remoteRepo.Version);
             }
 
