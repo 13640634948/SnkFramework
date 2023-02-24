@@ -87,7 +87,7 @@ namespace SnkFramework.NuGet.Features
                 _localRepo.UpdateLocalResVersion(_remoteRepo.Version);
             }
 
-            public async Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion = -1)
+            public async Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion)
             {
                 if (remoteResVersion < 0)
                     remoteResVersion = this._remoteRepo.Version;

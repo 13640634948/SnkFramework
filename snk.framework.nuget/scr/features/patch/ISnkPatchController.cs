@@ -17,7 +17,7 @@ namespace SnkFramework.NuGet.Features
             ISnkJsonParser JsonParser { get; }
 
             Task Initialize();
-            Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion = -1);
+            Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion);
             Task Apply(List<SnkSourceInfo> addList, List<string> delList);
         }
     }
