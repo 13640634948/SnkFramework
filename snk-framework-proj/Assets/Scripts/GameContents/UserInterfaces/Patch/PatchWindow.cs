@@ -47,6 +47,7 @@ namespace GAME.Contents.UserInterfaces
             private IBFPatchService _patchService;
             protected IBFPatchService patchService => this._patchService ??= Snk.IoCProvider.Resolve<IBFPatchService>();
 
+
             public async Task ExePatch()
             {
                 try
@@ -65,7 +66,8 @@ namespace GAME.Contents.UserInterfaces
                     while (patchService.Progress < 1.0f)
                     {
                         this.ProgressBar.Progress = patchService.Progress;
-                        Debug.Log("patchService.Progress:" + patchService.Progress + " - " + patchService.IsDone);
+                      
+                        Debug.Log($"[PatchWindow]progress:{patchService.Progress}, {patchService.IsDone}");
                         await new WaitForSecondsRealtime(0.02f);
                     }
                     Debug.Log("patchService.Progress-last:" + patchService.Progress + " - " + patchService.IsDone);

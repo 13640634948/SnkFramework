@@ -21,7 +21,7 @@ namespace BFFramework.Runtime.Services
         private bool _isDone = false;
         public bool IsDone => this._isDone;
 
-        public float Progress => this._patchCtrl.ApplyProgress;
+        public float Progress => this._patchCtrl.DownloadProgress;
         
         private List<SnkSourceInfo> _addList;
         private List<string> _delList;
