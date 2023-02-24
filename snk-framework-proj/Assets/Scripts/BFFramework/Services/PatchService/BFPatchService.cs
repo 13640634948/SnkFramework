@@ -50,7 +50,7 @@ namespace BFFramework.Runtime.Services
 
         public async Task<bool> IsNeedPatch()
         {
-            (_addList, _delList) = await this._patchCtrl.PreviewDiff();
+            (_addList, _delList) = await this._patchCtrl.PreviewDiff(this._patchCtrl.RemoteResVersion);
             return _addList.Count > 0 || _delList.Count > 0;
         }
 
