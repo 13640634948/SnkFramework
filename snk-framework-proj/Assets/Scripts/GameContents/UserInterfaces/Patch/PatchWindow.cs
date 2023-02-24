@@ -59,19 +59,16 @@ namespace GAME.Contents.UserInterfaces
                         Debug.Log("ExePatch => return");
                         return;
                     }
-
-
                     patchService.Apply();
-
-                    while (patchService.Progress < 1.0f)
+                    while (patchService.IsDone == false)
                     {
                         this.ProgressBar.Progress = patchService.Progress;
-                      
                         Debug.Log($"[PatchWindow]progress:{patchService.Progress}, {patchService.IsDone}");
                         await new WaitForSecondsRealtime(0.02f);
                     }
-                    Debug.Log("patchService.Progress-last:" + patchService.Progress + " - " + patchService.IsDone);
 
+                    this.ProgressBar.Progress = 1.0f;
+                    Debug.Log("patchService.Progress-last:" + patchService.Progress + " - " + patchService.IsDone);
                 }
                 finally
                 {
@@ -99,6 +96,7 @@ namespace GAME.Contents.UserInterfaces
                 var bindingSet = this.CreateBindingSet(viewModel);
 
                 bindingSet.Bind(this.tipText).For(v => v.text).To(vm => vm.ProgressBar.Progress).OneWay();
+                bindingSet.Bind(this.downloadSlider).For(v => v.value).To(vm => vm.ProgressBar.Progress).OneWay();
                 bindingSet.Build();
 
                 viewModel.ExePatch();
