@@ -56,6 +56,7 @@ namespace SnkFramework.NuGet.Features
 
             public Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
             {
+                SnkNuget.Logger?.Info($"[RemoteRepo]GetSourceInfoList.fromVersion:{version}");
                 var list = new List<SnkSourceInfo>();
 
                 var rootDirInfo = new DirectoryInfo(this.LocalPath);

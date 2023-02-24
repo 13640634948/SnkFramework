@@ -58,10 +58,15 @@ namespace SnkFramework.NuGet.Features
                     }
                     var content = UTF8Encoding.UTF8.GetString(result.data);
 
-
-
                     _versionInfos = this._patchCtrl.JsonParser.FromJson<SnkVersionInfos>(content);
+                    SnkNuget.Logger?.Info($"[RemoteInit]AppVersion:{_versionInfos.appVersion}");
+                    foreach (var a in _versionInfos.histories)
+                    {
+                        SnkNuget.Logger?.Info($"[RemoteInit]AppVersion:{a.version}|{a.size}|{a.count}|{a.code}");
+                    }
                     Version = _versionInfos.histories[_versionInfos.histories.Count - 1].version;
+                    SnkNuget.Logger?.Info($"[RemoteInit]Version:{Version}");
+
                 }
                 catch (System.Exception exception)
                 {
