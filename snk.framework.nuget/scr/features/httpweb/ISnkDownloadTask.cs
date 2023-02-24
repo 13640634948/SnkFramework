@@ -48,7 +48,7 @@ namespace SnkFramework.NuGet.Features
             /// </summary>
             /// <param name="buffSize"></param>
             /// <returns></returns>
-            Task<SnkHttpDownloadResult> DownloadFileAsync(int buffSize = 1024 * 4 * 10);
+            Task DownloadFileAsync(int buffSize = 1024 * 4 * 10);
 
             /// <summary>
             /// 设置断点下载
@@ -60,6 +60,12 @@ namespace SnkFramework.NuGet.Features
             /// 取消下载
             /// </summary>
             void CancelDownload();
+
+            /// <summary>
+            /// 下载结果
+            /// </summary>
+            SnkHttpDownloadResult DownloadResult { get; }
+
         }
     }
 }
