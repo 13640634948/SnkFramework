@@ -79,7 +79,7 @@ namespace SnkFramework.NuGet.Features
 
             public static (List<SnkSourceInfo>, List<string>) CompareToDiff(List<SnkSourceInfo> from, List<SnkSourceInfo> to)
             {
-                string diffLogString = $"CompareToDiff:from:{from.Count}, to:{to.Count}";
+                string diffLogString = $"CompareToDiff:from:{from.Count}, to:{to.Count}\n";
                 foreach (var a in from)
                     diffLogString += "[FROM]key:" + a.key + ", code:" + a.code + "\n";
 
