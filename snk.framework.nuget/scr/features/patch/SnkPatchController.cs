@@ -89,10 +89,11 @@ namespace SnkFramework.NuGet.Features
 
             public async Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion)
             {
+                var localManifest = await _localRepo.GetSourceInfoList() ?? new List<SnkSourceInfo>();
+
                 if (remoteResVersion < 0)
                     remoteResVersion = this._remoteRepo.Version;
                 var remoteManifest = await _remoteRepo.GetSourceInfoList(remoteResVersion);
-                var localManifest = await _localRepo.GetSourceInfoList() ?? new List<SnkSourceInfo>();
 
                 return SnkPatch.CompareToDiff(localManifest, remoteManifest);
             }
