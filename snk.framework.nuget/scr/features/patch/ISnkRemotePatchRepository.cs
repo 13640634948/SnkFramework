@@ -6,11 +6,6 @@ namespace SnkFramework.NuGet.Features
 {
     namespace Patch
     {
-        public struct DownloadProgress
-        {
-            public float progress;
-        }
-
         public interface ISnkRemotePatchRepository : ISnkPatchRepository
         {
             /// <summary>
@@ -30,7 +25,7 @@ namespace SnkFramework.NuGet.Features
 
             void EnqueueDownloadQueue(string dirPath, string key, int resVersion);
 
-            void StartupDownload(ISnkProgressPromise<DownloadProgress> progressPromise);
+            Task StartupDownload(ISnkProgressPromise<double> progressPromise);
         }
     }
 }

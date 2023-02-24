@@ -29,10 +29,8 @@ namespace SnkFramework.NuGet.Features
             /// 使下载任务生效
             /// </summary>
             /// <param name="task"></param>
-            public static async Task<SnkHttpDownloadResult> Implement(ISnkDownloadTask task)
-            {
-                return await s_TaskFactory.StartNew(() => task.DownloadFileAsync().Result);
-            }
+            public static void Implement(ISnkDownloadTask task)
+                => s_TaskFactory.StartNew(() => task.DownloadFileAsync());
 
             /// <summary>
             /// 创建下载任务

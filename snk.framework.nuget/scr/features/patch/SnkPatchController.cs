@@ -10,7 +10,7 @@ namespace SnkFramework.NuGet.Features
         public class SnkPatchController<TLocalRepo, TRemoteRepo> : ISnkPatchController
             where TLocalRepo : class, ISnkLocalPatchRepository, new()
             where TRemoteRepo : class, ISnkRemotePatchRepository, new()
-        { 
+        {
             private string _channelName;
 
             private string _appVersion;
@@ -29,8 +29,24 @@ namespace SnkFramework.NuGet.Features
 
             public ISnkJsonParser JsonParser => _jsonParser;
 
-            public float ApplyProgress => progressPromise.Progress.progress;
-            ISnkProgressPromise<DownloadProgress> progressPromise;
+            private float prevDownloadProgress;
+            private double prevDownloadSize;
+            public float DownloadProgress
+            {
+                get
+                {
+                    if (prevDownloadSize == _progressPromise.Progress)
+                        return prevDownloadProgress;
+                    prevDownloadSize = _progressPromise.Progress;
+                    prevDownloadProgress = (float)prevDownloadSize / (float)totalDownloadSize;
+                    prevDownloadProgress = prevDownloadProgress > 1f ? 1f : prevDownloadProgress;
+                    return prevDownloadProgress;
+                }
+            }
+
+
+            private ISnkProgressPromise<double> _progressPromise;
+            private double totalDownloadSize;
 
             public SnkPatchController(string channelName, string appVersion, SnkPatchControlSettings settings, ISnkJsonParser jsonParser)
             {
@@ -60,13 +76,14 @@ namespace SnkFramework.NuGet.Features
                 {
                     var sourceInfo = addList[i];
                     _remoteRepo.EnqueueDownloadQueue(_localRepo.LocalPath, sourceInfo.key, int.Parse(sourceInfo.version));
+                    totalDownloadSize += sourceInfo.size / 1024.0 / 1024.0;
                 }
 
-                if (progressPromise == null)
-                    progressPromise = new SnkProgressResult<DownloadProgress>();
+                if (_progressPromise == null)
+                    _progressPromise = new SnkProgressResult<double>();
 
-                _remoteRepo.StartupDownload(progressPromise);
-                //_localRepo.UpdateLocalResVersion(_remoteRepo.Version);
+                await _remoteRepo.StartupDownload(_progressPromise);
+                _localRepo.UpdateLocalResVersion(_remoteRepo.Version);
             }
 
             public async Task<(List<SnkSourceInfo>, List<string>)> PreviewDiff(int remoteResVersion = -1)

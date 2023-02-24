@@ -163,7 +163,7 @@ namespace SnkFramework.NuGet.Features
                                         $"本地文件长度大于等于总文件长度，请检查\n本地文件长度:{fileStream.Length}\n远端文件长度:{_totalSize}\n下载地址:{_url}";
                                     _result.code = SNK_HTTP_ERROR_CODE.file_error;
                                     _result.isDone = true;
-                                    //return _result;
+                                    return;//return _result;
                                 }
 
                                 using (var rspStream = await rsp.Content.ReadAsStreamAsync().ConfigureAwait(false))
@@ -173,7 +173,7 @@ namespace SnkFramework.NuGet.Features
                                         _result.errorMessage = $"下载出现异常,无法获取rsp流\n下载地址:{_url}";
                                         _result.code = SNK_HTTP_ERROR_CODE.download_error;
                                         _result.isDone = true;
-                                        //return _result;
+                                        return;//return _result;
                                     }
 
                                     _isDownloading = true;
@@ -203,7 +203,8 @@ namespace SnkFramework.NuGet.Features
                     _result.isDone = true;
                 }
 
-                //return _result;
+                _result.isDone = true;
+                return;//return _result;
             }
 
             /// <summary>

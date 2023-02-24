@@ -4,11 +4,12 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
-using SnkFramework.NuGet.Asynchronous;
+
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Asynchronous;
 using SnkFramework.NuGet.Features.HttpWeb;
-using static SnkFramework.NuGet.Features.HttpWeb.SnkDownloadTask;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -16,6 +17,8 @@ namespace SnkFramework.NuGet.Features
     {
         public class SnkRemotePatchRepository : ISnkRemotePatchRepository
         {
+            private readonly double SizeUnit = 1024.0 * 1024.0;
+
             public int Version { get; protected set; }
 
             protected ISnkPatchController _patchCtrl;
@@ -23,6 +26,15 @@ namespace SnkFramework.NuGet.Features
             private SnkVersionInfos _versionInfos;
 
             private int _urlIndex;
+
+            private int _maxThreadNumber = 5;
+            private int _threadTickInterval = 100;
+            private double currDownloadedSize;
+
+            private Dictionary<string, ISnkDownloadTask> DownloadTaskDict = new Dictionary<string, ISnkDownloadTask>();
+            private Queue<ISnkDownloadTask> willDownloadTaskQueue = new Queue<ISnkDownloadTask>();
+            private List<(string, ISnkDownloadTask)> downloadingTaskList = new List<(string, ISnkDownloadTask)>();
+
 
             public async Task Initialize(ISnkPatchController patchController)
             {
@@ -57,8 +69,7 @@ namespace SnkFramework.NuGet.Features
                 }
             }
 
-            public List<SnkVersionMeta> GetResVersionHistories()
-                => this._versionInfos.histories;
+            public List<SnkVersionMeta> GetResVersionHistories()=> this._versionInfos.histories;
 
             private string getCurrURL(bool moveNext = false)
             {
@@ -85,32 +96,27 @@ namespace SnkFramework.NuGet.Features
                 return this._patchCtrl.JsonParser.FromJson<List<SnkSourceInfo>>(content);
             }
 
-            private Dictionary<string, ISnkDownloadTask> DownloadTaskDict = new Dictionary<string, ISnkDownloadTask>();
-            private Queue<ISnkDownloadTask> willDownloadTaskQueue = new Queue<ISnkDownloadTask>();
-            private List<(string, ISnkDownloadTask)> downloadingTaskList = new List<(string, ISnkDownloadTask)>();
+            public void SetMaxThreadNumber(int maxThreadNumber)
+            {
+                this._maxThreadNumber = maxThreadNumber <= 0 ? 1 : maxThreadNumber;
+            }
 
-            public int MaxThreadNumber = 5;
+            public void SetThreadTickInterval(int threadTickInterval)
+            {
+                this._threadTickInterval = threadTickInterval;
+            }
+
             public void EnqueueDownloadQueue(string dirPath, string key, int resVersion)
             {
                 string basicURL = getCurrURL();
                 string url = Path.Combine(basicURL, _patchCtrl.ChannelName, _patchCtrl.AppVersion, resVersion.ToString(), _patchCtrl.Settings.assetsDirName, key);
                 var task = SnkHttpDownloadController.CreateDownloadTask(url, Path.Combine(dirPath, key));
-
-                SnkNuget.Logger?.Info("[EnQue]" + task.URL);
                 task.SetDownloadFormBreakpoint(true);
-                var downloadResultTask = SnkHttpDownloadController.Implement(task);
-                var tuple = new ValueTuple<string, ISnkDownloadTask>(task.URL, task);
-                downloadingTaskList.Add(tuple);
-                //willDownloadTaskQueue.Enqueue(task);
+                willDownloadTaskQueue.Enqueue(task);
                 DownloadTaskDict.Add(task.URL, task);
             }
 
-            private int downloadedTaskCount = 0;
-            private DownloadProgress downloadProgress = new DownloadProgress();
-
-            //progressPromise.UpdateProgress(downloadProgress);
-
-            private bool IsDone()
+            private bool isDone()
             {
                 foreach (var a in this.DownloadTaskDict)
                 {
@@ -121,88 +127,31 @@ namespace SnkFramework.NuGet.Features
                 return true;
             }
 
-            public void StartupDownload(ISnkProgressPromise<DownloadProgress> progressPromise)
+
+            void refreshDownloadProgress(ISnkProgressPromise<double> progressPromise)
             {
-                /*
-                while (willDownloadTaskQueue.Count > 0)
-                {
-                    var task = willDownloadTaskQueue.Dequeue();
-                    SnkNuget.Logger?.Info("[DownloadTask]" + task.URL);
-                    var downloadResultTask = SnkHttpDownloadController.Implement(task);
-                    var tuple = new ValueTuple<string, ISnkDownloadTask, SnkHttpDownloadResult>(task.URL, task, downloadResultTask.Result);
-                    downloadingTaskList.Add(tuple);
-                }
-                */
+                currDownloadedSize = this.DownloadTaskDict.Sum(a => (a.Value.DownloadedSize / SizeUnit));
+                progressPromise.UpdateProgress(currDownloadedSize);
+            }
 
-                Task.Run(() =>
+            public async Task StartupDownload(ISnkProgressPromise<double> progressPromise)
+            {
+                await Task.Run(() =>
                 {
-                    float downloadedCount = 0;
-                    while (this.IsDone() == false)
+                    while (this.isDone() == false)
                     {
-                        for (int i = 0; i < downloadingTaskList.Count; i++)
-                        {
-                            if (downloadingTaskList[i].Item2.DownloadResult.isDone)
-                            {
-                                downloadingTaskList.RemoveAt(i--);
-                            }
-                        }
+                        downloadingTaskList.RemoveAll(a => a.Item2.DownloadResult.isDone);
 
-                        if (downloadingTaskList.Count < MaxThreadNumber)
+                        while(downloadingTaskList.Count < this._maxThreadNumber && willDownloadTaskQueue.Count > 0)
                         {
-                            if (willDownloadTaskQueue.Count > 0)
-                            {
-                                var task = willDownloadTaskQueue.Dequeue();
-                                var downloadResultTask = SnkHttpDownloadController.Implement(task);
-                                var tuple = new ValueTuple<string, ISnkDownloadTask>(task.URL, task);
-                                downloadingTaskList.Add(tuple);
-                            }
+                            var task = willDownloadTaskQueue.Dequeue();
+                            downloadingTaskList.Add(new ValueTuple<string, ISnkDownloadTask>(task.URL, task));
+                            SnkHttpDownloadController.Implement(task);
                         }
+                        System.Threading.Thread.Sleep(_threadTickInterval);
+                        this.refreshDownloadProgress(progressPromise);
                     }
                 });
-
-                /*
-                SnkNuget.Logger?.Info("[StartupDownload]");
-                await Task.Run(() => {
-                    int totalTaskCount = DownloadTaskDict.Count;
-                    while (downloadedTaskCount < totalTaskCount)
-                    {
-                        //移除已经下载完成的任务
-                        for (int i = 0; i < downloadingTaskList.Count; i++)
-                        {
-                            var tuple = downloadingTaskList[i];
-                            if (tuple.Item3.isDone == true)
-                            {
-                                downloadingTaskList.RemoveAt(i--);
-                                downloadedTaskCount++;
-                            }
-                        }
-
-                        //开启新的任务
-                        if (downloadingTaskList.Count < MaxThreadNumber)
-                        {
-                            if (willDownloadTaskQueue.Count > 0)
-                            {
-                                var task = willDownloadTaskQueue.Dequeue();
-                                SnkNuget.Logger?.Info("[DownloadTask]" + task.URL);
-                                var downloadResultTask = SnkHttpDownloadController.Implement(task);
-                                var tuple = new ValueTuple<string, ISnkDownloadTask, SnkHttpDownloadResult>(task.URL, task, downloadResultTask.Result);
-                                downloadingTaskList.Add(tuple);
-                            }
-                        }
-
-                        float progress = downloadedTaskCount;
-                        string outputString = string.Empty;
-                        for (int i = 0; i < downloadingTaskList.Count; i++)
-                        {
-                            var tuple = downloadingTaskList[i];
-                            progress += tuple.Item2.GetDownloadProgress();
-                        }
-                        SnkNuget.Logger?.Info($"[progress]{progress}/{totalTaskCount}\n" + outputString);
-                        downloadProgress.progress = progress / totalTaskCount;
-                        progressPromise.UpdateProgress(downloadProgress);
-                    }
-                });
-                */
             }
         }
     }
