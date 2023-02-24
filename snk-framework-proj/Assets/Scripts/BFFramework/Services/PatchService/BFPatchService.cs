@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SnkFramework.NuGet.Features.Patch;
 using SnkFramework.Runtime;
 using SnkFramework.Runtime.Basic;
+using UnityEngine;
 
 namespace BFFramework.Runtime.Services
 {
@@ -25,7 +26,7 @@ namespace BFFramework.Runtime.Services
         
         private List<SnkSourceInfo> _addList;
         private List<string> _delList;
-        
+        private TaskCompletionSource<bool> _taskCompletionSource;
         public BFPatchService()
         {
             var settings = new SnkPatchControlSettings
@@ -40,7 +41,11 @@ namespace BFFramework.Runtime.Services
         {
             try
             {
+                if(_taskCompletionSource != null)
+                    return;
+                _taskCompletionSource = new TaskCompletionSource<bool>();
                 await this._patchCtrl.Initialize();
+                _taskCompletionSource.SetResult(true);
             }
             catch (Exception e)
             {
@@ -50,12 +55,15 @@ namespace BFFramework.Runtime.Services
 
         public async Task<bool> IsNeedPatch()
         {
+            await _taskCompletionSource.Task.ConfigureAwait(false);
+            Debug.Log($"[localVersion]{this._patchCtrl.LocalResVersion}, remoteVersion:{this._patchCtrl.RemoteResVersion}");
             (_addList, _delList) = await this._patchCtrl.PreviewDiff(this._patchCtrl.RemoteResVersion);
             return _addList.Count > 0 || _delList.Count > 0;
         }
 
         public async Task Apply()
         {
+            await _taskCompletionSource.Task.ConfigureAwait(false);
             await this._patchCtrl.Apply(_addList, _delList);
             this._isDone = true;
         }
