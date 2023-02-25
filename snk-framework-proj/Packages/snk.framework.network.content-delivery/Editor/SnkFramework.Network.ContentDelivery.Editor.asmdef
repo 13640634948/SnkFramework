@@ -2,7 +2,9 @@
     "name": "SnkFramework.Network.ContentDelivery.Editor",
     "rootNamespace": "SnkFramework.Network.ContentDelivery.Editor",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
