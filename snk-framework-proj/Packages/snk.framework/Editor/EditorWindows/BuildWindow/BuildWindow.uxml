@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/snk.framework/Editor/EditorWindows/BuildWindow/BuildWindow.uss?fileID=7433441132597879392&amp;guid=eda1537de7e5f456fa0ede32ca2071e7&amp;type=3#BuildWindow" />
+    <ui:EnumField label="平台选择" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="PlatformEnumField" />
+    <ui:TextField picking-mode="Ignore" label="导出路径" />
+    <ui:Toggle label="模式" />
+    <ui:EnumField label="渠道选择" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" name="ChannelEnumField" />
+    <ui:EnumField label="类型" type="UnityEngine.TextAlignment, UnityEngine.TextRenderingModule" value="Center" include-obsolete-values="false" name="TargetModeEnumField" />
+    <ui:Button text="Button" display-tooltip-when-elided="true" />
+</ui:UXML>
