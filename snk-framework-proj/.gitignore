@@ -64,3 +64,7 @@ crashlytics-build.properties
 #rider
 .idea/
 .run/
+
+#Custom
+Repository/
+PersistentData/
