@@ -1,5 +1,5 @@
 ﻿using System;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet
 {
@@ -7,7 +7,7 @@ namespace SnkFramework.NuGet
     {
         internal class SnkProgressCallbackable<TProgress> : ISnkProgressCallbackable<TProgress>
         {
-            private static readonly ISnkLogger log = SnkNuget.Logger;
+            private static readonly ISnkLog log = SnkLogHost.GetLogger<SnkProgressCallbackable<TProgress>>();
 
             private ISnkProgressResult<TProgress> result;
             private readonly object _lock = new object();
@@ -140,7 +140,7 @@ namespace SnkFramework.NuGet
 
         internal class SnkProgressCallbackable<TProgress, TResult> : ISnkProgressCallbackable<TProgress, TResult>
         {
-            private static readonly ISnkLogger log = SnkNuget.Logger;
+            private static readonly ISnkLog s_log = SnkLogHost.GetLogger<SnkProgressCallbackable<TProgress, TResult>>();
 
             private ISnkProgressResult<TProgress, TResult> result;
             private readonly object _lock = new object();
@@ -172,15 +172,15 @@ namespace SnkFramework.NuGet
                             }
                             catch (Exception e)
                             {
-                                if (log.IsWarnEnabled)
-                                    log.WarnFormat("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
+                                if (s_log.IsWarnEnabled)
+                                    s_log?.WarnFormat("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                             }
                         }
                     }
                     catch (Exception e)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
+                        if (s_log.IsWarnEnabled)
+                            s_log?.WarnFormat("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                     }
                     finally
                     {
@@ -207,15 +207,15 @@ namespace SnkFramework.NuGet
                             }
                             catch (Exception e)
                             {
-                                if (log.IsWarnEnabled)
-                                    log.WarnFormat("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
+                                if (s_log.IsWarnEnabled)
+                                    s_log?.WarnFormat("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
                             }
                         }
                     }
                     catch (Exception e)
                     {
-                        if (log.IsWarnEnabled)
-                            log.WarnFormat("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
+                        if (s_log.IsWarnEnabled)
+                            s_log?.WarnFormat("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
                     }
                 }
             }
@@ -235,8 +235,8 @@ namespace SnkFramework.NuGet
                         }
                         catch (Exception e)
                         {
-                            if (log.IsWarnEnabled)
-                                log.WarnFormat("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
+                            if (s_log.IsWarnEnabled)
+                                s_log?.WarnFormat("Class[{0}] callback exception.Error:{1}", this.GetType(), e);
                         }
                         return;
                     }
@@ -260,8 +260,8 @@ namespace SnkFramework.NuGet
                         }
                         catch (Exception e)
                         {
-                            if (log.IsWarnEnabled)
-                                log.WarnFormat("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
+                            if (s_log.IsWarnEnabled)
+                                s_log?.WarnFormat("Class[{0}] progress callback exception.Error:{1}", this.GetType(), e);
                         }
                         return;
                     }

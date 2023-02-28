@@ -1,5 +1,6 @@
 ﻿using System;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Logging;
+using SnkFramework.NuGet.Preference;
 
 namespace SnkFramework.NuGet
 {
@@ -7,7 +8,7 @@ namespace SnkFramework.NuGet
     {
         internal class SnkCallbackable : ISnkCallbackable
         {
-            private static readonly ISnkLogger log = SnkNuget.Logger;
+            private static readonly ISnkLog log = SnkLogHost.GetLogger<SnkCallbackable>();
 
             private ISnkAsyncResult result;
             private readonly object _lock = new object();
@@ -79,7 +80,7 @@ namespace SnkFramework.NuGet
 
         internal class SnkCallbackable<TResult> : ISnkCallbackable<TResult>
         {
-            private static readonly ISnkLogger log = SnkNuget.Logger;
+            private static readonly ISnkLog log = SnkLogHost.GetLogger<SnkCallbackable<TResult>>();
 
             private ISnkAsyncResult<TResult> result;
             private readonly object _lock = new object();

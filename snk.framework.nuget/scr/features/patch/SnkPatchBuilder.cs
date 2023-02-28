@@ -4,6 +4,7 @@ using System.Linq;
 
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -49,8 +50,7 @@ namespace SnkFramework.NuGet.Features
                 {
                     throw new SnkException("filderList is null or len = 0");
                 }
-
-                SnkNuget.Logger?.Info(Path.GetFullPath(this._projPath));
+                SnkLogHost.Default?.Info(Path.GetFullPath(this._projPath));
 
                 var appVersionPath = Path.Combine(this._projPath, this._channelName, _appVersion);
                 if (Directory.Exists(appVersionPath) == false)

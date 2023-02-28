@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SnkFramework.NuGet.Asynchronous;
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -11,6 +12,7 @@ namespace SnkFramework.NuGet.Features
             where TLocalRepo : class, ISnkLocalPatchRepository, new()
             where TRemoteRepo : class, ISnkRemotePatchRepository, new()
         {
+            private static readonly ISnkLog s_log = SnkLogHost.GetLogger<SnkPatchController<TLocalRepo, TRemoteRepo>>();
             private string _channelName;
 
             private string _appVersion;
@@ -83,7 +85,8 @@ namespace SnkFramework.NuGet.Features
                     _progressPromise = new SnkProgressResult<double>();
 
                 await _remoteRepo.StartupDownload(_progressPromise);
-                SnkNuget.Logger?.Info($"UpdateLocalResVersion:{_remoteRepo.Version}");
+                if(s_log.IsInfoEnabled)
+                    s_log?.Info($"UpdateLocalResVersion:{_remoteRepo.Version}");
                 _localRepo.UpdateLocalResVersion(_remoteRepo.Version);
             }
 

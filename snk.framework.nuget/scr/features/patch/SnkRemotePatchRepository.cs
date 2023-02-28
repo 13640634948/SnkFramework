@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Asynchronous;
 using SnkFramework.NuGet.Features.HttpWeb;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -17,6 +18,7 @@ namespace SnkFramework.NuGet.Features
     {
         public class SnkRemotePatchRepository : ISnkRemotePatchRepository
         {
+            private static readonly ISnkLog s_log = SnkLogHost.GetLogger<SnkRemotePatchRepository>();
             private readonly double SizeUnit = 1024.0 * 1024.0;
 
             public int Version { get; protected set; }
@@ -59,18 +61,18 @@ namespace SnkFramework.NuGet.Features
                     var content = UTF8Encoding.UTF8.GetString(result.data);
 
                     _versionInfos = this._patchCtrl.JsonParser.FromJson<SnkVersionInfos>(content);
-                    SnkNuget.Logger?.Info($"[RemoteInit]AppVersion:{_versionInfos.appVersion}");
+                    s_log?.Info($"[RemoteInit]AppVersion:{_versionInfos.appVersion}");
                     foreach (var a in _versionInfos.histories)
                     {
-                        SnkNuget.Logger?.Info($"[RemoteInit]AppVersion:{a.version}|{a.size}|{a.count}|{a.code}");
+                        s_log?.Info($"[RemoteInit]AppVersion:{a.version}|{a.size}|{a.count}|{a.code}");
                     }
                     Version = _versionInfos.histories[_versionInfos.histories.Count - 1].version;
-                    SnkNuget.Logger?.Info($"[RemoteInit]Version:{Version}");
+                    s_log?.Info($"[RemoteInit]Version:{Version}");
 
                 }
                 catch (System.Exception exception)
                 {
-                    SnkNuget.Logger?.Error("[Exception]\n" + exception.Message + "\n" + exception.StackTrace);
+                    s_log?.Error("[Exception]\n" + exception.Message + "\n" + exception.StackTrace);
                 }
             }
 
@@ -95,7 +97,7 @@ namespace SnkFramework.NuGet.Features
                 {
                     throw new AggregateException("获取远端版本信息失败。URL:" + url + "\nerrText:" + result.errorMessage);
                 }
-                SnkNuget.Logger?.Info("url:" + url);
+                s_log?.Info("url:" + url);
 
                 var content = UTF8Encoding.UTF8.GetString(result.data);
                 return this._patchCtrl.JsonParser.FromJson<List<SnkSourceInfo>>(content);

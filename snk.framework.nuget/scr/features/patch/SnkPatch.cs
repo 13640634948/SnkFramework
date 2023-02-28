@@ -2,7 +2,7 @@
 
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -36,7 +36,7 @@ namespace SnkFramework.NuGet.Features
                 keyPathMapping = new Dictionary<string, string>();
                 if (fileFinder.TrySurvey(out var fileInfos) == false)
                 {
-                    SnkNuget.Logger?.WarnFormat("搜索目录文件失败。路径：{0}", fileFinder.SourceDirPath);
+                    SnkLogHost.Default?.WarnFormat("搜索目录文件失败。路径：{0}", fileFinder.SourceDirPath);
                     return null;
                 }
 
@@ -103,7 +103,7 @@ namespace SnkFramework.NuGet.Features
                     delList.Add(a.key);
                     diffLogString += "[DEL]key:" + a.key + "\n";
                 }
-                SnkNuget.Logger?.Info(diffLogString.Trim());
+                SnkLogHost.Default?.Info(diffLogString.Trim());
                 return (addList, delList);
             }
 

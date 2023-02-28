@@ -28,7 +28,8 @@ using System.Text;
 using System.Collections.Generic;
 
 using SnkFramework.NuGet;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Features.Configuration;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet.Preference
 {
@@ -77,8 +78,7 @@ namespace SnkFramework.NuGet.Preference
     /// </summary>
     public class SnkBinaryFilePreferences :  SnkPreference
     {
-        //private static readonly ILog log = LogManager.GetLogger(typeof(BinaryFilePreferences));
-        private static readonly ISnkLogger log = SnkNuget.Logger;
+        private static readonly ISnkLog log = SnkLogHost.GetLogger<SnkBinaryFilePreferences>();
 
         private string _root;
         private string root

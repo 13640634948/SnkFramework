@@ -1,9 +1,11 @@
-﻿using SnkFramework.NuGet.Basic.TypeConverter;
-using SnkFramework.NuGet.Features.Logging;
+﻿using SnkFramework.NuGet.Asynchronous;
+using SnkFramework.NuGet.Basic.TypeConverter;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.NuGet.Utilities;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace SnkFramework.NuGet.Features
@@ -12,8 +14,8 @@ namespace SnkFramework.NuGet.Features
     {
         public abstract class SnkConfigurationBase : ISnkConfiguration
         {
-            //private static readonly ILog log = LogManager.GetLogger(typeof(ConfigurationBase));
-            private static readonly ISnkLogger log = SnkFramework.NuGet.SnkNuget.Logger;
+            private static readonly ISnkLog s_log = SnkLogHost.GetLogger<SnkConfigurationBase>();
+
 
             private static readonly SnkUniversalTypeConverter defaultTypeConverter = new SnkUniversalTypeConverter();
 
@@ -72,15 +74,15 @@ namespace SnkFramework.NuGet.Features
                 }
                 catch (FormatException e)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("This value \"{0}\" cannot be converted to type \"{1}\"", value, type.Name);
+                    if (s_log.IsWarnEnabled)
+                        s_log?.WarnFormat("This value \"{0}\" cannot be converted to type \"{1}\"", value, type.Name);
 
                     throw e;
                 }
                 catch (Exception e)
                 {
-                    if (log.IsWarnEnabled)
-                        log.WarnFormat("This value \"{0}\" cannot be converted to type \"{1}\"", value, type.Name);
+                    if (s_log.IsWarnEnabled)
+                        s_log?.WarnFormat("This value \"{0}\" cannot be converted to type \"{1}\"", value, type.Name);
 
                     throw new FormatException(string.Format("This value \"{0}\" cannot be converted to the type \"{1}\"", value, type.Name), e);
                 }

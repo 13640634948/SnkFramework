@@ -5,6 +5,7 @@ using System.IO;
 
 using SnkFramework.NuGet.Basic;
 using System.Reflection;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.NuGet.Features
 {
@@ -12,6 +13,7 @@ namespace SnkFramework.NuGet.Features
     {
         public class SnkLocalPatchRepository : ISnkLocalPatchRepository
         {
+            private static readonly ISnkLog s_log = SnkLogHost.GetLogger<SnkLocalPatchRepository>();
             public int Version => _versionInfos.resVersion;
 
             public string LocalPath => _patchCtrl.Settings.localPatchRepoPath;
@@ -56,7 +58,9 @@ namespace SnkFramework.NuGet.Features
 
             public Task<List<SnkSourceInfo>> GetSourceInfoList(int version = -1)
             {
-                SnkNuget.Logger?.Info($"[RemoteRepo]GetSourceInfoList.fromVersion:{version}");
+                if(s_log.IsInfoEnabled)
+                    s_log?.Info($"[RemoteRepo]GetSourceInfoList.fromVersion:{version}");
+
                 var list = new List<SnkSourceInfo>();
 
                 var rootDirInfo = new DirectoryInfo(this.LocalPath);
