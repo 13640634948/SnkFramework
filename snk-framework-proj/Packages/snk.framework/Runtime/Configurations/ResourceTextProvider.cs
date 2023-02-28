@@ -1,12 +1,13 @@
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Logging;
 using UnityEngine;
 
 namespace SnkFramework.Runtime.Configurations
 {
     public class ResourceTextProvider : ISnkTextProvider
     {
-        private static ISnkLogger log = SnkLogHost.GetLog<ResourceTextProvider>();
+        private static ISnkLog log = SnkLogHost.GetLogger<ResourceTextProvider>();
         private readonly string _assetPath;
         public ResourceTextProvider(string assetPath)
         {
@@ -17,7 +18,7 @@ namespace SnkFramework.Runtime.Configurations
         {
             var textAsset = Resources.Load<TextAsset>(_assetPath);
             if(textAsset == null)
-                log?.Warning("found out TextAsset. assetPath:" + _assetPath);
+                log?.Warn($"found out TextAsset. assetPath:{_assetPath}");
             return textAsset?.text;
         }
     }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Exceptions;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.Runtime;
 
 namespace SnkFramework.Plugins
@@ -77,7 +79,7 @@ namespace SnkFramework.Plugins
             }
             catch (Exception ex)
             {
-                SnkLogHost.Default?.Exception( ex, "Failed to load plugin {fullPluginName}", type.FullName);
+                SnkLogHost.Default?.Error($"Failed to load plugin {type.FullName}", ex);
                 return false;
             }
         }

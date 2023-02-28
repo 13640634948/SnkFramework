@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.NuGet;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime.Core
@@ -25,7 +27,8 @@ namespace SnkFramework.Runtime.Core
 
         public virtual Task Startup()
         {
-            SnkLogHost.Default?.Info("AppStart: Application Startup - On UI thread");
+            if(SnkLogHost.Default.IsInfoEnabled)
+                SnkLogHost.Default?.Info("AppStart: Application Startup - On UI thread");
             return Task.CompletedTask;
         }
 

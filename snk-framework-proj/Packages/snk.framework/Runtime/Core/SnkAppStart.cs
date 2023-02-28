@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using SnkFramework.Mvvm.Runtime;
 using SnkFramework.Mvvm.Runtime.ViewModel;
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.Runtime.Core
 {
@@ -34,7 +36,8 @@ namespace SnkFramework.Runtime.Core
             var applicationHint = await ApplicationStartup(hint);
             if (applicationHint != null)
             {
-                SnkLogHost.Default?.Info("Hint ignored in default SnkAppStart");
+                if(SnkLogHost.Default.IsInfoEnabled)
+                    SnkLogHost.Default?.Info("Hint ignored in default SnkAppStart");
             }
 
             await NavigateToFirstViewModel(applicationHint);

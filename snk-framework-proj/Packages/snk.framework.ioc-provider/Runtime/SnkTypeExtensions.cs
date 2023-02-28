@@ -12,6 +12,7 @@ using System.Reflection;
 //using MvvmCross.Logging;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.IoC
 {
@@ -29,14 +30,14 @@ namespace SnkFramework.IoC
                 // Check for null
 
 
-                SnkIoC.s_Logger?.WarnFormat("ReflectionTypeLoadException masked during loading of {0} - error {1}",
+                SnkLogHost.Default?.WarnFormat("ReflectionTypeLoadException masked during loading of {0} - error {1}",
                                       assembly.FullName, e.ToLongString());
 
                 if (e.LoaderExceptions != null)
                 {
                     foreach (var excp in e.LoaderExceptions)
                     {
-                        SnkIoC.s_Logger?.Warning(excp.ToLongString());
+                        SnkLogHost.Default?.Warn(excp.ToLongString());
                     }
                 }
 

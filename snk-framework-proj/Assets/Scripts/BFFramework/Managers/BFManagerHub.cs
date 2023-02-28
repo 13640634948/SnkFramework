@@ -1,5 +1,6 @@
 using SnkFramework.IoC;
-using SnkFramework.Runtime;
+using SnkFramework.NuGet;
+using SnkFramework.NuGet.Logging;
 
 namespace BFFramework.Runtime.Managers
 {
@@ -16,7 +17,8 @@ namespace BFFramework.Runtime.Managers
         private static void registerManager<TManager, TMgrInstance>(ISnkIoCProvider iocProvider)
             where TMgrInstance : class, IBFManager
         {
-            SnkLogHost.Default?.Info("Setup: Register " + typeof(TMgrInstance));
+            if(SnkLogHost.Default.IsInfoEnabled)
+                SnkLogHost.Default?.Info("Setup: Register " + typeof(TMgrInstance));
             var service = iocProvider.IoCConstruct<TMgrInstance>();
             iocProvider.RegisterSingleton(typeof(TManager), service);
         }

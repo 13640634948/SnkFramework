@@ -10,6 +10,7 @@ using System.Reflection;
 //using MvvmCross.Logging;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.IoC
 {
@@ -48,8 +49,7 @@ namespace SnkFramework.IoC
             }
             catch (ReflectionTypeLoadException e)
             {
-                SnkIoC.s_Logger?.Exception(e, "ReflectionTypeLoadException masked during loading of {assemblyName}",
-                    assembly.FullName);
+                SnkLogHost.Default?.Error($"ReflectionTypeLoadException masked during loading of {assembly.FullName}",e);
             }
         }
     }

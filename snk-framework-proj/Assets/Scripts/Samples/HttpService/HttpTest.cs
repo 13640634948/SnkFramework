@@ -1,8 +1,6 @@
-using System.Net.Http;
 using System.Text;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.HttpWeb;
-using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Runtime.Engine;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +17,7 @@ namespace SnkSamples.Snk_HttpService
 
         public void Start()
         {
-            SnkNuget.Logger = new SnkLogger("test", new SnkUnityLoggerProvider());
+            SnkLogHost.Registry(new SnkUnityLogFactory());
         }
 
         public void StartDownload()

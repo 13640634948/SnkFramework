@@ -1,8 +1,10 @@
 using System;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.Runtime.Core
 {
@@ -33,7 +35,7 @@ namespace SnkFramework.Runtime.Core
             }
             catch (Exception ex)
             {
-                SnkLogHost.Default?.Exception(ex, "Unable to cast setup to {0}", typeof(TSnkSetup));
+                SnkLogHost.Default?.Error($"Unable to cast setup to {typeof(TSnkSetup)}", ex);
                 throw;
             }
         }

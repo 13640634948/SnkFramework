@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using GAME.Contents.UserInterfaces.ViewModels;
 using Loxodon.Framework.Binding;
 using SnkFramework.Mvvm.Runtime.Base;
+using SnkFramework.NuGet;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.Runtime;
 using UnityEngine;
 using UnityEngine.UI;

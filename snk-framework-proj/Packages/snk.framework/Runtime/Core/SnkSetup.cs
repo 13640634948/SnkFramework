@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Exceptions;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.Runtime
 {
@@ -22,7 +22,7 @@ namespace SnkFramework.Runtime
             private eSnkSetupState _state;
 
             private ISnkIoCProvider _iocProvider;
-            protected ISnkLogger logger;
+            protected ISnkLog logger;
             public eSnkSetupState State
             {
                 get => _state;

@@ -1,15 +1,13 @@
 ﻿using System;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime;
-using SnkFramework.Mvvm.Runtime.Base;
 using SnkFramework.Mvvm.Runtime.Layer;
 using SnkFramework.Mvvm.Runtime.Presenters;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
 using SnkFramework.NuGet;
-using SnkFramework.NuGet.Features.Logging;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.Plugins;
-using UnityEngine;
 
 namespace SnkFramework.Runtime
 {
@@ -17,7 +15,7 @@ namespace SnkFramework.Runtime
     {
         public partial class SnkSetup
         {
-            protected abstract ISnkLoggerProvider CreateLoggerProvider();
+            //protected abstract ISnkLoggerProvider CreateLoggerProvider();
             protected abstract ISnkApplication CreateApp(ISnkIoCProvider iocProvider);
             //protected abstract ISnkViewCamera CreateViewCamera();
             protected abstract void RegisterLayer(ISnkLayerContainer container);
@@ -26,18 +24,13 @@ namespace SnkFramework.Runtime
             
             protected void InitializeLogService(ISnkIoCProvider iocProvider)
             {
-                var loggerProvider = this.CreateLoggerProvider();
-                var loggerFactory = this.CreateLoggerFactory();
-                loggerFactory.AddLoggerProvider(loggerProvider);
-                logger = loggerFactory.CreateLogger<SnkSetup>();
-                
-                iocProvider.RegisterSingleton(loggerFactory);
-                SnkNuget.Logger = SnkLogHost.Default;
-
+                var unityLogFactory = this.CreateLoggerFactory();
+                SnkLogHost.Registry(unityLogFactory);
+                logger = SnkLogHost.GetLogger(this.GetType());
+                iocProvider.RegisterSingleton(unityLogFactory);
             }
-
-            protected virtual ISnkLoggerFactory CreateLoggerFactory()
-                => new SnkLoggerFactory();
+            
+            protected abstract ISnkLogFactory CreateLoggerFactory();
             
             /// <summary>
             /// 初始化层级管理器
@@ -158,7 +151,7 @@ namespace SnkFramework.Runtime
                 }
                 catch (Exception e)
                 {
-                    logger?.Exception(e, "InitializePrimary() Failed initializing primary dependencies");
+                    logger?.Error("InitializePrimary() Failed initializing primary dependencies", e);
                     throw;
                 }
             }

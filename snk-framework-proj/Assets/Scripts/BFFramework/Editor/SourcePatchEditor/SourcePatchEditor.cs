@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
-using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.NuGet.Features.Patch;
 using SnkFramework.Runtime.Basic;
 using SnkFramework.Runtime.Engine;
@@ -18,8 +17,7 @@ namespace BFFramework.Editor
         {
             try
             {
-                SnkNuget.Logger ??= new SnkLogger("PatchBuild", new SnkUnityLoggerProvider());
-                
+                SnkLogHost.Registry(new SnkUnityLogFactory());
                 const string projPath = "PatchRepo";
                 const string channelName = "back_fire";
                 const string appVersion = "1.0.0";

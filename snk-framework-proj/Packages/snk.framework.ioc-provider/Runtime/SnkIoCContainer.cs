@@ -10,6 +10,7 @@ using System.Reflection;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.IoC
 {
@@ -540,7 +541,7 @@ namespace SnkFramework.IoC
                     // the item already exists in the lookup table
                     // - this is "game over" for the IoC lookup
                     // - see https://github.com/MvvmCross/MvvmCross/issues/553
-                    SnkIoC.s_Logger?.ErrorFormat("IoC circular reference detected - cannot currently resolve {typeName}", type.Name);
+                    SnkLogHost.Default?.ErrorFormat($"IoC circular reference detected - cannot currently resolve {type.Name}");
                     resolved = type.CreateDefault();
                     return false;
                 }

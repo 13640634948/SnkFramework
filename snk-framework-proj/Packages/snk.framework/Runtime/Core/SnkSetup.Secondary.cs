@@ -150,7 +150,6 @@ namespace SnkFramework.Runtime
             protected virtual void InitializeMvvmService(ISnkIoCProvider iocProvider)
             {
                 SnkBindingSetup.Initialize();
-                MvvmUI.Logger = SnkLogHost.Default;
                 this.InitializeViewModelLoader(_iocProvider);
             }
 
@@ -235,7 +234,7 @@ namespace SnkFramework.Runtime
                 }
                 catch (Exception e)
                 {
-                    logger?.Exception(e, "InitializeSecondary() failed initializing secondary dependencies");
+                    logger?.Error("InitializeSecondary() failed initializing secondary dependencies", e);
                     throw;
                 }
             }

@@ -1,7 +1,7 @@
 using SnkFramework.IoC;
 using SnkFramework.NuGet.Features.Configuration;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.NuGet.Preference;
-using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.Runtime.Configurations;
 using SnkFramework.Runtime.Core;
 using SnkFramework.Runtime.Preference;
@@ -12,9 +12,9 @@ namespace SnkFramework.Runtime
     {
         public abstract class SnkUnitySetup : SnkSetup, ISnkUnitySetup
         {
-            protected override ISnkLoggerProvider CreateLoggerProvider()
-                => new SnkUnityLoggerProvider();
-
+            protected override ISnkLogFactory CreateLoggerFactory()
+                => new SnkUnityLogFactory();
+            
             protected virtual ISnkPreferenceSerializer CreatePreferenceSerializer()
                 => new SnkUnityPrefSerializer();
 

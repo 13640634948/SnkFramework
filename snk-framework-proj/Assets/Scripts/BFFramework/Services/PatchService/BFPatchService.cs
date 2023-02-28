@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Features.Patch;
+using SnkFramework.NuGet.Logging;
 using SnkFramework.Runtime;
 using SnkFramework.Runtime.Basic;
 using UnityEngine;
@@ -49,7 +51,7 @@ namespace BFFramework.Runtime.Services
             }
             catch (Exception e)
             {
-                SnkLogHost.Default.Exception(e, "BFPatchService.Initialize");
+                SnkLogHost.Default?.Error("BFPatchService.Initialize", e);
             }
         }
 

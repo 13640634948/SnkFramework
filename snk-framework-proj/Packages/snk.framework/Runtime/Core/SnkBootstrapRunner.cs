@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 using SnkFramework.IoC;
+using SnkFramework.NuGet;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.Runtime.Core
 {
@@ -37,7 +39,7 @@ namespace SnkFramework.Runtime.Core
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 // pokemon handling
-                SnkLogHost.Default?.Exception(exception, "Error running startup task {TypeName}", type.Name);
+                SnkLogHost.Default?.Error($"Error running startup task {type.Name}", exception);
             }
         }
     }

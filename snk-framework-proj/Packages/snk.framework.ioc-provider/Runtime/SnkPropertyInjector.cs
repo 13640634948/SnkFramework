@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
 using SnkFramework.NuGet.Exceptions;
+using SnkFramework.NuGet.Logging;
 
 namespace SnkFramework.IoC
 {
@@ -53,7 +55,7 @@ namespace SnkFramework.IoC
                 }
                 else
                 {
-                    SnkIoC.s_Logger?.WarnFormat( "IoC property injection skipped for {propertyName} on {typeName}",
+                    SnkLogHost.Default?.WarnFormat("IoC property injection skipped for {propertyName} on {typeName}",
                         injectableProperty.Name, toReturn.GetType().Name);
                 }
             }
@@ -79,7 +81,7 @@ namespace SnkFramework.IoC
 
                 case SnkPropertyInjection.None:
                     //SnkLogHost.Default?.e(LogLevel.Error, "Internal error - should not call FindInjectableProperties with SnkPropertyInjection.None");
-                    SnkIoC.s_Logger?.Error("Internal error - should not call FindInjectableProperties with SnkPropertyInjection.None");
+                    SnkLogHost.Default?.Error("Internal error - should not call FindInjectableProperties with SnkPropertyInjection.None");
                     injectableProperties = new PropertyInfo[0];
                     break;
 

@@ -5,7 +5,6 @@ using System.Linq;
 using SnkFramework.Network.ContentDelivery.Editor;
 using SnkFramework.NuGet;
 using SnkFramework.NuGet.Basic;
-using SnkFramework.NuGet.Features.Logging;
 using SnkFramework.NuGet.Features.Patch;
 using SnkFramework.Runtime.Engine;
 using UnityEditor;
@@ -58,8 +57,7 @@ namespace BFFramework.Editor
         public void LocalSyncToRemote<TStorage>()
             where TStorage : class, ISnkContentDeliveryStorage, new()
         {
-            SnkNuget.Logger ??= new SnkLogger("AssetSyncer", new SnkUnityLoggerProvider());
-
+            SnkLogHost.Registry(new SnkUnityLogFactory());
             ISnkContentDeliveryStorage storage = null;
             try
             {
