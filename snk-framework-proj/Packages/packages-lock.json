@@ -227,6 +227,26 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.vovgou.loxodon-framework": {
+      "version": "file:LoxodonFramework",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.vovgou.loxodon-framework-connection": {
+      "version": "file:Connection",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.vovgou.loxodon-framework-log4net": {
+      "version": "file:Log4Net",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.vovgou.loxodon-framework": "2.0.1"
+      }
+    },
     "snk.framework": {
       "version": "file:snk.framework",
       "depth": 0,
