@@ -7,29 +7,17 @@ namespace SnkFramework.Runtime.Editor.PlayerBuilder
 {
     public class PlayerBuilder
     {
-        public static void Build(BuildTarget buildTarget)
+        public static void Build(string exportFolder, BuildTarget buildTarget)
         {
-            var exportFolder = Path.GetFullPath(".") + "/PlayerOutput/" + buildTarget;
-            if (!Directory.Exists(exportFolder))
-            {
+            exportFolder = Path.Combine(exportFolder, buildTarget.ToString(), "proj-v");
+            if (Directory.Exists(exportFolder) == false)
                 Directory.CreateDirectory(exportFolder);
-            }
- 
-            //提供用户选择路径
-            var selectPath = EditorUtility.SaveFolderPanel("请选择保存路径", exportFolder,"");
-            //用户点击取消处理
-            if (string.IsNullOrEmpty(selectPath))
-            {
-                Debug.Log("UPublish:用户取消导出GVRSDK  AS项目工程");
-                return;
-            }
- 
+            
+            
+                
             //获取场景编译场景列表
             var scenes = EditorBuildSettings.scenes;
-            Debug.Log("UPublish:开始发布导出GVRSDK AS项目工程");
- 
-            BuildReport result = BuildPipeline.BuildPlayer(scenes, selectPath, buildTarget, BuildOptions.None);
-
+            var result = BuildPipeline.BuildPlayer(scenes, exportFolder, buildTarget, BuildOptions.None);
         }
     }
 }
