@@ -86,7 +86,13 @@ public class BuildWindow : EditorWindow
                 throw new ArgumentOutOfRangeException();
             }
 
-            PlayerBuilder.Build(BuildTarget.StandaloneOSX);
+            if (buildTarget == BuildTarget.NoTarget)
+            {
+                Debug.LogError("构建平台错误:" + buildTarget);
+                return;
+            }
+
+            PlayerBuilder.Build(buildTarget);
         };
     }
 }
