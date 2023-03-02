@@ -70,7 +70,8 @@ namespace SnkFramework.NuGet
         public static void Registry(ISnkLogFactory factory)
         {
             if (_factory != null && _factory != factory)
-                throw new Exception("Don't register log factory many times");
+                return;
+                //throw new Exception("Don't register log factory many times");
 
             _factory = factory;
         }

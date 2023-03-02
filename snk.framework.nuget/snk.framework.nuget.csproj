@@ -34,6 +34,8 @@
     <None Remove="scr\asynchronous\internal\" />
     <None Remove="scr\utilities\" />
     <None Remove="scr\logging\" />
+    <None Remove="scr\tools\" />
+    <None Remove="scr\tools\ParserCSV\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scr\asynchronous\" />
@@ -41,5 +43,7 @@
     <Folder Include="scr\asynchronous\internal\" />
     <Folder Include="scr\utilities\" />
     <Folder Include="scr\logging\" />
+    <Folder Include="scr\tools\" />
+    <Folder Include="scr\tools\ParserCSV\" />
   </ItemGroup>
 </Project>
