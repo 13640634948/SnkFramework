@@ -2,8 +2,6 @@
     "name": "Game.Contexts.Core",
     "rootNamespace": "",
     "references": [
-        "GUID:00f3b9446f5c141f18613b9185cda6f4",
-        "GUID:21c295c21c64b49a08c9c2744e50c058",
         "GUID:c3bf3bdc3b4f3480ab80d55f71603535",
         "GUID:716af79e75ac0403188c02dc6dd87117",
         "GUID:d5684e46e27d242a597b38952bd72797",
@@ -12,9 +10,9 @@
         "GUID:06484c88b029046bc91b87d1396c0c58",
         "GUID:ee9e3071881c340d1b494bc4e161c872",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:9d78b89a9151e430ca7c2aabd556f3d6",
         "GUID:b9766a06244d2499d9622bc22441366c",
-        "GUID:6243cbface63748b79721c3b23b9ca82"
+        "GUID:6243cbface63748b79721c3b23b9ca82",
+        "GUID:e353924064f468f48b732b2ec0d3e62a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

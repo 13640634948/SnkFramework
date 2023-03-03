@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using SnkFramework.FluentBinding.Base;
 using SnkFramework.IoC;
 using SnkFramework.Mvvm.Runtime.View;
 using SnkFramework.Mvvm.Runtime.ViewModel;
-using SnkFramework.NuGet.Exceptions;
 using SnkFramework.Plugins;
 
 namespace SnkFramework.Runtime
@@ -149,7 +147,7 @@ namespace SnkFramework.Runtime
 
             protected virtual void InitializeMvvmService(ISnkIoCProvider iocProvider)
             {
-                SnkBindingSetup.Initialize();
+                //SnkBindingSetup.Initialize();
                 this.InitializeViewModelLoader(_iocProvider);
             }
 

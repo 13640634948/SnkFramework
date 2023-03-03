@@ -12,5 +12,10 @@
   "author": {
     "name": "ClaineLe"
   },
+  "dependencies": {
+    "snk.framework.network.content-delivery": "file:/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk-framework-proj/Packages/snk.framework.network.content-delivery",
+    "snk.framework.ioc-provider": "file:/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk-framework-proj/Packages/snk.framework.ioc-provider",
+    "snk.framework.mvvm-ui": "file:/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk-framework-proj/Packages/snk.framework.mvvm-ui"
+  },
   "description": "SnkFramework"
 }
