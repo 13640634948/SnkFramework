@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework> 
+    <RootNamespace>snk.framework.nuget</RootNamespace>
+    <PackageId>snk.framework.nuget</PackageId>
+    <Version>1.0.4</Version>
+    <Authors>ClaineLe</Authors>
+    <Company>snk-framework</Company>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <CustomCommands>
+      <CustomCommands>
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp ${SolutionDir}/bin/${ProjectConfigName}/netstandard2.0/snk.framework.nuget.dll ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/snk.framework.nuget.dll</command>
+        </Command>
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp ${SolutionDir}/bin/${ProjectConfigName}/netstandard2.0/snk.framework.nuget.pdb ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/snk.framework.nuget.pdb</command>
+        </Command>
+        <Command>
+          <type>AfterBuild</type>
+          <command>cp ${SolutionDir}/bin/${ProjectConfigName}/netstandard2.0/snk.framework.nuget.deps.json ${SolutionDir}/../snk-framework-proj/Packages/snk.framework/Plugins/snk.framework.nuget.deps.json</command>
+        </Command>
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="log4net" />
+    <None Remove="scr\asynchronous\" />
+    <None Remove="scr\asynchronous\interfaces\" />
+    <None Remove="scr\asynchronous\internal\" />
+    <None Remove="scr\utilities\" />
+    <None Remove="scr\logging\" />
+    <None Remove="scr\tools\" />
+    <None Remove="scr\tools\ParserCSV\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scr\asynchronous\" />
+    <Folder Include="scr\asynchronous\interfaces\" />
+    <Folder Include="scr\asynchronous\internal\" />
+    <Folder Include="scr\utilities\" />
+    <Folder Include="scr\logging\" />
+    <Folder Include="scr\tools\" />
+    <Folder Include="scr\tools\ParserCSV\" />
+  </ItemGroup>
+</Project>

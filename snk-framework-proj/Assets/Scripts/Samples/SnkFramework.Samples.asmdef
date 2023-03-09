@@ -1,0 +1,4 @@
+{
+	"name": "SnkFramework.Samples",
+	"references":[ "GUID:b9766a06244d2499d9622bc22441366c", "GUID:716af79e75ac0403188c02dc6dd87117" ]
+}

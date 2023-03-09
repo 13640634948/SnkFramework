@@ -1,95 +1,32 @@
 {
   "dependencies": {
-    "com.coffee.upm-git-extension": {
-      "version": "https://github.com/mob-sakai/UpmGitExtension.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e949d3e741950d55be7e3d6c6924dcf8935bbec2"
-    },
-    "com.cysharp.messagepipe": {
-      "version": "1.7.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
-    "com.cysharp.messagepipe.vcontainer": {
-      "version": "1.7.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.cysharp.unitask": {
-      "version": "2.3.2",
+      "version": "2.3.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.snkframework": {
-      "version": "file:com.snkframework",
+    "com.unity.ai.navigation": {
+      "version": "1.1.1",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
-    "com.snkframework.addr-file": {
-      "version": "file:com.snkframework.addr-file",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.asset-svr": {
-      "version": "file:com.snkframework.asset-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.assetbundle-svr": {
-      "version": "file:com.snkframework.assetbundle-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.hybrid-clr": {
-      "version": "file:com.snkframework.hybrid-clr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.mvvm-ui": {
-      "version": "file:com.snkframework.mvvm-ui",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.network.connector": {
-      "version": "file:com.snkframework.network.connector",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.network.file-storage": {
-      "version": "file:com.snkframework.network.file-storage",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.network.web": {
-      "version": "file:com.snkframework.network.web",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
-    "com.snkframework.patch-svr": {
-      "version": "file:com.snkframework.patch-svr",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+    "com.unity.burst": {
+      "version": "1.8.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.15.18",
+      "version": "1.17.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -112,21 +49,20 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.feature.development": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.ide.visualstudio": "2.0.16",
-        "com.unity.ide.rider": "3.0.15",
-        "com.unity.ide.vscode": "1.2.5",
+        "com.unity.ide.visualstudio": "2.0.17",
+        "com.unity.ide.rider": "3.0.18",
         "com.unity.editorcoroutines": "1.0.0",
-        "com.unity.performance.profile-analyzer": "1.1.1",
-        "com.unity.test-framework": "1.1.31",
-        "com.unity.testtools.codecoverage": "1.0.1"
+        "com.unity.performance.profile-analyzer": "1.2.2",
+        "com.unity.test-framework": "1.3.2",
+        "com.unity.testtools.codecoverage": "1.2.2"
       }
     },
     "com.unity.ide.rider": {
-      "version": "3.0.16",
+      "version": "3.0.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -135,7 +71,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.16",
+      "version": "2.0.17",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -143,15 +79,17 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.ide.vscode": {
-      "version": "1.2.5",
+    "com.unity.inputsystem": {
+      "version": "1.5.0",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
-    "com.unity.nuget.mono-cecil": {
-      "version": "1.10.1",
+    "com.unity.mathematics": {
+      "version": "1.2.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -165,14 +103,44 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.performance.profile-analyzer": {
-      "version": "1.1.1",
+      "version": "1.2.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.render-pipelines.core": {
+      "version": "15.0.4",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.4",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.terrain": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      }
+    },
+    "com.unity.render-pipelines.universal": {
+      "version": "15.0.4",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.burst": "1.8.2",
+        "com.unity.render-pipelines.core": "15.0.4",
+        "com.unity.shadergraph": "15.0.4"
+      }
+    },
+    "com.unity.searcher": {
+      "version": "4.9.2",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.services.core": {
-      "version": "1.4.0",
+      "version": "1.7.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -183,14 +151,23 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.settings-manager": {
-      "version": "1.0.3",
+      "version": "2.0.1",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.shadergraph": {
+      "version": "15.0.4",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "15.0.4",
+        "com.unity.searcher": "4.9.2"
+      }
+    },
     "com.unity.test-framework": {
-      "version": "1.3.0",
+      "version": "1.3.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -201,7 +178,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.testtools.codecoverage": {
-      "version": "1.0.1",
+      "version": "1.2.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -220,7 +197,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.4",
+      "version": "1.8.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -241,7 +218,7 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.7.8",
+      "version": "1.8.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -250,14 +227,59 @@
       },
       "url": "https://packages.unity.com"
     },
-    "jp.hadashikick.vcontainer": {
-      "version": "1.11.1",
+    "com.vovgou.loxodon-framework": {
+      "version": "file:LoxodonFramework",
       "depth": 0,
-      "source": "registry",
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.vovgou.loxodon-framework-connection": {
+      "version": "file:Connection",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.vovgou.loxodon-framework-log4net": {
+      "version": "file:Log4Net",
+      "depth": 0,
+      "source": "embedded",
       "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.1"
-      },
-      "url": "https://package.openupm.com"
+        "com.vovgou.loxodon-framework": "2.0.1"
+      }
+    },
+    "snk.framework": {
+      "version": "file:snk.framework",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "snk.framework.network.content-delivery": "file:/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk-framework-proj/Packages/snk.framework.network.content-delivery",
+        "snk.framework.ioc-provider": "file:/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk-framework-proj/Packages/snk.framework.ioc-provider",
+        "snk.framework.mvvm-ui": "file:/Users/clainele/Documents/WorkSpace/github/SnkFramework/snk-framework-proj/Packages/snk.framework.mvvm-ui"
+      }
+    },
+    "snk.framework.connector": {
+      "version": "file:snk.framework.connector",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.ioc-provider": {
+      "version": "file:snk.framework.ioc-provider",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.mvvm-ui": {
+      "version": "file:snk.framework.mvvm-ui",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "snk.framework.network.content-delivery": {
+      "version": "file:snk.framework.network.content-delivery",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
@@ -390,17 +412,6 @@
     "com.unity.modules.uielements": {
       "version": "1.0.0",
       "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.ui": "1.0.0",
-        "com.unity.modules.imgui": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.uielementsnative": "1.0.0"
-      }
-    },
-    "com.unity.modules.uielementsnative": {
-      "version": "1.0.0",
-      "depth": 1,
       "source": "builtin",
       "dependencies": {
         "com.unity.modules.ui": "1.0.0",

@@ -61,3 +61,12 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+#rider
+.idea/
+.run/
+
+#Custom
+Repository/
+PersistentData/
+PlayerOutput/
+PatchRepo/

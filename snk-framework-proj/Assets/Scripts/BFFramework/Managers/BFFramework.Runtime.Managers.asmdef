@@ -1,0 +1,4 @@
+{
+	"name": "BFFramework.Runtime.Managers",
+	"references":[ "GUID:716af79e75ac0403188c02dc6dd87117", "GUID:00f3b9446f5c141f18613b9185cda6f4", "GUID:6243cbface63748b79721c3b23b9ca82" ]
+}
